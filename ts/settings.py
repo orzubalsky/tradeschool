@@ -122,7 +122,7 @@ INSTALLED_APPS = (
     'tradeschool',                  # tradeschool branch app
     'notifications',                # tradeschool email management system
     'website',
-    'migration',                    # tradeschool (zend framework php version) db schema migration
+    #'migration',                    # tradeschool (zend framework php version) db schema migration
 )
 
 # A sample logging configuration. The only tangible logging
