@@ -1,0 +1,569 @@
+/* Reset first */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td
+	{
+	margin: 0;
+	padding: 0;
+	outline: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+fieldset,img {
+	border: 0;
+}
+
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style: normal;
+	font-weight: normal;
+}
+
+ol,ul {
+	list-style: none;
+}
+
+caption,th {
+	text-align: left;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+q:before,q:after {
+	content: '';
+}
+
+abbr,acronym {
+	border: 0;
+}
+
+/* Global ---------------------------------------------------------------------------- */
+body {
+	background: #ffff00;
+	text-align: center;
+	margin: 0 auto;
+	letter-spacing: 0.01em;
+	color: #000;
+	font: 1em/ 1.5em Helvetica, Arial, sans-serif;
+}
+
+strong {
+	font-weight: bold;
+}
+
+a:link,a:visited {
+	color: #ff3300;
+	text-decoration: none;
+	outline: 0;
+}
+
+a:link:hover,a:visited:hover {
+	color: #000;
+	text-decoration: none;
+	outline: 0;
+}
+
+.fc-widget-header, .fc-widget-content {
+	background-color: #ff3300;
+}
+
+/* Header ---------------------------------------------------------------------------- */
+#innerHeader {
+	width: 800px;
+	height: 100px;
+	margin: 20px auto 10px auto;
+	position: relative;
+	left: 17px;
+	text-align: left;
+}
+
+#container #innerHeader #headerLogo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+  background-color: #000;
+	z-index: 2;
+	color: #fff;
+}
+#container #innerHeader #headerLogo h1{
+  font-size: 1.5em;
+  line-height: 1.3em;
+  text-align: left;
+	z-index: 2;
+	color: #fff;
+  padding: 10px 20px;
+  height: 60px;
+}
+
+#innerHeader p {
+	width: 160px;
+	position: absolute;
+	top: 10px;
+	left: 180px;
+}
+
+
+/* Sub pages ---------------------------------------------------------------------------- */
+div#unregister, div#teacherInfo, div#subPage{
+  margin: 0 auto;
+  width: 800px;
+  overflow: auto;
+  position: relative;
+  left: 17px;
+}
+h2.subTitle{
+  float: left;
+  width: 800px;
+  font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+  font-size: 3.8em;
+  line-height: 1.4em;
+  text-align: left;
+  margin: 0 0 20px 0;
+}
+.subMain{
+  float: left;
+  text-align: left;
+  padding: 20px;
+  width: 540px;
+  background-color: #ffffff;
+  margin-bottom: 80px;
+}
+.subMain h4{
+  margin: 0 0 10px 0;
+}
+.subWide{
+  width: 760px;
+}
+.galleryWide{
+  margin: -20px -20px 0 -20px;
+}
+.subSide{
+  float: right;
+  text-align: left;
+  padding: 20px;
+  width: 180px;
+  background-color: #ff0000;
+  margin: 0;
+  color: #fff;
+}
+.subSide h3, .subMain h3{
+  font-weight: bold;
+  font-size: 1.3em;
+  margin: 0 0 20px 0;
+}
+.subSide p, .subMain p{
+  margin: 0 0 20px 0;
+}
+.subButtonBox{
+  float: left;
+  width: 100%;
+  text-align: center;
+  margin: 40px 0;
+}
+.subButtonBox input.submit, .subButtonBox a.submit{
+  font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+  border: none;
+  font-size: 2em;
+  color: #fff;
+  background-color: #000;
+  padding: 10px 20px;
+	outline: 0;
+	cursor: pointer;
+	display: inline;
+}
+.subButtonBox input.submit:hover, .subButtonBox a.submit:hover{
+  color: #fff;
+  background-color: #ff0000;
+	outline: 0;
+	cursor: pointer;
+}
+/* Teacher Form -------------------------------------------------------------------------- */
+#teacherForm {
+	width: 800px;
+	margin: 10px auto 100px auto;
+	position: relative;
+	left: 17px;
+	overflow: auto;
+	background-color: #fff;
+}
+
+.formQ {
+	margin: 0;
+	overflow: hidden;
+	text-align: left;
+}
+input#start_time, input#end_time, input#venue_id, input#unix_start_time, input#unix_end_time {
+  display: none;
+} 
+  
+  
+.formQ .formField {
+	background: #ff3300;
+	width: 560px;
+	padding: 15px 20px;
+	float: left;
+	position: relative;
+	color: #fff;
+}
+
+.formQ .formNote {
+	background: #fff;
+	color: #666;
+	width: 160px;
+	padding: 35px 20px 15px 20px;
+	float: right;
+	font: 0.8em/ 1.5em Helvetica, Arial, sans-serif;
+}
+
+.formQ .formField > h2 {
+  float: left;
+	font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+	z-index: 2;
+	color: #fff;
+	overflow: hidden;
+	margin: 0 0 20px 0;
+	font-size: 2em;
+	line-height: 1.3em;
+}
+
+.formQ .formField input {
+	border: 0;
+	width: 550px;
+	padding: 5px;
+	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+	margin: 0 0 10px 0;
+}
+.formQ .formField label {
+	margin: 0 0 5px 0;
+	float: left;
+	font-weight: bold;
+}
+.formQ .formField input.barter_item {
+	border: 0;
+	width: 500px;
+	padding: 5px;
+	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+	margin: 0 0 10px 0;
+	float: left;
+}
+.formQ .formField input.barter_qty {
+	border: 0;
+	width: 30px;
+	padding: 5px;
+	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+	margin: 0 0 10px 0;
+	float: right;
+}
+.formQ .formField textarea {
+	border: 0;
+	width: 550px;
+	height: 200px;
+	padding: 5px;
+	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+	margin: 0 0 10px 0;
+	resize: none;
+}
+#calendar{
+  float: left;
+  width: 560px;
+}
+#calendar .fc-button-today{
+  display: none;
+}
+#venuesInfo{
+  float: left;
+  margin: 20px 0 0 0;
+}
+.formQ .formField a:link,.formQ .formField a:visited {
+	color: #fff;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.formQ .formField a:link:hover,.formQ .formField a:visited:hover {
+	color: #000;
+	text-decoration: underline;
+	outline: 0;
+}
+
+.formQ .formNote ul {
+	margin: 10px 0 0 0;
+}
+.classSubmit{
+  width: 600px;
+  background-color: #666;
+  padding: 0 0 30px 0;
+}
+.formDisclaimer {
+	padding: 15px 20px;
+	width: 560px;
+	float: left;
+	color: #fff;
+	background: #666;
+	font: 0.8em/ 1.5em Helvetica, Arial, sans-serif;
+	text-align: center;
+}
+
+.formDisclaimer h5,.aboutTeaching h5 {
+	margin: 0 0 10px 0;
+}
+
+.aboutTeaching p {
+	margin: 0 0 20px 0;
+}
+
+.aboutTeaching {
+	padding: 15px 20px;
+	float: left;
+	color: #333;
+	background: #fff;
+	text-align: left;
+}
+
+.class_time label input {
+	float: left;
+}
+
+.class_time label {
+	float: left;
+	width: 100%;
+	margin: 0 0 10px 0;
+}
+
+.class_time input[type="checkbox"] {
+	display: block;
+	width: 26px;
+	margin-top: 5px;
+}
+
+#teacherForm input.submit {
+	width: 150px;
+	height: 49px;
+	background: url(../images/buttons/submit.png) no-repeat bottom left;
+	border: 0;
+	overflow: hidden;
+	text-indent: -9999px;
+	margin: 0 0 0 0;
+}
+
+#teacherForm input.submit:hover {
+	background: url(../images/buttons/submit.png) no-repeat top left;
+	outline: 0;
+	cursor: pointer;
+}
+
+
+#teacherForm input.update {
+	width: 150px;
+	height: 49px;
+	background: url(../images/buttons/update.png) no-repeat bottom left;
+	border: 0;
+	overflow: hidden;
+	text-indent: -9999px;
+	margin: 40px 0 0 0;
+}
+
+#teacherForm input.update:hover {
+	background: url(../images/buttons/update.png) no-repeat top left;
+	outline: 0;
+	cursor: pointer;
+}
+
+.formThanks {
+	margin: 0;
+	overflow: hidden;
+	text-align: left;
+	padding: 15px 20px;
+	width: 560px;
+	color: #fff;
+	background: #666;
+	font-weight: bold;
+}
+
+.formThanks p.thanks_intro {
+	font-weight: normal;
+}
+
+.formThanks h4 {
+	font-weight: normal;
+	margin: 20px 0 0 0;
+}
+
+em {
+	font-style: italic;
+}
+
+/* ERROR STYLES */
+ul.errors {
+  float: left;
+	width: 514px;
+	padding: 20px;
+	margin: 10px 0 0 0;
+	text-align: left;
+	background: #ff3300;
+	color: #fff;
+	border: 3px dashed #ffff00;
+	font-weight: bold;
+	list-style-type: square;
+}
+ul.errors li{
+  float: left;
+	margin: 0 0 5px 20px;
+	clear: both;
+}
+/* P&T LIST STYLES */
+.formField ul.pt-list {
+	margin: 5px 0 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.formField ul.pt-list li {
+	margin: 10px 0 0 0;
+	padding-left: 24px;
+	background-image: none;
+}
+
+.formField ul.pt-list li.last {
+	margin-bottom: 0;
+}
+
+.formField ul.pt-list li span {
+	cursor: pointer;
+}
+
+.formField ul.pt-list li.input {
+	padding: 0;
+	background: none;
+}
+
+.formField ul.pt-list li.input input {
+	padding: 5px;
+	width: 100%;
+	background: #fff;
+	background-image: none;
+	width: 550px;
+}
+
+.formField ul.pt-list.ee2 li.input input:focus {
+	padding: 5px;
+	width: 550px;
+}
+
+.matrix ul.pt-list {
+	margin: 0;
+}
+
+
+
+
+
+#container #headerNav {
+	width: 400px;
+	height: 65px;
+	position: absolute;
+  top: 10px;
+  right: 0;
+  text-align: right;
+}
+#container #headerNav ul li{
+  font-size: 1.3em;
+  font-weight: bold;
+  display: inline;
+  margin: 0 0 0 20px;
+}
+#container #headerNav ul li a{
+  text-decoration: none;
+  color: #ff0000;
+  border-bottom: 1px solid #ff0000;
+}
+#container #headerNav ul li a:hover{
+  color: #000;
+}
+
+
+
+
+/* JQUERY DATEPICKER CSS */
+.ui-datepicker-calendar tr td:nth-child (2),.ui-datepicker-calendar tr td:nth-child
+	(3) {
+	background-color: #fff;
+	visibility: hidden;
+}
+
+.ui-datepicker-calendar tr td:nth-child (2) a,.ui-datepicker-calendar tr td:nth-child
+	(3) a {
+	display: none;
+}
+
+.ui-datepicker,.ui-datepicker-calendar {
+	padding: 15px;
+	text-align: left;
+	color: #fff;
+	background: #444;
+}
+
+.ui-datepicker {
+	margin: 5px -10px;
+	-moz-box-shadow: 5px 5px 8px rgba(0, 0, 0, .3);
+	-webkit-box-shadow: 5px 5px 8px rgba(0, 0, 0, .3);
+	box-shadow: 5px 5px 8px rgba(0, 0, 0, .3);
+}
+
+.ui-datepicker-header {
+	padding: 12px;
+}
+
+.ui-datepicker-prev {
+	cursor: pointer;
+	float: left;
+}
+
+.ui-datepicker-next {
+	cursor: pointer;
+	float: right;
+}
+
+.ui-datepicker-title {
+	text-align: center;
+}
+
+.ui-datepicker a {
+	text-decoration: none;
+}
+
+.ui-datepicker-month,.ui-datepicker-year {
+	font-weight: bold;
+}
+
+.ui-datepicker-calendar td {
+	background: #fff;
+	width: 25px;
+	padding: 4px;
+	border: 2px solid #444;
+	text-align: center;
+}
+
+.ui-datepicker-calendar th {
+	width: 25px;
+	padding: 4px;
+	border: 2px solid #444;
+	text-align: center;
+}
+
+.ui-state-disabled {
+	visibility: hidden;
+}
+
+.ui-datepicker {
+	display: none;
+}

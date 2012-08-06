@@ -1,0 +1,183 @@
+#container #header {
+	width: 965px;
+	height: 532px;
+	margin: 20px auto 0 auto;
+	position: relative;
+}
+
+#container #header #inSession {
+	position: absolute;
+	top: 0;
+	left: 20px;
+	width: 80px;
+	height: 80px;
+	background: url(../images/tags/insession.png) no-repeat top left;
+}
+
+#container #header #inSession p{
+	display: none;
+}
+
+#container #header #headerLogo {
+	position: absolute;
+	top: 0;
+	left: 100px;
+	font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+  background-color: #000;
+	z-index: 2;
+	color: #fff;
+}
+#container #header #headerLogo h1{
+  font-size: 1.5em;
+  line-height: 1.3em;
+  text-align: left;
+	z-index: 2;
+	color: #fff;
+  padding: 10px 20px;
+  height: 60px;
+}
+
+#container #header #headerPhotoContainer {
+    height: 440px;
+    left: 480px;
+    overflow: hidden;
+    position: relative;
+    top: 60px;
+    width: 440px;
+    background-color: #000;
+}
+
+
+#container #header #headerPhoto img {
+    height: 440px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 440px;
+}
+
+#container #header #headerIntro {
+	position: absolute;
+	top: 80px;
+	left: 100px;
+	width: 380px;
+	height: 400px;
+	text-align: left;
+	background: #ff3300;
+	color: #fff;
+	overflow: hidden;
+}
+
+#container #header #headerIntro h2 {
+  font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+  font-size: 3.6em;
+  line-height: 1.1em;
+	margin: 20px 10px 30px 20px;
+}
+
+#container #header #headerIntro p {
+	padding: 0 20px 45px 20px;
+}
+
+#container #header #headerIntro p {
+	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+}
+
+#container #header #headerIntro ul, #container #headerIntro address {
+	position: absolute;
+	bottom: 20px;
+}
+
+#container #header #headerIntro ul {
+	width: 160px;
+	left: 20px;
+}
+
+#container #header #headerIntro address {
+	width: 160px;
+	right: 20px;
+}
+
+#container #headerNav {
+	width: 400px;
+	height: 65px;
+	position: absolute;
+  top: 10px;
+  right: 65px;
+  text-align: right;
+}
+#container #headerNav ul li{
+  font-size: 1.3em;
+  font-weight: bold;
+  display: inline;
+  margin: 0 0 0 20px;
+}
+#container #headerNav ul li.tshq a{
+  color: #000;
+  border-bottom: 1px solid #000;
+}
+#container #headerNav ul li.tshq a:hover{
+  color: #ff0000;
+  border-bottom: 1px solid #ff0000;
+}
+#container #headerNav ul li a{
+  text-decoration: none;
+  color: #ff0000;
+  border-bottom: 1px solid #ff0000;
+}
+#container #headerNav ul li a:hover{
+  color: #000;
+}
+#container #header #headerEmail {
+	width: 360px;
+	height: 40px;
+	text-align: left;
+	position: absolute;
+	top: 498px;
+	left: 100px;
+}
+#container #header #headerEmail p{
+  color: #ff0000;
+  font-size: 1.2em;
+  display: inline;
+}
+
+
+#container #header #headerEmail form#mailinglist {
+	display: inline;
+}
+
+#container #header #headerEmail input.emailField {
+	border: 0;
+	width: 170px;
+	padding: 5px;
+	color: #666;
+	font: 1em/ 1em Helvetica, Arial, sans-serif;
+	margin: 0 10px;
+	border: 3px solid #ff0000;
+}
+
+#container #header #headerEmail input.emailButton {
+	border: 0;
+	font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+	color: #fff;
+	font-size: 1em;
+	width: 41px;
+	height: 34px;
+  background-color: #ff0000;
+  background-image: none;
+	float: right;
+	text-indent: 0;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+#container #header #headerEmail input.emailButton:hover {
+  background-image: none;
+  background-color: #000;
+	outline: 0;
+	cursor: pointer;
+}
