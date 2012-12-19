@@ -151,7 +151,7 @@ class Person(Base):
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120)
-    site        = ForeignKey(Site, null=True)
+    site        = ManyToManyField(Site, null=True)
     
     objects = Manager()
     on_site = CurrentSiteManager()
@@ -172,9 +172,6 @@ class Person(Base):
         return courses.count()
     get_courses_taught.short_description = 'Classes Taught'    
     
-class CourseSiteManager(Manager):
-    def get_query_set(self):
-        return super(CourseSiteManager, self).get_query_set().filter(teacher__site__id__exact=settings.SITE_ID)
             
 class Course(Base):
     """
@@ -201,9 +198,10 @@ class Course(Base):
     title           = CharField(max_length=140, verbose_name="class title")    
     slug            = SlugField(max_length=120,blank=False, null=True)
     description     = TextField(blank=False, verbose_name="Class description")
+    site       	 	= ManyToManyField(Site, null=True)
     
     objects = Manager()
-    on_site = CourseSiteManager()    
+    on_site = CurrentSiteManager()    
 
 class Durational(Base):
     """
@@ -211,7 +209,7 @@ class Durational(Base):
     In the tradeschool system, these would be the Time and Course models.
     """
     class Meta:
-            abstract = True
+		abstract = True
 
     start_time  = DateTimeField()
     end_time    = DateTimeField()
@@ -236,11 +234,11 @@ class Time(Durational):
 class ScheduleSitePublicManager(Manager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
-        return super(ScheduleManager, self).get_query_set().filter(course__teacher__site__id__exact=settings.SITE_ID).filter(start_time__gte=now).filter(course_status__exact=3).annotate(registered_students=Count('students'))
+        return super(ScheduleSitePublicManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID).filter(start_time__gte=now).filter(course_status__exact=3).annotate(registered_students=Count('students'))
         
 class ScheduleSiteManager(Manager):
     def get_query_set(self):
-       return super(ScheduleSiteManager, self).get_query_set().filter(course__teacher__site__id__exact=settings.SITE_ID).annotate(registered_students=Count('students')).prefetch_related('course')
+       return super(ScheduleSiteManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID).annotate(registered_students=Count('students')).prefetch_related('course')
 
 class Schedule(Durational):
     """
@@ -254,11 +252,11 @@ class Schedule(Durational):
         (4, 'Rejected')
     )
 
-    venue           = ForeignKey(Venue)
+    venue           = ForeignKey(Venue, null=True, blank=True)
     course          = ForeignKey(Course)
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0)
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
-    students        = ManyToManyField(Person, through="Registration")
+    students        = ManyToManyField(Person, through="Registration")    
 
     objects = Manager()
     on_site = ScheduleSiteManager()    
@@ -304,7 +302,7 @@ class Schedule(Durational):
 
 class BarterItemSiteManager(Manager):
     def get_query_set(self):
-       return super(BarterItemSiteManager, self).get_query_set().filter(schedule__course__teacher__site__id__exact=settings.SITE_ID)
+       return super(BarterItemSiteManager, self).get_query_set().filter(schedule__course__site__id__exact=settings.SITE_ID)
 
 class BarterItem(Base):
     """
@@ -325,7 +323,7 @@ class BarterItem(Base):
 
 class RegistrationSiteManager(Manager):
     def get_query_set(self):
-       return super(RegistrationSiteManager, self).get_query_set().filter(schedule__course__teacher__site__id__exact=settings.SITE_ID)
+       return super(RegistrationSiteManager, self).get_query_set().filter(schedule__course__site__id__exact=settings.SITE_ID)
 
 class Registration(Base):
     """

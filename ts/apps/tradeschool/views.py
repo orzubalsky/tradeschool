@@ -33,11 +33,14 @@ def add_class(request):
         time_form           = TimeSelectionForm(request.POST, prefix="time")
                 
         if barter_item_formset.is_valid() and course_form.is_valid() and teacher_form.is_valid() and time_form.is_valid():
+            current_site = Site.objects.get_current()
+            
             # save teacher
             teacher = teacher_form.save(commit=False)
             teacher_data = teacher_form.cleaned_data
             teacher_data['slug'] = slugify(teacher.fullname)
             teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
+            teacher.site.add(current_site)
             teacher.save()
             
             # save course
@@ -46,12 +49,13 @@ def add_class(request):
             course_data['slug'] = slugify(course.title)
             course_data['teacher'] = teacher
             course, created = Course.objects.get_or_create(title=course.title, defaults=course_data)
+            course.site.add(current_site)
             course.save()
                         
             # save schedule
-            venue = Venue.objects.get(title="Cuchifritos")
+            #venue = Venue.objects.get(title="Cuchifritos")
             selected_time = time_form.cleaned_data['time']  
-            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, venue=venue, course_status=0)
+            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
             schedule.save()
             
             # save barter items
@@ -64,7 +68,7 @@ def add_class(request):
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(prefix="item")
         course_form         = CourseForm(prefix="course")
-        teacher_form        = TeacherForm(prefix="teahcer")
+        teacher_form        = TeacherForm(prefix="teacher")
         time_form           = TimeSelectionForm(prefix="time")
     
     return render_to_response(
