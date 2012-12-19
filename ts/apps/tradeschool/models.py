@@ -234,7 +234,7 @@ class Time(Durational):
 class ScheduleSitePublicManager(Manager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
-        return super(ScheduleSitePublicManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID).filter(start_time__gte=now).filter(course_status__exact=3).annotate(registered_students=Count('students'))
+        return super(ScheduleSitePublicManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID).filter(end_time__gte=now).filter(course_status__exact=3).annotate(registered_students=Count('students'))
         
 class ScheduleSiteManager(Manager):
     def get_query_set(self):

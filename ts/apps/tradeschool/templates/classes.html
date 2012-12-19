@@ -20,7 +20,7 @@
 		
 		<div class="classInfo">
 			<div class="classHeader">
-				<h3><a class="toggle" href="{% url class-view branch_slug=branch.slug course_slug=schedule.course.slug %}">{{ schedule.course.title }}</a></h3>
+				<h3><a class="toggle" href="{% url class-view course_slug=schedule.course.slug %}">{{ schedule.course.title }}</a></h3>
 				<em>{{ schedule.start_time|smartdate:"g:ia"|localize }} to {{ schedule.end_time|smartdate:"g:ia"|localize }}</em>
 			</div>
 			
