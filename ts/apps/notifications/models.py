@@ -1,4 +1,5 @@
 from django.db.models import *
+from django.contrib.sites.models import Site
 from tradeschool.models import Base, Branch, Course, Schedule
 
 
@@ -22,9 +23,9 @@ class Email(Base):
     )    
 
 
-    subject     = CharField(max_length=140)    
-    content     = TextField()
-    email_type  = CharField(max_length=30, choices=TYPE_CHOICES) 
+    subject    = CharField(max_length=140)    
+    content    = TextField()
+    email_type = CharField(max_length=30, choices=TYPE_CHOICES) 
     
     def __unicode__ (self):
         return self.subject
@@ -45,9 +46,9 @@ class ScheduleNotification(Email):
         ('sent', 'Sent')
     )
     
-    schedule    = ForeignKey(Schedule)
-    send_on     = DateTimeField(blank=True, null=True)
-    email_status= SmallIntegerField(max_length=1, choices=EMAIL_CHOICES)
+    schedule     = ForeignKey(Schedule)
+    send_on      = DateTimeField(blank=True, null=True)
+    email_status = SmallIntegerField(max_length=1, choices=EMAIL_CHOICES)
 
 
 class BranchNotificationTemplate(Email):
@@ -57,7 +58,7 @@ class BranchNotificationTemplate(Email):
     They should only be edited by super admins.
     """
 
-    cron            = BooleanField(verbose_name="timed email", help_text="Check this box if this email should get sent automatically") 
+    cron = BooleanField(verbose_name="timed email", help_text="Check this box if this email should get sent automatically") 
 
 
 class BranchNotification(BranchNotificationTemplate):
@@ -66,4 +67,17 @@ class BranchNotification(BranchNotificationTemplate):
     They are used to generate class notifications when a course is created.
     """
 
-    branch          = ForeignKey(Branch)
+    site = ForeignKey(Site)
+    
+    def calculate_send_time(self, schedule):
+        if self.cron:
+            if self.email_type == 'student_reminder':
+                return schedule.start_time
+            if self.email_type == 'student_feedback':
+                return schedule.end_time                
+            if self.email_type == 'teacher_reminder':
+                return schedule.start_time                
+            if self.email_type == 'teacher_feedback':
+                return schedule.end_time                
+                
+            

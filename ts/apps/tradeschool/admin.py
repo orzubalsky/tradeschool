@@ -34,7 +34,7 @@ class BranchAdmin(admin.ModelAdmin):
     def queryset(self, request):
         qs = super(BranchAdmin, self).queryset(request)        
         if settings.SITE_ID == 1:
-            # It is mine, all mine. Just return everything.
+            # return everything.
             return qs        
         # use our manager, rather than the default one
         qs = self.model.on_site.get_query_set()
@@ -168,8 +168,8 @@ class ScheduleAdmin(admin.ModelAdmin):
         return qs
                     
     def populate_notifications(self, request, queryset):
-        for course in queryset:
-            course.populate_notifications()
+        for schedule in queryset:
+            schedule.populate_notifications()
     populate_notifications.short_description = "Populate Email Notifications"
 
     list_display = ('get_course_title', 'get_teacher_fullname', 'start_time', 'end_time', 'venue', 'course_status', 'created')    

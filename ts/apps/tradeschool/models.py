@@ -49,6 +49,10 @@ class Branch(Location):
     The branch slug should be used to point to the individual branch app functionality.
     All dates and times in the branch's view templates should reflect the branch's timezone.   
     """    
+    
+    class Meta:
+        verbose_name_plural = "Branches"
+        
     COMMON_TIMEZONE_CHOICES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
     
     slug        = SlugField(max_length=120, help_text="This is the part that comes after 'http://tradeschool.coop/' in the URL")
@@ -70,7 +74,7 @@ class Branch(Location):
         # copy branch notification from the branch notification templates
         templates = BranchNotificationTemplate.objects.all()
         for template in templates:
-            branch_notification = BranchNotification(branch=self, subject=template.subject, content=template.content, email_type=template.email_type, cron=template.cron)
+            branch_notification = BranchNotification(site=self.site, subject=template.subject, content=template.content, email_type=template.email_type, cron=template.cron)
             branch_notification.save()
     
     # def files(self):
@@ -271,9 +275,9 @@ class Schedule(Durational):
         schedule_notifications = ScheduleNotification.objects.filter(schedule=self).delete()
         
         # copy course notification from the branch notification templates
-        templates = BranchNotification.objects.filter(branch=self.course.teacher.site.branch)
+        templates = BranchNotification.objects.filter(site__in=self.course.site.all())
         for template in templates:
-            send_on = calculate_send_time()
+            send_on = template.calculate_send_time(schedule=self)
             schedule_notification = ScheduleNotification(schedule=self, subject=template.subject, content=template.content, email_type=template.email_type, email_status=1, send_on=send_on)
             schedule_notification.save()
 
