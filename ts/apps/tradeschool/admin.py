@@ -151,17 +151,15 @@ class PersonAdmin(BaseAdmin):
 
 
 class TeacherAdmin(PersonAdmin):
-    list_display = ('fullname', 'email', 'phone', 'created')    
-    search_fields = ('fullname', 'email', 'phone')
-    fields = (('fullname', 'email', 'phone', 'slug'), 'website', 'bio')
-    prepopulated_fields = {'slug': ('fullname',)}
+    def queryset(self, request):
+        return super(TeacherAdmin, self).queryset(request).filter(courses_taught_count__gt=0)
+            
+    list_display = ('fullname', 'email', 'phone', 'courses_taught', 'created')    
 
 
 class StudentAdmin(PersonAdmin):
-    list_display = ('fullname', 'email', 'phone', 'courses_taken', 'created')    
-    search_fields = ('fullname', 'email', 'phone')
-    fields = (('fullname', 'email', 'phone', 'slug'), 'website', 'bio')
-    prepopulated_fields = {'slug': ('fullname',)}
+    def queryset(self, request):
+        return super(StudentAdmin, self).queryset(request).filter(registration_count__gt=0)
 
 
 class TimeAdmin(admin.ModelAdmin):

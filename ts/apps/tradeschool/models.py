@@ -138,6 +138,12 @@ class Venue(Location):
     objects = Manager()
     on_site = CurrentSiteManager()    
 
+class PersonManager(Manager):
+    def get_query_set(self):
+        return super(PersonManager, self).get_query_set().annotate(
+            registration_count  =Count('registrations', distinct=True), 
+            courses_taught_count=Count('courses_taught', distinct=True)
+        )
 
 class Person(Base):
     """
@@ -165,9 +171,9 @@ class Person(Base):
         return self.fullname
             
 
-class TeacherManager(Manager):
+class TeacherManager(PersonManager):
     def get_query_set(self):
-        return super(TeacherManager, self).get_query_set().filter()
+        return super(TeacherManager, self).get_query_set().filter(courses_taught_count__gt=0)
 
 
 class Teacher(Person):

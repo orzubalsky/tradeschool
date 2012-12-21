@@ -44,9 +44,9 @@ class BarterItemForm (ModelForm):
         self.fields['title'].error_messages['required']     = _("Barter item cannot be blank")        
         self.fields['requested'].error_messages['required'] = _("Barter item quantity cannot be blank")
         
-        class Meta:
-            model       = BarterItem
-            fields      = ('title', 'requested')
+    class Meta:
+        model   = BarterItem
+        fields  = ('title', 'requested')
 
 
 class BaseBarterItemFormSet(BaseFormSet):
