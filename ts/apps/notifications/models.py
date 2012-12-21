@@ -41,14 +41,14 @@ class ScheduleNotification(Email):
     """
 
     EMAIL_CHOICES = (
-        ('inactive', 'Inactive'),
-        ('active', 'Active'),
+        ('disabled', 'Disabled'),
+        ('not_sent', 'Not Sent Yet'),
         ('sent', 'Sent')
     )
     
     schedule     = ForeignKey(Schedule)
     send_on      = DateTimeField(blank=True, null=True)
-    email_status = SmallIntegerField(max_length=1, choices=EMAIL_CHOICES)
+    email_status = CharField(max_length=30, choices=EMAIL_CHOICES, default='not_sent')
 
 
 class BranchNotificationTemplate(Email):
@@ -74,10 +74,8 @@ class BranchNotification(BranchNotificationTemplate):
             if self.email_type == 'student_reminder':
                 return schedule.start_time
             if self.email_type == 'student_feedback':
-                return schedule.end_time                
+                return schedule.end_time
             if self.email_type == 'teacher_reminder':
-                return schedule.start_time                
+                return schedule.start_time
             if self.email_type == 'teacher_feedback':
-                return schedule.end_time                
-                
-            
+                return schedule.end_time

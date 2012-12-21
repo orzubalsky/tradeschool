@@ -509,7 +509,7 @@ body.global {
 
 .aClass .classInfo .classBody {
 	overflow: hidden;
-	display: none;
+	display: block;
 }
 
 .aClass .classInfo .classBody p,.aClass .classInfo .classBody h4 {

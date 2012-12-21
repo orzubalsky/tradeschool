@@ -6,10 +6,10 @@
 		this.init = function() {
 			//this.shadowbox();
 			this.gallery();
-			this.classMatch();
-			this.classToggles();
+			//this.classMatch();
+			//this.classToggles();
 			this.addClassItems();
-			this.registerForm();
+			//this.registerForm();
 		},
 
 		this.gallery = function() 

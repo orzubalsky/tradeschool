@@ -105,3 +105,26 @@ class TimeSelectionForm(Form):
 
 
 
+
+class RegisteredItemForm(ModelForm):
+    def __init__(self, schedule, *args, **kwargs):
+           super (RegisteredItemForm,self ).__init__(*args,**kwargs) # populates the post
+           self.fields['barter_item'].queryset = BarterItem.objects.filter(schedule=schedule)
+           self.fields['barter_item'].empty_label = None
+    
+    class Meta:
+        model       = RegisteredItem
+        fields      = ('barter_item', )
+        widgets = { 'barter_item': CheckboxSelectMultiple(), }        
+
+            
+
+class StudentForm (ExtendedMetaModelForm):
+    class Meta:
+        model       = Person
+        fields      = ('fullname', 'email', 'phone')
+        field_args  = {
+                        "fullname"  : { "error_messages" : { "required" : _("Please enter your name") } },
+                        "email"     : { "error_messages" : { "required" : _("Please enter your email") } },
+                        "phone"     : { "error_messages" : { "required" : _("Please enter your phone number") } },
+                      }

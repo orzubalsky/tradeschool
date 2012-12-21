@@ -278,7 +278,7 @@ class Schedule(Durational):
         templates = BranchNotification.objects.filter(site__in=self.course.site.all())
         for template in templates:
             send_on = template.calculate_send_time(schedule=self)
-            schedule_notification = ScheduleNotification(schedule=self, subject=template.subject, content=template.content, email_type=template.email_type, email_status=1, send_on=send_on)
+            schedule_notification = ScheduleNotification(schedule=self, subject=template.subject, content=template.content, email_type=template.email_type, email_status='not_sent', send_on=send_on)
             schedule_notification.save()
 
     def get_course_title(self):
@@ -323,7 +323,7 @@ class BarterItem(Base):
     on_site = BarterItemSiteManager()
 
     def __unicode__ (self):
-        return "%s: %i" % (self.title, self.requested)
+        return self.title
 
 class RegistrationSiteManager(Manager):
     def get_query_set(self):
