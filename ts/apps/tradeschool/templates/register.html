@@ -27,6 +27,9 @@
 				{% for field in student_form %}
 					{% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
            		{% endfor %}
+                {% for field in registered_item_form %}
+                    {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
+            	{% endfor %}           		
                 </ul>
 				{% endif %}
 

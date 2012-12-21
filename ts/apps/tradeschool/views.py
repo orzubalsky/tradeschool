@@ -26,23 +26,21 @@ def class_register(request, course_slug=None):
     seats_left = 2 
     
     if request.method == 'POST':
-        student_form          = StudentForm(request.POST, prefix="student")
-        registered_item_forms = RegisteredItemForm(request.POST, prefix="item")        
+        student_form         = StudentForm(data=request.POST, prefix="student")
+        registered_item_form = RegisteredItemForm(data=request.POST, schedule=schedule, prefix="item")        
                 
-        if registration_form.is_valid() and student_form.is_valid():
+        if registered_item_form.is_valid() and student_form.is_valid():
             current_site = Site.objects.get_current()
             
             # save student
-            teacher = teacher_form.save(commit=False)
-            teacher_data = teacher_form.cleaned_data
-            teacher_data['slug'] = slugify(teacher.fullname)
-            teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
-            teacher.site.add(current_site)
-            teacher.save()
+            student = student_form.save(commit=False)
+            student_data = student_form.cleaned_data
+            student_data['slug'] = slugify(student.fullname)
+            student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
+            student.site.add(current_site)
+            student.save()
                         
             # save registration
-            #venue = Venue.objects.get(title="Cuchifritos")
-            selected_time = time_form.cleaned_data['time']  
             schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
             schedule.save()
             

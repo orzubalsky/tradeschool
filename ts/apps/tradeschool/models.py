@@ -337,11 +337,11 @@ class Registration(Base):
     and then unregistered from a class.
     """
 
-    REGISTRATION_CHOICES = ((0, 'registered'),(1, 'unregistereed'))
+    REGISTRATION_CHOICES = (('registered', 'Registered'),('unregistered', 'Unregistereed'))
 
     schedule            = ForeignKey(Schedule)
     student             = ForeignKey(Person)
-    registration_status = SmallIntegerField(max_length=1, choices=REGISTRATION_CHOICES, default=0)
+    registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
     items               = ManyToManyField(BarterItem, through="RegisteredItem")
     
     objects = Manager()
