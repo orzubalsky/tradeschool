@@ -342,7 +342,7 @@ class Registration(Base):
     schedule            = ForeignKey(Schedule)
     student             = ForeignKey(Person)
     registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
-    items               = ManyToManyField(BarterItem, through="RegisteredItem")
+    items               = ManyToManyField(BarterItem, through="RegisteredItem", blank=False)
     
     objects = Manager()
     on_site = RegistrationSiteManager()    

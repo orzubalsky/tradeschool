@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from tradeschool.models import *
 
 
-class TeacherForm (ExtendedMetaModelForm):
+class TeacherForm (ModelForm):
     def __init__(self, *args, **kwargs):
         "Sets custom meta data to the form's fields"
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -22,7 +22,7 @@ class TeacherForm (ExtendedMetaModelForm):
     bio = forms.CharField(required=True, label=_("A few sentences about you"), help_text=_("For prospective students to see on the website"), widget=forms.Textarea)
 
 
-class CourseForm (ExtendedMetaModelForm):
+class CourseForm (ModelForm):
     def __init__(self, *args, **kwargs):
         "Sets custom meta data to the form's fields"
         super(ModelForm, self).__init__(*args, **kwargs)
@@ -70,17 +70,17 @@ class TimeSelectionForm(Form):
     time = forms.ModelChoiceField(queryset=Time.objects.all(), error_messages={'required': _('Please select a time') } )
 
 
-class RegisteredItemForm(ModelForm):
+class RegistrationForm(ModelForm):
     def __init__(self, schedule, *args, **kwargs):
-           super (RegisteredItemForm,self ).__init__(*args,**kwargs) # populates the post
-           self.fields['barter_item'].queryset = BarterItem.objects.filter(schedule=schedule)
-           self.fields['barter_item'].error_messages['required'] =  _("Please select at least one item")           
-           self.fields['barter_item'].empty_label = None
+           super (RegistrationForm,self ).__init__(*args,**kwargs) # populates the post
+           self.fields['items'].queryset = BarterItem.objects.filter(schedule=schedule)
+           self.fields['items'].error_messages['required'] =  _("Please select at least one item")           
+           self.fields['items'].empty_label = None
     
     class Meta:
-        model       = RegisteredItem
-        fields      = ('barter_item', )
-        widgets     = { 'barter_item': CheckboxSelectMultiple(), }        
+        model       = Registration
+        fields      = ('items', )
+        widgets     = { 'items': CheckboxSelectMultiple(), }        
             
 
 class StudentForm(ModelForm):

@@ -22,20 +22,21 @@
 			</div>
 			
 			<form id="registerToClass" method="post" action="{% url class-register course_slug=schedule.course.slug %}">{% csrf_token %}
-				{% if student_form.errors %}
+        		{% if student_form.errors or registration_form.errors %}
 			    <ul class="errors">                    
 				{% for field in student_form %}
 					{% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
            		{% endfor %}
-                {% for field in registered_item_form %}
+                {% for field in registration_form %}
                     {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
-            	{% endfor %}           		
+            	{% endfor %}
+            	
                 </ul>
 				{% endif %}
 
 				I can <strong>bring the following</strong>:<br />
 				<div class="barterItems">
-				    {{ registered_item_form.barter_item }}
+				    {{ registration_form.items }}
 				</div>
 				{{ student_form.fullname.label }}<br />
 				{{ student_form.fullname }}<br />

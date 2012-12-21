@@ -26,12 +26,12 @@ def class_register(request, course_slug=None):
     seats_left = 2 
     
     if request.method == 'POST':
-        student_form         = StudentForm(data=request.POST, prefix="student")
-        registered_item_form = RegisteredItemForm(data=request.POST, schedule=schedule, prefix="item")        
+        student_form      = StudentForm(data=request.POST, prefix="student")
+        registration_form = RegistrationForm(data=request.POST, schedule=schedule, prefix="item")        
                 
-        if registered_item_form.is_valid() and student_form.is_valid():
+        if registration_form.is_valid() and student_form.is_valid():
             current_site = Site.objects.get_current()
-            
+                        
             # save student
             student = student_form.save(commit=False)
             student_data = student_form.cleaned_data
@@ -39,27 +39,30 @@ def class_register(request, course_slug=None):
             student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
             student.site.add(current_site)
             student.save()
-                        
+                                    
             # save registration
-            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
-            schedule.save()
+            registration = registration_form.save(commit=False)
+            registration.student = student
+            registration.schedule = schedule
+            registration.save()
             
-            # save registered barter items
-            for barter_item_form in barter_item_formset:
-                barter_item_form_data = barter_item_form.cleaned_data
-                barter_item = BarterItem(title=barter_item_form_data['title'], requested=barter_item_form_data['requested'], schedule=schedule)
-                barter_item.save()
+            # save items in registration through RegisteredItem
+            for barter_item in registration_form.cleaned_data['items']:
+                registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
+                registered_item.save()
             
     else :            
-        student_form         = StudentForm(prefix="student")
-        registered_item_form = RegisteredItemForm(schedule=schedule, prefix="item")        
+        student_form      = StudentForm(prefix="student")
+        registration_form = RegistrationForm(schedule=schedule, prefix="item")
+        
+    print registration_form
         
     return render_to_response(
         'register.html',
         {'schedule'             : schedule,
          'open_seat_percentage' : open_seat_percentage,
          'seats_left'           : seats_left,
-         'registered_item_form' : registered_item_form,
+         'registration_form'    : registration_form,
          'student_form'         : student_form,}, 
         context_instance=RequestContext(request))
         
