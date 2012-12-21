@@ -20,12 +20,11 @@ def class_list(request, course_slug=None):
 
 def class_register(request, course_slug=None):
     schedule             = get_object_or_404(Schedule, course__slug=course_slug)
-    #open_seat_percentage = (schedule.registered_students / schedule.course.max_students) * 100;
-    open_seat_percentage = 50
-    #seats_left           = schedule.course.max_students - schedule.registered_students
-    seats_left = 2 
-    
+    open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
+    seats_left           = schedule.course.max_students - schedule.registered_students
+
     if request.method == 'POST':
+        
         student_form      = StudentForm(data=request.POST, prefix="student")
         registration_form = RegistrationForm(data=request.POST, schedule=schedule, prefix="item")        
                 
@@ -54,9 +53,7 @@ def class_register(request, course_slug=None):
     else :            
         student_form      = StudentForm(prefix="student")
         registration_form = RegistrationForm(schedule=schedule, prefix="item")
-        
-    print registration_form
-        
+                
     return render_to_response(
         'register.html',
         {'schedule'             : schedule,

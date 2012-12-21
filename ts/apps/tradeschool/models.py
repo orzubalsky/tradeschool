@@ -2,21 +2,21 @@ from django.conf import settings
 from django.db.models import *
 from django_countries import CountryField
 from django.contrib.localflavor.us.models import USStateField
+from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 from django.core.files.storage import default_storage as storage
 from django.core.files.base import ContentFile
 from django.utils.timezone import utc
-from datetime import *
 import os, sys, pytz, uuid, random
+from datetime import *
 from tradeschool.widgets import *
-from django.contrib.sites.models import Site
-from django.contrib.sites.managers import CurrentSiteManager
 
 class Base(Model):
     """
     Base model for all of the models in ts.  
     """
     class Meta:
-            abstract = True
+        abstract = True
                     
     created     = DateTimeField(auto_now_add=True, editable=False)
     updated     = DateTimeField(auto_now=True, editable=False)
@@ -34,13 +34,13 @@ class Location(Base):
     Abstract for location based models: branch & venue.     
     """
     class Meta:
-            abstract = True
+        abstract = True
 
-    title       = CharField(max_length=100)
-    phone       = CharField(max_length=20, blank=True, null=True)    
-    city        = CharField(max_length=100)
-    state       = USStateField(null=True, blank=True, verbose_name="state")
-    country     = CountryField()
+    title   = CharField(max_length=100)
+    phone   = CharField(max_length=20, blank=True, null=True)    
+    city    = CharField(max_length=100)
+    state   = USStateField(null=True, blank=True, verbose_name="state")
+    country = CountryField()
 
 
 class Branch(Location):
@@ -148,6 +148,9 @@ class Person(Base):
     Hash is used in public urls that involve teachers editing classes & students unregistering
     """
     
+    class Meta:
+        verbose_name_plural = "People"
+            
     fullname    = CharField(max_length=100, verbose_name="your name", help_text="This will appear on the site.")
     email       = EmailField(max_length=100, verbose_name="Email address", help_text="Used only for us to contact you.")
     phone       = CharField(max_length=20, blank=False, null=True, verbose_name="Cell phone number", help_text="Used only for us to contact you.")
@@ -235,14 +238,19 @@ class Time(Durational):
     on_site = CurrentSiteManager()    
 
 
-class ScheduleSitePublicManager(Manager):
+class ScheduleManager(Manager):
+   def get_query_set(self):
+      return super(ScheduleManager, self).get_query_set().annotate(registered_students=Count('students')).prefetch_related('course')
+
+class ScheduleSiteManager(ScheduleManager):
+  def get_query_set(self):
+     return super(ScheduleSiteManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID)
+
+class ScheduleSitePublicManager(ScheduleSiteManager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
-        return super(ScheduleSitePublicManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID).filter(end_time__gte=now).filter(course_status__exact=3).annotate(registered_students=Count('students'))
+        return super(ScheduleSitePublicManager, self).get_query_set().filter(end_time__gte=now).filter(course__is_active=1)
         
-class ScheduleSiteManager(Manager):
-    def get_query_set(self):
-       return super(ScheduleSiteManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID).annotate(registered_students=Count('students')).prefetch_related('course')
 
 class Schedule(Durational):
     """
@@ -262,7 +270,7 @@ class Schedule(Durational):
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
 
-    objects = Manager()
+    objects = ScheduleManager()
     on_site = ScheduleSiteManager()    
     public  = ScheduleSitePublicManager()
 
