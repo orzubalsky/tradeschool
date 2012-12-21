@@ -182,10 +182,17 @@ class Teacher(Person):
         
     objects = TeacherManager()
 
-   
+
+class StudentManager(PersonManager):
+    def get_query_set(self):
+        return super(StudentManager, self).get_query_set().filter(registration_count__gt=0)
+
+
 class Student(Person):
     class Meta:
         proxy = True
+ 
+    objects = StudentManager()
  
             
 class Course(Base):

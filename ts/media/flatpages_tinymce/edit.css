@@ -1,0 +1,40 @@
+#django_staticpages_edit_body{
+    min-height:400px;
+}
+
+
+#django_staticpages_edit_header{
+    text-align:right;
+    padding:0px 0px 5px;
+}
+
+#django_staticpages_edit_header>a{
+    color:#ff9999;
+    font-weight:bold;
+    padding:3px 10px;
+    border:1px solid #f99;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    text-decoration:none;
+}
+
+#django_staticpages_edit_header>a:hover{
+    background-color:#ff6666;
+    color:white;
+    font-weight:bold;
+    padding:3px 10px;
+    border:1px solid #ff6666;
+}
+
+
+#django_staticpages_edit_header>a.save{
+    color:#6c6;
+    border:1px solid #6c6;
+}
+
+#django_staticpages_edit_header>a.save:hover{
+    background-color:#6c6;
+    border:1px solid #6c6;
+    color:white;
+}

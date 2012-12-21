@@ -84,6 +84,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'    
 )
 
 ROOT_URLCONF = 'ts.urls'
@@ -115,6 +116,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.humanize',
     'django.contrib.redirects',
+    'django.contrib.flatpages',
+    'flatpages_tinymce',
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
     'chronograph',                  # admin based cron job management
@@ -152,6 +155,13 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+TINYMCE_DEFAULT_CONFIG = {
+    # custom plugins
+    'plugins': "table,spellchecker,paste,searchreplace",
+    # editor theme
+    'theme': "advanced",
 }
 
 try:

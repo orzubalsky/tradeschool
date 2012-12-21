@@ -14,8 +14,8 @@ urlpatterns = patterns('',
     (r'^admin/password_reset/done/$', 'django.contrib.auth.views.password_reset_done'),
     (r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
-
-    url(r'^class/', include('tradeschool.urls')),    
+    (r'^tinymce/', include('tinymce.urls')),    
+    url(r'^class/', include('tradeschool.urls')),
 )
 
 # static files url patterns
@@ -26,3 +26,7 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, }),
    )
 
+
+urlpatterns += patterns('django.contrib.flatpages.views',
+    (r'^(?P<url>.*)$', 'flatpage'),
+)
