@@ -138,8 +138,6 @@ class Venue(Location):
     objects = Manager()
     on_site = CurrentSiteManager()    
 
-class PersonManager(Manager):
-    pass
 
 class Person(Base):
     """
@@ -165,20 +163,24 @@ class Person(Base):
     
     def __unicode__ (self):
         return self.fullname
-    
-    def get_courses_taken(self):
-        "return the count of courses taken by this person"
-        from tradeschool.models import Registration        
-        registrations = Registration.objects.filter(student=self)
-        return registrations.count()
-    get_courses_taken.short_description = 'Classes Taken'
-    
-    def get_courses_taught(self):
-        "return the count of courses taught by this person"
-        courses = Course.objects.filter(teacher=self)
-        return courses.count()
-    get_courses_taught.short_description = 'Classes Taught'    
-    
+            
+
+class TeacherManager(Manager):
+    def get_query_set(self):
+        return super(TeacherManager, self).get_query_set().filter()
+
+
+class Teacher(Person):
+    class Meta:
+        proxy = True
+        
+    objects = TeacherManager()
+
+   
+class Student(Person):
+    class Meta:
+        proxy = True
+ 
             
 class Course(Base):
     """
@@ -199,7 +201,7 @@ class Course(Base):
         (6, 'Org')
     )
 
-    teacher         = ForeignKey(Person)
+    teacher         = ForeignKey(Person, related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
     title           = CharField(max_length=140, verbose_name="class title")    
@@ -348,7 +350,7 @@ class Registration(Base):
     REGISTRATION_CHOICES = (('registered', 'Registered'),('unregistered', 'Unregistereed'))
 
     schedule            = ForeignKey(Schedule)
-    student             = ForeignKey(Person)
+    student             = ForeignKey(Person, related_name='registrations')
     registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
     items               = ManyToManyField(BarterItem, through="RegisteredItem", blank=False)
     

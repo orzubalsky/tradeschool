@@ -1,6 +1,21 @@
 from tradeschool.models import *
 from notifications.models import *
 from django.contrib import admin
+
+class BaseAdmin(admin.ModelAdmin):
+    def queryset(self, request):
+        qs = super(BaseAdmin, self).queryset(request)        
+        if settings.SITE_ID == 1:
+            # return everything.
+            return qs        
+        # use our manager, rather than the default one
+        qs = self.model.on_site.get_query_set()
+
+        # we need this from the superclass method
+        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs    
     
 class ScheduleInline(admin.TabularInline):
     model = Schedule
@@ -112,25 +127,42 @@ class CourseAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     inlines = (ScheduleInline,)
     
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(BaseAdmin):
     def queryset(self, request):
-        qs = super(PersonAdmin, self).queryset(request)        
-        if settings.SITE_ID == 1:
-            # It is mine, all mine. Just return everything.
-            return qs        
-        # use our manager, rather than the default one
-        qs = self.model.on_site.get_query_set()
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-            
-    list_display = ('fullname', 'email', 'phone', 'get_courses_taken', 'get_courses_taught', 'created')    
+        return super(PersonAdmin, self).queryset(request).annotate(
+            registration_count  =Count('registrations', distinct=True), 
+            courses_taught_count=Count('courses_taught', distinct=True)
+        )
+        
+    list_display = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'created')    
     search_fields = ('fullname', 'email', 'phone')
     fields = (('fullname', 'email', 'phone', 'slug'), 'website', 'bio')
     prepopulated_fields = {'slug': ('fullname',)}
+
+    def courses_taken(self, obj):
+        return obj.registration_count
+    courses_taken.short_description = 'Courses Taken'
+    courses_taken.admin_order_field = 'registration_count'
+
+    def courses_taught(self, obj):
+        return obj.courses_taught_count
+    courses_taught.short_description = 'Courses Taught'
+    courses_taught.admin_order_field = 'courses_taught_count'
+
+
+class TeacherAdmin(PersonAdmin):
+    list_display = ('fullname', 'email', 'phone', 'created')    
+    search_fields = ('fullname', 'email', 'phone')
+    fields = (('fullname', 'email', 'phone', 'slug'), 'website', 'bio')
+    prepopulated_fields = {'slug': ('fullname',)}
+
+
+class StudentAdmin(PersonAdmin):
+    list_display = ('fullname', 'email', 'phone', 'courses_taken', 'created')    
+    search_fields = ('fullname', 'email', 'phone')
+    fields = (('fullname', 'email', 'phone', 'slug'), 'website', 'bio')
+    prepopulated_fields = {'slug': ('fullname',)}
+
 
 class TimeAdmin(admin.ModelAdmin):
     def queryset(self, request):
@@ -241,6 +273,8 @@ admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Person, PersonAdmin)
+admin.site.register(Teacher, TeacherAdmin)
+admin.site.register(Student, StudentAdmin)
 admin.site.register(Time, TimeAdmin)
 admin.site.register(BarterItem, BarterItemAdmin)
 admin.site.register(RegisteredItem, RegisteredItemAdmin)
