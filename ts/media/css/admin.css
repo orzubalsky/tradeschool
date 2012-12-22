@@ -1,0 +1,96 @@
+/*------ HEADER ----------*/
+header#grp-header #grp-navigation {
+    background-color: red;
+    background-image: none;
+}
+header#grp-header #grp-navigation ul#grp-user-tools {
+    border-color: red;
+}
+header#grp-header #grp-navigation ul#grp-user-tools > li {
+    border-color: red;
+}
+header#grp-header #grp-navigation ul#grp-user-tools > li a {
+    color: white;
+}
+header#grp-header #grp-navigation ul#grp-user-tools > li a:hover {
+    color: yellow;
+}
+header#grp-header #grp-context-navigation {
+    background-color: white;
+    background-image: none;
+    border: none;
+    color: black;
+}
+#grp-breadcrumbs > ul a {
+    color: black;
+}
+#grp-breadcrumbs > ul a:hover {
+    color: red;
+}
+
+/*------ HEADER END ----------*/
+
+
+
+
+/*--------- GROUP ----------*/
+.grp-group {
+    border: none;
+}
+.grp-group > h2, 
+.grp-collapse h2.grp-collapse-handle,
+.grp-collapse.grp-open > h2.grp-collapse-handler,
+.grp-collapse.grp-open > h2.grp-collapse-handle {
+    background-color: white;
+    background-image: none;
+    text-shadow: none;
+    border-radius: 0px;
+    border: none;
+    margin: 0;
+}
+/*--------- GROUP END ----------*/
+
+
+
+
+/*--------- MODULE ----------*/
+.grp-module {
+    border: none;
+    margin: none;
+}
+.grp-group:not(.grp-tabular) .grp-module {
+    margin-bottom: 20px;
+}
+.grp-module h3,
+.grp-collapse.grp-open > h3.grp-collapse-handler,
+.grp-collapse h3.grp-collapse-handler,
+.grp-group .grp-module > h3 {
+    background-image: none;
+    background-color: white;
+    color: red;
+    border: none;
+    border-bottom: 1px solid #eee;    
+    margin: none;
+    border-radius: 0px;
+    font-weight: bold;
+}
+.grp-module .grp-row:not(tr) {
+    background-image: none;
+    background-color: white;
+    border: none;
+    border-bottom: 1px solid #eee;
+    margin: none;
+    border-radius: 0px;
+}
+a.grp-link-external {
+    color: black;
+}
+a.grp-link-external:hover {
+    color: black;
+}
+a {
+    color: black;
+}
+a:hover {
+    color: red;
+}

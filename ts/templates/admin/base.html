@@ -15,6 +15,7 @@
         {% else %}
             <link href="{% static "grappelli/stylesheets/mueller/grid/output.css" %}" rel="stylesheet" type="text/css" media="screen" />
         {% endif %}
+        <link href="{% static "css/admin.css" %}" rel="stylesheet" type="text/css" media="screen" />        
     {% endblock %}
     <!-- EXTRASTYLES -->
     {% block extrastyle %}{% endblock %}
@@ -101,7 +102,6 @@
             <!-- CONTENT TITLE -->
             <header id="grp-content-title">
                 {% block pretitle %}{% endblock %}
-                {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
                 {% block object-tools %}{% endblock %}
             </header>
 

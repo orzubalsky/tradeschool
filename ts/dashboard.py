@@ -18,6 +18,17 @@ class CustomIndexDashboard(Dashboard):
     """
     Custom index dashboard for www.
     """
+
+    class Media:
+        css = {
+            'all': (
+                'css/admin.css',
+            ),
+        }
+                
+    columns = 3
+    template = 'admin/dashboard.html'
+    
     
     def init_with_context(self, context):
         site_name = get_admin_site_name(context)
@@ -27,7 +38,7 @@ class CustomIndexDashboard(Dashboard):
             self.children.append(modules.Group(
                 title=_('Admin'),
                 column=3,
-                collapsible=True,
+                collapsible=False,
                 children= [
                     modules.ModelList(
                         title=_('Everything'),
@@ -39,9 +50,8 @@ class CustomIndexDashboard(Dashboard):
         # individual school admin displays only relevant apps
         else:        
             self.children.append(modules.Group(
-                _('Trade School'),
                 column=1,
-                collapsible=True,
+                collapsible=False,
                 children = [
                     modules.ModelList(
                         title=_('Classes'),
@@ -77,26 +87,25 @@ class CustomIndexDashboard(Dashboard):
                     ),
                 ]
             ))
-
-        self.children.append(modules.Group(
-             title=_('Recent'),
-             column=2,
-             collapsible=True,
-             children = [
-        
-                # append a feed module for talk.tradeschool.coop posts
-                modules.Feed(
-                    title=_('Talk TS Posts'),
-                    column=1,
-                    limit=5,
-                    feed_url='http://talk.tradeschool.coop/rss',            
-                ),
-
-                # append a recent actions module
-                modules.RecentActions(
-                    title=_('Recent Actions'),
-                    column=1,
-                    limit=5,
-                )
-             ]
-        ))        
+                
+            self.children.append(modules.Group(
+               column=2,
+               collapsible=True,
+               children = [
+          
+                  # append a feed module for talk.tradeschool.coop posts
+                  modules.Feed(
+                      title=_('Talk TS Posts'),
+                      column=1,
+                      limit=10,
+                      feed_url='http://talk.tradeschool.coop/rss',            
+                  ),
+          
+                  # append a recent actions module
+                  # modules.RecentActions(
+                  #     title=_('Recent Actions'),
+                  #     column=1,
+                  #     limit=5,
+                  # )
+               ]
+          ))        
