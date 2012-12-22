@@ -67,11 +67,11 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    'django.contrib.messages.context_processors.messages',
     "django.core.context_processors.request",
+    "django.core.context_processors.i18n",
+    'django.contrib.messages.context_processors.messages',
+    "django.core.context_processors.debug",
+    "django.core.context_processors.media",
     'ts.context_processors.site',
 )
 
@@ -112,6 +112,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'grappelli.dashboard',    
+    'grappelli',    
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
@@ -158,11 +160,13 @@ LOGGING = {
 }
 
 TINYMCE_DEFAULT_CONFIG = {
-    # custom plugins
     'plugins': "table,spellchecker,paste,searchreplace",
-    # editor theme
     'theme': "advanced",
 }
+
+GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
+GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
+
 
 try:
     LOCAL_SETTINGS

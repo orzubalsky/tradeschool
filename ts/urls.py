@@ -7,7 +7,7 @@ admin.autodiscover()
 
 # direct browser requests to the different apps
 urlpatterns = patterns('',
-
+    (r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/password_reset/$', 'django.contrib.auth.views.password_reset', name='admin_password_reset'),
@@ -28,5 +28,5 @@ if settings.DEBUG:
 
 
 urlpatterns += patterns('django.contrib.flatpages.views',
-    (r'^(?P<url>.*)$', 'flatpage'),
+    #(r'^(?P<url>.*)$', 'flatpage'),
 )
