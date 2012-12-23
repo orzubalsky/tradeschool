@@ -67,7 +67,8 @@ class BranchNotification(BranchNotificationTemplate):
     They are used to generate class notifications when a course is created.
     """
 
-    site = ForeignKey(Site)
+    site    = ForeignKey(Site)
+    branch  = ForeignKey(Branch)    
     
     def calculate_send_time(self, schedule):
         if self.cron:

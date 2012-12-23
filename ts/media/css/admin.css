@@ -32,6 +32,7 @@ header#grp-header #grp-context-navigation {
     background-image: none;
     border: none;
     color: black;
+    padding-bottom: 6px;
 }
 #grp-breadcrumbs > ul a {
     color: black;
@@ -114,8 +115,144 @@ body.grp-change-list table {
 table thead th:first-of-type {
     width: 20px;
 }
-table thead th {
+table thead th,
+table.grp-sortable thead th.sortable:hover,
+table.grp-sortable thead th.sortable.sorted.ascending,
+table.grp-sortable thead th.sortable.sorted.descending,
+table.grp-sortable thead th.sortable.sorted.ascending:hover,
+table.grp-sortable thead th.sortable.sorted.descending:hover {
     background-color: white;
-    background-image: none;
+    background-image: none;   
+}
+table tbody tr.grp-selected,
+body.grp-change-list table tr.grp-selected th, 
+body.grp-change-list table tr.grp-selected td {
+    background-color: yellow;
+}
+table.grp-sortable thead th.sortable a {
+    color: black;
+    font-weight: bold;
+}
+table.grp-sortable thead th.sortable:hover a {
+    color: red;
 }
 /*--------- TABLE END ----------*/
+
+
+
+
+
+/*--------- CHANGE LIST ----------*/
+#grp-content {
+    top: 110px;
+}
+.grp-object-tools {
+    
+}
+.grp-object-tools li a,
+.grp-object-tools li a:hover {
+    border-radius: 0px;
+}
+.grp-object-tools li a.grp-add-link {
+    background-color: black;
+    background-image: none;
+    padding-left: 20px;
+}
+.grp-object-tools li a.grp-add-link:hover {
+    background-image: none;   
+    background-color: red;
+    color: white;
+}
+.grp-pagination ul li span {
+    background-image: none;
+    background-color: #f4f4f4;
+}
+form#grp-changelist-search {
+    border-radius: 0px;
+}
+input[type="text"].grp-search-field  {
+    border-radius: 0px;
+}
+.grp-pulldown-container {
+    border-radius: 0px;
+}
+.grp-pulldown-container .grp-pulldown-handler {
+    background-color: white;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+}
+.grp-pulldown-container .grp-pulldown-handler:hover {
+    background-color: white;
+}
+.grp-fixed-footer {
+    padding: 5px 10px 0px;
+}
+input[type="text"],
+input[type="password"],
+input[type="submit"],
+input[type="reset"],
+textarea,
+select {
+    border-radius: 0px;
+}
+.grp-submit-row.grp-fixed-footer > ul > li {
+    padding: 0;
+    background-color: transparent;
+}
+input[type="submit"],
+.grp-fixed-footer input[type="submit"],
+.grp-fixed-footer input[type="submit"] {
+    border-radius: 0px;
+    background-color: white;
+    color: black;
+    background-image: none;
+    border: none;
+}
+input[type="submit"]:focus,
+input[type="submit"]:hover,
+.grp-fixed-footer input[type="submit"]:hover,
+.grp-fixed-footer input[type="submit"]:focus {
+    border: none;
+    background-image: none;    
+    background-color: yellow;
+}
+#grp-changelist-form .grp-module .grp-row:not(tr) {
+    background-color: white;
+}
+/*--------- CHANGE LIST END ----------*/
+
+
+
+
+
+/*--------- ADD FORM --------------*/
+form .grp-module .grp-row:not(tr) {
+    background-color: yellow;
+}
+.grp-module h2 {
+    background-color: white;
+    background-image: none;
+    border: none;
+}
+fieldset.grp-module {
+    margin-bottom:20px;
+}
+.grp-change-form .grp-module:not(.grp-submit-row) {
+    min-width: 602px;
+    width: 602px;
+}
+.grp-row .vTextField,
+.grp-row .vURLField,
+.grp-row .vFileBrowseField,
+.grp-row textarea, 
+.grp-row .vLargeTextField,
+.grp-row .vXMLLargeTextField,
+.grp-autocomplete-wrapper-m2m,
+select {
+    width: 400px;
+}
+form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
+    background-color: white;
+}
+/*--------- ADD FORM END ----------*/
+

@@ -62,7 +62,7 @@ class CustomIndexDashboard(Dashboard):
                                 'tradeschool.models.Student',
                                 'tradeschool.models.Teacher',
                                 'tradeschool.models.Course',
-                                'tradeschool.models.Venues'),
+                                'tradeschool.models.Venue'),
                     ),
                     modules.ModelList(
                         title=_('Emails'),
@@ -90,12 +90,13 @@ class CustomIndexDashboard(Dashboard):
                 
             self.children.append(modules.Group(
                column=2,
-               collapsible=True,
+               collapsible=False,
                children = [
           
                   # append a feed module for talk.tradeschool.coop posts
                   modules.Feed(
                       title=_('Recent TalkTS Posts'),
+                      collapsible=False,                      
                       column=1,
                       limit=10,
                       feed_url='http://talk.tradeschool.coop/rss',            

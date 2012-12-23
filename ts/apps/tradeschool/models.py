@@ -36,10 +36,10 @@ class Location(Base):
     class Meta:
         abstract = True
 
-    title   = CharField(max_length=100)
-    phone   = CharField(max_length=20, blank=True, null=True)    
+    title   = CharField(max_length=100, help_text="The name of the space")
+    phone   = CharField(max_length=20, blank=True, null=True, help_text="Optional.")
     city    = CharField(max_length=100)
-    state   = USStateField(null=True, blank=True, verbose_name="state")
+    state   = USStateField(null=True, blank=True, verbose_name="State", help_text="If in the US.")
     country = CountryField()
 
 
@@ -128,12 +128,12 @@ class Venue(Location):
         return "#%x" % colorValue
 
     venue_type  = SmallIntegerField(max_length=1, choices=TYPE_CHOICES, default=0)
-    address_1   = CharField(max_length=50)
+    address_1   = CharField(max_length=50, verbose_name="Street")
     address_2   = CharField(max_length=100, blank=True, null=True)
-    capacity    = SmallIntegerField(max_length=4)     
-    resources   = TextField(null=True, default="Chairs, Tables")
+    capacity    = SmallIntegerField(max_length=4, default=20, help_text="How many people fit in the space?")     
+    resources   = TextField(null=True, default="Chairs, Tables", help_text="What resources are available at the space?")
     color       = CharField(max_length=7, default=random_color)
-    site        = ForeignKey(Site)
+    site        = ForeignKey(Site, default=Site.objects.get_current(), help_text="What TS is this space related to?")
 
     objects = Manager()
     on_site = CurrentSiteManager()    
@@ -161,7 +161,7 @@ class Person(Base):
     bio         = TextField(blank=True, verbose_name="A few sentences about you", help_text="For prospective students to see on the website")
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
-    slug        = SlugField(max_length=120)
+    slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
     site        = ManyToManyField(Site, null=True)
     
     objects = Manager()
@@ -218,7 +218,7 @@ class Course(Base):
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
     title           = CharField(max_length=140, verbose_name="class title")    
-    slug            = SlugField(max_length=120,blank=False, null=True)
+    slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
     site       	 	= ManyToManyField(Site, null=True)
     
@@ -277,7 +277,9 @@ class Schedule(Durational):
     """
 
     class Meta:
-		verbose_name_plural="Class Schedules"
+        verbose_name        = 'Class Schedule'
+        verbose_name_plural = 'Class Schedules'
+        ordering            = ['course_status', 'start_time', '-venue']
 		
     STATUS_CHOICES = (
         (0, 'Pending'),
@@ -312,15 +314,6 @@ class Schedule(Durational):
             schedule_notification = ScheduleNotification(schedule=self, subject=template.subject, content=template.content, email_type=template.email_type, email_status='not_sent', send_on=send_on)
             schedule_notification.save()
 
-    def get_course_title(self):
-        "return the title of the associated course"        
-        return '%s' % (self.course.title)
-    get_course_title.short_description = 'Class'
-
-    def get_teacher_fullname(self):
-        "return the full name of the person teaching the associated course"
-        return '%s' % (self.course.teacher.fullname)
-    get_teacher_fullname.short_description = 'Teacher'
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"

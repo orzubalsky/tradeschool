@@ -67,21 +67,24 @@ class BranchAdmin(BaseAdmin):
        
        
 class VenueAdmin(BaseAdmin):
-    list_display = ('title', 'site', 'is_active')
-    list_editable = ('is_active','site',)
+    list_display = ('title', 'site', 'address_1', 'city', 'capacity', 'is_active')
+    list_editable = ('site', 'address_1', 'city', 'capacity', 'is_active',)
     fieldsets = (
         ('Basic Info', {
             'fields': ('title', 'site',)
         }),
         ('Contact Info', {
-            'fields': ('city', 'state', 'country', 'phone')
+            'fields': ('address_1', 'city', 'state', 'country', 'phone')
         }),
+        ('Additional Info', {
+            'fields': ('capacity', 'resources',)
+        }),        
     )       
 
 class CourseAdmin(BaseAdmin):
     list_display = ('title', 'teacher', 'created')    
     search_fields = ('title', 'teacher__fullname')
-    fields = (('title', 'slug'), ('teacher', 'max_students', 'category'), 'description')
+    fields = (('title',), ('slug',), ('teacher',), ('max_students', ), ('category',), 'description')
     prepopulated_fields = {"slug": ("title",)}
     inlines = (ScheduleInline,)
     
@@ -94,7 +97,7 @@ class PersonAdmin(BaseAdmin):
         
     list_display = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'created')    
     search_fields = ('fullname', 'email', 'phone')
-    fields = (('fullname', 'email', 'phone', 'slug'), 'website', 'bio')
+    fields = ('fullname', 'email', 'phone', 'slug', 'website', 'bio')
     prepopulated_fields = {'slug': ('fullname',)}
 
     def courses_taken(self, obj):
@@ -132,14 +135,23 @@ class ScheduleAdmin(BaseAdmin):
         for schedule in queryset:
             schedule.populate_notifications()
     populate_notifications.short_description = "Populate Email Notifications"
+ 
+    list_display    = ('course_title', 'teacher_fullname', 'teacher_email', 'start_time', 'end_time', 'venue', 'course_status', 'created', 'updated')
+    list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
+    list_filter     = ('course_status', 'venue__title', 'start_time')
+    search_fields   = ('get_course_title', 'get_teacher_fullname')
+    fields          = (('course', 'venue', 'course_status'), ('start_time', 'end_time'))
+    inlines         = (RegistrationInline, BarterItemInline, ScheduleNotificationInline,)
+    actions         = ('approve_courses', 'populate_notifications')
 
-    list_display = ('get_course_title', 'get_teacher_fullname', 'start_time', 'end_time', 'venue', 'course_status', 'created')    
-    list_editable = ('start_time', 'end_time', 'venue', 'course_status', )
-    list_filter = ('course_status', 'venue__title', 'start_time')
-    search_fields = ('get_course_title', 'get_teacher_fullname')
-    fields = (('course', 'venue', 'course_status'), ('start_time', 'end_time'))
-    inlines = (RegistrationInline, BarterItemInline, ScheduleNotificationInline,)
-    actions = ('approve_courses', 'populate_notifications')
+    def course_title(self, obj):
+        return obj.course.title
+
+    def teacher_fullname(self, obj):
+        return obj.course.teacher.fullname
+        
+    def teacher_email(self, obj):
+        return obj.course.teacher.email
 
 class RegistrationAdmin(BaseAdmin):
     fields = ()
