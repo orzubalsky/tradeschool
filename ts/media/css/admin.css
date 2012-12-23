@@ -1,3 +1,15 @@
+/*------ GENERAL ----------*/
+a {
+    color: black;
+}
+a:hover {
+    color: red;
+}
+/*------END GENERAL ----------*/
+
+
+
+
 /*------ HEADER ----------*/
 header#grp-header #grp-navigation {
     background-color: red;
@@ -88,9 +100,22 @@ a.grp-link-external {
 a.grp-link-external:hover {
     color: black;
 }
-a {
-    color: black;
+
+
+
+/*--------- TABLE ----------*/
+#grp-changelist .grp-changelist-results  {
+    background-color: white;
+    background-image: none;
 }
-a:hover {
-    color: red;
+body.grp-change-list table {
+    width: 100%;
 }
+table thead th:first-of-type {
+    width: 20px;
+}
+table thead th {
+    background-color: white;
+    background-image: none;
+}
+/*--------- TABLE END ----------*/

@@ -247,6 +247,11 @@ class Time(Durational):
     These slots populate the calendar for teachers submitting a class.
     Times do not affect the admin class schedluing logic.
     """
+    
+    class Meta:
+        verbose_name        = "Time Slot"
+        verbose_name_plural = "Time Slots"
+		    
     site    = ForeignKey(Site)
     
     objects = Manager()
@@ -271,6 +276,9 @@ class Schedule(Durational):
     """
     """
 
+    class Meta:
+		verbose_name_plural="Class Schedules"
+		
     STATUS_CHOICES = (
         (0, 'Pending'),
         (1, 'Contacted'),

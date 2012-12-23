@@ -54,7 +54,7 @@ class CustomIndexDashboard(Dashboard):
                 collapsible=False,
                 children = [
                     modules.ModelList(
-                        title=_('Classes'),
+                        title=_('Scheduling'),
                         column=1,
                         collapsible=True,
                         models=('tradeschool.models.Schedule', 
@@ -95,7 +95,7 @@ class CustomIndexDashboard(Dashboard):
           
                   # append a feed module for talk.tradeschool.coop posts
                   modules.Feed(
-                      title=_('Talk TS Posts'),
+                      title=_('Recent TalkTS Posts'),
                       column=1,
                       limit=10,
                       feed_url='http://talk.tradeschool.coop/rss',            
