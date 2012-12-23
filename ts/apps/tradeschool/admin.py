@@ -30,7 +30,8 @@ class RegistrationInline(admin.TabularInline):
 class BarterItemInline(admin.TabularInline):
     model = BarterItem
     exclude = ('is_active',)    
-    extra = 0
+    extra = 5
+    max_num = 5
 
 class RegisteredItemInline(admin.TabularInline):
     model = RegisteredItem
@@ -142,7 +143,7 @@ class ScheduleAdmin(BaseAdmin):
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
-    inlines         = (RegistrationInline, BarterItemInline, ScheduleNotificationInline,)
+    inlines         = (BarterItemInline, RegistrationInline, ScheduleNotificationInline,)
     actions         = ('approve_courses', 'populate_notifications')
     fieldsets = (
         ('Class Schedule Info', {

@@ -265,3 +265,22 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
 }
 /*--------- ADD FORM END ----------*/
 
+
+
+
+
+/*--------- INLINE FORM --------------*/
+.grp-tabular .grp-table .grp-th, 
+.grp-tabular .grp-table .grp-td {
+    border: none;
+}
+.grp-tabular .grp-table .grp-tbody .grp-th, 
+.grp-tabular .grp-table .grp-tbody .grp-td,
+.grp-tabular .grp-table .grp-tbody .grp-th:last-of-type, 
+.grp-tabular .grp-table .grp-tbody .grp-td:last-of-type,
+.grp-tabular .grp-table .grp-tbody .grp-th:first-of-type, 
+.grp-tabular .grp-table .grp-tbody .grp-td:first-of-type {
+    background-color: yellow;
+    border: none;
+}
+/*--------- INLINE FORM END ----------*/
