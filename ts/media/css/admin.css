@@ -195,6 +195,15 @@ textarea,
 select {
     border-radius: 0px;
 }
+.grp-changelist-results table .vTextField, 
+.grp-changelist-results table .vURLField, 
+.grp-changelist-results table .vFileBrowseField, 
+.grp-changelist-results table textarea, 
+.grp-changelist-results table .vLargeTextField, 
+.grp-changelist-results table .vXMLLargeTextField, 
+.grp-changelist-results table select {
+    width: 120px;
+}
 .grp-submit-row.grp-fixed-footer > ul > li {
     padding: 0;
     background-color: transparent;

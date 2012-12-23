@@ -289,9 +289,9 @@ class Schedule(Durational):
         (4, 'Rejected')
     )
 
-    venue           = ForeignKey(Venue, null=True, blank=True)
-    course          = ForeignKey(Course)
-    course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0)
+    venue           = ForeignKey(Venue, limit_choices_to = {'site': Site.objects.get_current()}, null=True, blank=True, help_text="Where is this class taking place?")
+    course          = ForeignKey(Course, limit_choices_to = {'site': Site.objects.get_current()}, help_text="What class are you scheduling?")
+    course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
 

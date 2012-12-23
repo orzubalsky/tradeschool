@@ -7,7 +7,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-SITE_ID = 4
+SITE_ID = 2
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

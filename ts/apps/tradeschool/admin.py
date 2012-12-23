@@ -81,6 +81,7 @@ class VenueAdmin(BaseAdmin):
         }),        
     )       
 
+
 class CourseAdmin(BaseAdmin):
     list_display = ('title', 'teacher', 'created')    
     search_fields = ('title', 'teacher__fullname')
@@ -88,11 +89,12 @@ class CourseAdmin(BaseAdmin):
     prepopulated_fields = {"slug": ("title",)}
     inlines = (ScheduleInline,)
     
+    
 class PersonAdmin(BaseAdmin):
     def queryset(self, request):
         return super(PersonAdmin, self).queryset(request).annotate(
-            registration_count  =Count('registrations', distinct=True), 
-            courses_taught_count=Count('courses_taught', distinct=True)
+            registration_count   = Count('registrations', distinct=True), 
+            courses_taught_count = Count('courses_taught', distinct=True)
         )
         
     list_display = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'created')    
@@ -140,9 +142,16 @@ class ScheduleAdmin(BaseAdmin):
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
-    fields          = (('course', 'venue', 'course_status'), ('start_time', 'end_time'))
     inlines         = (RegistrationInline, BarterItemInline, ScheduleNotificationInline,)
     actions         = ('approve_courses', 'populate_notifications')
+    fieldsets = (
+        ('Class Schedule Info', {
+            'fields': ('course', 'venue', 'course_status')
+        }),
+        ('Class Time', {
+            'fields': ('start_time', 'end_time',)
+        }),
+    )    
 
     def course_title(self, obj):
         return obj.course.title
