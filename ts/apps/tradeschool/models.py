@@ -70,11 +70,11 @@ class Branch(Location):
         
         # delete existing branch notifications
         branch_notifications = BranchNotification.objects.filter(branch=self).delete()
-        
+            
         # copy branch notification from the branch notification templates
         templates = BranchNotificationTemplate.objects.all()
         for template in templates:
-            branch_notification = BranchNotification(site=self.site, subject=template.subject, content=template.content, email_type=template.email_type, cron=template.cron)
+            branch_notification = BranchNotification(site=self.site, branch=self, subject=template.subject, content=template.content, email_type=template.email_type, cron=template.cron)
             branch_notification.save()
     
     # def files(self):
@@ -162,7 +162,7 @@ class Person(Base):
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-    site        = ManyToManyField(Site, null=True, default=Site.objects.get_current())
+    site        = ManyToManyField(Site, null=True, default=str(Site.objects.get_current().id))
     
     objects = Manager()
     on_site = CurrentSiteManager()
@@ -214,13 +214,13 @@ class Course(Base):
         (6, 'Org')
     )
 
-    teacher         = ForeignKey(Person, related_name='courses_taught')
+    teacher         = ForeignKey(Person, limit_choices_to = {'site': Site.objects.get_current()}, related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
     title           = CharField(max_length=140, verbose_name="class title")    
     slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
-    site       	 	= ManyToManyField(Site, null=True,  default=Site.objects.get_current())
+    site       	 	= ManyToManyField(Site, null=True,  default=str(Site.objects.get_current().id))
     
     objects = Manager()
     on_site = CurrentSiteManager()    
@@ -407,3 +407,8 @@ class Feedback(Base):
 
     def __unicode__ (self):
         return "feedback from %s" % (self.author.fullname)
+
+
+# signals are separated to signals.py 
+# just for the sake of organization
+import signals

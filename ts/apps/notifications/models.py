@@ -46,7 +46,7 @@ class ScheduleNotification(Email):
         ('sent', 'Sent')
     )
     
-    schedule     = ForeignKey(Schedule)
+    schedule     = ForeignKey(Schedule, related_name="notifications")
     send_on      = DateTimeField(blank=True, null=True)
     email_status = CharField(max_length=30, choices=EMAIL_CHOICES, default='not_sent')
 
@@ -61,14 +61,15 @@ class BranchNotificationTemplate(Email):
     cron = BooleanField(verbose_name="timed email", help_text="Check this box if this email should get sent automatically") 
 
 
-class BranchNotification(BranchNotificationTemplate):
+class BranchNotification(Email):
     """
     These are the notification templates for a single branch.
     They are used to generate class notifications when a course is created.
     """
 
+    cron    = BooleanField(verbose_name="timed email", help_text="Check this box if this email should get sent automatically") 
     site    = ForeignKey(Site)
-    branch  = ForeignKey(Branch)    
+    branch  = ForeignKey(Branch, related_name="notifications")
     
     def calculate_send_time(self, schedule):
         if self.cron:

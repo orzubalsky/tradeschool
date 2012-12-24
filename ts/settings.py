@@ -7,7 +7,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-SITE_ID = 2
+SITE_ID = 4
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -97,6 +97,11 @@ TEMPLATE_DIRS = (
     PROJECT_DIR + '/apps/tradeschool/templates/admin',    
     PROJECT_DIR + '/apps/tradeschool/templates',
     PROJECT_DIR + '/templates',
+)
+
+FIXTURE_DIRS = (
+   PROJECT_DIR + '/apps/notifications/fixtures',
+   PROJECT_DIR + '/apps/tradeschool/fixtures',   
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.

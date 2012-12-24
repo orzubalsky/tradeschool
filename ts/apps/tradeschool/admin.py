@@ -70,8 +70,10 @@ class BranchNotificationInline(admin.TabularInline):
         Used in the Branch Admin view in order to give 
         an overview of the branch's default email templates.
     """    
-    model   = BranchNotification
-    extra   = 0
+    model           = BranchNotification
+    fields          = ('email_type', 'subject', 'content',)
+    readonly_fields = ('email_type',)
+    extra           = 0
     
     
 class ScheduleNotificationInline(admin.TabularInline):
@@ -80,7 +82,9 @@ class ScheduleNotificationInline(admin.TabularInline):
         an overview of the schedule's emails and their status.
     """    
     model   = ScheduleNotification
-    extra   = 0    
+    extra   = 0
+    fields          = ('email_type', 'subject', 'content', 'send_on', 'email_status')
+    readonly_fields = ('email_type',)    
     
 
 class BranchAdmin(BaseAdmin):
@@ -133,7 +137,7 @@ class CourseAdmin(BaseAdmin):
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'site')
     prepopulated_fields  = {"slug": ("title",)}
     
     
@@ -150,7 +154,7 @@ class PersonAdmin(BaseAdmin):
         
     list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'created')    
     search_fields       = ('fullname', 'email', 'phone')
-    fields              = ('fullname', 'email', 'phone', 'slug', 'website', 'bio')
+    fields              = ('fullname', 'email', 'phone', 'slug', 'website', 'bio', 'site')
     prepopulated_fields = {'slug': ('fullname',)}
 
     def courses_taken(self, obj):
