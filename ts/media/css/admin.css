@@ -283,4 +283,7 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
     background-color: yellow;
     border: none;
 }
+.grp-tools li a.grp-add-handler {
+    display: none;
+}
 /*--------- INLINE FORM END ----------*/

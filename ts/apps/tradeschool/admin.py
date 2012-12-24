@@ -32,7 +32,7 @@ class ScheduleInline(admin.TabularInline):
     """
     model   = Schedule
     extra   = 1
-    fields  = ('venue', 'start_time', 'end_time')
+    fields  = ('start_time', 'end_time', 'venue')
 
 
 class RegistrationInline(admin.TabularInline):
