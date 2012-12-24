@@ -245,7 +245,7 @@ class RegisteredItemAdmin(BaseAdmin):
     """ RegisteredItemAdmin is used mostly for introspection. 
         Editing RegisteredItem should be done within the related Registration or Schedule.
     """
-    fields = ()
+    fields = ('barter_item', 'registration', 'registered')
 
 
 class BarterItemAdmin(BaseAdmin):
