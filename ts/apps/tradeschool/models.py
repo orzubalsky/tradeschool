@@ -162,7 +162,7 @@ class Person(Base):
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-    site        = ManyToManyField(Site, null=True)
+    site        = ManyToManyField(Site, null=True, default=Site.objects.get_current())
     
     objects = Manager()
     on_site = CurrentSiteManager()
@@ -220,7 +220,7 @@ class Course(Base):
     title           = CharField(max_length=140, verbose_name="class title")    
     slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
-    site       	 	= ManyToManyField(Site, null=True)
+    site       	 	= ManyToManyField(Site, null=True,  default=Site.objects.get_current())
     
     objects = Manager()
     on_site = CurrentSiteManager()    
@@ -252,7 +252,7 @@ class Time(Durational):
         verbose_name        = "Time Slot"
         verbose_name_plural = "Time Slots"
 		    
-    site    = ForeignKey(Site)
+    site    = ForeignKey(Site,  default=Site.objects.get_current())
     
     objects = Manager()
     on_site = CurrentSiteManager()    
