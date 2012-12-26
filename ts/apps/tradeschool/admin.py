@@ -1,5 +1,4 @@
 from tradeschool.models import *
-from tradeschool.forms import TimeBatchForm
 from notifications.models import *
 from django.contrib import admin
 

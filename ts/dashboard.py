@@ -59,6 +59,7 @@ class CustomIndexDashboard(Dashboard):
                         collapsible=True,
                         models=('tradeschool.models.Schedule', 
                                 'tradeschool.models.Time',
+                                'tradeschool.models.TimeRange',
                                 'tradeschool.models.Student',
                                 'tradeschool.models.Teacher',
                                 'tradeschool.models.Course',
