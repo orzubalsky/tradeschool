@@ -1,4 +1,5 @@
 from tradeschool.models import *
+from tradeschool.forms import TimeBatchForm
 from notifications.models import *
 from django.contrib import admin
 
@@ -197,6 +198,19 @@ class TimeAdmin(BaseAdmin):
     """    
     list_display = ('start_time', 'end_time',)
     fields       = ('start_time', 'end_time')
+    add_form_template = 'batch_time_add.html'
+
+    def add_view(self, request, form_url='', extra_context=None):
+        form = TimeBatchForm(prefix='batch')        
+        extra_context = { 'batch_time_form' : form }
+        return super(TimeAdmin, self).add_view(request, extra_context=extra_context) 
+
+
+class TimeRangeAdmin(BaseAdmin):
+    """ TimeRangeAdmin is a way to create batch time slots. A post save signal adds Time objects.
+    """    
+    list_display = ('start_time', 'end_time', 'start_date', 'end_date',)
+    fields       = ('start_time', 'end_time', 'start_date', 'end_date', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'site')
 
 
 class ScheduleAdmin(BaseAdmin):
@@ -262,6 +276,7 @@ class BarterItemAdmin(BaseAdmin):
     fields          = ('title', 'requested')
     
 
+
 # register admin models
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
@@ -270,6 +285,7 @@ admin.site.register(Person, PersonAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Time, TimeAdmin)
+admin.site.register(TimeRange, TimeRangeAdmin)
 admin.site.register(BarterItem, BarterItemAdmin)
 admin.site.register(RegisteredItem, RegisteredItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)

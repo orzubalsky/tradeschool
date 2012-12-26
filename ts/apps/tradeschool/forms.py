@@ -70,6 +70,22 @@ class TimeSelectionForm(Form):
     time = forms.ModelChoiceField(queryset=Time.objects.all(), error_messages={'required': _('Please select a time') } )
 
 
+class TimeBatchForm(Form):
+    start_date  = forms.DateField()
+    end_date    = forms.DateField()
+    start_time  = forms.TimeField()
+    to_time     = forms.TimeField()
+
+    class Meta:
+        fieldsets = (
+            ('Time Slot', {
+                'fields': ('start_time', 'end_time'),
+            }),
+            ('Date Range to Repeat in', {
+                'fields': ('start_date', 'end_date'),
+            }),
+        )        
+
 class RegistrationForm(ModelForm):
     def __init__(self, schedule, *args, **kwargs):
            super (RegistrationForm,self ).__init__(*args,**kwargs) # populates the post

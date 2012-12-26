@@ -9,6 +9,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import utc
 import os, sys, pytz, uuid, random
 from datetime import *
+import time
 from tradeschool.widgets import *
 
 class Base(Model):
@@ -26,7 +27,7 @@ class Base(Model):
         if hasattr(self, "title") and self.title:
             return self.title
         else:
-            return "%s #%d" % (type(self), self.id)
+            return "%s" % (type(self))
             
 
 class Location(Base):
@@ -257,6 +258,31 @@ class Time(Durational):
     objects = Manager()
     on_site = CurrentSiteManager()    
 
+
+class TimeRange(Base):
+    """
+    """
+    class Meta:
+        verbose_name        = "Time Slot Range"
+        verbose_name_plural = "Time Slot Ranges"
+
+    start_date  = DateField(default=datetime.now())
+    end_date    = DateField(default=datetime.now())
+    start_time  = TimeField(default=datetime(2008, 1, 31, 18, 00, 00))
+    end_time    = TimeField(default=datetime(2008, 1, 31, 19, 30, 00))
+    sunday      = BooleanField()
+    monday      = BooleanField()
+    tuesday     = BooleanField()
+    wednesday   = BooleanField()
+    thursday    = BooleanField()
+    friday      = BooleanField()
+    saturday    = BooleanField()
+
+    site    = ForeignKey(Site, default=Site.objects.get_current())
+    
+    objects = Manager()
+    on_site = CurrentSiteManager()
+    
 
 class ScheduleManager(Manager):
    def get_query_set(self):
