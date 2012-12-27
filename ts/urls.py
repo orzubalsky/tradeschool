@@ -7,6 +7,7 @@ admin.autodiscover()
 
 # direct browser requests to the different apps
 urlpatterns = patterns('',
+    url(r'^rosetta/', include('rosetta.urls')),
     (r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -14,7 +15,8 @@ urlpatterns = patterns('',
     (r'^admin/password_reset/done/$', 'django.contrib.auth.views.password_reset_done'),
     (r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
-    (r'^tinymce/', include('tinymce.urls')),    
+    (r'^tinymce/', include('tinymce.urls')),
+    
     url(r'^class/', include('tradeschool.urls')),
 )
 

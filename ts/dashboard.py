@@ -86,6 +86,12 @@ class CustomIndexDashboard(Dashboard):
                         models=('django.contrib.auth.models.Group', 
                                 'django.contrib.auth.models.User',),
                     ),
+                    modules.AppList(
+                        title=_('Everything Else'),
+                        column=1,
+                        collapsible=True,
+                        exclude=('django.contrib.*',),
+                    )                 
                 ]
             ))
                 

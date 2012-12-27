@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'grappelli.dashboard',    
     'grappelli',    
+    'rosetta-grappelli',    
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
@@ -127,6 +128,7 @@ INSTALLED_APPS = (
     'flatpages_tinymce',
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
+    'rosetta',                      
     'chronograph',                  # admin based cron job management
     'mailer',                       # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
@@ -172,7 +174,25 @@ TINYMCE_DEFAULT_CONFIG = {
 GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
-DATETIME_FORMAT = 'N j, Y, P'
+ROSETTA_MESSAGES_PER_PAGE = 100
+LANGUAGES = (
+    ('en', 'English'), 
+    ('es-ES', 'Spanish (Spain)'),
+    ('es-MX', 'Spanish (Mexico)'),
+    ('de-DE', 'German'),
+    ('ms-SG', 'Malay'),
+    ('zh-SG', 'Chinese (Singapore)'),
+    ('it-IT', 'Italian'),
+    ('tl', 'Tagalog'),
+    ('fr-FR', 'French'),
+    ('nl-NL', 'Dutch'),
+    ('th', 'Thai'),
+    ('pt-BR', 'Portuguese'),
+    ('el-GR', 'Greek'),
+    ('ru-RU', 'Russian'),
+    ('zh-CN', 'Chinese (China)')
+)
+
 
 
 try:
