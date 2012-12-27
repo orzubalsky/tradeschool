@@ -8,40 +8,35 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Photo.status'
-        db.delete_column('website_photo', 'status')
 
-        # Adding field 'Photo.is_active'
-        db.add_column('website_photo', 'is_active',
-                      self.gf('django.db.models.fields.BooleanField')(default=True),
-                      keep_default=False)
+        # Changing field 'ContentBlock.chunk'
+        db.alter_column('website_contentblock', 'chunk_id', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['chunks.Chunk'], unique=True))
+        # Adding unique constraint on 'ContentBlock', fields ['chunk']
+        db.create_unique('website_contentblock', ['chunk_id'])
 
-        # Deleting field 'Page.status'
-        db.delete_column('website_page', 'status')
-
-        # Adding field 'Page.is_active'
-        db.add_column('website_page', 'is_active',
-                      self.gf('django.db.models.fields.BooleanField')(default=True),
-                      keep_default=False)
 
     def backwards(self, orm):
-        # Adding field 'Photo.status'
-        db.add_column('website_photo', 'status',
-                      self.gf('django.db.models.fields.SmallIntegerField')(default=1, max_length=1),
-                      keep_default=False)
+        # Removing unique constraint on 'ContentBlock', fields ['chunk']
+        db.delete_unique('website_contentblock', ['chunk_id'])
 
-        # Deleting field 'Photo.is_active'
-        db.delete_column('website_photo', 'is_active')
 
-        # Adding field 'Page.status'
-        db.add_column('website_page', 'status',
-                      self.gf('django.db.models.fields.SmallIntegerField')(default=1, max_length=1),
-                      keep_default=False)
-
-        # Deleting field 'Page.is_active'
-        db.delete_column('website_page', 'is_active')
+        # Changing field 'ContentBlock.chunk'
+        db.alter_column('website_contentblock', 'chunk_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chunks.Chunk']))
 
     models = {
+        'chunks.chunk': {
+            'Meta': {'object_name': 'Chunk'},
+            'content': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '64', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
+        },
+        'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
         'tradeschool.branch': {
             'Meta': {'object_name': 'Branch'},
             'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -50,22 +45,22 @@ class Migration(SchemaMigration):
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'site': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['sites.Site']", 'unique': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '120'}),
             'state': ('django.contrib.localflavor.us.models.USStateField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
             'timezone': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
-        'website.page': {
-            'Meta': {'object_name': 'Page'},
-            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Branch']"}),
-            'content': ('django.db.models.fields.TextField', [], {}),
+        'website.contentblock': {
+            'Meta': {'object_name': 'ContentBlock'},
+            'chunk': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['chunks.Chunk']", 'unique': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '120'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'local_content': ('django.db.models.fields.TextField', [], {}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['sites.Site']"}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         'website.photo': {

@@ -8,36 +8,37 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ContentBlock'
-        db.create_table('website_contentblock', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('chunk', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chunks.Chunk'])),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
-            ('local_content', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('website', ['ContentBlock'])
-
-        # Adding model 'Photo'
-        db.create_table('website_photo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'])),
-            ('filename', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-        ))
-        db.send_create_signal('website', ['Photo'])
-
-
-    def backwards(self, orm):
         # Deleting model 'ContentBlock'
         db.delete_table('website_contentblock')
 
-        # Deleting model 'Photo'
-        db.delete_table('website_photo')
+        # Adding model 'SiteContentBlock'
+        db.create_table('website_sitecontentblock', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('chunk', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['chunks.Chunk'], unique=True)),
+            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
+            ('content', self.gf('django.db.models.fields.TextField')()),
+        ))
+        db.send_create_signal('website', ['SiteContentBlock'])
+
+
+    def backwards(self, orm):
+        # Adding model 'ContentBlock'
+        db.create_table('website_contentblock', (
+            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('chunk', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['chunks.Chunk'], unique=True)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('local_content', self.gf('django.db.models.fields.TextField')()),
+            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
+        ))
+        db.send_create_signal('website', ['ContentBlock'])
+
+        # Deleting model 'SiteContentBlock'
+        db.delete_table('website_sitecontentblock')
 
 
     models = {
@@ -70,16 +71,6 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
-        'website.contentblock': {
-            'Meta': {'object_name': 'ContentBlock'},
-            'chunk': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chunks.Chunk']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'local_content': ('django.db.models.fields.TextField', [], {}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['sites.Site']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
         'website.photo': {
             'Meta': {'object_name': 'Photo'},
             'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Branch']"}),
@@ -87,6 +78,16 @@ class Migration(SchemaMigration):
             'filename': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+        },
+        'website.sitecontentblock': {
+            'Meta': {'object_name': 'SiteContentBlock'},
+            'chunk': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['chunks.Chunk']", 'unique': 'True'}),
+            'content': ('django.db.models.fields.TextField', [], {}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['sites.Site']"}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
     }

@@ -1,12 +1,13 @@
 from website.models import *
 from django.contrib import admin
+from chunks.models import Chunk
+from tradeschool.admin import BaseAdmin
 
-  
-class PageAdmin(admin.ModelAdmin):
-   list_display = ('branch', 'title', 'is_active')
-   list_editable = ('is_active',)
-   prepopulated_fields = {'slug': ('title',)}
+class SiteChunkAdmin(BaseAdmin):
+    """ 
+        
+    """     
+    pass
 
-
-admin.site.register(Page, PageAdmin)
 admin.site.register(Photo)
+admin.site.register(SiteChunk, SiteChunkAdmin)

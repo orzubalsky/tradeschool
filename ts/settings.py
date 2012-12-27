@@ -7,7 +7,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-SITE_ID = 2
+SITE_ID = 4
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.flatpages',
     'flatpages_tinymce',
+    'chunks',
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
     'rosetta',                      

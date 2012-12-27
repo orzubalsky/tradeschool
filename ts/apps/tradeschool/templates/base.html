@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n chunks %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,9 +47,7 @@
         	<div id="headerIntro">
         		<h2>{% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}</h2>
         		<p>
-        			{% blocktrans context "description on front page" %}Trade School is a self-organized learning space that runs on barter.{% endblocktrans %}<br />
-        			<strong>{% blocktrans %}We will open again soon.{% endblocktrans %}</strong><br /><br />
-        			<strong><a href="/start-a-tradeschool">{% blocktrans %}Want to open a Trade School?{% endblocktrans %}</a></strong>
+                    {% chunk "homepage-intro" site %}                    
         		</p>
         	</div>
         	<div id="headerEmail">

@@ -1,18 +1,7 @@
 from django.db.models import *
 from tradeschool.models import Base, Branch
+from chunks.models import Chunk
 
-
-class Page(Base):
-    """
-    Each branch has dynamic content pages.
-    """
-            
-    branch      = ForeignKey(Branch)
-    title       = CharField(max_length=100)
-    slug        = SlugField(max_length=120)
-    content     = TextField()
-            
-                
 class Photo(Base):
     """
     Each branch has photos that can go in a gallery
@@ -25,3 +14,8 @@ class Photo(Base):
 
     branch      = ForeignKey(Branch)
     filename    = ImageField("Photo",upload_to=photo_filename)    
+    
+    
+class SiteChunk(Chunk):
+    class Meta:
+        proxy = True
