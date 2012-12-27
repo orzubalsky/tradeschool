@@ -46,9 +46,7 @@
         	</div>		
         	<div id="headerIntro">
         		<h2>{% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}</h2>
-        		<p>
-                    {% chunk "homepage-intro" site %}                    
-        		</p>
+        		<p>{% chunk "homepage-intro" site %}</p>
         	</div>
         	<div id="headerEmail">
         		<p>{% trans "Join our list" %}:</p>				
@@ -65,15 +63,6 @@
         		{% endblock %}		
         	</div>
 
-        	<div class="clear"></div>
-        	<div id="mainPreLaunch">
-        		<div id="video">
-        		  	<h3>{% blocktrans %}What Trade School is about{% endblocktrans %}</h3>	
-        		    <iframe src="http://player.vimeo.com/video/23393455?title=0&amp;byline=0&amp;portrait=0" width="800" height="460" frameborder="0"></iframe>
-        		    <p class="credit">{% blocktrans context "ts movie credit" %}Trade School New York 2011, shot and edited by{% endblocktrans %} <a href="http://vimeo.com/user5084577">David Felix Sutcliffe</a>.</p>
-        			<div class="clear"></div>
-        		</div>	
-        	</div>
         	<div class="clear"></div>
         {% endblock content %}
 	</div>

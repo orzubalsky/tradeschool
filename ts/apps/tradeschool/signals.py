@@ -18,7 +18,7 @@ def branch_save_callback(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")
 def schedule_save_callback(sender, instance, **kwargs):
-    """ create notifications on creation of a new schedule."""
+    """ create notifications on creation of a new schedule"""
     if instance.notifications.count() == 0:
         instance.populate_notifications()
 

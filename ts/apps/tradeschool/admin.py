@@ -224,7 +224,7 @@ class ScheduleAdmin(BaseAdmin):
     actions         = ('approve_courses', 'populate_notifications')
     fieldsets = (
         ('Class Schedule Info', {
-            'fields': ('course', 'venue', 'course_status')
+            'fields': ('course', 'slug', 'venue', 'course_status')
         }),
         ('Class Time', {
             'fields': ('start_time', 'end_time',)

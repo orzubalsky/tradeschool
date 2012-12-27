@@ -40,7 +40,7 @@
 					{{ schedule.course.teacher.bio }}
 				</p>
         		{% if schedule.registered_students < schedule.course.max_students %}
-				<a class="join" href="{% url class-register course_slug=schedule.course.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
+				<a class="join" href="{% url schedule-register schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
 				{% endif %}
 			</div>				
 		</div>

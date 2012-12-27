@@ -322,6 +322,8 @@ class Schedule(Durational):
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
+    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
+    
 
     objects = ScheduleManager()
     on_site = ScheduleSiteManager()    

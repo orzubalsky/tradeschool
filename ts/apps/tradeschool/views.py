@@ -5,10 +5,11 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from tradeschool.models import *
 from tradeschool.forms import *
+from notifications.models import *
 from django.template.defaultfilters import slugify
 
 
-def class_list(request, course_slug=None):
+def schedule_list(request, schedule_slug=None):
     schedules = Schedule.public.all()
     if course_slug != None:
         previewed_course = Course.objects.get(slug=course_slug)
@@ -18,11 +19,11 @@ def class_list(request, course_slug=None):
     return render_to_response('classes.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
 
 
-def class_register(request, course_slug=None):
-    schedule             = get_object_or_404(Schedule, course__slug=course_slug)
+def schedule_register(request, schedule_slug=None):
+    schedule             = get_object_or_404(Schedule, slug=schedule_slug)
     open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
     seats_left           = schedule.course.max_students - schedule.registered_students
-
+    
     if request.method == 'POST':
         
         student_form      = StudentForm(data=request.POST, prefix="student")
@@ -62,15 +63,15 @@ def class_register(request, course_slug=None):
          'registration_form'    : registration_form,
          'student_form'         : student_form,}, 
         context_instance=RequestContext(request))
-        
+
 
 def teacher_info(request):    
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
 
-def past_classes(request):    
+def past_schedules(request):    
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
 
-def add_class(request):
+def schedule_add(request):
     if request.method == 'POST':
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
@@ -101,7 +102,7 @@ def add_class(request):
             # save schedule
             #venue = Venue.objects.get(title="Cuchifritos")
             selected_time = time_form.cleaned_data['time']  
-            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
+            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, slug=slugify(course.title), course_status=0)
             schedule.save()
             
             # save barter items
@@ -109,7 +110,14 @@ def add_class(request):
                 barter_item_form_data = barter_item_form.cleaned_data
                 barter_item = BarterItem(title=barter_item_form_data['title'], requested=barter_item_form_data['requested'], schedule=schedule)
                 barter_item.save()
+
+            # send confirmation email to teacher
+            notification = ScheduleNotification.objects.get(schedule=schedule, email_type='teacher_confirmation')
+            notification.send_teacer_confirmation(request)
             
+            # delete the selected time slot
+            Time.objects.get(pk=selected_time.pk).delete()
+
     else :            
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(prefix="item")
@@ -124,3 +132,16 @@ def add_class(request):
          'teacher_form'         : teacher_form,
          'time_form'            : time_form,}, 
         context_instance=RequestContext(request))
+
+
+def schedule_unregister(request, schedule_slug, student_slug):
+    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+
+def schedule_edit(request, schedule_slug):
+    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+
+def schedule_feedback_student(request, schedule_slug):
+    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+
+def schedule_feedback_teacher(request, schedule_slug):
+    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))    
