@@ -19,3 +19,4 @@ class Photo(Base):
 class SiteChunk(Chunk):
     class Meta:
         proxy = True
+        verbose_name = "Site Content Block"

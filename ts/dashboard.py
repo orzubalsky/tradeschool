@@ -78,7 +78,7 @@ class CustomIndexDashboard(Dashboard):
                         title=_('Website Content'),
                         column=1,
                         models=('website.models.Photo',
-                                'chunks.models.Chunk',
+                                'website.models.SiteChunk',
                                 'django.contrib.flatpages.models.FlatPage',),
                     ),   
                     modules.ModelList(
