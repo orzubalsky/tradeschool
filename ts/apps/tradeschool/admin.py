@@ -196,13 +196,7 @@ class TimeAdmin(BaseAdmin):
     """ TimeAdmin lets you add and edit time slots in the Trade School system.
     """    
     list_display = ('start_time', 'end_time',)
-    fields       = ('start_time', 'end_time')
-    add_form_template = 'batch_time_add.html'
-
-    def add_view(self, request, form_url='', extra_context=None):
-        form = TimeBatchForm(prefix='batch')        
-        extra_context = { 'batch_time_form' : form }
-        return super(TimeAdmin, self).add_view(request, extra_context=extra_context) 
+    fields       = ('start_time', 'end_time', 'site')
 
 
 class TimeRangeAdmin(BaseAdmin):

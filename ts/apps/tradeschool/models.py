@@ -234,8 +234,8 @@ class Durational(Base):
     class Meta:
 		abstract = True
 
-    start_time  = DateTimeField()
-    end_time    = DateTimeField()
+    start_time  = DateTimeField(default=datetime.now())
+    end_time    = DateTimeField(default=datetime.now())
 
     formfield_overrides = {
         DateTimeField: {'widget': TsAdminSplitDateTime},
@@ -258,6 +258,8 @@ class Time(Durational):
     objects = Manager()
     on_site = CurrentSiteManager()    
 
+    def __unicode__ (self):
+        return unicode(self.start_time)
 
 class TimeRange(Base):
     """

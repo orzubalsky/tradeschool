@@ -7,7 +7,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-SITE_ID = 4
+SITE_ID = 2
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -171,6 +171,8 @@ TINYMCE_DEFAULT_CONFIG = {
 
 GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
+
+DATETIME_FORMAT = 'N j, Y, P'
 
 
 try:

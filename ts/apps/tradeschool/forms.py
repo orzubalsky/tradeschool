@@ -65,9 +65,18 @@ class BaseBarterItemFormSet(BaseFormSet):
             raise forms.ValidationError( _('Please add at least %i barter items' % required) ) 
 
 
+class TimeModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        from django.utils import timezone
+        import pytz        
+        current_tz = timezone.get_current_timezone()
+        date = obj.start_time.astimezone(current_tz).strftime('%A, %b %d')
+        time = obj.start_time.astimezone(current_tz).strftime('%I:%M%p').lstrip('0').lower()
+        return "%s %s" % (date, time)
+         
 class TimeSelectionForm(Form):
     "A simple dropdown menu for teachers to select an available time when submitting a class. Uses the Time model"
-    time = forms.ModelChoiceField(queryset=Time.objects.all(), error_messages={'required': _('Please select a time') } )
+    time = TimeModelChoiceField(queryset=Time.on_site.all(), error_messages={'required': _('Please select a time') } )
 
 
 class RegistrationForm(ModelForm):

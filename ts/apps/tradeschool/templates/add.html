@@ -1,13 +1,12 @@
 {% extends "subpage.html" %}
 
-{% load i18n %}
+{% load i18n tz %}
 
 {% block title %}{% blocktrans context "page title" %}Submit a Class{% endblocktrans %}{% endblock %}
 
 {% block tradeschool_content %}
 <div id="teacherForm">
 	<form id="addClass" method="post" action="{% url add-class %}">{% csrf_token %}
-
 		{% if course_form.errors or teacher_form.errors or time_form.errors or barter_item_formset.non_form_errors or barter_item_formset.errors %}
 		<div class="formQ">
 			<div class="formField">
@@ -31,7 +30,7 @@
 			</div>
 		</div>
 		{% endif %}
-		
+        
 		<div class="formQ">
 			<div class="formField">
 				{{ teacher_form.fullname.label }}<br />
