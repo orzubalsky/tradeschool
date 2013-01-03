@@ -10,6 +10,58 @@ a:hover {
 
 
 
+
+
+/*------ LOGIN ----------*/
+body.grp-login .grp-module-login {
+    margin: 0;
+}
+body.grp-login .grp-module-login h1 {
+    padding: 0;
+    border: none;    
+}
+body.grp-login .grp-module-login h1 span {
+    color: white;
+    background-color: red;
+}
+body.grp-login .grp-module-login h1 span.grp-current-page {
+    border: none;
+    margin: 0;
+    background-image: none;
+    background-color: red;
+    display: none;
+}
+body.grp-login .grp-module-login .grp-module {
+    border: none;
+}
+.grp-login .grp-module .grp-row,
+body.grp-login .grp-module-login .grp-module .grp-row.grp-connected  {
+    background-color: yellow;
+    border: none;
+}
+.grp-login .grp-submit-row > ul > li .grp-button {
+    background-color: black;
+    color: white;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border: none;
+    border-radius: 0;
+}
+.grp-login .grp-submit-row > ul > li .grp-button:hover {
+    background-color: red;
+}
+.grp-login .grp-submit-row > ul > li,
+.grp-login .grp-button,
+.grp-login input[type="submit"] {
+    border-radius: 0;
+}
+/*------END LOGIN ----------*/
+
+
+
+
+
+
 /*------ HEADER ----------*/
 header#grp-header #grp-navigation {
     background-color: red;
