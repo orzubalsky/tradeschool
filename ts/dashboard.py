@@ -76,7 +76,6 @@ class CustomIndexDashboard(Dashboard):
                     column=1,
                     collapsible=True,
                     exclude=('tradeschool.models.*',
-                             'notifications.models.*',
                              'website.models.*',
                              ),
                 )                 

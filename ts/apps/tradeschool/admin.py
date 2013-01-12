@@ -1,8 +1,9 @@
 from tradeschool.models import *
 from notifications.models import *
+from admin_enhancer import admin as enhanced_admin
 from django.contrib import admin
 
-class BaseAdmin(admin.ModelAdmin):
+class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """ Base admin model. Filters objects querysite according to the Site."""
     
     def queryset(self, request):
@@ -65,27 +66,27 @@ class RegisteredItemInline(admin.TabularInline):
     extra   = 0
 
 
-class BranchNotificationInline(admin.TabularInline):
-    """ BranchNotification model inline object. 
+class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
+    """ BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
-        an overview of the branch's default email templates.
+        an overview of the branch's emails.
     """    
-    model           = BranchNotification
-    fields          = ('email_type', 'subject', 'content',)
-    readonly_fields = ('email_type',)
+    model           = BranchEmailContainer
+    fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
     extra           = 0
+    max_num         = 1
     
     
-class ScheduleNotificationInline(admin.TabularInline):
-    """ ScheduleNotification model inline object. 
-        Used in the Schedule Admin view in order to give 
-        an overview of the schedule's emails and their status.
+class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
+    """ BranchEmailContainer model inline object. 
+        Used in the Branch Admin view in order to give 
+        an overview of the branch's emails.
     """    
-    model   = ScheduleNotification
-    extra   = 0
-    fields          = ('email_type', 'subject', 'content', 'send_on', 'email_status')
-    readonly_fields = ('email_type',)    
-    
+    model           = ScheduleEmailContainer
+    fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
+    extra           = 0
+    max_num         = 1
+
 
 class BranchAdmin(BaseAdmin):
     """ BranchAdmin lets you add and edit Trade School branches,
@@ -101,7 +102,7 @@ class BranchAdmin(BaseAdmin):
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'is_active')
     list_editable       = ('is_active','site',)
     prepopulated_fields = {'slug': ('title',)}
-    inlines             = (BranchNotificationInline,)
+    inlines             = (BranchEmailContainerInline,)
     fieldsets = (
         ('Basic Info', {
             'fields': ('title', 'slug', 'site', 'timezone')
@@ -136,7 +137,7 @@ class CourseAdmin(BaseAdmin):
     """    
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
-    inlines              = (ScheduleInline,)
+    #inlines              = (ScheduleInline,)
     fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'site')
     prepopulated_fields  = {"slug": ("title",)}
     
@@ -220,7 +221,7 @@ class ScheduleAdmin(BaseAdmin):
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
-    inlines         = (BarterItemInline, RegistrationInline, ScheduleNotificationInline,)
+    inlines         = (BarterItemInline, RegistrationInline, ScheduleEmailContainerInline,)
     actions         = ('approve_courses', 'populate_notifications')
     fieldsets = (
         ('Class Schedule Info', {

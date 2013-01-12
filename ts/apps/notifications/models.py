@@ -14,51 +14,127 @@ class Email(Base):
     and course-specific notification templates extend this model. 
     """
     class Meta:
-            abstract = True
-
-    TYPE_CHOICES = (
-        ('student_confirmation', 'Student Confirmation'),
-        ('student_reminder', 'Student Reminder'),
-        ('student_feedback', 'Student Feedback'),                
-        ('teacher_confirmation', 'Teacher Confirmation'),
-        ('teacher_class_approved', 'Teacher Class Approved'),                
-        ('teacher_reminder', 'Teacher Reminder'),
-        ('teacher_feedback', 'Teacher Feedback'),
-    )    
-
-
-    subject    = CharField(max_length=140)    
-    content    = TextField()
-    email_type = CharField(max_length=30, choices=TYPE_CHOICES) 
-    
-    def __unicode__ (self):
-        return self.subject
-
-
-class ScheduleNotification(Email):
-    """
-    Course notifications are sent to students and teachers on several occasions
-    (see the email abstract model for a listing of the various notification types)
-    When a course is created, the course notifications are generated for it.
-    This is done because some course notification would have to be specific for the course.
-    For example, a yoga course student reminder would include details about what to wear.
-    """
+        abstract = True
 
     EMAIL_CHOICES = (
         ('disabled', 'Disabled'),
         ('not_sent', 'Not Sent Yet'),
         ('sent', 'Sent')
     )
-
-    schedule     = ForeignKey(Schedule, related_name="notifications")
-    send_on      = DateTimeField(blank=True, null=True)
+    
+    subject      = CharField(max_length=140)
+    content      = TextField()
     email_status = CharField(max_length=30, choices=EMAIL_CHOICES, default='not_sent')
-
-    def send_teacer_confirmation(self, request):
-        template = Template(self.content)
+    
+    def send(self, request):
+        template = Template(self.template.content)
         context  = notification_template_context(self, request)
         print template.render(context)
         #print send_mail('Welcome to My Project', t.render(c), 'from@address.com', ('email@aa.com',), fail_silently=False)        
+
+    def __unicode__ (self):
+        return self.content
+
+
+class TimedEmail(Email):
+    """
+    Abstract model for all email notifications in the ts system.
+    TS-wide notification templates, individulal branch notification templates,
+    and course-specific notification templates extend this model. 
+    """
+    class Meta:
+            abstract = True
+    
+    send_on      = DateTimeField(blank=True, null=True)
+
+
+class StudentConfirmation(Email):
+    pass
+
+
+class StudentReminder(TimedEmail):
+    pass
+
+
+class StudentFeedback(TimedEmail):
+    pass
+    
+    
+class TeacherConfirmation(Email):
+    pass
+    
+
+class TeacherClassApproval(Email):
+    pass                                 
+
+
+class TeacherReminder(TimedEmail):
+    pass
+
+
+class TeacherFeedback(TimedEmail):
+    pass
+
+
+class EmailContainer(Base):
+    """
+    """
+    class Meta:
+        abstract = True
+            
+    student_confirmation   = ForeignKey(StudentConfirmation)
+    student_reminder       = ForeignKey(StudentReminder)
+    student_feedback       = ForeignKey(StudentFeedback)
+    teacher_confirmation   = ForeignKey(TeacherConfirmation)
+    teacher_class_approval = ForeignKey(TeacherClassApproval)
+    teacher_reminder       = ForeignKey(TeacherReminder)
+    teacher_feedback       = ForeignKey(TeacherFeedback)
+
+    def emails():
+        def fget(self):
+            return {"student_confirmation"   : self.student_confirmation, 
+                    "student_reminder"       : self.student_reminder, 
+                    "student_feedback"       : self.student_feedback,
+                    "teacher_confirmation"   : self.teacher_confirmation, 
+                    "teacher_class_approval" : self.teacher_class_approval, 
+                    "teacher_reminder"       : self.teacher_reminder, 
+                    "teacher_feedback"       : self.teacher_feedback
+                    }
+        return locals()
+
+    emails = property(**emails())
+
+
+class DefaultEmailContainer(EmailContainer):
+    """
+    """
+
+
+class BranchEmailContainer(EmailContainer):
+    """
+    """
+    class Meta:
+        verbose_name = "Branch Emails"
+        verbose_name_plural = "Branch Emails"
+        
+    branch = ForeignKey(Branch, related_name="emails")
+    site   = ForeignKey(Site, related_name="emails")
+
+    def __unicode__ (self):
+        return u"for %s" % self.branch.title
+
+
+class ScheduleEmailContainer(EmailContainer):
+    """
+    """
+    class Meta:
+        verbose_name = "Schedule Emails"
+        verbose_name_plural = "Schedule Emails"
+            
+    schedule = ForeignKey(Schedule, related_name="emails")
+
+    def __unicode__ (self):
+        return u"for %s" % self.schedule.course.title
 
 
 def notification_template_context(obj, request, registration=None):
@@ -109,35 +185,3 @@ def notification_template_context(obj, request, registration=None):
         })
 
     return c
-        
-            
-class BranchNotificationTemplate(Email):
-    """
-    These are the initial templates that are used
-    to generate a branch notification templates when a new branch is added.
-    They should only be edited by super admins.
-    """
-
-    cron = BooleanField(verbose_name="timed email", help_text="Check this box if this email should get sent automatically") 
-
-
-class BranchNotification(Email):
-    """
-    These are the notification templates for a single branch.
-    They are used to generate class notifications when a course is created.
-    """
-
-    cron    = BooleanField(verbose_name="timed email", help_text="Check this box if this email should get sent automatically") 
-    site    = ForeignKey(Site)
-    branch  = ForeignKey(Branch, related_name="notifications")
-    
-    def calculate_send_time(self, schedule):
-        if self.cron:
-            if self.email_type == 'student_reminder':
-                return schedule.start_time
-            if self.email_type == 'student_feedback':
-                return schedule.end_time
-            if self.email_type == 'teacher_reminder':
-                return schedule.start_time
-            if self.email_type == 'teacher_feedback':
-                return schedule.end_time

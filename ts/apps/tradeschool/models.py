@@ -12,6 +12,14 @@ from datetime import *
 import time
 from tradeschool.widgets import *
 
+def copy_model_instance(obj):
+    initial = dict([(f.name, getattr(obj, f.name))
+                    for f in obj._meta.fields
+                    if not isinstance(f, AutoField) and\
+                       not f in obj._meta.parents.values()])
+    return obj.__class__(**initial)
+
+
 class Base(Model):
     """
     Base model for all of the models in ts.  
@@ -67,16 +75,21 @@ class Branch(Location):
     def populate_notifications(self):
         "resets branch notification templates from the global branch notification templates"
         
-        from notifications.models import BranchNotificationTemplate, BranchNotification
+        from notifications.models import DefaultEmailContainer, BranchEmailContainer
         
-        # delete existing branch notifications
-        branch_notifications = BranchNotification.objects.filter(branch=self).delete()
+        # delete existing branch emails
+        branch_emails = BranchEmailContainer.objects.filter(branch=self).delete()
             
         # copy branch notification from the branch notification templates
-        templates = BranchNotificationTemplate.objects.all()
-        for template in templates:
-            branch_notification = BranchNotification(site=self.site, branch=self, subject=template.subject, content=template.content, email_type=template.email_type, cron=template.cron)
-            branch_notification.save()
+        default_email_container = DefaultEmailContainer.objects.all()[0]
+        
+        branch_email_container = BranchEmailContainer(branch=self, site=self.site)
+        
+        for fieldname, email_obj in default_email_container.emails.iteritems():
+            new_email = copy_model_instance(email_obj)
+            new_email.save()
+            setattr(branch_email_container, fieldname, new_email)
+        branch_email_container.save()
     
     # def files(self):
     #         """ the branch's custom files """
@@ -332,17 +345,21 @@ class Schedule(Durational):
     def populate_notifications(self):
         "resets course notification templates from the branch notification templates"
         
-        from notifications.models import BranchNotification, ScheduleNotification
+        from notifications.models import BranchEmailContainer, ScheduleEmailContainer
         
-        # delete existing schedule notifications
-        schedule_notifications = ScheduleNotification.objects.filter(schedule=self).delete()
-        
+        # delete existing branch emails
+        schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self).delete()
+            
         # copy course notification from the branch notification templates
-        templates = BranchNotification.objects.filter(site__in=self.course.site.all())
-        for template in templates:
-            send_on = template.calculate_send_time(schedule=self)
-            schedule_notification = ScheduleNotification(schedule=self, subject=template.subject, content=template.content, email_type=template.email_type, email_status='not_sent', send_on=send_on)
-            schedule_notification.save()
+        branch_email_container = BranchEmailContainer.objects.filter(site__in=self.course.site.all())[0]
+        
+        schedule_email_container = ScheduleEmailContainer(schedule=self)
+        
+        for fieldname, email_obj in branch_email_container.emails.iteritems():
+            new_email = copy_model_instance(email_obj)
+            new_email.save()
+            setattr(schedule_email_container, fieldname, new_email)
+        schedule_email_container.save()
 
 
     def approve_courses(self, request, queryset):

@@ -280,6 +280,12 @@ input[type="submit"]:hover,
 #grp-changelist-form .grp-module .grp-row:not(tr) {
     background-color: white;
 }
+a.related-widget-wrapper-link {
+    margin: 0 3px;
+}
+.grp-row select {
+    margin-right: 2px;
+}
 /*--------- CHANGE LIST END ----------*/
 
 
@@ -299,8 +305,8 @@ fieldset.grp-module {
     margin-bottom:20px;
 }
 .grp-change-form .grp-module:not(.grp-submit-row) {
-    min-width: 602px;
-    width: 602px;
+    min-width: 630px;
+    width: 630px;
 }
 .grp-row .vTextField,
 .grp-row .vURLField,
@@ -336,6 +342,15 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
     border: none;
 }
 .grp-tools li a.grp-add-handler {
+    display: none;
+}
+#emails-group .grp-collapse.grp-closed * {
+    display: inline-block;
+}
+#emails-group .grp-collapse.grp-closed h3 {
+    display: none;
+}
+#emails-group .grp-group:not(.grp-tabular) h2 {
     display: none;
 }
 /*--------- INLINE FORM END ----------*/

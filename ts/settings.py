@@ -62,7 +62,7 @@ LOCALE_PATHS = (
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+#'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -95,6 +95,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     PROJECT_DIR + '/apps/tradeschool/templates',
     PROJECT_DIR + '/templates',
+    PROJECT_DIR + '/../parts/django-admin-enhancer/admin_enhancer/templates/',    
 )
 
 FIXTURE_DIRS = (
