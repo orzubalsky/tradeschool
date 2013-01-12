@@ -95,12 +95,15 @@ class CustomIndexDashboard(Dashboard):
                   limit=10,
                   feed_url='http://talk.tradeschool.coop/rss',            
               ),
-      
-              # append a recent actions module
-              # modules.RecentActions(
-              #     title=_('Recent Actions'),
-              #     column=1,
-              #     limit=5,
-              # )
+              modules.LinkList(
+                  layout='inline',
+                  column=1,
+                  children=(
+                    ['Translate TS', '/rosetta'],
+                    ['Talk TS', 'http://talk.tradeschool.coop', True],
+                    ['Trade School', 'http://tradeschool.coop', True]
+                  )
+                  
+              ),
            ]
       ))        

@@ -71,8 +71,8 @@ class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.Mo
 class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """
     """    
-    list_display = ('schedule',)
-    fields       = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
+    list_display  = ('schedule',)
+    fields        = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
 
 
 admin.site.register(DefaultEmailContainer)
