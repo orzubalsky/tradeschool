@@ -16,7 +16,7 @@ class TeacherForm (ModelForm):
     
     class Meta:
         model       = Person
-        fields      = ('fullname', 'email', 'phone', 'website')
+        fields      = ('fullname', 'email', 'phone', 'bio', 'website')
 
     # since bio is set to blank=True in the Person model to accommodate students, we're setting it here manually.
     bio = forms.CharField(required=True, label=_("A few sentences about you"), help_text=_("For prospective students to see on the website"), widget=forms.Textarea)
@@ -51,7 +51,7 @@ class BarterItemForm (ModelForm):
 
 class BaseBarterItemFormSet(BaseFormSet):
     def clean(self):
-        "Checks that at least one barter item form is filled"
+        "Checks that at least 5 barter items form are filled"
         count = 0        
         required = 5
         

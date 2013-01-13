@@ -42,7 +42,7 @@ class RegistrationInline(admin.TabularInline):
         to give an overview of students registered.
     """    
     model   = Registration 
-    fields  = ('student', 'registration_status')  
+    fields  = ('student', 'registration_status',)
     extra   = 1
 
 
@@ -62,7 +62,7 @@ class RegisteredItemInline(admin.TabularInline):
         give an overview of the items checked by each student.
     """    
     model   = RegisteredItem
-    exclude = ('is_active',)    
+    exclude = ('is_active',)
     extra   = 0
 
 

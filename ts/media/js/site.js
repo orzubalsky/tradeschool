@@ -81,16 +81,35 @@
 					$('#previewContainer').hide();
 				});
 			});
-		},		
-		this.addClassItems = function() {
-			$('#addItem').live('click', function(e) {
-				
-				e.preventDefault();
-				
-				html =	'<input class="barter_item" type="field" name="items_new[]" />';
-				html += '<input class="barter_qty" name="requested_new[]" type="field" value="1" />';
-				
-				$('.items').append(html);
+		},
+		this.addClassItems = function() 
+		{
+		    var self = this; 
+		    
+    		function updateElementIndex($el, prefix, ndx) 
+    		{
+                var id_regex = new RegExp('(' + prefix + '-\\d+)');
+                var replacement = prefix + '-' + ndx;
+                $el.attr("id", $el.attr("id").replace(id_regex, replacement));
+                $el.attr("name", $el.attr("name").replace(id_regex, replacement));
+            };
+
+			$('#addItem').live('click', function(e) 
+			{
+			    e.preventDefault();
+			    var prefix = 'item';
+			    
+                var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+                console.log(formCount);
+                var field_1 = $('.barter_item:first').clone(true).get(0);
+                var field_2 = $('.barter_qty:first').clone(true).get(0);
+                $(field_1).val('').insertAfter($('.barter_qty:last')).children('.hidden').removeClass('hidden');
+                $(field_2).val(1).insertAfter($('.barter_item:last')).children('.hidden').removeClass('hidden');            
+        	    updateElementIndex($(field_1), prefix, formCount);
+        	    updateElementIndex($(field_2), prefix, formCount);
+                
+                $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+                return false;
 			});
 		},
 		this.shadowbox = function() {

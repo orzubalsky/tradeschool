@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'^tinymce/', include('tinymce.urls')),
     
-    url(r'^class/', include('tradeschool.urls')),
+    url(r'^', include('tradeschool.urls')),
 )
 
 # static files url patterns

@@ -6,7 +6,7 @@
 
 {% block tradeschool_content %}
 <div id="teacherForm">
-	<form id="addClass" method="post" action="{% url schedule-add %}">{% csrf_token %}
+	<form id="addClass" method="post" action="{{ request.path }}">{% csrf_token %}
 		{% if course_form.errors or teacher_form.errors or time_form.errors or barter_item_formset.non_form_errors or barter_item_formset.errors %}
 		<div class="formQ">
 			<div class="formField">
@@ -82,6 +82,7 @@
 			</div>
 		</div>
 
+    {% if time_form %}
 		<div class="formQ calBox">
 			<div class="formField">
 				<label for="">{% blocktrans %}When you'd like to teach{% endblocktrans %}:</label>
@@ -89,10 +90,11 @@
 				<div id="calendar"></div>
 			</div>
 			<div class="formNote">
-                {% blocktrans context "class submission form calendar contextual help" %}Click on a time slot to choose it for your class - if you need more time select two consecutive slots.<br /><br /> If there are multiple venues, the color of each time slot will correspond to a venue in the list below.{% endblocktrans %}
+        {% blocktrans context "class submission form calendar contextual help" %}Click on a time slot to choose it for your class - if you need more time select two consecutive slots.<br /><br /> If there are multiple venues, the color of each time slot will correspond to a venue in the list below.{% endblocktrans %}
 			</div>
 		</div>
-
+    {% endif %}
+    
 		<div class="formQ">
 			<div class="formField">
 				{{ course_form.max_students.label }}<br />

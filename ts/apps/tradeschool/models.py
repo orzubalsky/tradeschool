@@ -310,7 +310,7 @@ class ScheduleSiteManager(ScheduleManager):
 class ScheduleSitePublicManager(ScheduleSiteManager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
-        return super(ScheduleSitePublicManager, self).get_query_set().filter(end_time__gte=now).filter(course__is_active=1)
+        return super(ScheduleSitePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, course_status=3)
         
 
 class Schedule(Durational):
@@ -382,9 +382,11 @@ class Schedule(Durational):
     def __unicode__ (self):
         return "%s" % (self.course.title)
 
+
 class BarterItemSiteManager(Manager):
     def get_query_set(self):
        return super(BarterItemSiteManager, self).get_query_set().filter(schedule__course__site__id__exact=settings.SITE_ID)
+
 
 class BarterItem(Base):
     """
@@ -421,7 +423,7 @@ class Registration(Base):
     student             = ForeignKey(Person, related_name='registrations')
     registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
     items               = ManyToManyField(BarterItem, through="RegisteredItem", blank=False)
-    
+        
     objects = Manager()
     on_site = RegistrationSiteManager()    
 
