@@ -12,14 +12,18 @@ from datetime import datetime
 @receiver(post_save, sender=Branch, dispatch_uid="ts.apps.tradeschool.signals")
 def branch_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new branch."""    
-    if instance.notifications.count() == 0:
+    try:
+        emails = BranchEmailContainer.objects.get(branch=instance)
+    except BranchEmailContainer.DoesNotExist:
         instance.populate_notifications()
 
 
 @receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")
 def schedule_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new schedule"""
-    if instance.notifications.count() == 0:
+    try:
+        emails = ScheduleEmailContainer.objects.get(schedule=instance)
+    except ScheduleEmailContainer.DoesNotExist:
         instance.populate_notifications()
 
 

@@ -132,7 +132,7 @@ INSTALLED_APPS = (
     'pytz',                         # python timezone library
     'rosetta',                      
     'chronograph',                  # admin based cron job management
-    'mailer',                       # handle outgoing email queue
+    'django_mailer',                # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     'notifications',                # tradeschool email management system
     'website',

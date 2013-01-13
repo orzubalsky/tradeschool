@@ -1,7 +1,8 @@
+from django.core.mail import send_mail
+#from django_mailer import send_mail
 from django.db.models import *
 from django.contrib.sites.models import Site
 from django.template import loader, Context
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.template import Template
 from tradeschool.models import Base, Branch, Course, Schedule
@@ -25,17 +26,17 @@ class Email(Base):
     subject      = CharField(max_length=140)
     content      = TextField()
     email_status = CharField(max_length=30, choices=EMAIL_CHOICES, default='not_sent')
-    
+
     def preview(self, schedule_obj, registration=None):
         template = Template(self.content)
         context  = self.template_context(schedule_obj)
         body     = template.render(context)
         return body
 
-    def send(self, schedule_obj, registration=None):
+    def send(self, schedule_obj, recipient, registration=None):
         body = self.preview(schedule_obj)
-        print body
-        #print send_mail('Welcome to My Project', body, 'from@address.com', ('email@aa.com',), fail_silently=False)
+        site = Site.objects.get_current()
+        send_mail(self.subject, body, site.branch.email, recipient)
 
     def template_context(self, schedule_obj, registration=None):
         """ """
@@ -70,15 +71,16 @@ class Email(Base):
         })
 
         if registration != None:
-            unregister_url = "%s%s" % (domain, reverse('class-unregister', kwargs={'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
+            unregister_url = "%s%s" % (domain, reverse('schedule-unregister', kwargs={'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
             item_list = ""
             for item in registration.items.all():
-                item_list += "%s" % item.title    
+                item_list += "%s\n" % item.title
 
             c.dicts.append({
-                'student'       : student,
+                'student'       : registration.student,
                 'registration'  : registration,
                 'unregister_url': unregister_url,
+                'item_list'     : item_list
             })
 
         return c
@@ -94,14 +96,14 @@ class TimedEmail(Email):
     and course-specific notification templates extend this model. 
     """
     class Meta:
-            abstract = True
+        abstract = True
     
     send_on      = DateTimeField(blank=True, null=True)
 
 
 class StudentConfirmation(Email):
     pass
-
+    
 
 class StudentReminder(TimedEmail):
     pass
@@ -184,14 +186,24 @@ class ScheduleEmailContainer(EmailContainer):
             
     schedule = OneToOneField(Schedule, related_name="emails")
 
+    def email_teacher(self, email):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        return email.send(self.schedule, (self.schedule.course.teacher.email,))
+
+    def email_student(self, email, registration):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        return email.send(self.schedule, (registration.student.email,), registration)
+                        
+    def email_students(self, email):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        for registration in self.schedule.registration_set.all():
+            if registration.registration_status == 'registered':
+                return self.email_student(email, registration)
+
     def preview(self, email):
         """shortcut method to preview an email via the ScheduleEmailContainer object."""
         return email.preview(self.schedule)
 
-    def send(self, email):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
-        return email.send(self.schedule)
-        
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
 
