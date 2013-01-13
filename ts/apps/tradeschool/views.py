@@ -144,38 +144,33 @@ def schedule_edit(request, schedule_slug=None):
     if request.method == 'POST':
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
-        course_form         = CourseForm(request.POST, prefix="course")
-        teacher_form        = TeacherForm(request.POST, prefix="teacher")
+        course_form         = CourseForm(request.POST, prefix="course", instance=schedule.course)
+        teacher_form        = TeacherForm(request.POST, prefix="teacher", instance=schedule.course.teacher)
 
         if barter_item_formset.is_valid() and course_form.is_valid() and teacher_form.is_valid():
             current_site = Site.objects.get_current()
 
             # save teacher
             teacher = teacher_form.save(commit=False)
-            teacher_data = teacher_form.cleaned_data
-            teacher_data['slug'] = slugify(teacher.fullname)
-            teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
+            teacher.slug = slugify(teacher.fullname)
             teacher.save()
-
+            
             # save course
-            course  = course_form.save(commit=False)
-            course_data = course_form.cleaned_data
-            course_data['slug'] = slugify(course.title)
-            course_data['teacher'] = teacher
-            course, created = Course.objects.get_or_create(title=course.title, defaults=course_data)
-            course.site.add(current_site)
+            course = course_form.save(commit=False)
+            course.slug = slugify(course.title)
             course.save()
 
             # save schedule
-            #venue = Venue.objects.get(title="Cuchifritos")
+            schedule.slug = slugify(course.title)
             schedule.save()
 
             # save barter items
             for barter_item_form in barter_item_formset:
                 barter_item_form_data = barter_item_form.cleaned_data
                 barter_item, created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], requested=barter_item_form_data['requested'], schedule=schedule)
-                print barter_item
                 barter_item.save()
+
+            return HttpResponseRedirect( reverse(schedule_edit, args=[schedule.slug]) )
 
     else :
         initial_item_data = []
