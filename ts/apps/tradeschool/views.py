@@ -112,8 +112,7 @@ def schedule_add(request):
                 barter_item.save()
 
             # send confirmation email to teacher
-            notification = ScheduleNotification.objects.get(schedule=schedule, email_type='teacher_confirmation')
-            notification.send_teacer_confirmation(request)
+            schedule.emails.teacher_confirmation.send()
             
             # delete the selected time slot
             Time.objects.get(pk=selected_time.pk).delete()

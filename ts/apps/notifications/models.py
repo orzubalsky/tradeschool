@@ -11,7 +11,7 @@ class Email(Base):
     """
     Abstract model for all email notifications in the ts system.
     TS-wide notification templates, individulal branch notification templates,
-    and course-specific notification templates extend this model. 
+    and schedule-specific notification templates extend this model. 
     """
     class Meta:
         abstract = True
@@ -26,11 +26,62 @@ class Email(Base):
     content      = TextField()
     email_status = CharField(max_length=30, choices=EMAIL_CHOICES, default='not_sent')
     
-    def send(self, request):
-        template = Template(self.template.content)
-        context  = notification_template_context(self, request)
-        print template.render(context)
-        #print send_mail('Welcome to My Project', t.render(c), 'from@address.com', ('email@aa.com',), fail_silently=False)        
+    def preview(self, schedule_obj, registration=None):
+        template = Template(self.content)
+        context  = self.template_context(schedule_obj)
+        body     = template.render(context)
+        return body
+
+    def send(self, schedule_obj, registration=None):
+        body = self.preview(schedule_obj)
+        print body
+        #print send_mail('Welcome to My Project', body, 'from@address.com', ('email@aa.com',), fail_silently=False)
+
+    def template_context(self, schedule_obj, registration=None):
+        """ """
+        teacher = schedule_obj.course.teacher
+        site    = Site.objects.get_current()
+        branch  = Branch.objects.get(site=site)
+        venue   = schedule_obj.venue
+        domain  = site.domain
+        
+        student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback-student', kwargs={'schedule_slug': schedule_obj.slug,}))
+        teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback-teacher', kwargs={'schedule_slug': schedule_obj.slug,}))
+        class_edit_url       = "%s%s" % (domain, reverse('schedule-edit', kwargs={'schedule_slug': schedule_obj.slug,}))
+        homepage_url         = "%s%s" % (domain, reverse('schedule-list'))
+
+        student_list = ""
+        for registration in schedule_obj.registration_set.all():
+            student_list += "\n%s: " % registration.student.fullname
+            student_items = []
+            for item in registration.items.all():
+                student_items.append(item.title)
+            student_list += ", ".join(map(str, student_items))
+
+        c = Context({
+            'schedule'              : schedule_obj,
+            'branch'                : branch,
+            'teacher'               : teacher,
+            'student_feedback_url'  : student_feedback_url,
+            'teacher_feedback_url'  : teacher_feedback_url,
+            'class_edit_url'        : class_edit_url,
+            'homepage_url'          : homepage_url,
+            'student_list'          : student_list
+        })
+
+        if registration != None:
+            unregister_url = "%s%s" % (domain, reverse('class-unregister', kwargs={'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
+            item_list = ""
+            for item in registration.items.all():
+                item_list += "%s" % item.title    
+
+            c.dicts.append({
+                'student'       : student,
+                'registration'  : registration,
+                'unregister_url': unregister_url,
+            })
+
+        return c
 
     def __unicode__ (self):
         return self.content
@@ -117,8 +168,8 @@ class BranchEmailContainer(EmailContainer):
         verbose_name = "Branch Emails"
         verbose_name_plural = "Branch Emails"
         
-    branch = ForeignKey(Branch, related_name="emails")
-    site   = ForeignKey(Site, related_name="emails")
+    branch = OneToOneField(Branch, related_name="emails")
+    site   = OneToOneField(Site, related_name="emails")
 
     def __unicode__ (self):
         return u"for %s" % self.branch.title
@@ -131,57 +182,8 @@ class ScheduleEmailContainer(EmailContainer):
         verbose_name = "Schedule Emails"
         verbose_name_plural = "Schedule Emails"
             
-    schedule = ForeignKey(Schedule, related_name="emails")
+    schedule = OneToOneField(Schedule, related_name="emails")
 
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
 
-
-def notification_template_context(obj, request, registration=None):
-    """ """
-    teacher = obj.schedule.course.teacher
-    branch  = Branch.objects.get(site=Site.objects.get_current())
-    venue   = obj.schedule.venue
-
-    student_feedback_url = reverse('schedule-feedback-student', kwargs={'schedule_slug': obj.schedule.slug,})
-    student_feedback_url = request.build_absolute_uri(student_feedback_url)
-    teacher_feedback_url = reverse('schedule-feedback-teacher', kwargs={'schedule_slug': obj.schedule.slug,})
-    teacher_feedback_url = request.build_absolute_uri(teacher_feedback_url)
-    class_edit_url       = reverse('schedule-edit', kwargs={'schedule_slug': obj.schedule.slug,})
-    class_edit_url       = request.build_absolute_uri(class_edit_url)
-    homepage_url         = reverse('schedule-list')
-    homepage_url         = request.build_absolute_uri(homepage_url)
-        
-    student_list = ""
-    for registration in obj.schedule.registration_set.all():
-        student_list += "\n%s: " % registration.student.fullname
-        student_items = []
-        for item in registration.items.all():
-            student_items.append(item.title)
-        student_list += ", ".join(map(str, student_items))
-    
-    c = Context({
-        'schedule'              : obj.schedule,
-        'branch'                : branch,
-        'teacher'               : teacher,
-        'student_feedback_url'  : student_feedback_url,
-        'teacher_feedback_url'  : teacher_feedback_url,
-        'class_edit_url'        : class_edit_url,
-        'homepage_url'          : homepage_url,
-        'student_list'          : student_list
-    })
-        
-    if registration != None:
-        unregister_url = reverse('class-unregister', kwargs={'schedule_slug': obj.schedule.slug, 'student_slug': registration.student.slug})
-        unregister_url = request.build_absolute_uri(unregister_url)
-        item_list = ""
-        for item in registration.items.all():
-            item_list += "%s" % item.title    
-
-        c.dicts.append({
-            'student'       : student,
-            'registration'  : registration,
-            'unregister_url': unregister_url,
-        })
-
-    return c
