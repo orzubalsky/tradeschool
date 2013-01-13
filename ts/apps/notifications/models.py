@@ -184,6 +184,14 @@ class ScheduleEmailContainer(EmailContainer):
             
     schedule = OneToOneField(Schedule, related_name="emails")
 
+    def preview(self, email):
+        """shortcut method to preview an email via the ScheduleEmailContainer object."""
+        return email.preview(self.schedule)
+
+    def send(self, email):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        return email.send(self.schedule)
+        
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
 
