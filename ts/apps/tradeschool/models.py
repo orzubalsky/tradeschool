@@ -361,7 +361,6 @@ class Schedule(Durational):
             setattr(schedule_email_container, fieldname, new_email)
         schedule_email_container.save()
 
-
     def approve_courses(self, request, queryset):
         "approve multiple courses"
         rows_updated = queryset.update(course_status=3)
@@ -371,6 +370,14 @@ class Schedule(Durational):
             message_bit = "%s classes were" % rows_updated
             self.message_user(request, "%s successfully approved." % message_bit)        
     approve_courses.short_description = "Approve Classes"
+
+    def save(self, *args, **kwargs):
+        """ check if status was changed to approved and email teacher if it has.""" 
+        if self.pk is not None:
+            original = Schedule.objects.get(pk=self.pk)
+            if original.course_status != self.course_status and self.course_status == 3:
+                self.emails.email_teacher(self.emails.teacher_class_approval)
+        super(Schedule, self).save(*args, **kwargs)
 
     def __unicode__ (self):
         return "%s" % (self.course.title)

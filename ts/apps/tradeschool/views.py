@@ -50,6 +50,9 @@ def schedule_register(request, schedule_slug=None):
             for barter_item in registration_form.cleaned_data['items']:
                 registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
                 registered_item.save()
+                
+            # email confirmation to student
+            schedule.emails.email_student(schedule.emails.student_confirmation, registration)
             
     else :            
         student_form      = StudentForm(prefix="student")
@@ -89,7 +92,7 @@ def schedule_add(request):
             teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
             teacher.site.add(current_site)
             teacher.save()
-            
+
             # save course
             course  = course_form.save(commit=False)
             course_data = course_form.cleaned_data
@@ -98,13 +101,13 @@ def schedule_add(request):
             course, created = Course.objects.get_or_create(title=course.title, defaults=course_data)
             course.site.add(current_site)
             course.save()
-                        
+
             # save schedule
             #venue = Venue.objects.get(title="Cuchifritos")
             selected_time = time_form.cleaned_data['time']  
             schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, slug=slugify(course.title), course_status=0)
             schedule.save()
-            
+
             # save barter items
             for barter_item_form in barter_item_formset:
                 barter_item_form_data = barter_item_form.cleaned_data
@@ -112,8 +115,8 @@ def schedule_add(request):
                 barter_item.save()
 
             # send confirmation email to teacher
-            schedule.emails.teacher_confirmation.send()
-            
+            schedule.emails.email_teacher(schedule.emails.teacher_confirmation)
+
             # delete the selected time slot
             Time.objects.get(pk=selected_time.pk).delete()
 
