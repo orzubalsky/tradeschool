@@ -403,7 +403,8 @@ class BarterItem(Base):
     on_site = BarterItemSiteManager()
 
     def __unicode__ (self):
-        return self.title
+        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
+        return u"%s (%i are bringing)" % (self.title, registered_count)
 
 class RegistrationSiteManager(Manager):
     def get_query_set(self):
@@ -418,7 +419,7 @@ class Registration(Base):
     """
 
     REGISTRATION_CHOICES = (('registered', 'Registered'),('unregistered', 'Unregistereed'))
-
+    
     schedule            = ForeignKey(Schedule)
     student             = ForeignKey(Person, related_name='registrations')
     registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
