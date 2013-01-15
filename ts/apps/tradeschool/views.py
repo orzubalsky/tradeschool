@@ -16,7 +16,7 @@ def schedule_list(request, schedule_slug=None):
     else:
         previewed_course = None
     
-    return render_to_response('classes.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
+    return render_to_response('class_list.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
 
 
 def schedule_register(request, schedule_slug=None):
@@ -76,7 +76,7 @@ def past_schedules(request):
     """ """ 
     schedules = Schedule.past.all()
     
-    return render_to_response('past_classes.html',{ 'schedules': schedules,}, context_instance=RequestContext(request))    
+    return render_to_response('class_list_past.html',{ 'schedules': schedules,}, context_instance=RequestContext(request))    
 
 
 def schedule_add(request):
@@ -136,7 +136,7 @@ def schedule_add(request):
         time_form           = TimeSelectionForm(prefix="time")
 
     return render_to_response(
-        'add.html',
+        'class_submit.html',
         {'barter_item_formset'  : barter_item_formset,
          'course_form'          : course_form,
          'teacher_form'         : teacher_form,
@@ -191,7 +191,7 @@ def schedule_edit(request, schedule_slug=None):
         teacher_form        = TeacherForm(prefix="teacher", instance=schedule.course.teacher)
 
     return render_to_response(
-        'add.html',
+        'class_submit.html',
         {'barter_item_formset'  : barter_item_formset,
          'course_form'          : course_form,
          'teacher_form'         : teacher_form,}, 
