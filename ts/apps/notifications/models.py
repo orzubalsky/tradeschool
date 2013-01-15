@@ -63,6 +63,7 @@ class Email(Base):
             'schedule'              : schedule_obj,
             'branch'                : branch,
             'teacher'               : teacher,
+            'venue'                 : venue,
             'student_feedback_url'  : student_feedback_url,
             'teacher_feedback_url'  : teacher_feedback_url,
             'class_edit_url'        : class_edit_url,
