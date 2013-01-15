@@ -148,7 +148,7 @@ class Venue(Location):
     capacity    = SmallIntegerField(max_length=4, default=20, help_text="How many people fit in the space?")     
     resources   = TextField(null=True, default="Chairs, Tables", help_text="What resources are available at the space?")
     color       = CharField(max_length=7, default=random_color)
-    site        = ForeignKey(Site, default=Site.objects.get_current(), help_text="What TS is this space related to?")
+    site        = ForeignKey(Site, default=str(Site.objects.get_current().id), help_text="What TS is this space related to?")
 
     objects = Manager()
     on_site = CurrentSiteManager()    
@@ -267,7 +267,7 @@ class Time(Durational):
         verbose_name        = "Time Slot"
         verbose_name_plural = "Time Slots"
 		    
-    site    = ForeignKey(Site,  default=Site.objects.get_current())
+    site    = ForeignKey(Site,  default=str(Site.objects.get_current().id))
     
     objects = Manager()
     on_site = CurrentSiteManager()    
@@ -294,7 +294,7 @@ class TimeRange(Base):
     friday      = BooleanField()
     saturday    = BooleanField()
 
-    site    = ForeignKey(Site, default=Site.objects.get_current())
+    site    = ForeignKey(Site, default=str(Site.objects.get_current().id))
     
     objects = Manager()
     on_site = CurrentSiteManager()
@@ -468,7 +468,6 @@ class Feedback(Base):
     course      = ForeignKey(Schedule)
     content     = TextField()
     
-
     def __unicode__ (self):
         return "feedback from %s" % (self.author.fullname)
 
@@ -477,16 +476,27 @@ class Photo(Base):
     """
     Each branch has photos that can go in a gallery
     """
-    def photo_filename (self, filename):
-        # branch image files are stored in the branch's id directory
-       if not self.id:
-           raise Error('branch image folder does not exist')
-       return 'branches/%i/photos/%s' % (self.id,filename)
+    class Meta:
+        ordering = ['position',]
+               
+    filename = ImageField("Photo",upload_to='uploads/images')    
+    position = PositiveSmallIntegerField('Position', default=0)    
+    site     = ForeignKey(Site, default=str(Site.objects.get_current().id))
+    branch   = ForeignKey(Branch, default=Branch.objects.filter(site=str(Site.objects.get_current().id)[0]))
+    
+    objects = Manager()
+    on_site = CurrentSiteManager()
 
-    branch      = ForeignKey(Branch)
-    filename    = ImageField("Photo",upload_to=photo_filename)    
-
-
+    def thumbnail(self):
+        if self.filename:
+            return u'<img src="%s" class="branch_image" />' % self.filename.url
+        else:
+            return '(No Image)'
+        
+    def __unicode__ (self):
+        return "%s: %s" % (self.branch.title, self.filename)
+        
+        
 class SiteChunk(Chunk):
     class Meta:
         proxy = True

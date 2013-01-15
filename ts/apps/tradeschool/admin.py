@@ -1,3 +1,4 @@
+from django.utils.safestring import mark_safe
 from tradeschool.models import *
 from notifications.models import *
 from admin_enhancer import admin as enhanced_admin
@@ -89,6 +90,20 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
     max_num         = 1
 
 
+class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
+    """
+    """
+    model   = Photo
+    fields = ('render_image', 'filename', 'position',)
+    readonly_fields = ('render_image',)
+    extra   = 0
+    sortable_field_name = "position"
+    
+    def render_image(self, obj):
+        return mark_safe("""<img src="%s" class="branch_image"/>""" % obj.filename.url)    
+    render_image.short_description = "thumbnail"
+        
+        
 class BranchAdmin(BaseAdmin):
     """ BranchAdmin lets you add and edit Trade School branches,
         and reset the email templates for each branch.
@@ -103,7 +118,7 @@ class BranchAdmin(BaseAdmin):
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'is_active')
     list_editable       = ('is_active','site',)
     prepopulated_fields = {'slug': ('title',)}
-    inlines             = (BranchEmailContainerInline,)
+    inlines             = (BranchEmailContainerInline, PhotoInline)
     fieldsets = (
         ('Basic Info', {
             'fields': ('title', 'slug', 'site', 'timezone')
@@ -277,6 +292,18 @@ class SiteChunkAdmin(BaseAdmin):
     pass
 
 
+class PhotoAdmin(BaseAdmin):
+    """ 
+    """  
+    list_display    = ('get_thumbnail', 'filename', 'position')
+    readonly_fields = ('site',)   
+    
+    def get_thumbnail(self, obj):
+        """ """
+        return obj.thumbnail() 
+    get_thumbnail.short_description = 'thumbnail'
+    get_thumbnail.allow_tags = True        
+
 # register admin models
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
@@ -291,5 +318,5 @@ admin.site.register(RegisteredItem, RegisteredItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Feedback)
 admin.site.register(Schedule, ScheduleAdmin)
-admin.site.register(Photo)
+admin.site.register(Photo, PhotoAdmin)
 admin.site.register(SiteChunk, SiteChunkAdmin)

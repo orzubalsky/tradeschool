@@ -135,7 +135,6 @@ INSTALLED_APPS = (
     'django_mailer',                # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     'notifications',                # tradeschool email management system
-    'website',
     #'migration',                    # tradeschool (zend framework php version) db schema migration
 )
 

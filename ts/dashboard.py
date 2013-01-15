@@ -47,7 +47,8 @@ class CustomIndexDashboard(Dashboard):
                             'tradeschool.models.Student',
                             'tradeschool.models.Teacher',
                             'tradeschool.models.Course',
-                            'tradeschool.models.Venue'),
+                            'tradeschool.models.Venue',
+                            'tradeschool.models.Branch',),
                 ),
                 modules.ModelList(
                     title=_('Emails'),

@@ -40,8 +40,8 @@
 
         	<div id="headerPhotoContainer" class="gallery">
         		<div id="headerPhoto">
-        		{% for photo in photos %}		
-        			<img src="/uploads/{{ branch.slug }}/{{ photo.filename }}" />
+        		{% for photo in branch.photo_set.all %}		
+        			<img src="{{ photo.filename.url }}" />
         		{% endfor %}
         		</div>
         	</div>		

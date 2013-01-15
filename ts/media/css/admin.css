@@ -286,6 +286,9 @@ a.related-widget-wrapper-link {
 .grp-row select {
     margin-right: 2px;
 }
+img.branch_image {
+    height: 100px;
+}
 /*--------- CHANGE LIST END ----------*/
 
 
