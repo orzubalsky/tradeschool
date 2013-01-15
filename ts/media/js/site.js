@@ -4,10 +4,9 @@
 		this.swfu;
 		this.controllers = ['class'],
 		this.init = function() {
-			//this.shadowbox();
 			this.gallery();
 			//this.classMatch();
-			//this.classToggles();
+			this.classToggles();
 			this.addClassItems();
 			//this.registerForm();
 		},
@@ -112,40 +111,6 @@
                 return false;
 			});
 		},
-		this.shadowbox = function() {
-			var self = this;
-			
-			Shadowbox.init({
-				overlayOpacity	: "0.8",
-				viewportPadding	: "0",
-				continuous		: "true",
-				animate			: "false",
-				handleOversize	: "resize",
-				handleUnsupported:"remove",
-				displayNav		: false,
-				onOpen			: function(item) {
-					//console.log("open");
-					console.log(item);
-				},
-				onFinish		: function(item) {
-					//console.log("finish");
-					console.log(Shadowbox.dimensions);
-					
-					var contentHeight = $('#classPopup')[0].scrollHeight;
-					//console.log(contentHeight);
-				}
-			});
-		},
-		this.getController = function() {
-			var self = this;
-			var pathname = window.location.pathname;
-			var controller;
-			for (var i=0; i<self.controllers.length; i++) {
-				var query = new RegExp(self.controllers[i], 'i');
-				if (pathname.search(query) > 0) { controller = self.controllers[i]; }
-			}
-			return controller;
-		},		
 		this.classMatch = function() 
 		{
 		    var self = this;
@@ -175,62 +140,14 @@
 				var open = ($(classElement).hasClass('open')) ? true : false;
 				
 				if (open) {
-				    if (past) {
-    					urlPath = '/' + branchUrl + '/class/past/';													        
-				    } else {
-    					urlPath = '/' + branchUrl + '/class/';	
-				    }
-                    window.history.pushState({},"", urlPath);    									    
 					$('.classBody', classElement).slideUp(300);
 	            	$(classElement).removeClass('open');
 				} 
 				else 
 				{	
-				    if (past) {
-    					urlPath = '/' + branchUrl + '/class/past/' + classId;				        				        
-				    } else {
-    					urlPath = '/' + branchUrl + '/class/' + classId;				        
-				    } 	
-                    window.history.pushState({},"", urlPath);    									    	
 					$('.classBody', classElement).slideDown(300);
 	            	$(classElement).addClass('open');
 				}
-				/*
-				e.stopImmediatePropagation();
-				
-				var classElement = $(this).parent().parent();
-				var classId = self.getId($(classElement).attr('id'));
-				self.workingClassId = classId;
-				var open = ($(classElement).hasClass('open')) ? true : false;
-				
-				if (open) {
-					$('.classBody', classElement).slideUp(300).empty();
-	            	$(classElement).removeClass('open');
-				} 
-				else 
-				{
-					 $.ajax({
-						 	type: 'post',
-				            url: baseUrl + '/../ajax/' + branchUrl + '/class/view/id/' + classId,
-				            dataType: 'html',
-				            data: {},
-				            success: function(data) {
-				                $('.classBody', classElement).append(data).slideDown(300);
-				            	$(classElement).addClass('open');
-				            	
-								//Shadowbox.clearCache();
-								//Shadowbox.setup();
-												          
-								$('.join', classElement).bind('click', function(e) {
-									e.preventDefault();
-									
-									var href = $(this).attr('href');
-									self.previewItem(href);
-								});				            	
-				            }
-					 });						
-				}
-				*/
 			});
 			
 			
@@ -286,19 +203,6 @@
 				});
 			});
 		},		
-		this.inArray = function(needle, haystack) {
-		    var length = haystack.length;
-		    for(var i = 0; i < length; i++) {
-		        if(haystack[i] == needle) return true;
-		    }
-		    return false;
-		},
-		this.random = function(max, add) {
-			return Math.floor(Math.random()*max+add);
-		},
-		this.isEmail = function isEmail(email){
-			return /^[\w-+\.]+@([\w-]+\.)+[\w-]{2,}$/i.test(email);
-		},
 		this.getId = function(idString) {
 			 return idString.substring((idString.search('_')+1));
 		};
