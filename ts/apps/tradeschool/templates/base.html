@@ -1,4 +1,5 @@
-{% load i18n chunks %}
+{% load i18n chunks flatpages %}
+{% get_flatpages as flatpages %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,9 +29,9 @@
         	{% block navigation %}
         	<div id="headerNav">
         		<ul>
-        		{% for page in pages %}		
-        			<li><a href="/{{ page.slug }}">{{ page.title }}</a></li>
-        		{% endfor %}
+                {% for page in flatpages %}
+                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                {% endfor %}        		    
         			<li><a href="{% url past-classes %}">{% trans "Past" context "Past Classes" %}</a></li>
         	    	<li class="tshq"><a href="/">{% blocktrans context "Text for the Tradeschool.coop link" %}TS HQ{% endblocktrans %}</a></li>
         		</ul>
