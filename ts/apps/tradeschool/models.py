@@ -10,6 +10,7 @@ from django.utils.timezone import utc
 import os, sys, pytz, uuid, random
 from datetime import *
 import time
+from chunks.models import Chunk
 from tradeschool.widgets import *
 
 def copy_model_instance(obj):
@@ -470,6 +471,27 @@ class Feedback(Base):
 
     def __unicode__ (self):
         return "feedback from %s" % (self.author.fullname)
+
+
+class Photo(Base):
+    """
+    Each branch has photos that can go in a gallery
+    """
+    def photo_filename (self, filename):
+        # branch image files are stored in the branch's id directory
+       if not self.id:
+           raise Error('branch image folder does not exist')
+       return 'branches/%i/photos/%s' % (self.id,filename)
+
+    branch      = ForeignKey(Branch)
+    filename    = ImageField("Photo",upload_to=photo_filename)    
+
+
+class SiteChunk(Chunk):
+    class Meta:
+        proxy = True
+        verbose_name = "Site Content Block"
+
 
 
 # signals are separated to signals.py 

@@ -61,8 +61,8 @@ class CustomIndexDashboard(Dashboard):
                 modules.ModelList(
                     title=_('Website Content'),
                     column=1,
-                    models=('website.models.Photo',
-                            'website.models.SiteChunk',
+                    models=('tradeschool.models.Photo',
+                            'tradeschool.models.SiteChunk',
                             'django.contrib.flatpages.models.FlatPage',),
                 ),   
                 modules.ModelList(

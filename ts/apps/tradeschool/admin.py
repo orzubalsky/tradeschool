@@ -2,6 +2,7 @@ from tradeschool.models import *
 from notifications.models import *
 from admin_enhancer import admin as enhanced_admin
 from django.contrib import admin
+from chunks.models import Chunk
 
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """ Base admin model. Filters objects querysite according to the Site."""
@@ -269,6 +270,11 @@ class BarterItemAdmin(BaseAdmin):
     search_fields   = ('title',)
     fields          = ('title', 'requested')
     
+    
+class SiteChunkAdmin(BaseAdmin):
+    """ 
+    """     
+    pass
 
 
 # register admin models
@@ -285,3 +291,5 @@ admin.site.register(RegisteredItem, RegisteredItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Feedback)
 admin.site.register(Schedule, ScheduleAdmin)
+admin.site.register(Photo)
+admin.site.register(SiteChunk, SiteChunkAdmin)
