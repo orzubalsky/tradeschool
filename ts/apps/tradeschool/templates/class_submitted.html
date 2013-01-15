@@ -14,7 +14,7 @@
         {{ schedule.course.description }}
 
         <h4>{% blocktrans %}When you'd like to teach{% endblocktrans %}:</h4>
-        {{ schedule.start_time|smartdate:"M j, Y g:ia"|localize }} to {{ schedule.end_time|smartdate:"g:ia"|localize }}
+        {{ schedule.start_time|date:"M j, Y g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}
 
         <h4>{% blocktrans %}Maximum students in your class{% endblocktrans %}:</h4>
         {{ schedule.course.max_students }}

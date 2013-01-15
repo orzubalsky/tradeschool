@@ -21,7 +21,7 @@
 		<div class="classInfo">
 			<div class="classHeader">
 				<h3><a class="toggle" href="{% url schedule-view schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
-				<em>{{ schedule.start_time|smartdate:"g:ia"|localize }} to {{ schedule.end_time|smartdate:"g:ia"|localize }}</em>
+				<em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
 			</div>
 			
 			<div class="classBody">
