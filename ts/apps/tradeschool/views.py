@@ -71,8 +71,12 @@ def schedule_register(request, schedule_slug=None):
 def teacher_info(request):    
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
 
-def past_schedules(request):    
-    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+def past_schedules(request):
+    """ """ 
+    schedules = Schedule.past.all()
+    
+    return render_to_response('past_classes.html',{ 'schedules': schedules,}, context_instance=RequestContext(request))    
+
 
 def schedule_add(request):
     if request.method == 'POST':

@@ -312,6 +312,11 @@ class ScheduleSitePublicManager(ScheduleSiteManager):
         now = datetime.utcnow().replace(tzinfo=utc)
         return super(ScheduleSitePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, course_status=3)
         
+class ScheduleSitePublicPastManager(ScheduleSiteManager):
+    def get_query_set(self):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        return super(ScheduleSitePublicPastManager, self).get_query_set().filter(end_time__lte=now, course__is_active=1, course_status=3)
+
 
 class Schedule(Durational):
     """
@@ -341,6 +346,7 @@ class Schedule(Durational):
     objects = ScheduleManager()
     on_site = ScheduleSiteManager()    
     public  = ScheduleSitePublicManager()
+    past    = ScheduleSitePublicPastManager()
 
     def populate_notifications(self):
         "resets course notification templates from the branch notification templates"
