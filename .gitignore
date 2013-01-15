@@ -16,5 +16,8 @@ ts/static/
 # ignore the migration app
 ts/apps/migration/
 
+# ignore uploaded files
+ts/media/uploads
+
 # ignore sql data dump:
 sample_data.json

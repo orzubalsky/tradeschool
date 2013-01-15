@@ -1,0 +1,45 @@
+{% extends "subpage.html" %}
+
+{% load humanize smartdate i18n l10n chunks %}
+
+{% block tradeschool_content %}
+<div id="teacherForm">
+    <div class="formThanks">
+        <p class="thanks_intro">{% blocktrans %}Thanks! Your class will be pending for now. It will be added to the site within 24 hours if it's approved. Here is what you submitted:{% endblocktrans %}</p>
+
+        <h4>{% blocktrans %}Class title{% endblocktrans %}:</h4>
+        {{ schedule.course.title }}
+
+        <h4>{% blocktrans %}Class description{% endblocktrans %}:</h4>
+        {{ schedule.course.description }}
+
+        <h4>{% blocktrans %}When you'd like to teach{% endblocktrans %}:</h4>
+        {{ schedule.start_time|smartdate:"M j, Y g:ia"|localize }} to {{ schedule.end_time|smartdate:"g:ia"|localize }}
+
+        <h4>{% blocktrans %}Maximum students in your class{% endblocktrans %}:</h4>
+        {{ schedule.course.max_students }}
+
+        <h4>{% blocktrans %}Items you want in exchange for teaching{% endblocktrans %}:</h4>
+        <ul>
+        {% for item in schedule.barteritem_set.all %}
+            <li><strong>{{ item.requested }} x {{ item.title|capfirst }}</strong></li>
+        {% endfor %}
+        </ul>
+
+        <h4>{% blocktrans %}Your name{% endblocktrans %}:</h4>
+        {{ schedule.course.teacher.fullname }}
+        
+        <h4>{% blocktrans %}Your website / blog URL{% endblocktrans %}:</h4>
+        {{ schedule.course.teacher.website }}
+
+        <h4>{% blocktrans %}A few sentences about you{% endblocktrans %}:</h4>
+        {{ schedule.course.teacher.bio }}
+        
+        <h4>{% blocktrans %}Email address{% endblocktrans %}:</h4>
+        {{ schedule.course.teacher.email }}
+
+        <h4>{% blocktrans %}Cell phone number{% endblocktrans %}:</h4>
+        {{ schedule.course.teacher.phone }}
+    </div>
+</div>
+{% endblock tradeschool_content %}

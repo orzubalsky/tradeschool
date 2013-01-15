@@ -71,6 +71,7 @@ def schedule_register(request, schedule_slug=None):
 def teacher_info(request):    
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
 
+
 def past_schedules(request):
     """ """ 
     schedules = Schedule.past.all()
@@ -123,6 +124,9 @@ def schedule_add(request):
 
             # delete the selected time slot
             Time.objects.get(pk=selected_time.pk).delete()
+            
+            # redirect to thank you page
+            return HttpResponseRedirect( reverse(schedule_submitted, args=[schedule.slug]) )            
 
     else :
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
@@ -174,7 +178,7 @@ def schedule_edit(request, schedule_slug=None):
                 barter_item, created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], requested=barter_item_form_data['requested'], schedule=schedule)
                 barter_item.save()
 
-            return HttpResponseRedirect( reverse(schedule_edit, args=[schedule.slug]) )
+            return HttpResponseRedirect( reverse(schedule_submitted, args=[schedule.slug]) )
 
     else :
         initial_item_data = []
@@ -193,8 +197,17 @@ def schedule_edit(request, schedule_slug=None):
          'teacher_form'         : teacher_form,}, 
         context_instance=RequestContext(request))    
 
+
+def schedule_submitted(request, schedule_slug):
+    """ loaded after a successful submission of the schedule form."""
+    schedule = get_object_or_404(Schedule, slug=schedule_slug)
+    
+    return render_to_response('class_submitted.html', { 'schedule': schedule, }, context_instance=RequestContext(request))
+
+
 def schedule_unregister(request, schedule_slug, student_slug):
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+
 
 def schedule_feedback_student(request, schedule_slug):
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
