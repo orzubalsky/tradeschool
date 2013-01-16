@@ -52,6 +52,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'dajaxice.finders.DajaxiceFinder',
 )
 
 LOCALE_PATHS = (
@@ -130,7 +131,8 @@ INSTALLED_APPS = (
     'chunks',
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
-    'rosetta',                      
+    'dajaxice',                     # django ajax app    
+    'rosetta',                      # django admin translation interface
     'chronograph',                  # admin based cron job management
     'django_mailer',                # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
@@ -164,6 +166,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'dajaxice': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },        
     }
 }
 

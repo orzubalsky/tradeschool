@@ -1,75 +1,87 @@
 ;(function($){
-	var site = window.site = new function() {
-		this.workingClassId;
-		this.swfu;
-		this.controllers = ['class'],
-		this.init = function() {
-			this.gallery();
-			//this.classMatch();
-			this.classToggles();
-			this.addClassItems();
-			//this.registerForm();
-		},
+	var site = window.site = new function() 
+	{
+        this.workingClassId;
+        
+        this.init = function() 
+        {
+            this.gallery();
 
-		this.gallery = function() 
+            //this.classMatch();
+            this.schedule_toggle();
+            this.schedule_preview();
+
+            this.addClassItems();
+            //this.registerForm();
+		};
+
+        this.gallery = function() 
+        {
+            var images = $('.gallery img');
+            var count = $(images).size();
+
+            $(images).css({'opacity':0});
+            $(images).eq(0).css({'opacity':1});
+
+            var i = 0;
+            var interval = setInterval(function() 
+            {
+                var next = (i < count-1) ? i+1 : 0;
+
+                $(images).eq(i).animate({
+                    opacity	: 0
+                }, 3000);
+                $(images).eq(next).animate({
+                    opacity	: 1
+                }, 3000);	
+                i = (i < count-1) ? i+1 : 0;
+            }, 9000);
+
+        },
+        
+        this.schedule_preview = function(href) 
+        {
+            var self = this;
+                        
+            $('.join').bind('click', function(e) 
+            {
+                e.preventDefault();
+
+                var href = $(this).attr('href');				
+
+                $('#matte').fadeIn(100, function() 
+                {
+                    $('#loader').show();
+
+                    $('#previewContainer').fadeIn(100, function() 
+                    {
+                        Dajaxice.tradeschool.schedule_form(self.preview_callback(), {'schedule_slug': href});				    
+                    });
+                });
+            });		    
+		},	
+		
+		this.preview_callback = function(data)	
 		{
-			var images = $('.gallery img');
-			var count = $(images).size();
-			
-			$(images).css({'opacity':0});
-			$(images).eq(0).css({'opacity':1});
-			
-			var i = 0;
-			var interval = setInterval(function() 
-			{
-				var next = (i < count-1) ? i+1 : 0;
+    	    if (data.success == true)
+		    {
+				$('#loader').hide();
+				$('#preview').html(data.html);
+                
+                var height = $('#preview #classPopup').height();
+				var width = $('#preview #classPopup').width();
+				var topOffset = $(document).scrollTop() + 50;
 				
-				$(images).eq(i).animate({
-					opacity	: 0
-				}, 3000);
-				$(images).eq(next).animate({
-					opacity	: 1
-				}, 3000);	
-				i = (i < count-1) ? i+1 : 0;
-			}, 9000);
-			
+				$('#preview, #previewContainer')
+				.css({
+					'height': height+'px', 
+					'width'	: width+'px',
+					'top'	: topOffset
+				})
+				.show();				
+		    }
 		},
-		this.previewItem = function(href) {
-			var self = this;
-			
-			$('#matte').fadeIn(100, function() {
-				$('#previewContainer').fadeIn(100);
-				self.ajaxPreview(href);
-			});						
-		},		
-		this.ajaxPreview = function(url) {
-			var self = this;
-			
-			$('#loader').show();
-			$.ajax({
-				type: "post",
-				url: url,
-				data: {},
-				dataType: "html",
-				success: function(data){
-					$('#loader').hide();
-					$('#preview').html(data);
-					
-					var height = $('#preview #classPopup').height();
-					var width = $('#preview #classPopup').width();
-					
-					var topOffset = $(document).scrollTop() + 50;
-					
-					$('#preview, #previewContainer')
-					.css({
-						'height': height+'px', 
-						'width'	: width+'px',
-						'top'	: topOffset
-					})
-					.show();
-				}
-			});				
-		},
+		
 		this.previewControls = function() {
 			var self = this;
 			
@@ -125,7 +137,7 @@
 				$(id).find('.classBody').slideToggle('slow');
 			}			
 		},
-		this.classToggles = function() 
+		this.schedule_toggle = function() 
 		{
 			var self = this;
 			
@@ -148,15 +160,7 @@
 					$('.classBody', classElement).slideDown(300);
 	            	$(classElement).addClass('open');
 				}
-			});
-			
-			
-			$('.join').bind('click', function(e) {
-				e.preventDefault();
-				
-				var href = $(this).attr('href');
-				self.previewItem(href);
-			});				
+			});			
 		},
 		this.registerForm = function() {
 			var self = this;

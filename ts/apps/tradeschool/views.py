@@ -16,7 +16,7 @@ def schedule_list(request, schedule_slug=None):
     else:
         previewed_course = None
     
-    return render_to_response('class_list.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
+    return render_to_response('schedule_list.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
 
 
 def schedule_register(request, schedule_slug=None):
@@ -76,7 +76,7 @@ def past_schedules(request):
     """ """ 
     schedules = Schedule.past.all()
     
-    return render_to_response('class_list_past.html',{ 'schedules': schedules,}, context_instance=RequestContext(request))    
+    return render_to_response('schedule_list_past.html',{ 'schedules': schedules,}, context_instance=RequestContext(request))    
 
 
 def schedule_add(request):
@@ -136,7 +136,7 @@ def schedule_add(request):
         time_form           = TimeSelectionForm(prefix="time")
 
     return render_to_response(
-        'class_submit.html',
+        'schedule_submit.html',
         {'barter_item_formset'  : barter_item_formset,
          'course_form'          : course_form,
          'teacher_form'         : teacher_form,
@@ -191,7 +191,7 @@ def schedule_edit(request, schedule_slug=None):
         teacher_form        = TeacherForm(prefix="teacher", instance=schedule.course.teacher)
 
     return render_to_response(
-        'class_submit.html',
+        'schedule_submit.html',
         {'barter_item_formset'  : barter_item_formset,
          'course_form'          : course_form,
          'teacher_form'         : teacher_form,}, 
@@ -202,7 +202,7 @@ def schedule_submitted(request, schedule_slug):
     """ loaded after a successful submission of the schedule form."""
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     
-    return render_to_response('class_submitted.html', { 'schedule': schedule, }, context_instance=RequestContext(request))
+    return render_to_response('schedule_submitted.html', { 'schedule': schedule, }, context_instance=RequestContext(request))
 
 
 def schedule_unregister(request, schedule_slug, student_slug):

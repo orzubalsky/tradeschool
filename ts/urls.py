@@ -2,8 +2,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+
 
 admin.autodiscover()
+dajaxice_autodiscover()
 
 # direct browser requests to the different apps
 urlpatterns = patterns('',
@@ -16,7 +19,7 @@ urlpatterns = patterns('',
     (r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'^tinymce/', include('tinymce.urls')),
-    
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),    
     url(r'^', include('tradeschool.urls')),
 )
 
