@@ -23,6 +23,12 @@
                     {{ schedule.course.venue.city }}
                 </div>
                 <p class="description">{{ schedule.course.description }}</p>
+                <p class="description">
+                    {% blocktrans %}The following items were exchanged{% endblocktrans %}:<br />
+                {% for item in schedule.barteritem_set.all %}
+                    {{ item.title }}<br />
+                {% endfor %}
+                </p>
                 <h4 class="teacher">
                     {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ schedule.course.teacher.website }}" target="_blank">{{ schedule.course.teacher.fullname }}</a>
                 </h4>

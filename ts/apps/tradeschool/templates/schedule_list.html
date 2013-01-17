@@ -6,45 +6,51 @@
 
 <div class="classes" id="future">	
 {% for schedule in schedules %}
-	{% ifchanged schedules.start_time.day %}
-	<div class="dateDivider">
-		<strong class="date1">{{ schedule.start_time|date:"M j, Y"|localize }}</strong>
-		<strong class="date2">{{ schedule.start_time|date:"l"|naturalday|localize }}</strong>
-	</div>
-	{% endifchanged %}
-	
-	<div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
-		{% if schedule.registered_students >= schedule.course.max_students %}
-		<div class="classTag tagFull">({% blocktrans context "Class full tag" %}Full{% endblocktrans %})</div>
-		{% endif %}
-		
-		<div class="classInfo">
-			<div class="classHeader">
-				<h3><a class="toggle" href="{% url schedule-view schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
-				<em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
-			</div>
-			
-			<div class="classBody">
-				<div class="classSite">
-					<strong>{{ schedule.course.venue.title }}</strong><br />
-					{{ schedule.course.venue.address_1 }}<br />
-					{{ schedule.course.venue.city }}
-				</div>
-				<p class="description">
-					{{ schedule.course.description }}
-				</p>
-				<h4 class="teacher">
-					{% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ schedule.course.teacher.website }}" target="_blank">{{ schedule.course.teacher.fullname }}</a>
-				</h4>
-				<p class="description">
-					{{ schedule.course.teacher.bio }}
-				</p>
-        		{% if schedule.registered_students < schedule.course.max_students %}
-				<a class="join" id="{{ schedule.slug }}" href="{% url schedule-register schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
-				{% endif %}
-			</div>				
-		</div>
-	</div>
+    {% ifchanged schedules.start_time.day %}
+    <div class="dateDivider">
+        <strong class="date1">{{ schedule.start_time|date:"M j, Y"|localize }}</strong>
+        <strong class="date2">{{ schedule.start_time|date:"l"|naturalday|localize }}</strong>
+    </div>
+    {% endifchanged %}
+
+    <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
+        {% if schedule.registered_students >= schedule.course.max_students %}
+        <div class="classTag tagFull">({% blocktrans context "Class full tag" %}Full{% endblocktrans %})</div>
+        {% endif %}
+
+        <div class="classInfo">
+            <div class="classHeader">
+                <h3><a class="toggle" href="{% url schedule-view schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
+                <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
+            </div>
+
+            <div class="classBody">
+                <div class="classSite">
+                    <strong>{{ schedule.course.venue.title }}</strong><br />
+                    {{ schedule.course.venue.address_1 }}<br />
+                    {{ schedule.course.venue.city }}
+                </div>
+                <p class="description">
+                    {{ schedule.course.description }}
+                </p>
+                <p class="description">
+                    {% blocktrans %}Bring one of the following{% endblocktrans %}:<br />
+                {% for item in schedule.barteritem_set.all %}
+                    {{ item.title }}<br />
+                {% endfor %}
+                </p>          
+                <h4 class="teacher">
+                    {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ schedule.course.teacher.website }}" target="_blank">{{ schedule.course.teacher.fullname }}</a>
+                </h4>
+                <p class="description">
+                    {{ schedule.course.teacher.bio }}
+                </p>
+                {% if schedule.registered_students < schedule.course.max_students %}
+                <a class="join" id="{{ schedule.slug }}" href="{% url schedule-register schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endfor %}
 </div>
 {% endblock tradeschool_content %}
