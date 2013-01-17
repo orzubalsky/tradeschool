@@ -13,6 +13,7 @@ from notifications.models import *
 
 
 def schedule_list(request, schedule_slug=None):
+    """ """
     schedules = Schedule.public.all()
     if schedule_slug != None:
         previewed_course = Course.objects.get(slug=schedule_slug)
@@ -23,6 +24,7 @@ def schedule_list(request, schedule_slug=None):
 
 
 def schedule_register(request, schedule_slug=None, data=None):
+    """ """
     schedule             = get_object_or_404(Schedule, slug=schedule_slug)
     open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
     seats_left           = schedule.course.max_students - schedule.registered_students
@@ -74,6 +76,7 @@ def schedule_register(request, schedule_slug=None, data=None):
     
 
 def teacher_info(request):    
+    """ """
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
 
 
@@ -85,6 +88,7 @@ def past_schedules(request):
 
 
 def schedule_add(request):
+    """ """
     if request.method == 'POST':
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
@@ -211,11 +215,21 @@ def schedule_submitted(request, schedule_slug):
 
 
 def schedule_unregister(request, schedule_slug, student_slug):
-    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+    """ """
+    registration = get_object_or_404(Registration, student__slug=student_slug, schedule__slug=schedule_slug)
+    
+    if request.method == 'POST':
+        registration.registration_status = 'unregistered'
+        registration.save()
+        return HttpResponseRedirect( reverse(schedule_list,) )
+        
+    return render_to_response('schedule_unregister.html', { 'registration' : registration }, context_instance=RequestContext(request))
 
 
 def schedule_feedback_student(request, schedule_slug):
+    """ """
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
 
 def schedule_feedback_teacher(request, schedule_slug):
+    """ """
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))    

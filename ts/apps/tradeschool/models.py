@@ -341,13 +341,19 @@ class Schedule(Durational):
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
-    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
-    
+    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")    
 
     objects = ScheduleManager()
     on_site = ScheduleSiteManager()    
     public  = ScheduleSitePublicManager()
     past    = ScheduleSitePublicPastManager()
+
+    @property
+    def is_within_a_day(self):
+        now = datetime.utcnow().replace(tzinfo=utc) 
+        if (self.start_time - now) < timedelta(hours=24):
+            return True
+        return False
 
     def populate_notifications(self):
         "resets course notification templates from the branch notification templates"
