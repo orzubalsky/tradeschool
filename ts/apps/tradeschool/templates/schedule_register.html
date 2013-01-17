@@ -1,5 +1,3 @@
-{% extends "base.html" %}
-
 {% load humanize smartdate i18n l10n %}
 
 {% block tradeschool_content %}
@@ -21,7 +19,7 @@
 				<em>{{ seats_left }} seats left</em>
 			</div>
 			
-			<form id="registerToClass" method="post" action="{% url schedule-register schedule_slug=schedule.slug %}">{% csrf_token %}
+			<form id="registerToClass" class="{{ schedule.slug }}" method="post" action="{% url schedule-register schedule_slug=schedule.slug %}">{% csrf_token %}
         		{% if student_form.errors or registration_form.errors %}
 			    <ul class="errors">                    
 				{% for field in student_form %}

@@ -1,72 +1,77 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.template.defaultfilters import slugify
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
+from django.utils import simplejson as json
 from tradeschool.models import *
 from tradeschool.forms import *
 from notifications.models import *
-from django.template.defaultfilters import slugify
+
 
 
 def schedule_list(request, schedule_slug=None):
     schedules = Schedule.public.all()
     if schedule_slug != None:
-        previewed_course = Course.objects.get(slug=course_slug)
+        previewed_course = Course.objects.get(slug=schedule_slug)
     else:
         previewed_course = None
     
     return render_to_response('schedule_list.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
 
 
-def schedule_register(request, schedule_slug=None):
+def schedule_register(request, schedule_slug=None, data=None):
     schedule             = get_object_or_404(Schedule, slug=schedule_slug)
     open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
     seats_left           = schedule.course.max_students - schedule.registered_students
-    
-    if request.method == 'POST':
-        
-        student_form      = StudentForm(data=request.POST, prefix="student")
-        registration_form = RegistrationForm(data=request.POST, schedule=schedule, prefix="item")        
-                
+
+    if data != None:
+        student_form      = StudentForm(data=data, prefix="student")
+        registration_form = RegistrationForm(data=data, schedule=schedule, prefix="item")        
+   
         if registration_form.is_valid() and student_form.is_valid():
-            current_site = Site.objects.get_current()
-                        
-            # save student
-            student = student_form.save(commit=False)
-            student_data = student_form.cleaned_data
-            student_data['slug'] = slugify(student.fullname)
-            student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
-            student.site.add(current_site)
-            student.save()
-                                    
-            # save registration
-            registration = registration_form.save(commit=False)
-            registration.student = student
-            registration.schedule = schedule
-            registration.save()
-            
-            # save items in registration through RegisteredItem
-            for barter_item in registration_form.cleaned_data['items']:
-                registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
-                registered_item.save()
-                
-            # email confirmation to student
-            schedule.emails.email_student(schedule.emails.student_confirmation, registration)
-            
+           current_site = Site.objects.get_current()
+           
+           # save student
+           student = student_form.save(commit=False)
+           student_data = student_form.cleaned_data
+           student_data['slug'] = slugify(student.fullname)
+           student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
+           student.site.add(current_site)
+           student.save()
+                       
+           # save registration
+           registration = registration_form.save(commit=False)
+           registration.student = student
+           registration.schedule = schedule
+           registration.save()
+
+           # save items in registration through RegisteredItem
+           for barter_item in registration_form.cleaned_data['items']:
+               registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
+               registered_item.save()
+   
+           # email confirmation to student
+           schedule.emails.email_student(schedule.emails.student_confirmation, registration)
+           
+           # render thank you template
+           return render_to_response('schedule_registered.html', { 'registration' : registration, }, context_instance=RequestContext(request), mimetype="application/json")    
+
     else :            
         student_form      = StudentForm(prefix="student")
         registration_form = RegistrationForm(schedule=schedule, prefix="item")
                 
-    return render_to_response(
-        'register.html',
-        {'schedule'             : schedule,
-         'open_seat_percentage' : open_seat_percentage,
-         'seats_left'           : seats_left,
-         'registration_form'    : registration_form,
-         'student_form'         : student_form,}, 
-        context_instance=RequestContext(request))
-
+    return render_to_response('schedule_register.html', 
+    {
+        'schedule'             : schedule,
+        'open_seat_percentage' : open_seat_percentage,
+        'seats_left'           : seats_left,
+        'registration_form'    : registration_form,
+        'student_form'         : student_form,    
+    }, context_instance=RequestContext(request), mimetype="application/json")
+    
 
 def teacher_info(request):    
     return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))

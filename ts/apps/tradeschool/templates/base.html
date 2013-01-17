@@ -1,4 +1,4 @@
-{% load i18n chunks flatpages %}
+{% load i18n chunks flatpages dajaxice_templatetags %}
 {% get_flatpages as flatpages %}
 <!DOCTYPE html>
 <html>
@@ -75,6 +75,7 @@
 	<div id="matte">&nbsp;</div>
 	{% endblock %}	
 	
+	{% dajaxice_js_import %}
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
