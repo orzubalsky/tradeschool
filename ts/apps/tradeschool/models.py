@@ -470,12 +470,14 @@ class Feedback(Base):
     Feedback is collected after courses take place.
     """
 
-    author      = OneToOneField(Person)
-    course      = ForeignKey(Schedule)
-    content     = TextField()
+    FEEDBACK_TYPE_CHOICES = (('teacher', 'From the Teacher'),('student', 'From a student'))    
+
+    schedule      = ForeignKey(Schedule)
+    feedback_type = CharField(max_length=20, choices=FEEDBACK_TYPE_CHOICES, default='student')
+    content       = TextField(verbose_name='Your Feedback', help_text='your feedback')
     
     def __unicode__ (self):
-        return "feedback from %s" % (self.author.fullname)
+        return u'%s: feedback %s' % (self.schedule.course.title, self.feedback_type)
 
 
 class Photo(Base):
@@ -488,7 +490,7 @@ class Photo(Base):
     filename = ImageField("Photo",upload_to='uploads/images')    
     position = PositiveSmallIntegerField('Position', default=0)    
     site     = ForeignKey(Site, default=str(Site.objects.get_current().id))
-    branch   = ForeignKey(Branch, default=Branch.objects.filter(site=str(Site.objects.get_current().id)[0]))
+    branch   = ForeignKey(Branch, default=Branch.objects.filter(site=str(Site.objects.get_current().id)))
     
     objects = Manager()
     on_site = CurrentSiteManager()

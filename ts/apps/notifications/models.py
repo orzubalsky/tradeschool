@@ -46,8 +46,8 @@ class Email(Base):
         venue   = schedule_obj.venue
         domain  = site.domain
         
-        student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback-student', kwargs={'schedule_slug': schedule_obj.slug,}))
-        teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback-teacher', kwargs={'schedule_slug': schedule_obj.slug,}))
+        student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'schedule_slug': schedule_obj.slug, 'feedback_type': 'student'}))
+        teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'schedule_slug': schedule_obj.slug, 'feedback_type': 'teacher'}))
         class_edit_url       = "%s%s" % (domain, reverse('schedule-edit', kwargs={'schedule_slug': schedule_obj.slug,}))
         homepage_url         = "%s%s" % (domain, reverse('schedule-list'))
 

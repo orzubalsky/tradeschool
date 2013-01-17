@@ -93,17 +93,26 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
 class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
     """
     """
-    model   = Photo
-    fields = ('render_image', 'filename', 'position',)
-    readonly_fields = ('render_image',)
-    extra   = 0
+    model               = Photo
+    fields              = ('render_image', 'filename', 'position',)
+    readonly_fields     = ('render_image',)
+    extra               = 0
     sortable_field_name = "position"
     
     def render_image(self, obj):
         return mark_safe("""<img src="%s" class="branch_image"/>""" % obj.filename.url)    
     render_image.short_description = "thumbnail"
-        
-        
+
+
+class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
+    """
+    """
+    model   = Feedback
+    fields = ('feedback_type', 'content',)
+    readonly_fields = ('feedback_type',)
+    extra   = 0
+
+
 class BranchAdmin(BaseAdmin):
     """ BranchAdmin lets you add and edit Trade School branches,
         and reset the email templates for each branch.
@@ -237,7 +246,7 @@ class ScheduleAdmin(BaseAdmin):
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
-    inlines         = (BarterItemInline, RegistrationInline, ScheduleEmailContainerInline,)
+    inlines         = (BarterItemInline, RegistrationInline, ScheduleEmailContainerInline, FeedbackInline)
     actions         = ('approve_courses', 'populate_notifications')
     fieldsets = (
         ('Class Schedule Info', {
@@ -284,8 +293,8 @@ class BarterItemAdmin(BaseAdmin):
     list_filter     = ('requested',)
     search_fields   = ('title',)
     fields          = ('title', 'requested')
-    
-    
+
+
 class SiteChunkAdmin(BaseAdmin):
     """ 
     """     

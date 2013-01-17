@@ -102,3 +102,13 @@ class StudentForm(ModelForm):
     class Meta:
         model       = Person
         fields      = ('fullname', 'email', 'phone')
+
+
+class FeedbackForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+           super (FeedbackForm,self ).__init__(*args,**kwargs) 
+           self.fields['content'].error_messages['required'] =  _("Please enter your feedback")
+
+    class Meta:
+        model       = Feedback
+        fields      = ('content',)

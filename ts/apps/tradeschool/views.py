@@ -226,10 +226,25 @@ def schedule_unregister(request, schedule_slug, student_slug):
     return render_to_response('schedule_unregister.html', { 'registration' : registration }, context_instance=RequestContext(request))
 
 
-def schedule_feedback_student(request, schedule_slug):
+def schedule_feedback(request, schedule_slug=None, feedback_type='student'):
     """ """
-    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+    schedule = get_object_or_404(Schedule, slug=schedule_slug)
+    
+    if request.method == 'POST':
+         form = FeedbackForm(data=request.POST)
 
-def schedule_feedback_teacher(request, schedule_slug):
-    """ """
-    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))    
+         if form.is_valid():
+
+             # save feedback
+             feedback = form.save(commit=False)
+             feedback.feedback_type = feedback_type
+             feedback.schedule = schedule
+             feedback.save()
+
+             # redirect to thank you page
+             return HttpResponseRedirect( reverse(schedule_list,) )            
+
+    else :
+        form = FeedbackForm()
+
+    return render_to_response('schedule_feedback.html', {'form' : form,},  context_instance=RequestContext(request))    
