@@ -4,12 +4,9 @@ from django_countries import CountryField
 from django.contrib.localflavor.us.models import USStateField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
-from django.core.files.storage import default_storage as storage
-from django.core.files.base import ContentFile
 from django.utils.timezone import utc
-import os, sys, pytz, uuid, random
+import pytz, uuid, random, time
 from datetime import *
-import time
 from chunks.models import Chunk
 from tradeschool.widgets import *
 
@@ -91,39 +88,6 @@ class Branch(Location):
             new_email.save()
             setattr(branch_email_container, fieldname, new_email)
         branch_email_container.save()
-    
-    # def files(self):
-    #         """ the branch's custom files """
-    #         return ('base.html', 'subpage.html', 'site.css')
-    #         
-    #     def folder(self):
-    #         """ the folder in which to store the branch's files """        
-    #         return settings.BRANCH_FILES + '/%s/' % (self.slug) 
-    #         
-    #     def create_branch_files(self):
-    #         """ create the branch's files in the branch's folder """
-    #         for filename in self.files():
-    #             filename = self.folder() + filename
-    #             if not storage.exists(filename):
-    #                 storage.save(filename, ContentFile(''))
-    #                     
-    #     def delete_branch_files(self):
-    #         """ delete files & folder """
-    #         for filename in self.files():
-    #             filename = self.folder() + filename
-    #             if storage.exists(filename):
-    #                 storage.delete(filename)
-    #         os.rmdir(self.folder())
-    #                 
-    #     def save (self, *args, **kwargs):
-    #         """ save and then create branch files """
-    #         super(Branch, self).save(*args, **kwargs)
-    #         self.create_branch_files()
-    #     
-    #     def delete(self):
-    #         """ delete and then remove branch files """                        
-    #         super(Branch, self).delete()
-    #         self.delete_branch_files()
 
 
 class Venue(Location):
@@ -304,14 +268,17 @@ class ScheduleManager(Manager):
    def get_query_set(self):
       return super(ScheduleManager, self).get_query_set().annotate(registered_students=Count('students')).prefetch_related('course')
 
+
 class ScheduleSiteManager(ScheduleManager):
   def get_query_set(self):
      return super(ScheduleSiteManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID)
+
 
 class ScheduleSitePublicManager(ScheduleSiteManager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
         return super(ScheduleSitePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, course_status=3)
+
         
 class ScheduleSitePublicPastManager(ScheduleSiteManager):
     def get_query_set(self):
@@ -322,7 +289,6 @@ class ScheduleSitePublicPastManager(ScheduleSiteManager):
 class Schedule(Durational):
     """
     """
-
     class Meta:
         verbose_name        = 'Class Schedule'
         verbose_name_plural = 'Class Schedules'
