@@ -47,3 +47,20 @@ MAILER_USE_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER =
 # EMAIL_HOST_PASSWORD =
 # EMAIL_USE_TLS =
+
+
+CACHES = {
+    'default' : dict(
+        BACKEND = 'johnny.backends.filebased.FileBasedCache',
+        LOCATION = PROJECT_DIR + '/tmp/django_cache',
+        JOHNNY_CACHE = True,
+    )
+}
+# CACHES = {
+#     'default' : dict(
+#         BACKEND = 'johnny.backends.memcached.MemcachedCache',
+#         LOCATION = ['127.0.0.1:11211'],
+#         JOHNNY_CACHE = True,
+#     )
+# }
+JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_ts'
