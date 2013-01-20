@@ -2,6 +2,8 @@ LOCAL_SETTINGS = True
 from django.conf import settings
 from settings import *
 
+SITE_ID = 2
+
 # define environment
 STAGE_NAME = 'PROD' # either PROD or DEV
 
