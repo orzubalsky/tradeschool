@@ -105,10 +105,26 @@ class TimedEmail(Email):
     
     send_on      = DateTimeField(blank=True, null=True)
     days_delta   = IntegerField(default=-1)
+    send_time    = TimeField(default=time(10,0,0))
 
     def set_send_on(self, event_datetime):
         # construct a datetime object after adding / subtracting the days delta
-        self.send_on = event_datetime + timedelta(days=self.days_delta)
+        send_datetime = event_datetime + timedelta(days=self.days_delta)
+        
+        # create a naive date from send_datetime
+        send_date = date(send_datetime.year, send_datetime.month, send_datetime.day)
+        
+        # combine the date to send the email with the time set in the email object
+        send_on_datetime = datetime.combine(send_date, self.send_time)
+        
+        # now do timezone conversion
+        current_tz = timezone.get_current_timezone()
+        localized_datetime = current_tz.localize(send_on_datetime)
+        utc = pytz.timezone('UTC')
+        normalized_datetime = utc.normalize(localized_datetime.astimezone(utc))
+
+        # set send_on to normalized datetime
+        self.send_on = normalized_datetime
 
 
 class StudentConfirmation(Email):
@@ -120,6 +136,7 @@ class StudentReminder(TimedEmail):
     """ """
     def save(self, *args, **kwargs):
         self.days_delta = -1
+        self.send_time = time(10,0,0)
         super(StudentReminder, self).save(*args, **kwargs)
 
 
@@ -127,6 +144,7 @@ class StudentFeedback(TimedEmail):
     """ """
     def save(self, *args, **kwargs):
         self.days_delta = 1
+        self.send_time = time(16,0,0)
         super(StudentFeedback, self).save(*args, **kwargs)
 
     
@@ -142,6 +160,7 @@ class TeacherReminder(TimedEmail):
     """ """
     def save(self, *args, **kwargs):
         self.days_delta = -1
+        self.send_time = time(18,0,0)
         super(TeacherReminder, self).save(*args, **kwargs)
 
 
@@ -149,6 +168,7 @@ class TeacherFeedback(TimedEmail):
     """ """
     def save(self, *args, **kwargs):
         self.days_delta = 1
+        self.send_time = time(18,0,0)
         super(TeacherFeedback, self).save(*args, **kwargs)
 
 

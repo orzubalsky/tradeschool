@@ -11,9 +11,9 @@ class Command(BaseCommand):
         from notifications.models import ScheduleEmailContainer, TimedEmail, StudentReminder, StudentFeedback, TeacherReminder, TeacherFeedback
         
         end_date   = datetime.utcnow().replace(tzinfo=utc)
-        start_date = end_date - timedelta(hours=1)
+        start_date = end_date - timedelta(hours=1, minutes=1)
 
-        schedules = Schedule.objects.filter(end_time__lte=(start_date + timedelta(days=14)))
+        schedules = Schedule.objects.filter(start_time__gte=(start_date - timedelta(days=14)), end_time__lte=(start_date + timedelta(days=14)))
         
         self.stdout.write('found %i schedules in the next 14 days\n' % (schedules.count()))
         
