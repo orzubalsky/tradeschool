@@ -162,9 +162,9 @@ class CourseAdmin(BaseAdmin):
     """    
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
-    #inlines              = (ScheduleInline,)
+    inlines              = (ScheduleInline,)
     fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'site')
-    prepopulated_fields  = {"slug": ("title",)}
+    prepopulated_fields  = {'slug': ('title',)}
     
     
 class PersonAdmin(BaseAdmin):
@@ -241,7 +241,19 @@ class ScheduleAdmin(BaseAdmin):
         for schedule in queryset:
             schedule.populate_notifications()
     populate_notifications.short_description = "Populate Email Notifications"
- 
+
+    def course_title(self, obj):
+        """ Return related course title so it can be used in list_display."""
+        return obj.course.title
+
+    def teacher_fullname(self, obj):
+        """ Return related course's teacher so it can be used in list_display."""        
+        return obj.course.teacher.fullname
+        
+    def teacher_email(self, obj):
+        """ Return related course's teacher's email so it can be used in list_display."""
+        return obj.course.teacher.email
+
     list_display    = ('course_title', 'teacher_fullname', 'teacher_email', 'start_time', 'end_time', 'venue', 'course_status', 'created', 'updated')
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
@@ -255,19 +267,8 @@ class ScheduleAdmin(BaseAdmin):
         ('Class Time', {
             'fields': ('start_time', 'end_time',)
         }),
-    )    
-
-    def course_title(self, obj):
-        """ Return related course title so it can be used in list_display."""
-        return obj.course.title
-
-    def teacher_fullname(self, obj):
-        """ Return related course's teacher so it can be used in list_display."""        
-        return obj.course.teacher.fullname
-        
-    def teacher_email(self, obj):
-        """ Return related course's teacher's email so it can be used in list_display."""
-        return obj.course.teacher.email
+    )
+    prepopulated_fields  = {'slug': ('start_time',) }
 
 
 class RegistrationAdmin(BaseAdmin):

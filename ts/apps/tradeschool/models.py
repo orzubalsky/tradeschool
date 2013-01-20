@@ -324,7 +324,7 @@ class Schedule(Durational):
     def populate_notifications(self):
         "resets course notification templates from the branch notification templates"
         
-        from notifications.models import BranchEmailContainer, ScheduleEmailContainer
+        from notifications.models import BranchEmailContainer, ScheduleEmailContainer, TimedEmail
         
         # delete existing branch emails
         schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self).delete()
@@ -336,6 +336,8 @@ class Schedule(Durational):
         
         for fieldname, email_obj in branch_email_container.emails.iteritems():
             new_email = copy_model_instance(email_obj)
+            if isinstance(new_email, TimedEmail):
+                new_email.set_send_on(self.start_time)
             new_email.save()
             setattr(schedule_email_container, fieldname, new_email)
         schedule_email_container.save()

@@ -5,6 +5,9 @@ from django.contrib.sites.models import Site
 from django.template import loader, Context
 from django.core.urlresolvers import reverse
 from django.template import Template
+from django.utils import timezone
+import pytz, time
+from datetime import *
 from tradeschool.models import Base, Branch, Course, Schedule
 
 
@@ -37,6 +40,7 @@ class Email(Base):
         body = self.preview(schedule_obj)
         site = Site.objects.get_current()
         send_mail(self.subject, body, site.branch.email, recipient)
+        self.email_status = 'sent'
 
     def template_context(self, schedule_obj, registration=None):
         """ """
@@ -100,19 +104,31 @@ class TimedEmail(Email):
         abstract = True
     
     send_on      = DateTimeField(blank=True, null=True)
+    days_delta   = IntegerField(default=-1)
+
+    def set_send_on(self, event_datetime):
+        # construct a datetime object after adding / subtracting the days delta
+        self.send_on = event_datetime + timedelta(days=self.days_delta)
 
 
 class StudentConfirmation(Email):
+    """ """
     pass
-    
+
 
 class StudentReminder(TimedEmail):
-    pass
+    """ """
+    def save(self, *args, **kwargs):
+        self.days_delta = -1
+        super(StudentReminder, self).save(*args, **kwargs)
 
 
 class StudentFeedback(TimedEmail):
-    pass
-    
+    """ """
+    def save(self, *args, **kwargs):
+        self.days_delta = 1
+        super(StudentFeedback, self).save(*args, **kwargs)
+
     
 class TeacherConfirmation(Email):
     pass
@@ -123,11 +139,17 @@ class TeacherClassApproval(Email):
 
 
 class TeacherReminder(TimedEmail):
-    pass
+    """ """
+    def save(self, *args, **kwargs):
+        self.days_delta = -1
+        super(TeacherReminder, self).save(*args, **kwargs)
 
 
 class TeacherFeedback(TimedEmail):
-    pass
+    """ """
+    def save(self, *args, **kwargs):
+        self.days_delta = 1
+        super(TeacherFeedback, self).save(*args, **kwargs)
 
 
 class EmailContainer(Base):

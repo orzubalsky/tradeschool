@@ -4,62 +4,6 @@ from admin_enhancer import admin as enhanced_admin
 from django.contrib import admin
 
 
-class StudentConfirmationInline(admin.TabularInline):
-    """
-    """
-    model   = StudentConfirmation
-    extra   = 0
-    max_num = 1
-
-
-class StudentReminderInline(admin.TabularInline):
-    """
-    """
-    model   = StudentReminder
-    extra   = 0
-    max_num = 1
-
-
-class StudentFeedbackInline(admin.TabularInline):
-    """
-    """
-    model   = StudentFeedback
-    extra   = 0
-    max_num = 1
-
-
-class TeacherConfirmationInline(admin.TabularInline):
-    """
-    """
-    model   = TeacherConfirmation
-    extra   = 0
-    max_num = 1
-
-
-class TeacherClassApprovalInline(admin.TabularInline):
-    """
-    """
-    model   = TeacherClassApproval
-    extra   = 0
-    max_num = 1
-
-
-class TeacherReminderInline(admin.TabularInline):
-    """
-    """
-    model   = TeacherReminder
-    extra   = 0
-    max_num = 1
-                
-                
-class TeacherFeedbackInline(admin.TabularInline):
-    """
-    """
-    model   = TeacherFeedback
-    extra   = 0
-    max_num = 1
-
-
 class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """
     """    
