@@ -58,7 +58,8 @@ class Branch(Location):
     """    
     
     class Meta:
-        verbose_name_plural = "Branches"
+        verbose_name_plural = 'Branche'
+        ordering = ['title']
         
     COMMON_TIMEZONE_CHOICES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
     

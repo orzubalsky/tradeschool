@@ -1,0 +1,14 @@
+{% extends "hub_base.html" %}
+
+{% load flatpage_admin %}
+
+{% block extra_js %}
+{% flatpage_media %}
+{% endblock %}
+
+{% block content %}
+<h1 class="about_title">{{ flatpage.title }}</h1>
+<div id="about">
+    {% flatpage_admin flatpage %}
+</div>    
+{% endblock %}

@@ -16,7 +16,7 @@ def schedule_list(request, schedule_slug=None):
     """ """
     schedules = Schedule.public.all()
     if schedule_slug != None:
-        previewed_course = Course.objects.get(slug=schedule_slug)
+        previewed_course = Schedule.objects.get(slug=schedule_slug)
     else:
         previewed_course = None
     

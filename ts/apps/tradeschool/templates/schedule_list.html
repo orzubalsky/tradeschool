@@ -4,9 +4,9 @@
 
 {% block tradeschool_content %}
 
-<div class="classes" id="future">	
+<div class="classes" id="future">
 {% for schedule in schedules %}
-    {% ifchanged schedules.start_time.day %}
+   {% ifchanged schedules.start_time.day %}
     <div class="dateDivider">
         <strong class="date1">{{ schedule.start_time|date:"M j, Y"|localize }}</strong>
         <strong class="date2">{{ schedule.start_time|date:"l"|naturalday|localize }}</strong>
@@ -16,8 +16,7 @@
     <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
         {% if schedule.registered_students >= schedule.course.max_students %}
         <div class="classTag tagFull">({% blocktrans context "Class full tag" %}Full{% endblocktrans %})</div>
-        {% endif %}
-
+        {% endif %}        
         <div class="classInfo">
             <div class="classHeader">
                 <h3><a class="toggle" href="{% url schedule-view schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
@@ -45,7 +44,7 @@
                 <p class="description">
                     {{ schedule.course.teacher.bio }}
                 </p>
-                {% if schedule.registered_students < schedule.course.max_students %}
+                {% if schedule.registered_students < schedule.course.max_students %}                    
                 <a class="join" id="{{ schedule.slug }}" href="{% url schedule-register schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
                 {% endif %}
             </div>

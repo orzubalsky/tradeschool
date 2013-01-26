@@ -25,7 +25,6 @@ sys.path.append(PROJECT_DIR)
 sys.path.append(os.path.join(PROJECT_DIR, 'apps'))                      
 sys.path.append(os.path.join(PROJECT_DIR, 'libs'))
 
-
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -71,6 +70,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     "django.core.context_processors.debug",
     "django.core.context_processors.media",
+    'django.core.context_processors.static',    
     'ts.context_processors.site',
 )
 
@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'django_mailer',                # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     'notifications',                # tradeschool email management system
+    'hub'
     #'migration',                    # tradeschool (zend framework php version) db schema migration
 )
 

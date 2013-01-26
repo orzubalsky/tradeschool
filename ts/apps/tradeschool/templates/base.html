@@ -8,9 +8,9 @@
 	<meta name="description" content="{% blocktrans context 'Page Meta Description' %}Take a class with a range of specialized teachers in exchange for basic items and services. Secure a spot in a TradeSchool class by meeting one of the teachers barter needs.{% endblocktrans %}" />
 	<meta name="keywords" content="{% blocktrans context 'Page Meta Keywords' %}tradeschool, trade, school, grand, opening, grandopening, ourgoods, art, artist, barter, trade, exchange, community, pop-up, storefront, new york city, lower east side {% endblocktrans %}" />
 
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/site.css" />
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/branch.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/site.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/branch.css" />
 	{% block extra_css %}{% endblock %}
 </head>
 <script type="text/javascript">
@@ -22,63 +22,61 @@
 
         {% block header %}
         <div id="header">
-        	{% block logo %}	
-        	<a href="{% url schedule-list %}"><div id="headerLogo"><h1>Trade School <br />{{ branch.title }}</h1></div></a>
-        	{% endblock logo %}	
+            {% block logo %}	
+            <a href="{% url schedule-list %}"><div id="headerLogo"><h1>Trade School <br />{{ branch.title }}</h1></div></a>
+            {% endblock logo %}	
 
-        	{% block navigation %}
-        	<div id="headerNav">
-        		<ul>
+            {% block navigation %}
+            <div id="headerNav">
+                <ul>
                 {% for page in flatpages %}
                     <li><a href="{{ page.url }}">{{ page.title }}</a></li>
                 {% endfor %}        		    
-        			<li><a href="{% url past-classes %}">{% trans "Past" context "Past Classes" %}</a></li>
-        	    	<li class="tshq"><a href="/">{% blocktrans context "Text for the Tradeschool.coop link" %}TS HQ{% endblocktrans %}</a></li>
-        		</ul>
-        	</div>
-        	{% endblock navigation %}		
+                    <li><a href="{% url past-classes %}">{% trans "Past" context "Past Classes" %}</a></li>
+                    <li class="tshq"><a href="/">{% blocktrans context "Text for the Tradeschool.coop link" %}TS HQ{% endblocktrans %}</a></li>
+                </ul>
+            </div>
+            {% endblock navigation %}		
 
-        	<div id="headerPhotoContainer" class="gallery">
-        		<div id="headerPhoto">
-        		{% for photo in branch.photo_set.all %}		
-        			<img src="{{ photo.filename.url }}" />
-        		{% endfor %}
-        		</div>
-        	</div>		
-        	<div id="headerIntro">
-        		<h2>{% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}</h2>
-        		<p>{% chunk "homepage-intro" site %}</p>
-        	</div>
-        	<div id="headerEmail">
-        		<p>{% trans "Join our list" %}:</p>				
-        		<form id="mailinglist" action="http://carolinewoolard.createsend.com/t/r/s/qukiuh/" method="post" id="subForm">
+            <div id="headerPhotoContainer" class="gallery">
+                <div id="headerPhoto">
+                {% for photo in branch.photo_set.all %}		
+                    <img src="{{ photo.filename.url }}" />
+                {% endfor %}
+                </div>
+            </div>
+            <div id="headerIntro">
+                <h2>{% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}</h2>
+                <p>{% chunk "homepage-intro" site %}</p>
+            </div>
+            <div id="headerEmail">
+                <p>{% trans "Join our list" %}:</p>				
+                <form id="mailinglist" action="http://carolinewoolard.createsend.com/t/r/s/qukiuh/" method="post" id="subForm">
                     <input type="text" name="cm-qukiuh-qukiuh" id="qukiuh-qukiuh" value="your email address" class="emailField">
                     <input type="submit" value="{% blocktrans context 'mailing list join button text' %}GO{% endblocktrans %}" class="emailButton">
-         		</form>
-        	</div>
+                </form>
+            </div>
         </div>
         {% endblock header %}
 
-        	<div id="main">
-        		{% block tradeschool_content %}
-        		{% endblock %}		
-        	</div>
-
-        	<div class="clear"></div>
+            <div id="main">
+            {% block tradeschool_content %}
+            {% endblock %}		
+            </div>
+            <div class="clear"></div>
         {% endblock content %}
 	</div>
-	{% block lightbox %}	
-	<div id="previewContainer">
-		<img id="loader" src="{{ MEDIA_URL }}/images/ajax-loader.gif" />
-		<div id="preview">&nbsp;</div>
+    {% block lightbox %}	
+    <div id="previewContainer">
+        <img id="loader" src="{{ STATIC_URL }}/images/ajax-loader.gif" />
+        <div id="preview">&nbsp;</div>
 	</div>
-	<div id="matte">&nbsp;</div>
-	{% endblock %}	
-	
-	{% dajaxice_js_import %}
-	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/jquery.js"></script>	
-	<script type="text/javascript" src="{{ MEDIA_URL }}js/lib.js"></script>
-	<script type="text/javascript" src="{{ MEDIA_URL }}js/site.js"></script>
-	{% block extra_js %}{% endblock %}	
+    <div id="matte">&nbsp;</div>
+    {% endblock %}	
+
+    {% dajaxice_js_import %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.js"></script>	
+    <script type="text/javascript" src="{{ STATIC_URL }}js/site.js"></script>
+	{% block extra_js %}{% endblock %}
 </body>
 </html>

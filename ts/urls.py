@@ -20,6 +20,12 @@ urlpatterns = patterns('',
     (r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete'),
     (r'^tinymce/', include('tinymce.urls')),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),    
+)
+
+if settings.SITE_ID == 1:
+    urlpatterns += patterns('', url(r'^', include('hub.urls')),)
+
+urlpatterns += patterns('',
     url(r'^', include('tradeschool.urls')),
 )
 
