@@ -65,6 +65,7 @@ def schedule_register(request, schedule_slug=None, data=None):
         student_form      = StudentForm(prefix="student")
         registration_form = RegistrationForm(schedule=schedule, prefix="item")
     
+    # return content as either json or html depending on request type
     if request.is_ajax():
         mimetype = "application/json"
     else:
