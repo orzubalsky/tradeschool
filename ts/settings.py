@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     'dajaxice',                     # django ajax app    
     'rosetta',                      # django admin translation interface
     'chronograph',                  # admin based cron job management
-    'django_mailer',                # handle outgoing email queue
+    #'django_mailer',                # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     'notifications',                # tradeschool email management system
     'hub'
