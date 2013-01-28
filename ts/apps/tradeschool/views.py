@@ -64,7 +64,12 @@ def schedule_register(request, schedule_slug=None, data=None):
     else :            
         student_form      = StudentForm(prefix="student")
         registration_form = RegistrationForm(schedule=schedule, prefix="item")
-                
+    
+    if request.is_ajax():
+        mimetype = "application/json"
+    else:
+        mimetype = "text/html"
+    
     return render_to_response('schedule_register.html', 
     {
         'schedule'             : schedule,
@@ -72,7 +77,7 @@ def schedule_register(request, schedule_slug=None, data=None):
         'seats_left'           : seats_left,
         'registration_form'    : registration_form,
         'student_form'         : student_form,    
-    }, context_instance=RequestContext(request), mimetype="application/json")
+    }, context_instance=RequestContext(request), mimetype=mimetype)
     
 
 def teacher_info(request):    

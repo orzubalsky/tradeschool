@@ -571,6 +571,7 @@ body.global {
 	overflow: hidden;
 	background-color: black;
 	color: white;
+	margin: 30px auto;
 }
 
 #classPopup ul.errors{

@@ -1,3 +1,5 @@
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+
 {% load humanize smartdate i18n l10n %}
 
 {% block tradeschool_content %}
