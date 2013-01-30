@@ -1,6 +1,5 @@
 from django.utils.safestring import mark_safe
 from tradeschool.models import *
-from notifications.models import *
 from admin_enhancer import admin as enhanced_admin
 from django.contrib import admin
 from chunks.models import Chunk
@@ -314,6 +313,21 @@ class PhotoAdmin(BaseAdmin):
     get_thumbnail.short_description = 'thumbnail'
     get_thumbnail.allow_tags = True        
 
+
+class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
+    """
+    """    
+    list_display = ('branch',)
+    fields       = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
+
+
+class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
+    """
+    """    
+    list_display  = ('schedule',)
+    fields        = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
+
+
 # register admin models
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
@@ -330,3 +344,15 @@ admin.site.register(Feedback)
 admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(SiteChunk, SiteChunkAdmin)
+
+admin.site.register(DefaultEmailContainer)
+admin.site.register(BranchEmailContainer, BranchEmailContainerAdmin)
+admin.site.register(ScheduleEmailContainer, ScheduleEmailContainerAdmin)
+
+admin.site.register(StudentConfirmation)
+admin.site.register(StudentReminder)
+admin.site.register(StudentFeedback)
+admin.site.register(TeacherConfirmation)
+admin.site.register(TeacherClassApproval)
+admin.site.register(TeacherReminder)
+admin.site.register(TeacherFeedback)

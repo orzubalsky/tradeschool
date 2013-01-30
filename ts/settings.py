@@ -60,7 +60,7 @@ LOCALE_PATHS = (
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -100,7 +100,6 @@ TEMPLATE_DIRS = (
 )
 
 FIXTURE_DIRS = (
-   PROJECT_DIR + '/apps/notifications/fixtures',
    PROJECT_DIR + '/apps/tradeschool/fixtures',   
 )
 
@@ -134,9 +133,8 @@ INSTALLED_APPS = (
     'dajaxice',                     # django ajax app    
     'rosetta',                      # django admin translation interface
     'chronograph',                  # admin based cron job management
-    #'django_mailer',                # handle outgoing email queue
+    #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
-    'notifications',                # tradeschool email management system
     'hub'
     #'migration',                    # tradeschool (zend framework php version) db schema migration
 )

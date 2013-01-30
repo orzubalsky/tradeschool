@@ -8,8 +8,6 @@ from django.forms.formsets import formset_factory
 from django.utils import simplejson as json
 from tradeschool.models import *
 from tradeschool.forms import *
-from notifications.models import *
-
 
 
 def schedule_list(request, schedule_slug=None):

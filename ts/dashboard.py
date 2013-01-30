@@ -53,9 +53,9 @@ class CustomIndexDashboard(Dashboard):
                 modules.ModelList(
                     title=_('Emails'),
                     column=1,
-                    models=('notifications.models.BranchNotificationTemplate', 
-                            'notifications.models.BranchNotification',
-                            'notifications.models.ScheduleNotification',
+                    models=('tradeschool.models.BranchNotificationTemplate', 
+                            'tradeschool.models.BranchNotification',
+                            'tradeschool.models.ScheduleNotification',
                             'mailer.models.MessageLog',
                             'mailer.models.Message'),                    
                 ),
@@ -76,8 +76,7 @@ class CustomIndexDashboard(Dashboard):
                     title=_('Everything Else'),
                     column=1,
                     collapsible=True,
-                    exclude=('tradeschool.models.*',
-                             'website.models.*',
+                    exclude=('',
                              ),
                 )                 
             ]

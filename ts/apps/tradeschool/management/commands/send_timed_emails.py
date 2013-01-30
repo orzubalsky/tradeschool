@@ -7,8 +7,7 @@ class Command(BaseCommand):
         
     def handle(self, *args, **options):
         """ """
-        from tradeschool.models import Schedule        
-        from notifications.models import ScheduleEmailContainer, TimedEmail, StudentReminder, StudentFeedback, TeacherReminder, TeacherFeedback
+        from ts.models import Schedule, ScheduleEmailContainer, TimedEmail, StudentReminder, StudentFeedback, TeacherReminder, TeacherFeedback
         
         end_date   = datetime.utcnow().replace(tzinfo=utc)
         start_date = end_date - timedelta(hours=1, minutes=1)

@@ -10,14 +10,13 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from datetime import *
-from notifications.models import *
 from tradeschool.models import *
 
 
 class RegistrationTestCase(TestCase):
     """ test student registration """
     def setUp(self):
-        self.c = Client()
+        self.client = Client()
 
         self.site     = Site(domain="http://test.tradeschool.coop/", name="test ts", id=2)
         self.site.save()
@@ -40,11 +39,6 @@ class RegistrationTestCase(TestCase):
     def test_registration(self):
         """
         """
-        
-        url  = '/class/%s/register' % self.schedule.slug
-        print url
-        data = {}
-        response = self.c.get(url) 
-        #response = self.c.post(url, data)
+        response = self.client.get(reverse('schedule-register', kwargs={ 'schedule_slug': self.schedule.slug }))        
         print response
         self.assertEqual(1 + 1, 2)
