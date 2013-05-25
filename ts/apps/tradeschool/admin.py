@@ -1,31 +1,34 @@
 from django.utils.safestring import mark_safe
-from tradeschool.models import *
-from admin_enhancer import admin as enhanced_admin
 from django.contrib import admin
+from admin_enhancer import admin as enhanced_admin
+from guardian.admin import GuardedModelAdmin
 from chunks.models import Chunk
+from tradeschool.models import *
 
-class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
+
+class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, GuardedModelAdmin):
     """Base admin model. Filters objects querysite according to the current branch."""
     
-    def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-        
-        qs = super(BaseAdmin, self).queryset(request)        
-
-        # superusers get to see all of the data
-        if request.user.is_superuser:
-            return qs
-   
-        # other users see data filtered by the branch they're associated with
-        qs = self.model.on_branch.get_query_set()
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-        
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs   
-         
+    # 
+    # def queryset(self, request):
+    #     """Filter the queryset in order to only display objects from the current branch."""
+    #     
+    #     qs = super(BaseAdmin, self).queryset(request)        
+    # 
+    #     # superusers get to see all of the data
+    #     if request.user.is_superuser:
+    #         return qs
+    #    
+    #     # other users see data filtered by the branch they're associated with
+    #     qs = self.model.on_branch.get_query_set()
+    # 
+    #     # we need this from the superclass method
+    #     ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+    #     
+    #     if ordering:
+    #         qs = qs.order_by(*ordering)
+    #     return qs   
+    #      
     
 class ScheduleInline(admin.TabularInline):
     """ Schedule model inline object. 
@@ -140,11 +143,11 @@ class BranchAdmin(BaseAdmin):
 class VenueAdmin(BaseAdmin):
     """ VenueAdmin lets you add and edit venues.
     """    
-    list_display    = ('title', 'site', 'address_1', 'city', 'capacity', 'is_active')
-    list_editable   = ('site', 'address_1', 'city', 'capacity', 'is_active',)
+    list_display    = ('title', 'branch', 'address_1', 'city', 'capacity', 'is_active')
+    list_editable   = ('branch', 'address_1', 'city', 'capacity', 'is_active',)
     fieldsets = (
         ('Basic Info', {
-            'fields': ('title', 'site',)
+            'fields': ('title', 'branch',)
         }),
         ('Contact Info', {
             'fields': ('address_1', 'city', 'state', 'country', 'phone')
@@ -162,7 +165,7 @@ class CourseAdmin(BaseAdmin):
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'site')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'branch')
     prepopulated_fields  = {'slug': ('title',)}
     
     
@@ -179,7 +182,7 @@ class PersonAdmin(BaseAdmin):
         
     list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'created')    
     search_fields       = ('fullname', 'email', 'phone')
-    fields              = ('fullname', 'email', 'phone', 'slug', 'website', 'bio', 'site')
+    fields              = ('fullname', 'email', 'phone', 'slug', 'website', 'bio', 'branch')
     prepopulated_fields = {'slug': ('fullname',)}
 
     def courses_taken(self, obj):
@@ -221,14 +224,14 @@ class TimeAdmin(BaseAdmin):
     """ TimeAdmin lets you add and edit time slots in the Trade School system.
     """    
     list_display = ('start_time', 'end_time',)
-    fields       = ('start_time', 'end_time', 'site')
+    fields       = ('start_time', 'end_time', 'branch')
 
 
 class TimeRangeAdmin(BaseAdmin):
     """ TimeRangeAdmin is a way to create batch time slots. A post save signal adds Time objects.
     """    
     list_display = ('start_time', 'end_time', 'start_date', 'end_date',)
-    fields       = ('start_time', 'end_time', 'start_date', 'end_date', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'site')
+    fields       = ('start_time', 'end_time', 'start_date', 'end_date', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'branch')
 
 
 class ScheduleAdmin(BaseAdmin):
@@ -305,7 +308,7 @@ class PhotoAdmin(BaseAdmin):
     """ 
     """  
     list_display    = ('get_thumbnail', 'filename', 'position')
-    readonly_fields = ('site',)   
+    readonly_fields = ('branch',)   
     
     def get_thumbnail(self, obj):
         """ """

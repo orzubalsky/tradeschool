@@ -76,7 +76,7 @@ class TimeModelChoiceField(forms.ModelChoiceField):
          
 class TimeSelectionForm(Form):
     "A simple dropdown menu for teachers to select an available time when submitting a class. Uses the Time model"
-    time = TimeModelChoiceField(queryset=Time.on_site.all(), error_messages={'required': _('Please select a time') } )
+    time = TimeModelChoiceField(queryset=Time.objects.all(), error_messages={'required': _('Please select a time') } )
 
 
 class RegistrationForm(ModelForm):

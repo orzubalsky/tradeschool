@@ -31,6 +31,9 @@ class Base(Model):
     """
     class Meta:
         abstract = True
+        permissions = (
+            ('view_object', 'View object'),
+        )
                     
     created     = DateTimeField(auto_now_add=True, editable=False)
     updated     = DateTimeField(auto_now=True, editable=False)
@@ -405,7 +408,7 @@ class Course(Base):
         (6, 'Org')
     )
 
-    teacher         = ForeignKey(Person, limit_choices_to = {'site': Site.objects.get_current()}, related_name='courses_taught')
+    teacher         = ForeignKey(Person, related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
     title           = CharField(max_length=140, verbose_name="class title")    
@@ -540,8 +543,8 @@ class Schedule(Durational):
         (4, 'Rejected')
     )
 
-    venue           = ForeignKey(Venue, limit_choices_to = {'site': Site.objects.get_current()}, null=True, blank=True, help_text="Where is this class taking place?")
-    course          = ForeignKey(Course, limit_choices_to = {'site': Site.objects.get_current()}, help_text="What class are you scheduling?")
+    venue           = ForeignKey(Venue, null=True, blank=True, help_text="Where is this class taking place?")
+    course          = ForeignKey(Course, help_text="What class are you scheduling?")
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    

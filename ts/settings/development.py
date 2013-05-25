@@ -53,7 +53,7 @@ DATABASES = {
 CACHES = {
     'default' : dict(
         BACKEND = 'johnny.backends.filebased.FileBasedCache',
-        LOCATION = PROJECT_DIR + '/../tmp/django_cache',
+        LOCATION = PROJECT_DIR + '/tmp/django_cache',
         JOHNNY_CACHE = True,
     )
 }

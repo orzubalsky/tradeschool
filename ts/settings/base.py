@@ -56,6 +56,13 @@ LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale/'),
 )
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # default
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+ANONYMOUS_USER_ID = -1
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -71,7 +78,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    'ts.apps.tradeschool.context_processors.branch',
+    #'tradeschool.context_processors.branch',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -107,7 +114,8 @@ FIXTURE_DIRS = (
 # Example: '/home/media/media.lawrence.com/media/'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
-#ADMIN_MEDIA_PREFIX = '/admin/media/'
+ADMIN_MEDIA_PREFIX = '/admin/media/'
+
 #BRANCH_FILES = MEDIA_ROOT + '/branches_files'
 
 INSTALLED_APPS = (
@@ -131,6 +139,7 @@ INSTALLED_APPS = (
     'pytz',                         # python timezone library
     'dajaxice',                     # django ajax app    
     'rosetta',                      # django admin translation interface
+    'guardian',                     # django object permissions
     #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     #'migration',                    # tradeschool (zend framework php version) db schema migration
