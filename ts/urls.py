@@ -37,19 +37,21 @@ urlpatterns += patterns('',
 
 # flat pages
 urlpatterns += patterns('django.contrib.flatpages.views',
-    (r'^(?P<url>.*)$', 'flatpage'),
+    # it's probably better to specify specific flat page urls here so they don't interfere with branch slugs
+    #(r'^(?P<url>[0-9A-Za-z]+)$', 'flatpage'),
 )
 
 # tradeschool urls
 urlpatterns += patterns('',
-    url(r'^', include('tradeschool.urls')),
+    url(r'^(?P<branch_slug>[0-9A-Za-z]+)', include('tradeschool.urls')),
+    url(r'^$', 'tradeschool.views.branch_list', name='branch-list'),    
 )    
 
 # static files url patterns
 urlpatterns += staticfiles_urlpatterns()
 
 # serve static files from media directory when in debug mode
-if settings.DEBUG:
+if settings.DEBUG: 
     urlpatterns += patterns('',
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, }),
    )

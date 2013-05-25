@@ -19,7 +19,8 @@ ts/apps/migration/
 ts/media/uploads
 
 # ignore cache files
-ts/tmp
+ts/tmp/
+ts/settings/tmp/
 
 # ignore sql data dump:
 sample_data.json

@@ -134,7 +134,6 @@ INSTALLED_APPS = (
     'rosetta',                      # django admin translation interface
     #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
-    'hub'
     #'migration',                    # tradeschool (zend framework php version) db schema migration
 )
 

@@ -23,7 +23,7 @@
         {% block header %}
         <div id="header">
             {% block logo %}	
-            <a href="{% url schedule-list %}"><div id="headerLogo"><h1>Trade School <br />{{ branch.title }}</h1></div></a>
+            <a href="{% url 'schedule-list' branch_slug=branch.slug %}"><div id="headerLogo"><h1>Trade School <br />{{ branch.title }}</h1></div></a>
             {% endblock logo %}	
 
             {% block navigation %}
@@ -32,7 +32,7 @@
                 {% for page in flatpages %}
                     <li><a href="{{ page.url }}">{{ page.title }}</a></li>
                 {% endfor %}        		    
-                    <li><a href="{% url past-classes %}">{% trans "Past" context "Past Classes" %}</a></li>
+                    <li><a href="{% url 'past-classes' branch_slug=branch.slug %}">{% trans "Past" context "Past Classes" %}</a></li>
                     <li class="tshq"><a href="/">{% blocktrans context "Text for the Tradeschool.coop link" %}TS HQ{% endblocktrans %}</a></li>
                 </ul>
             </div>

@@ -10,15 +10,31 @@ from tradeschool.models import *
 from tradeschool.forms import *
 
 
-def schedule_list(request, schedule_slug=None):
+def branch_list(request):
+    """display all branches in current site."""
+    
+    branches  = Branch.objects.all()
+    schedules = Schedule.public.all()
+
+    return render_to_response('branch_list.html',{ 'branches': branches, 'schedules' : schedules }, context_instance=RequestContext(request))
+
+
+def schedule_list(request, branch_slug=None, schedule_slug=None):
     """ """
+
+    branch = get_object_or_404(Branch, slug=branch_slug)
+        
     schedules = Schedule.public.all()
     if schedule_slug != None:
         previewed_course = Schedule.objects.get(slug=schedule_slug)
     else:
         previewed_course = None
     
-    return render_to_response('schedule_list.html',{ 'schedules': schedules, 'previewed_course': previewed_course}, context_instance=RequestContext(request))
+    return render_to_response('schedule_list.html',{ 
+            'branch'            : branch,
+            'schedules'         : schedules, 
+            'previewed_course'  : previewed_course
+        }, context_instance=RequestContext(request))
 
 
 def schedule_register(request, schedule_slug=None, data=None):

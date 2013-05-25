@@ -3,10 +3,15 @@ from django.conf import settings
 from ts.settings.base import *
 
 SITE_ID = 1
-
 SECRET_KEY = 'asdasd12e1asdasd'
 
-# define environment
+
+
+
+###############################################################
+# Environment Settings
+###############################################################
+
 STAGE_NAME = 'DEV' # either PROD or DEV
 
 # debugging changes according to environment configuration
@@ -19,6 +24,13 @@ else :
 
 TEMPLATE_DEBUG = DEBUG
 
+
+
+
+###############################################################
+# Database Settings
+###############################################################
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',    # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -29,6 +41,14 @@ DATABASES = {
         'PORT': '',                         # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+
+
+
+
+###############################################################
+# Cache Settings
+###############################################################
  
 CACHES = {
     'default' : dict(
@@ -39,9 +59,52 @@ CACHES = {
 }
 JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_ts'
 
+
+
+
+###############################################################
+# Media Files Settings
+###############################################################
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_URL = 'http://127.0.0.1:8000/media/'
+MEDIA_URL = 'http://localhost:8000/media/'
+
+# Absolute path to the directory that holds media.
+# Example: "/home/media/media.lawrence.com/"
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
+
+
+
+
+###############################################################
+# Static Files Settings
+###############################################################
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = ''
+
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = '/static/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    #os.path.join(PROJECT_DIR, 'media/'),    
+)
+
+
+
+
+###############################################################
+# Locale Settings
+###############################################################
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
