@@ -132,7 +132,6 @@ INSTALLED_APPS = (
     'pytz',                         # python timezone library
     'dajaxice',                     # django ajax app    
     'rosetta',                      # django admin translation interface
-    'chronograph',                  # admin based cron job management
     #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     'hub'
@@ -203,10 +202,3 @@ LANGUAGES = (
     ('ru-RU', 'Russian'),
     ('zh-CN', 'Chinese (China)')
 )
-
-
-
-try:
-    LOCAL_SETTINGS
-except NameError:
-    from local_settings import *

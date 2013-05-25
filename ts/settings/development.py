@@ -4,6 +4,8 @@ from ts.settings.base import *
 
 SITE_ID = 1
 
+SECRET_KEY = 'asdasd12e1asdasd'
+
 # define environment
 STAGE_NAME = 'DEV' # either PROD or DEV
 
