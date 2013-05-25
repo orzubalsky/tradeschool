@@ -1,6 +1,5 @@
 *.pyc
 *~
-local_settings.py
 .DS_Store
 
 # ignore buildout's workspace stuff:
