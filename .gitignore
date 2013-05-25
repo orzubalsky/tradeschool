@@ -9,6 +9,10 @@ develop-eggs/
 eggs/
 parts/
 
+# ignore settings files:
+ts/settings/*.py
+!ts/settings/__init__.py
+
 # ignore static files (for now):
 ts/static/
 
