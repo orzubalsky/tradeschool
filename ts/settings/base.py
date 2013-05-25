@@ -70,8 +70,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     "django.core.context_processors.debug",
     "django.core.context_processors.media",
-    'django.core.context_processors.static',    
-    'ts.context_processors.site',
+    'django.core.context_processors.static',
 )
 
 MIDDLEWARE_CLASSES = (

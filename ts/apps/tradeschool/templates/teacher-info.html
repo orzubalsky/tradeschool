@@ -28,7 +28,7 @@
 	</div>
   
 	<div class="subButtonBox">
-		<a class="submit" href="{% url schedule-add %}">{% blocktrans %}Sign up to teach{% endblocktrans %}</a>
+		<a class="submit" href="{% url 'schedule-add' branch_slug=branch.slug %}">{% blocktrans %}Sign up to teach{% endblocktrans %}</a>
 	</div>
 </div>
 {% endblock tradeschool_content %}

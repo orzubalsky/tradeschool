@@ -20,7 +20,7 @@ def branch_list(request):
 
 
 def schedule_list(request, branch_slug=None, schedule_slug=None):
-    """ """
+    """display all upcoming schedules for branch."""
 
     branch = get_object_or_404(Branch, slug=branch_slug)
         
@@ -95,20 +95,32 @@ def schedule_register(request, schedule_slug=None, data=None):
     }, context_instance=RequestContext(request), mimetype=mimetype)
     
 
-def teacher_info(request):    
-    """ """
-    return render_to_response('teacher-info.html', {}, context_instance=RequestContext(request))
+def teacher_info(request, branch_slug=None):    
+    """display a content page with information for prospective teachers. This page leads to the class submission form page."""
+    
+    branch = get_object_or_404(Branch, slug=branch_slug)
+    
+    return render_to_response('teacher-info.html', { 'branch' : branch, }, context_instance=RequestContext(request))
 
 
-def past_schedules(request):
-    """ """ 
+def past_schedules(request, branch_slug=None):
+    """display a list of past classes for the current branch."""
+
+    branch = get_object_or_404(Branch, slug=branch_slug)
+    
     schedules = Schedule.past.all()
     
-    return render_to_response('schedule_list_past.html',{ 'schedules': schedules,}, context_instance=RequestContext(request))    
+    return render_to_response('schedule_list_past.html',{ 
+            'branch'    : branch,
+            'schedules' : schedules,
+        }, context_instance=RequestContext(request))    
 
 
-def schedule_add(request):
+def schedule_add(request, branch_slug=None):
     """ """
+    
+    branch = get_object_or_404(Branch, slug=branch_slug)
+    
     if request.method == 'POST':
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
@@ -164,17 +176,18 @@ def schedule_add(request):
         teacher_form        = TeacherForm(prefix="teacher")
         time_form           = TimeSelectionForm(prefix="time")
 
-    return render_to_response(
-        'schedule_submit.html',
-        {'barter_item_formset'  : barter_item_formset,
-         'course_form'          : course_form,
-         'teacher_form'         : teacher_form,
-         'time_form'            : time_form,}, 
+    return render_to_response('schedule_submit.html', {
+            'branch'               : branch,
+            'barter_item_formset'  : barter_item_formset,
+            'course_form'          : course_form,
+            'teacher_form'         : teacher_form,
+            'time_form'            : time_form,
+        }, 
         context_instance=RequestContext(request))
 
 
 
-def schedule_edit(request, schedule_slug=None):
+def schedule_edit(request, schedule_slug=None, branch_slug=None):
     """ """
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     

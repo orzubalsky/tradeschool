@@ -25,7 +25,7 @@
         <div class="branchInfo">
             <div class="branchHeader">
                 <h3>
-                    <a href="{{ branch.site.domain }}">{{ branch.title|title }}</a>
+                    <a href="{% url 'schedule-list' branch_slug='newyork' %}">{{ branch.title|title }}</a>
                 </h3>
             </div>
         </div>
