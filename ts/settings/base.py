@@ -18,7 +18,7 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-PROJECT_DIR = os.path.dirname(__file__)
+PROJECT_DIR = os.path.dirname(__file__) + '/..'
 
 sys.path.append(os.path.dirname(PROJECT_DIR))    
 sys.path.append(PROJECT_DIR)
@@ -27,17 +27,17 @@ sys.path.append(os.path.join(PROJECT_DIR, 'libs'))
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
+# in apps' 'static/' subdirectories and in STATICFILES_DIRS.
+# Example: '/home/media/media.lawrence.com/static/'
 STATIC_ROOT = ''
 
 # URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
+# Example: 'http://media.lawrence.com/static/'
 STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Put strings here, like '/home/html/static' or 'C:/www/django/static'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_DIR, 'static/'),    
@@ -64,13 +64,14 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.request",
-    "django.core.context_processors.i18n",
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+    'django.core.context_processors.i18n',
     'django.contrib.messages.context_processors.messages',
-    "django.core.context_processors.debug",
-    "django.core.context_processors.media",
+    'django.core.context_processors.debug',
+    'django.core.context_processors.media',
     'django.core.context_processors.static',
+    'ts.apps.tradeschool.context_processors.branch',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,7 +91,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'ts.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like '/home/html/django_templates' or 'C:/www/django/templates'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     PROJECT_DIR + '/apps/tradeschool/templates',
@@ -103,12 +104,11 @@ FIXTURE_DIRS = (
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
+# Example: '/home/media/media.lawrence.com/media/'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
-ADMIN_MEDIA_PREFIX = '/admin/media/'
-
-BRANCH_FILES = MEDIA_ROOT + '/branches_files'
+#ADMIN_MEDIA_PREFIX = '/admin/media/'
+#BRANCH_FILES = MEDIA_ROOT + '/branches_files'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -175,8 +175,8 @@ LOGGING = {
 }
 
 TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "table,spellchecker,paste,searchreplace",
-    'theme': "advanced",
+    'plugins': 'table,spellchecker,paste,searchreplace',
+    'theme': 'advanced',
 }
 
 GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'

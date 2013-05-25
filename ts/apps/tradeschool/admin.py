@@ -5,23 +5,23 @@ from django.contrib import admin
 from chunks.models import Chunk
 
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
-    """ Base admin model. Filters objects querysite according to the Site."""
+    """Base admin model. Filters objects querysite according to the current branch."""
     
     def queryset(self, request):
-        """ Filter the queryset using the on site manager 
-            in order to only display objects from the current site.
-            If the current site is tradeschool.coop (should be SITE_ID = 1),
-            display all objects from all sites.        
-        """
+        """Filter the queryset in order to only display objects from the current branch."""
+        
         qs = super(BaseAdmin, self).queryset(request)        
-        if settings.SITE_ID == 1:
-            # return everything.
-            return qs        
-        # use on site manager, rather than the default one
-        qs = self.model.on_site.get_query_set()
+
+        # superusers get to see all of the data
+        if request.user.is_superuser:
+            return qs
+   
+        # other users see data filtered by the branch they're associated with
+        qs = self.model.on_branch.get_query_set()
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+        
         if ordering:
             qs = qs.order_by(*ordering)
         return qs   

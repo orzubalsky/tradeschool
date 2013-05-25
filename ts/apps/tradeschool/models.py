@@ -160,12 +160,12 @@ class TimedEmail(Email):
 
 
 class StudentConfirmation(Email):
-    """ """
+    """An email that is sent when a student registered to a scheduled class."""
     pass
 
 
 class StudentReminder(TimedEmail):
-    """ """
+    """An email that is sent to a registered student a day before a class is scheduled to start."""
     def save(self, *args, **kwargs):
         self.days_delta = -1
         self.send_time = time(10,0,0)
@@ -173,7 +173,8 @@ class StudentReminder(TimedEmail):
 
 
 class StudentFeedback(TimedEmail):
-    """ """
+    """An email that is sent to a student a day after a scheduled class took place."""
+
     def save(self, *args, **kwargs):
         self.days_delta = 1
         self.send_time = time(16,0,0)
@@ -181,15 +182,18 @@ class StudentFeedback(TimedEmail):
 
 
 class TeacherConfirmation(Email):
+    """An email that is sent when a teacher submitted a class."""
     pass
 
 
 class TeacherClassApproval(Email):
+    """An email that is sent when an admin approved a teacher submitted a class."""
     pass                                 
 
 
 class TeacherReminder(TimedEmail):
-    """ """
+    """An email that is sent to a teacher a day before their class takes place."""
+    
     def save(self, *args, **kwargs):
         self.days_delta = -1
         self.send_time = time(18,0,0)
@@ -197,7 +201,8 @@ class TeacherReminder(TimedEmail):
 
 
 class TeacherFeedback(TimedEmail):
-    """ """
+    """An email that is sent to a teacher a day after a scheduled class took place."""
+
     def save(self, *args, **kwargs):
         self.days_delta = 1
         self.send_time = time(18,0,0)
@@ -283,8 +288,8 @@ class Branch(Location):
     timezone    = CharField(max_length=100, choices=COMMON_TIMEZONE_CHOICES)
     site        = ForeignKey(Site)
 
-    objects = Manager()
-    on_site = CurrentSiteManager()    
+    objects   = Manager()
+    on_site   = CurrentSiteManager()
     
     def populate_notifications(self):
         "resets branch notification templates from the global branch notification templates"
@@ -305,14 +310,7 @@ class Branch(Location):
 
 
 class Venue(Location):
-    """
-    Each branch has venues in which classes take place.
-    *   Normal venues are displayed on the front page calendar.
-        Alternative venues are created specifically for classes that require a one-time special location.
-        For example, a cooking class has to take place in a kitchen,
-        but the kitchen is not open for other classses.
-    *   The venue's color is a css hex color that is used in the calendars.
-    """
+    """Branches have venues in which scheduled classes take place."""
 
     TYPE_CHOICES = ((0, 'Normal'), (1, 'Alternative'))
 
@@ -326,10 +324,10 @@ class Venue(Location):
     capacity    = SmallIntegerField(max_length=4, default=20, help_text="How many people fit in the space?")     
     resources   = TextField(null=True, default="Chairs, Tables", help_text="What resources are available at the space?")
     color       = CharField(max_length=7, default=random_color)
-    site        = ForeignKey(Site, default=str(Site.objects.get_current().id), help_text="What TS is this space related to?")
+    branch      = ForeignKey(Branch, help_text="What TS is this space related to?")
 
     objects = Manager()
-    on_site = CurrentSiteManager()    
+    
 
 class PersonManager(Manager):
     def get_query_set(self):
@@ -337,6 +335,7 @@ class PersonManager(Manager):
             registration_count  =Count('registrations', distinct=True), 
             courses_taught_count=Count('courses_taught', distinct=True)
         )
+
 
 class Person(Base):
     """
@@ -355,10 +354,9 @@ class Person(Base):
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-    site        = ManyToManyField(Site, null=True, default=str(Site.objects.get_current().id))
+    branch      = ManyToManyField(Branch, null=True)
     
     objects = Manager()
-    on_site = CurrentSiteManager()
     
     def __unicode__ (self):
         return self.fullname
@@ -413,10 +411,10 @@ class Course(Base):
     title           = CharField(max_length=140, verbose_name="class title")    
     slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
-    site       	 	= ManyToManyField(Site, null=True,  default=str(Site.objects.get_current().id))
+    branch          = ManyToManyField(Branch, null=True)
     
     objects = Manager()
-    on_site = CurrentSiteManager()    
+
 
 class Durational(Base):
     """
@@ -428,10 +426,6 @@ class Durational(Base):
 
     start_time  = DateTimeField(default=datetime.now())
     end_time    = DateTimeField(default=datetime.now())
-
-    formfield_overrides = {
-        DateTimeField: {'widget': TsAdminSplitDateTime},
-    }
     
     
 class Time(Durational):
@@ -445,10 +439,9 @@ class Time(Durational):
         verbose_name        = "Time Slot"
         verbose_name_plural = "Time Slots"
 		    
-    site    = ForeignKey(Site,  default=str(Site.objects.get_current().id))
+    branch  = ForeignKey(Branch)
     
     objects = Manager()
-    on_site = CurrentSiteManager()    
 
     def __unicode__ (self):
         return unicode(self.start_time)
@@ -472,33 +465,10 @@ class TimeRange(Base):
     friday      = BooleanField()
     saturday    = BooleanField()
 
-    site    = ForeignKey(Site, default=str(Site.objects.get_current().id))
+    branch    = ForeignKey(Branch)
     
     objects = Manager()
-    on_site = CurrentSiteManager()
     
-
-class ScheduleManager(Manager):
-   def get_query_set(self):
-      return super(ScheduleManager, self).get_query_set().annotate(registered_students=Count('students')).prefetch_related('course')
-
-
-class ScheduleSiteManager(ScheduleManager):
-  def get_query_set(self):
-     return super(ScheduleSiteManager, self).get_query_set().filter(course__site__id__exact=settings.SITE_ID)
-
-
-class ScheduleSitePublicManager(ScheduleSiteManager):
-    def get_query_set(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        return super(ScheduleSitePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, course_status=3)
-
-        
-class ScheduleSitePublicPastManager(ScheduleSiteManager):
-    def get_query_set(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        return super(ScheduleSitePublicPastManager, self).get_query_set().filter(end_time__lte=now, course__is_active=1, course_status=3)
-
 
 class ScheduleEmailContainer(EmailContainer):
     """
@@ -531,6 +501,29 @@ class ScheduleEmailContainer(EmailContainer):
         return u"for %s" % self.schedule.course.title
 
 
+class ScheduleManager(Manager):
+   def get_query_set(self):
+      return super(ScheduleManager, self).get_query_set().annotate(registered_students=Count('students')).prefetch_related('course')
+
+
+class ScheduleBranchManager(ScheduleManager):
+  def get_query_set(self):
+      branch = Branch.objects.get(pk=1)
+      return super(ScheduleBranchManager, self).get_query_set().filter(course__branch__id__exact=branch.pk)
+
+
+class ScheduleBranchPublicManager(ScheduleBranchManager):
+    def get_query_set(self):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        return super(ScheduleBranchPublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, course_status=3)
+
+
+class ScheduleBranchPublicPastManager(ScheduleBranchManager):
+    def get_query_set(self):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        return super(ScheduleBranchPublicPastManager, self).get_query_set().filter(end_time__lte=now, course__is_active=1, course_status=3)
+
+
 class Schedule(Durational):
     """
     """
@@ -554,10 +547,10 @@ class Schedule(Durational):
     students        = ManyToManyField(Person, through="Registration")    
     slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")    
 
-    objects = ScheduleManager()
-    on_site = ScheduleSiteManager()    
-    public  = ScheduleSitePublicManager()
-    past    = ScheduleSitePublicPastManager()
+    objects   = ScheduleManager()
+    on_branch = ScheduleBranchManager()    
+    public    = ScheduleBranchPublicManager()
+    past      = ScheduleBranchPublicPastManager()
 
     @property
     def is_within_a_day(self):
@@ -607,9 +600,9 @@ class Schedule(Durational):
         return "%s" % (self.course.title)
 
 
-class BarterItemSiteManager(Manager):
+class BarterItemBranchManager(Manager):
     def get_query_set(self):
-       return super(BarterItemSiteManager, self).get_query_set().filter(schedule__course__site__id__exact=settings.SITE_ID)
+       return super(BarterItemBranchManager, self).get_query_set().filter(schedule__course__branch__id__exact=1)
 
 
 class BarterItem(Base):
@@ -623,16 +616,18 @@ class BarterItem(Base):
     requested   = IntegerField(max_length=3, default=1)
     schedule    = ForeignKey(Schedule, null=True, blank=False)
 
-    objects = Manager()
-    on_site = BarterItemSiteManager()
+    objects   = Manager()
+    on_branch = BarterItemBranchManager()
 
     def __unicode__ (self):
         registered_count = RegisteredItem.objects.filter(barter_item=self).count()
         return u"%s (%i are bringing)" % (self.title, registered_count)
 
-class RegistrationSiteManager(Manager):
+
+class RegistrationBranchManager(Manager):
     def get_query_set(self):
-       return super(RegistrationSiteManager, self).get_query_set().filter(schedule__course__site__id__exact=settings.SITE_ID)
+       return super(RegistrationBranchManager, self).get_query_set().filter(schedule__course__branch__id__exact=1)
+
 
 class Registration(Base):
     """
@@ -649,16 +644,17 @@ class Registration(Base):
     registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
     items               = ManyToManyField(BarterItem, through="RegisteredItem", blank=False)
         
-    objects = Manager()
-    on_site = RegistrationSiteManager()    
+    objects   = Manager()
+    on_branch = RegistrationBranchManager()    
 
     def __unicode__ (self):      
         return "%s: %s" % (self.student.fullname, self.registration_status)
 
 
-class RegisteredItemSiteManager(Manager):
+class RegisteredItemBranchManager(Manager):
     def get_query_set(self):
-       return super(RegisteredItemSiteManager, self).get_query_set().filter(registration__schedule__course__teacher__site__id__exact=settings.SITE_ID)
+       return super(RegisteredItemBranchManager, self).get_query_set().filter(registration__schedule__course__teacher__branch__id__exact=1)
+
 
 class RegisteredItem(Base):
     """
@@ -669,8 +665,8 @@ class RegisteredItem(Base):
     barter_item     = ForeignKey(BarterItem)
     registered      = IntegerField(max_length=3, default=1)
     
-    objects = Manager()
-    on_site = RegisteredItemSiteManager()
+    objects   = Manager()
+    on_branch = RegisteredItemBranchManager()
     
     def __unicode__ (self):
         return "%s: %i" % (self.barter_item.title, self.registered)
@@ -700,11 +696,9 @@ class Photo(Base):
                
     filename = ImageField("Photo",upload_to='uploads/images')    
     position = PositiveSmallIntegerField('Position', default=0)    
-    site     = ForeignKey(Site, default=str(Site.objects.get_current().id))
-    branch   = ForeignKey(Branch, default=Branch.objects.filter(site=str(Site.objects.get_current().id)))
+    branch   = ForeignKey(Branch)
     
     objects = Manager()
-    on_site = CurrentSiteManager()
 
     def thumbnail(self):
         if self.filename:
