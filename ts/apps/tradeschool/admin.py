@@ -1,80 +1,81 @@
 from django.utils.safestring import mark_safe
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
-from guardian.admin import GuardedModelAdmin
 from chunks.models import Chunk
 from tradeschool.models import *
 
 
-class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, GuardedModelAdmin):
+class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """Base admin model. Filters objects querysite according to the current branch."""
+
+
+    def queryset(self, request):
+        """Filter the queryset in order to only display objects from the current branch."""
     
-    # 
-    # def queryset(self, request):
-    #     """Filter the queryset in order to only display objects from the current branch."""
-    #     
-    #     qs = super(BaseAdmin, self).queryset(request)        
-    # 
-    #     # superusers get to see all of the data
-    #     if request.user.is_superuser:
-    #         return qs
-    #    
-    #     # other users see data filtered by the branch they're associated with
-    #     qs = self.model.on_branch.get_query_set()
-    # 
-    #     # we need this from the superclass method
-    #     ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-    #     
-    #     if ordering:
-    #         qs = qs.order_by(*ordering)
-    #     return qs   
-    #      
+        qs = super(BaseAdmin, self).queryset(request)        
     
+        # superusers get to see all of the data
+        if request.user.is_superuser:
+            return qs
+    
+        # other users see data filtered by the branch they're associated with
+        qs = qs.filter(branch__in=request.user.branch_set.all)
+    
+        # we need this from the superclass method
+        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+    
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+
+
 class ScheduleInline(admin.TabularInline):
-    """ Schedule model inline object. 
+    """Schedule model inline object. 
         Can be used in the Course Admin view in order 
-        to allow on the spot scheduling.
-    """
+        to allow on the spot scheduling."""
+        
     model   = Schedule
     extra   = 1
     fields  = ('start_time', 'end_time', 'venue')
 
 
 class RegistrationInline(admin.TabularInline):
-    """ Registration model inline object. 
+    """Registration model inline object. 
         Used in the Schedule Admin view in order 
-        to give an overview of students registered.
-    """    
+        to give an overview of students registered."""
+        
     model   = Registration 
     fields  = ('student', 'registration_status',)
     extra   = 1
 
 
 class BarterItemInline(admin.TabularInline):
-    """ BarterItem model inline object. 
+    """BarterItem model inline object. 
         Used in the Schedule Admin view in order 
-        to give an overview of the items requested.
-    """    
+        to give an overview of the items requested."""
+        
     model   = BarterItem
     exclude = ('is_active',)    
     extra   = 2
 
 
 class RegisteredItemInline(admin.TabularInline):
-    """ RegisteredItem model inline object. 
+    """RegisteredItem model inline object. 
         Used in the Registration Admin view in order to 
-        give an overview of the items checked by each student.
-    """    
+        give an overview of the items checked by each student."""
+        
     model   = RegisteredItem
     exclude = ('is_active',)
     extra   = 0
 
 
 class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
-    """ BranchEmailContainer model inline object. 
+    """BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
-        an overview of the branch's emails.
-    """    
+        an overview of the branch's emails."""
+
     model           = BranchEmailContainer
     fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
     extra           = 0
@@ -82,10 +83,10 @@ class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stacke
     
     
 class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
-    """ BranchEmailContainer model inline object. 
+    """BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
-        an overview of the branch's emails.
-    """    
+        an overview of the branch's emails."""
+        
     model           = ScheduleEmailContainer
     fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
     extra           = 0
@@ -116,11 +117,12 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
 
 
 class BranchAdmin(BaseAdmin):
-    """ BranchAdmin lets you add and edit Trade School branches,
-        and reset the email templates for each branch.
-    """    
+    """BranchAdmin lets you add and edit tradeschool branches,
+        and reset the email templates for each branch."""
+        
     def populate_notifications(self, request, queryset):
-        """ call the populate_notifications() method in order to reset email templates for the branch."""
+        """call the populate_notifications() method in order to reset email templates for the branch."""
+        
         for branch in queryset:
             branch.populate_notifications()
     populate_notifications.short_description = "Populate Email Notifications"
@@ -137,12 +139,15 @@ class BranchAdmin(BaseAdmin):
         ('Contact Info', {
             'fields': ('city', 'state', 'country', 'email', 'phone')
         }),
+        ('Organizers', {
+            'fields': ('organizers',)
+        }),        
     )
 
 
 class VenueAdmin(BaseAdmin):
-    """ VenueAdmin lets you add and edit venues.
-    """    
+    """VenueAdmin lets you add and edit venues."""
+    
     list_display    = ('title', 'branch', 'address_1', 'city', 'capacity', 'is_active')
     list_editable   = ('branch', 'address_1', 'city', 'capacity', 'is_active',)
     fieldsets = (
@@ -159,13 +164,13 @@ class VenueAdmin(BaseAdmin):
 
 
 class CourseAdmin(BaseAdmin):
-    """ CourseAdmin lets you add and edit courses
-        and their corresponding schedules.
-    """    
+    """CourseAdmin lets you add and edit courses
+        and their corresponding schedules."""
+
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'branch')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description')
     prepopulated_fields  = {'slug': ('title',)}
     
     

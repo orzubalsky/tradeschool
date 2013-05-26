@@ -98,6 +98,18 @@ header#grp-header #grp-context-navigation {
 
 
 
+
+/*------ MESSAGES --------------*/
+.grp-messagelist li {
+    background-color: transparent;
+    border-color: transparent;
+}
+/*------ MESSAGES END ----------*/
+
+
+
+
+
 /*--------- GROUP ----------*/
 .grp-group {
     border: none;

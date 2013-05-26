@@ -5,7 +5,7 @@ def branch(request, branch_slug=None):
     try:
         branch = Branch.objects.get(slug=branch_slug)
         
-        return { 'branch':branch }        
+        return { 'branch':branch, }
         
     except Branch.DoesNotExist:
-        pass
+        return {}
