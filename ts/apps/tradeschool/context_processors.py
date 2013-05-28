@@ -1,11 +1,19 @@
 from django.conf import settings
+from django.core.urlresolvers import resolve
 from tradeschool.models import *
 
-def branch(request, branch_slug=None):
+def branch(request):
+    
+    url = resolve(request.path)
+    branch_slug = url.kwargs.get('branch_slug')
+    print url
     try:
         branch = Branch.objects.get(slug=branch_slug)
-        
-        return { 'branch':branch, }
+        pages  = BranchPage.objects.filter(branch=branch) 
+                
+        return { 'branch'       : branch, 
+                 'branch_pages' : pages,
+               }
         
     except Branch.DoesNotExist:
         return {}

@@ -2,10 +2,12 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.utils import simplejson as json
+from django.contrib.sites.models import get_current_site
+from django.contrib.flatpages.views import render_flatpage
 from tradeschool.models import *
 from tradeschool.forms import *
 
@@ -23,7 +25,7 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     """display all upcoming schedules for branch."""
 
     branch = get_object_or_404(Branch, slug=branch_slug)
-        
+    
     schedules = Schedule.public.all()
     if schedule_slug != None:
         previewed_course = Schedule.objects.get(slug=schedule_slug)
@@ -279,5 +281,23 @@ def schedule_feedback(request, schedule_slug=None, feedback_type='student'):
 
     else :
         form = FeedbackForm()
-
+    
     return render_to_response('schedule_feedback.html', {'form' : form,},  context_instance=RequestContext(request))    
+    
+
+def branchpage(request, url, branch_slug=None):
+    """ """
+    if not url.startswith('/'):
+        url = '/' + url
+    
+    try:
+        branch_page = get_object_or_404(BranchPage, url__exact=url)
+    except Http404:
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            url += '/'
+            branch_page = get_object_or_404(BranchPage, url__exact=url)
+            return HttpResponsePermanentRedirect('%s/' % request.path)
+        else:
+            raise
+            
+    return render_flatpage(request, branch_page)

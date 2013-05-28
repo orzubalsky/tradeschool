@@ -1,6 +1,10 @@
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.flatpages.admin import FlatpageForm
+from django.contrib.flatpages.models import FlatPage
+from flatpages_tinymce.admin import FlatPageAdmin
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
 from chunks.models import Chunk
@@ -661,6 +665,22 @@ class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.
     fields        = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
 
 
+class BranchPageForm(FlatpageForm):
+    class Meta:
+        model = BranchPage
+  
+
+class BranchPageAdmin(FlatPageAdmin):
+    """ """
+    form = BranchPageForm
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content', 'branch')}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required', 'template_name')}),
+    )
+    list_display = ('url', 'title')
+    list_filter = ('sites', 'branch', 'enable_comments', 'registration_required')
+    search_fields = ('url', 'title') 
+
 # register admin models
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
@@ -677,6 +697,9 @@ admin.site.register(Feedback)
 admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(SiteChunk, SiteChunkAdmin)
+
+admin.site.unregister(FlatPage)
+admin.site.register(BranchPage, BranchPageAdmin)
 
 admin.site.register(DefaultEmailContainer)
 admin.site.register(BranchEmailContainer, BranchEmailContainerAdmin)

@@ -320,8 +320,8 @@ fieldset.grp-module {
     margin-bottom:20px;
 }
 .grp-change-form .grp-module:not(.grp-submit-row) {
-    min-width: 630px;
-    width: 630px;
+    min-width: 900px;
+    width: 900px;
 }
 .grp-row .vTextField,
 .grp-row .vURLField,
@@ -331,7 +331,7 @@ fieldset.grp-module {
 .grp-row .vXMLLargeTextField,
 .grp-autocomplete-wrapper-m2m,
 select {
-    width: 400px;
+    width: 680px;
 }
 form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
     background-color: white;

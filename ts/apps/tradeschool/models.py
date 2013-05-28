@@ -3,9 +3,11 @@ from django.db.models import *
 from django.contrib.localflavor.us.models import USStateField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
+from django.contrib.flatpages.models import FlatPage
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.timezone import utc
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 #from django_mailer import send_mail
@@ -672,6 +674,14 @@ class Photo(Base):
     def __unicode__ (self):
         return "%s: %s" % (self.branch.title, self.filename)
         
+
+class BranchPage(FlatPage):
+    """Extending the FlatPage model to provide branch-specific content pages."""
+
+    branch   = ForeignKey(Branch)
+    position = PositiveSmallIntegerField('Position', default=0)    
+    
+    
         
 class SiteChunk(Chunk):
     class Meta:

@@ -63,6 +63,7 @@ class CustomIndexDashboard(Dashboard):
                     title=_('Website Content'),
                     column=1,
                     models=('tradeschool.models.Photo',
+                            'tradeschool.models.BranchPage',                    
                             'tradeschool.models.SiteChunk',
                             'django.contrib.flatpages.models.FlatPage',),
                 ),   
