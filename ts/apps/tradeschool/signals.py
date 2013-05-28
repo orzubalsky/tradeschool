@@ -47,7 +47,7 @@ def timerange_save_callback(sender, instance, **kwargs):
             end_time    = datetime.combine(single_date, instance.end_time)
 
             # append a time object to the list so all of them can be inserted in one query
-            timeList.append(Time(start_time=start_time, end_time=end_time, site=instance.site))                                    
+            timeList.append(Time(start_time=start_time, end_time=end_time, branch=instance.branch))                                    
 
     # save time slots
     Time.objects.bulk_create(timeList)
