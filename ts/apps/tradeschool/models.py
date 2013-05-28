@@ -34,8 +34,7 @@ class Base(Model):
                     
     created     = DateTimeField(auto_now_add=True, editable=False)
     updated     = DateTimeField(auto_now=True, editable=False)
-    is_active   = BooleanField(default=1)  
-    branch      = ManyToManyField("Branch", help_text="What tradeschool is this object related to?")      
+    is_active   = BooleanField(default=1)
         
     def __unicode__ (self):
         if hasattr(self, "title") and self.title:
@@ -263,7 +262,7 @@ class BranchEmailContainer(EmailContainer):
         verbose_name = "Branch Emails"
         verbose_name_plural = "Branch Emails"
 
-    primary_branch = OneToOneField("Branch", related_name="emails")
+    branch = OneToOneField("Branch", related_name="emails")
 
     def __unicode__ (self):
         return u"for %s" % self.branch.title
@@ -324,7 +323,8 @@ class Venue(Location):
     capacity    = SmallIntegerField(max_length=4, default=20, help_text="How many people fit in the space?")     
     resources   = TextField(null=True, default="Chairs, Tables", help_text="What resources are available at the space?")
     color       = CharField(max_length=7, default=random_color)
-    
+    branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+
 
 class PersonManager(Manager):
     def get_query_set(self):
@@ -354,7 +354,8 @@ class Person(Base):
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-
+    branch      = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
+    
     objects = Manager()
 
     def __unicode__ (self):
@@ -410,6 +411,7 @@ class Course(Base):
     title           = CharField(max_length=140, verbose_name="class title")    
     slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
+    branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
 
 
 class Durational(Base):
@@ -435,7 +437,8 @@ class Time(Durational):
         verbose_name        = "Time Slot"
         verbose_name_plural = "Time Slots"
     
-    objects = Manager()
+    venue = ForeignKey(Venue, null=True, help_text="Is this time slot associated with a specific venue?")
+    branch = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
 
     def __unicode__ (self):
         return unicode(self.start_time)
@@ -460,8 +463,8 @@ class TimeRange(Base):
     friday      = BooleanField()
     saturday    = BooleanField()
     
-    objects = Manager()
-    
+    branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+        
 
 class ScheduleEmailContainer(EmailContainer):
     """
@@ -532,7 +535,7 @@ class Schedule(Durational):
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
-    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")    
+    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
 
     objects   = ScheduleManager()
     public    = SchedulePublicManager()
@@ -596,9 +599,7 @@ class BarterItem(Base):
     title       = CharField(max_length=255)
     requested   = IntegerField(max_length=3, default=1)
     schedule    = ForeignKey(Schedule, null=True, blank=False)
-
-    objects   = Manager()
-
+    
     def __unicode__ (self):
         registered_count = RegisteredItem.objects.filter(barter_item=self).count()
         return u"%s (%i are bringing)" % (self.title, registered_count)
@@ -618,8 +619,6 @@ class Registration(Base):
     student             = ForeignKey(Person, related_name='registrations')
     registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
     items               = ManyToManyField(BarterItem, through="RegisteredItem", blank=False)
-        
-    objects   = Manager()
 
     def __unicode__ (self):      
         return "%s: %s" % (self.student.fullname, self.registration_status)
@@ -633,8 +632,6 @@ class RegisteredItem(Base):
     registration    = ForeignKey(Registration)
     barter_item     = ForeignKey(BarterItem)
     registered      = IntegerField(max_length=3, default=1)
-    
-    objects   = Manager()
     
     def __unicode__ (self):
         return "%s: %i" % (self.barter_item.title, self.registered)
@@ -650,7 +647,7 @@ class Feedback(Base):
     schedule      = ForeignKey(Schedule)
     feedback_type = CharField(max_length=20, choices=FEEDBACK_TYPE_CHOICES, default='student')
     content       = TextField(verbose_name='Your Feedback', help_text='your feedback')
-    
+        
     def __unicode__ (self):
         return u'%s: feedback %s' % (self.schedule.course.title, self.feedback_type)
 
@@ -662,9 +659,10 @@ class Photo(Base):
     class Meta:
         ordering = ['position',]
                
-    filename = ImageField("Photo",upload_to='uploads/images')    
-    position = PositiveSmallIntegerField('Position', default=0)    
-    
+    filename    = ImageField("Photo",upload_to='uploads/images')    
+    position    = PositiveSmallIntegerField('Position', default=0)    
+    branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+        
     def thumbnail(self):
         if self.filename:
             return u'<img src="%s" class="branch_image" />' % self.filename.url
@@ -679,8 +677,6 @@ class SiteChunk(Chunk):
     class Meta:
         proxy = True
         verbose_name = "Site Content Block"
-
-
 
 # signals are separated to signals.py 
 # just for the sake of organization
