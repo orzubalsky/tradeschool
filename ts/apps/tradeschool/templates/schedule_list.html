@@ -19,7 +19,7 @@
         {% endif %}        
         <div class="classInfo">
             <div class="classHeader">
-                <h3><a class="toggle" href="{% url 'schedule-view' schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
+                <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
                 <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
             </div>
 
@@ -45,7 +45,7 @@
                     {{ schedule.course.teacher.bio }}
                 </p>
                 {% if schedule.registered_students < schedule.course.max_students %}                    
-                <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-register' schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
+                <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-register' branch_slug=branch.slug schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
                 {% endif %}
             </div>
         </div>

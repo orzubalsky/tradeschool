@@ -320,8 +320,8 @@ fieldset.grp-module {
     margin-bottom:20px;
 }
 .grp-change-form .grp-module:not(.grp-submit-row) {
-    min-width: 900px;
-    width: 900px;
+    min-width: 920px;
+    width: 920px;
 }
 .grp-row .vTextField,
 .grp-row .vURLField,

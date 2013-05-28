@@ -6,7 +6,7 @@ def branch(request):
     
     url = resolve(request.path)
     branch_slug = url.kwargs.get('branch_slug')
-    print url
+
     try:
         branch = Branch.objects.get(slug=branch_slug)
         pages  = BranchPage.objects.filter(branch=branch) 

@@ -1,6 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
@@ -8,6 +7,7 @@ from django.forms.formsets import formset_factory
 from django.utils import simplejson as json
 from django.contrib.sites.models import get_current_site
 from django.contrib.flatpages.views import render_flatpage
+from tradeschool.utils import unique_slugify
 from tradeschool.models import *
 from tradeschool.forms import *
 
@@ -55,7 +55,7 @@ def schedule_register(request, schedule_slug=None, data=None):
            # save student
            student = student_form.save(commit=False)
            student_data = student_form.cleaned_data
-           student_data['slug'] = slugify(student.fullname)
+           student_data['slug'] = unique_slugify(student, student.fullname)
            student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
            student.site.add(current_site)
            student.save()
@@ -136,24 +136,25 @@ def schedule_add(request, branch_slug=None):
             # save teacher
             teacher = teacher_form.save(commit=False)
             teacher_data = teacher_form.cleaned_data
-            teacher_data['slug'] = slugify(teacher.fullname)
+            teacher_data['slug'] = unique_slugify(teacher, teacher.fullname)
             teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
-            teacher.site.add(current_site)
+            teacher.branch.add(branch)
             teacher.save()
 
             # save course
             course  = course_form.save(commit=False)
             course_data = course_form.cleaned_data
-            course_data['slug'] = slugify(course.title)
+            course_data['slug'] = unique_slugify(course, course.title)
             course_data['teacher'] = teacher
             course, created = Course.objects.get_or_create(title=course.title, defaults=course_data)
-            course.site.add(current_site)
+            course.branch.add(branch)
             course.save()
 
             # save schedule
             #venue = Venue.objects.get(title="Cuchifritos")
             selected_time = time_form.cleaned_data['time']  
-            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, slug=slugify(course.title), course_status=0)
+            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
+            schedule.slug = unique_slugify(schedule, course.title)
             schedule.save()
 
             # save barter items
@@ -204,16 +205,16 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
 
             # save teacher
             teacher = teacher_form.save(commit=False)
-            teacher.slug = slugify(teacher.fullname)
+            teacher.slug = unique_slugify(teacher, teacher.fullname)
             teacher.save()
             
             # save course
             course = course_form.save(commit=False)
-            course.slug = slugify(course.title)
+            course.slug = unique_slugify(course, course.title)
             course.save()
 
             # save schedule
-            schedule.slug = slugify(course.title)
+            schedule.slug = unique_slugify(schedule, course.title)
             schedule.save()
 
             # save barter items
@@ -286,7 +287,9 @@ def schedule_feedback(request, schedule_slug=None, feedback_type='student'):
     
 
 def branchpage(request, url, branch_slug=None):
-    """ """
+    """this is copied from django.contrib.flatpages.views only in order to 
+       query the BranchPage table instead of FlatPage."""
+        
     if not url.startswith('/'):
         url = '/' + url
     

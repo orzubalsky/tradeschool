@@ -72,21 +72,23 @@ class Email(Base):
     def send(self, schedule_obj, recipient, registration=None):
         body = self.preview(schedule_obj)
         site = Site.objects.get_current()
-        send_mail(self.subject, body, site.branch.email, recipient)
+        branch = schedule_obj.course.branch.all()[0]
+        send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
 
     def template_context(self, schedule_obj, registration=None):
         """ """
+        
         teacher = schedule_obj.course.teacher
         site    = Site.objects.get_current()
-        branch  = Branch.objects.get(site=site)
+        branch  = Branch.objects.get(pk=schedule_obj.course.branch.all()[0].pk)
         venue   = schedule_obj.venue
         domain  = site.domain
 
-        student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'schedule_slug': schedule_obj.slug, 'feedback_type': 'student'}))
-        teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'schedule_slug': schedule_obj.slug, 'feedback_type': 'teacher'}))
-        class_edit_url       = "%s%s" % (domain, reverse('schedule-edit', kwargs={'schedule_slug': schedule_obj.slug,}))
-        homepage_url         = "%s%s" % (domain, reverse('schedule-list'))
+        student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'feedback_type': 'student'}))
+        teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'feedback_type': 'teacher'}))
+        class_edit_url       = "%s%s" % (domain, reverse('schedule-edit', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug,}))
+        homepage_url         = "%s%s" % (domain, reverse('schedule-list', kwargs={'branch_slug': branch.slug}))
 
         student_list = ""
         for registration in schedule_obj.registration_set.all():
@@ -109,7 +111,7 @@ class Email(Base):
         })
 
         if registration != None:
-            unregister_url = "%s%s" % (domain, reverse('schedule-unregister', kwargs={'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
+            unregister_url = "%s%s" % (domain, reverse('schedule-unregister', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
             item_list = ""
             for item in registration.items.all():
                 item_list += "%s\n" % item.title
@@ -557,7 +559,7 @@ class Schedule(Durational):
         schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self).delete()
             
         # copy course notification from the branch notification templates
-        branch_email_container = BranchEmailContainer.objects.filter(site__in=self.course.site.all())[0]
+        branch_email_container = BranchEmailContainer.objects.filter(branch__in=self.course.branch.all())[0]
         
         schedule_email_container = ScheduleEmailContainer(schedule=self)
         
