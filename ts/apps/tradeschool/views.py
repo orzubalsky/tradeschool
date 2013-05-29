@@ -267,7 +267,7 @@ def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_s
     return render_to_response('schedule_unregister.html', { 'registration' : registration }, context_instance=RequestContext(request))
 
 
-def schedule_feedback(request, schedule_slug=None, feedback_type='student'):
+def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_type='student'):
     """ """
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     
@@ -283,7 +283,7 @@ def schedule_feedback(request, schedule_slug=None, feedback_type='student'):
              feedback.save()
 
              # redirect to thank you page
-             return HttpResponseRedirect( reverse(schedule_list,) )            
+             return HttpResponseRedirect( reverse(schedule_list, kwargs={'branch_slug' : branch_slug, }) )            
 
     else :
         form = FeedbackForm()

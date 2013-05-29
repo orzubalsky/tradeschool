@@ -662,8 +662,11 @@ class Photo(Base):
     """
     class Meta:
         ordering = ['position',]
-               
-    filename    = ImageField("Photo",upload_to='uploads/images')    
+
+    def upload_path(self, filename):
+        return "uploads/%s/images/%s" % (self.branch.slug, filename)
+    
+    filename    = ImageField("Photo",upload_to=upload_path)    
     position    = PositiveSmallIntegerField('Position', default=0)    
     branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
         

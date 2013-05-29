@@ -613,8 +613,7 @@ class PhotoAdmin(BaseAdmin):
             qs = qs.order_by(*ordering)
         return qs
               
-    list_display    = ('get_thumbnail', 'filename', 'position')
-    readonly_fields = ('branch',)   
+    list_display    = ('get_thumbnail', 'filename', 'position', 'branch')
     
     def get_thumbnail(self, obj):
         """ """

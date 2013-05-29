@@ -68,7 +68,7 @@ JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_ts'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_URL = 'http://localhost:8000/media/'
+MEDIA_URL = 'http://127.0.0.1:8000/media/'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
