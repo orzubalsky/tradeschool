@@ -589,12 +589,6 @@ class BarterItemAdmin(BaseAdmin):
     fields          = ('title', 'requested')
 
 
-class SiteChunkAdmin(BaseAdmin):
-    """ 
-    """     
-    pass
-
-
 class PhotoAdmin(BaseAdmin):
     """ 
     """
@@ -695,7 +689,6 @@ admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Feedback)
 admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(Photo, PhotoAdmin)
-admin.site.register(SiteChunk, SiteChunkAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(BranchPage, BranchPageAdmin)

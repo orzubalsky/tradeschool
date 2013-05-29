@@ -16,16 +16,9 @@ from django.template import Template
 from django_countries import CountryField
 import pytz, uuid, random, time
 from datetime import *
-from chunks.models import Chunk
+from tradeschool.utils import copy_model_instance
 from tradeschool.widgets import *
 
-
-def copy_model_instance(obj):
-    initial = dict([(f.name, getattr(obj, f.name))
-                    for f in obj._meta.fields
-                    if not isinstance(f, AutoField) and\
-                       not f in obj._meta.parents.values()])
-    return obj.__class__(**initial)
 
 
 class Base(Model):
@@ -686,12 +679,6 @@ class BranchPage(FlatPage):
     branch   = ForeignKey(Branch)
     position = PositiveSmallIntegerField('Position', default=0)    
     
-    
-        
-class SiteChunk(Chunk):
-    class Meta:
-        proxy = True
-        verbose_name = "Site Content Block"
 
 # signals are separated to signals.py 
 # just for the sake of organization
