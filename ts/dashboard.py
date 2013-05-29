@@ -64,7 +64,7 @@ class CustomIndexDashboard(Dashboard):
                     column=1,
                     models=('tradeschool.models.Photo',
                             'tradeschool.models.BranchPage',                    
-                            'tradeschool.models.SiteChunk',
+                            'tradeschool.models.BranchContentBlock',
                             'django.contrib.flatpages.models.FlatPage',),
                 ),   
                 modules.ModelList(
@@ -87,8 +87,9 @@ class CustomIndexDashboard(Dashboard):
            column=2,
            collapsible=False,
            children = [
-      
+                
               # append a feed module for talk.tradeschool.coop posts
+              """
               modules.Feed(
                   title=_('Recent TalkTS Posts'),
                   collapsible=False,                      
@@ -96,6 +97,7 @@ class CustomIndexDashboard(Dashboard):
                   limit=10,
                   feed_url='http://talk.tradeschool.coop/rss',            
               ),
+              """
               modules.LinkList(
                   layout='inline',
                   column=1,

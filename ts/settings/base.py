@@ -128,7 +128,6 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.flatpages',
     'flatpages_tinymce',
-    'chunks',
     'south',                        # intelligent schema and data migrations
     'pytz',                         # python timezone library
     'dajaxice',                     # django ajax app    

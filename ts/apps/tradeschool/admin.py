@@ -692,6 +692,7 @@ admin.site.register(Photo, PhotoAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(BranchPage, BranchPageAdmin)
+admin.site.register(BranchContentBlock)
 
 admin.site.register(DefaultEmailContainer)
 admin.site.register(BranchEmailContainer, BranchEmailContainerAdmin)

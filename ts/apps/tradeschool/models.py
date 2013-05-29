@@ -678,7 +678,14 @@ class BranchPage(FlatPage):
 
     branch   = ForeignKey(Branch)
     position = PositiveSmallIntegerField('Position', default=0)    
-    
+
+
+class BranchContentBlock(Base):
+    """Each branch has content block for specific parts of the homepage."""
+
+    title   = CharField(max_length=100, blank=False)
+    content = TextField(_(u'Content'), blank=True)
+    branch  = ForeignKey(Branch)
 
 # signals are separated to signals.py 
 # just for the sake of organization
