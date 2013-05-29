@@ -281,6 +281,7 @@ class Branch(Location):
     slug        = SlugField(max_length=120, help_text="This is the part that comes after 'http://tradeschool.coop/' in the URL")
     email       = EmailField(max_length=100)
     timezone    = CharField(max_length=100, choices=COMMON_TIMEZONE_CHOICES)
+    language    = CharField(max_length=50, choices=settings.LANGUAGES, null=True)
     organizers  = ManyToManyField(User)
     site        = ForeignKey(Site)
     header_copy = TextField(null=True)

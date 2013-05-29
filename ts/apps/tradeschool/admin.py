@@ -273,7 +273,7 @@ class BranchAdmin(BaseAdmin):
     inlines             = (BranchEmailContainerInline, PhotoInline)
     fieldsets = (
         ('Basic Info', {
-            'fields': ('title', 'slug', 'site', 'timezone')
+            'fields': ('title', 'slug', 'site', 'timezone', 'language')
         }),
         ('Contact Info', {
             'fields': ('city', 'state', 'country', 'email', 'phone')
