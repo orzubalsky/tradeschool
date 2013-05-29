@@ -426,10 +426,18 @@ class StudentAdmin(PersonAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
+
 class TimeAdmin(BaseAdmin):
     """ TimeAdmin lets you add and edit time slots in the Trade School system.
     """    
-    
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(TimeAdmin, self).get_form(request, obj, **kwargs)
+
+        form.base_fields['venue'].queryset = Venue.objects.filter(branch=obj.branch)
+        form.base_fields['branch'].queryset = Branch.objects.filter(pk=obj.branch.pk)
+
+        return form
+
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(TimeAdmin, self).queryset(request)
@@ -444,8 +452,9 @@ class TimeAdmin(BaseAdmin):
             qs = qs.order_by(*ordering)
         return qs
             
-    list_display = ('start_time', 'end_time',)
-    fields       = ('start_time', 'end_time', 'branch')
+    list_display  = ('start_time', 'end_time', 'venue')
+    fields        = ('start_time', 'end_time', 'venue', 'branch')
+    
 
 
 class TimeRangeAdmin(BaseAdmin):

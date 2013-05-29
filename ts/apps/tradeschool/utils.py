@@ -1,4 +1,5 @@
 from django.template.defaultfilters import slugify
+from django.db.models import AutoField
 
 
 def copy_model_instance(obj):

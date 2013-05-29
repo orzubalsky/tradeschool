@@ -156,10 +156,11 @@ def schedule_add(request, branch_slug=None):
             course.save()
 
             # save schedule
-            #venue = Venue.objects.get(title="Cuchifritos")
-            selected_time = time_form.cleaned_data['time']  
+            selected_time = time_form.cleaned_data['time']
             schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
             schedule.slug = unique_slugify(Schedule, course.title)
+            if selected_time.venue is not None:
+                schedule.venue = selected_time.venue
             schedule.save()
 
             # save barter items

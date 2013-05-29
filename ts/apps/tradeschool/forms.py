@@ -72,6 +72,9 @@ class TimeModelChoiceField(forms.ModelChoiceField):
         current_tz = timezone.get_current_timezone()
         date = obj.start_time.astimezone(current_tz).strftime('%A, %b %d')
         time = obj.start_time.astimezone(current_tz).strftime('%I:%M%p').lstrip('0').lower()
+        
+        if obj.venue is not None:
+            return "%s %s at %s" % (date, time, obj.venue)        
         return "%s %s" % (date, time)
          
 class TimeSelectionForm(Form):

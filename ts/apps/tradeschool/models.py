@@ -442,7 +442,7 @@ class Time(Durational):
     branch = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
 
     def __unicode__ (self):
-        return unicode(self.start_time)
+        return u"%s" % self.start_time
 
 
 class TimeRange(Base):
