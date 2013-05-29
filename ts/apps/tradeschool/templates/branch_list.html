@@ -25,7 +25,7 @@
         <div class="branchInfo">
             <div class="branchHeader">
                 <h3>
-                    <a href="{% url 'schedule-list' branch_slug='newyork' %}">{{ branch.title|title }}</a>
+                    <a href="{% url 'schedule-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
                 </h3>
             </div>
         </div>
@@ -42,16 +42,17 @@
 
     <div class="classes" id="upcomingClasses">
     {% for schedule in schedules %}
-    {% ifchanged schedule.course.site.branch %}
+
+    {% ifchanged schedule.course.branch %}
         <div class="branchDivider">
-		    <h4 class="branchTitle">{{ schedule.course.site.branch.title|title }}</h4>
+		    <h4 class="branchTitle">{{ schedule.course.branch.title|title }}</h4>
         </div>    
         {% endifchanged %}
 
         <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
             <div class="classInfo">
                 <div class="classHeader">
-                    <h3><a class="toggle" href="{% url 'schedule-view' schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
+                    <h3><a class="toggle" href="{% url 'schedule-view' branch_slug='newyork' schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
                     <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
                 </div>
 
@@ -76,7 +77,7 @@
                     <p class="description">
                         {{ schedule.course.teacher.bio }}
                     </p>
-                    <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-view' schedule_slug=schedule.slug %}" title="view {{ schedule.course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
+                    <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-view' branch_slug='newyork' schedule_slug=schedule.slug %}" title="view {{ schedule.course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
                 </div>
             </div>
         </div>

@@ -26,7 +26,8 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = Schedule.public.all()
+    schedules = Schedule.public.filter(course__branch=branch)
+    
     if schedule_slug != None:
         previewed_course = Schedule.objects.get(slug=schedule_slug)
     else:
