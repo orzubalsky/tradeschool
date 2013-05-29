@@ -41,13 +41,14 @@
     <h3>Classes Happening Around the World</h3>	
 
     <div class="classes" id="upcomingClasses">
-    {% for schedule in schedules %}
 
-    {% ifchanged schedule.course.branch %}
+    {% for branch in branches %}
+    {% if branch.schedules %}
         <div class="branchDivider">
-		    <h4 class="branchTitle">{{ schedule.course.branch.title|title }}</h4>
+    	    <h4 class="branchTitle">{{ branch.title|title }}</h4>
         </div>    
-        {% endifchanged %}
+    
+        {% for schedule in branch.schedules %}
 
         <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
             <div class="classInfo">
@@ -81,6 +82,8 @@
                 </div>
             </div>
         </div>
+        {% endfor %}   
+    {% endif %} 
     {% endfor %}
     </div>
 </div>

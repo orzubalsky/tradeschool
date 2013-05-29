@@ -16,9 +16,11 @@ def branch_list(request):
     """display all branches in current site."""
     
     branches  = Branch.objects.all()
-    schedules = Schedule.public.all()
 
-    return render_to_response('branch_list.html',{ 'branches': branches, 'schedules' : schedules }, context_instance=RequestContext(request))
+    for branch in branches:
+        branch.schedules = Schedule.public.filter(course__branch=branch)
+        
+    return render_to_response('branch_list.html',{ 'branches': branches, }, context_instance=RequestContext(request))
 
 
 def schedule_list(request, branch_slug=None, schedule_slug=None):
