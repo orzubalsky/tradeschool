@@ -1,5 +1,4 @@
-{% load i18n chunks flatpages dajaxice_templatetags %}
-{% get_flatpages as flatpages %}
+{% load i18n dajaxice_templatetags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,8 +45,20 @@
                 </div>
             </div>
             <div id="headerIntro">
-                <h2>{% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}</h2>
-                <p>intro text</p>
+                <h2>
+                {% if branch.header_copy %}
+                    {{ branch.header_copy }}
+                {% else %}
+                    {% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}
+                {% endif %}                    
+                </h2>
+                <p>
+                {% if branch.intro_copy %}
+                    {{ branch.header_copy }}
+                {% else %}
+                    {% blocktrans context "intro on front page" %}{% endblocktrans %}
+                {% endif %}
+                </p>
             </div>
             <div id="headerEmail">
                 <p>{% trans "Join our list" %}:</p>				

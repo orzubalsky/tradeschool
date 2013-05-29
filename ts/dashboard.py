@@ -89,15 +89,13 @@ class CustomIndexDashboard(Dashboard):
            children = [
                 
               # append a feed module for talk.tradeschool.coop posts
-              """
-              modules.Feed(
-                  title=_('Recent TalkTS Posts'),
-                  collapsible=False,                      
-                  column=1,
-                  limit=10,
-                  feed_url='http://talk.tradeschool.coop/rss',            
-              ),
-              """
+              # modules.Feed(
+              #     title=_('Recent TalkTS Posts'),
+              #     collapsible=False,                      
+              #     column=1,
+              #     limit=10,
+              #     feed_url='http://talk.tradeschool.coop/rss',            
+              # ),
               modules.LinkList(
                   layout='inline',
                   column=1,

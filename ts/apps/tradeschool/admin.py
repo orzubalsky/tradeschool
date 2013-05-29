@@ -7,7 +7,6 @@ from django.contrib.flatpages.models import FlatPage
 from flatpages_tinymce.admin import FlatPageAdmin
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
-from chunks.models import Chunk
 from tradeschool.models import *
 
 
@@ -279,6 +278,9 @@ class BranchAdmin(BaseAdmin):
         ('Contact Info', {
             'fields': ('city', 'state', 'country', 'email', 'phone')
         }),
+        ('Website Content', {
+            'fields': ('header_copy', 'intro_copy', 'footer_copy')
+        }),        
         ('Organizers', {
             'fields': ('organizers',)
         }),        
@@ -665,6 +667,20 @@ class BranchPageForm(FlatpageForm):
 
 class BranchPageAdmin(FlatPageAdmin):
     """ """
+    def queryset(self, request):
+        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
+        qs = super(BranchPageAdmin, self).queryset(request)
+
+        # other users see data filtered by the branch they're associated with
+        qs = qs.filter(branch__in=request.user.branch_set.all)
+
+        # we need this from the superclass method
+        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+            
     form = BranchPageForm
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content', 'branch')}),
@@ -673,6 +689,7 @@ class BranchPageAdmin(FlatPageAdmin):
     list_display = ('url', 'title')
     list_filter = ('sites', 'branch', 'enable_comments', 'registration_required')
     search_fields = ('url', 'title') 
+    
 
 # register admin models
 admin.site.register(Branch, BranchAdmin)
@@ -692,7 +709,6 @@ admin.site.register(Photo, PhotoAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(BranchPage, BranchPageAdmin)
-admin.site.register(BranchContentBlock)
 
 admin.site.register(DefaultEmailContainer)
 admin.site.register(BranchEmailContainer, BranchEmailContainerAdmin)
