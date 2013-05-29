@@ -55,7 +55,7 @@ def schedule_register(request, schedule_slug=None, data=None):
            # save student
            student = student_form.save(commit=False)
            student_data = student_form.cleaned_data
-           student_data['slug'] = unique_slugify(student, student.fullname)
+           student_data['slug'] = unique_slugify(Student, student.fullname)
            student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
            student.site.add(current_site)
            student.save()
@@ -136,7 +136,7 @@ def schedule_add(request, branch_slug=None):
             # save teacher
             teacher = teacher_form.save(commit=False)
             teacher_data = teacher_form.cleaned_data
-            teacher_data['slug'] = unique_slugify(teacher, teacher.fullname)
+            teacher_data['slug'] = unique_slugify(Teacher, teacher.fullname)
             teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
             teacher.branch.add(branch)
             teacher.save()
@@ -144,7 +144,7 @@ def schedule_add(request, branch_slug=None):
             # save course
             course  = course_form.save(commit=False)
             course_data = course_form.cleaned_data
-            course_data['slug'] = unique_slugify(course, course.title)
+            course_data['slug'] = unique_slugify(Course, course.title)
             course_data['teacher'] = teacher
             course, created = Course.objects.get_or_create(title=course.title, defaults=course_data)
             course.branch.add(branch)
@@ -154,7 +154,7 @@ def schedule_add(request, branch_slug=None):
             #venue = Venue.objects.get(title="Cuchifritos")
             selected_time = time_form.cleaned_data['time']  
             schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
-            schedule.slug = unique_slugify(schedule, course.title)
+            schedule.slug = unique_slugify(Schedule, course.title)
             schedule.save()
 
             # save barter items
@@ -170,7 +170,7 @@ def schedule_add(request, branch_slug=None):
             Time.objects.get(pk=selected_time.pk).delete()
             
             # redirect to thank you page
-            return HttpResponseRedirect( reverse(schedule_submitted, args=[schedule.slug]) )            
+            return HttpResponseRedirect( reverse(schedule_submitted, kwargs={'schedule_slug' : schedule.slug, 'branch_slug': branch.slug}))            
 
     else :
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
@@ -205,16 +205,16 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
 
             # save teacher
             teacher = teacher_form.save(commit=False)
-            teacher.slug = unique_slugify(teacher, teacher.fullname)
+            teacher.slug = unique_slugify(Teacher, teacher.fullname)
             teacher.save()
             
             # save course
             course = course_form.save(commit=False)
-            course.slug = unique_slugify(course, course.title)
+            course.slug = unique_slugify(Course, course.title)
             course.save()
 
             # save schedule
-            schedule.slug = unique_slugify(schedule, course.title)
+            schedule.slug = unique_slugify(Schedule, course.title)
             schedule.save()
 
             # save barter items
@@ -243,7 +243,7 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
         context_instance=RequestContext(request))    
 
 
-def schedule_submitted(request, schedule_slug):
+def schedule_submitted(request, schedule_slug=None, branch_slug=None):
     """ loaded after a successful submission of the schedule form."""
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     
