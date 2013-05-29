@@ -4,9 +4,9 @@ from tradeschool.views import *
 
 
 @dajaxice_register(method='POST')
-def schedule_load_form(request, schedule_slug=None):
+def schedule_load_form(request, branch_slug=None, schedule_slug=None):
     """ """
-    return schedule_register(request, schedule_slug)
+    return schedule_register(request, branch_slug, schedule_slug)
     
     
 @dajaxice_register(method='POST')

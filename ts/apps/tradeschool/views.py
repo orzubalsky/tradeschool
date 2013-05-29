@@ -42,8 +42,9 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
         }, context_instance=RequestContext(request))
 
 
-def schedule_register(request, schedule_slug=None, data=None):
+def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     """ """
+    branch               = get_object_or_404(Branch, slug=branch_slug)
     schedule             = get_object_or_404(Schedule, slug=schedule_slug)
     open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
     seats_left           = schedule.course.max_students - schedule.registered_students
@@ -92,6 +93,7 @@ def schedule_register(request, schedule_slug=None, data=None):
     
     return render_to_response('schedule_register.html', 
     {
+        'branch'               : branch,
         'schedule'             : schedule,
         'open_seat_percentage' : open_seat_percentage,
         'seats_left'           : seats_left,

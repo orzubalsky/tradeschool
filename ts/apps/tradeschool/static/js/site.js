@@ -41,7 +41,7 @@ var site = window.site = new function()
 
                 $('#previewContainer').fadeIn(100, function() 
                 {
-                    Dajaxice.tradeschool.schedule_load_form(self.schedule_load_register_form_callback, {'schedule_slug': slug});				    
+                    Dajaxice.tradeschool.schedule_load_form(self.schedule_load_register_form_callback, {'branch_slug': branchUrl, 'schedule_slug': slug});				    
                 });
             });
         });		    
@@ -160,7 +160,7 @@ var site = window.site = new function()
             var prefix = 'item';
             
             var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-            console.log(formCount);
+
             var field_1 = $('.barter_item:first').clone(true).get(0);
             var field_2 = $('.barter_qty:first').clone(true).get(0);
             $(field_1).val('').insertAfter($('.barter_qty:last')).children('.hidden').removeClass('hidden');
