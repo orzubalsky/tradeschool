@@ -53,7 +53,7 @@
         <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
             <div class="classInfo">
                 <div class="classHeader">
-                    <h3><a class="toggle" href="{% url 'schedule-view' branch_slug='newyork' schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
+                    <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
                     <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
                 </div>
 
@@ -78,7 +78,7 @@
                     <p class="description">
                         {{ schedule.course.teacher.bio }}
                     </p>
-                    <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-view' branch_slug='newyork' schedule_slug=schedule.slug %}" title="view {{ schedule.course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
+                    <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}" title="view {{ schedule.course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
                 </div>
             </div>
         </div>
