@@ -1,4 +1,4 @@
-{% load admin_static %}{% load url from future %}{% load i18n grp_tags %}
+{% load admin_static %}{% load url from future %}{% load i18n grp_tags tz %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
@@ -57,6 +57,9 @@
     {% block extrahead %}{% endblock %}
 </head>
 <body class="{% if is_popup %}grp-popup {% endif %}{% block bodyclass %}{% endblock %}{% if LANGUAGE_BIDI %} rtl{% endif %}">
+    
+    {% timezone branch.timezone %}
+    
     <div id="grp-container">
 
         <!-- HEADER -->
@@ -119,5 +122,7 @@
         {% block footer %}{% endblock %}
 
     </div>
+
+{% endtimezone %}	    
 </body>
 </html>

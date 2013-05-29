@@ -1,4 +1,4 @@
-{% load i18n dajaxice_templatetags %}
+{% load i18n dajaxice_templatetags tz %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +16,8 @@
 	var branchUrl = '{{ branch.slug }}';
 </script>
 <body>
+{% timezone branch.timezone %}
+    
 	<div id="container">
         {% block content %}
 
@@ -89,5 +91,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.js"></script>	
     <script type="text/javascript" src="{{ STATIC_URL }}js/site.js"></script>
 	{% block extra_js %}{% endblock %}
+	
+{% endtimezone %}
 </body>
 </html>
