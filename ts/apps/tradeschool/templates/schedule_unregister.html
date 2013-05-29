@@ -6,6 +6,12 @@
 <div id="unregister">
     <h2 class="subTitle">Unregister for class</h2>
     <div class="subMain">
+        {% if registration.registration_status == 'unregistered' %}
+        <h3>You've already unregistered</h3>
+        <p>
+            If this is a mistake, feel free to register again!
+        </p>
+        {% else %}
         <h3>I can't come to class!</h3>
         <p>
             We have you down as <br />
@@ -51,5 +57,6 @@
             <input type="submit" name="submit" class="submit" value="Remove Me" />
         </form>
     </div>
+    {% endif %}    
 </div>
 {% endblock %}

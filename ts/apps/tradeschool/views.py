@@ -255,14 +255,14 @@ def schedule_submitted(request, schedule_slug=None, branch_slug=None):
     return render_to_response('schedule_submitted.html', { 'schedule': schedule, }, context_instance=RequestContext(request))
 
 
-def schedule_unregister(request, schedule_slug, student_slug):
+def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_slug=None):
     """ """
     registration = get_object_or_404(Registration, student__slug=student_slug, schedule__slug=schedule_slug)
     
     if request.method == 'POST':
         registration.registration_status = 'unregistered'
         registration.save()
-        return HttpResponseRedirect( reverse(schedule_list,) )
+        return HttpResponseRedirect( reverse(schedule_list,kwargs={'branch_slug' : branch_slug,}) )
         
     return render_to_response('schedule_unregister.html', { 'registration' : registration }, context_instance=RequestContext(request))
 
