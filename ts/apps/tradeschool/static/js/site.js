@@ -41,10 +41,16 @@ var site = window.site = new function()
 
                 $('#previewContainer').fadeIn(100, function() 
                 {
-                    Dajaxice.tradeschool.schedule_load_form(self.schedule_load_register_form_callback, {'branch_slug': branchUrl, 'schedule_slug': slug});				    
+                    Dajaxice.tradeschool.schedule_load_form(
+                        self.schedule_load_register_form_callback, 
+                        {
+                            'branch_slug'   : branchUrl, 
+                            'schedule_slug' : slug
+                        }
+                    );
                 });
             });
-        });		    
+        });	
     };
 
 
@@ -78,7 +84,14 @@ var site = window.site = new function()
             var slug = $(this).attr('class');
             var data = $(this).serialize();
 
-            Dajaxice.tradeschool.schedule_submit_form(self.schedule_submit_register_form_callback, {'data': data, 'schedule_slug': slug});				    
+            Dajaxice.tradeschool.schedule_submit_form(
+                self.schedule_submit_register_form_callback, 
+                {
+                    'data'          : data, 
+                    'branch_slug'   : branchUrl,
+                    'schedule_slug' : slug
+                }
+            );				    
         });
     }; 
 	

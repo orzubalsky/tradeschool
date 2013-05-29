@@ -61,7 +61,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
            student_data = student_form.cleaned_data
            student_data['slug'] = unique_slugify(Student, student.fullname)
            student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
-           student.site.add(current_site)
+           student.branch.add(branch)
            student.save()
                        
            # save registration
