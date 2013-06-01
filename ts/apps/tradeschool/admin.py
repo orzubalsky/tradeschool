@@ -432,9 +432,10 @@ class TimeAdmin(BaseAdmin):
     """    
     def get_form(self, request, obj=None, **kwargs):
         form = super(TimeAdmin, self).get_form(request, obj, **kwargs)
-
-        form.base_fields['venue'].queryset = Venue.objects.filter(branch=obj.branch)
-        form.base_fields['branch'].queryset = Branch.objects.filter(pk=obj.branch.pk)
+        
+        if obj is not None:
+            form.base_fields['venue'].queryset = Venue.objects.filter(branch=obj.branch)
+            form.base_fields['branch'].queryset = Branch.objects.filter(pk=obj.branch.pk)
 
         return form
 
