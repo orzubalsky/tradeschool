@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 # tradeschool application
 urlpatterns = patterns('tradeschool.views',
-
+ 
     url(r'teacher-info$', 'teacher_info', name='teacher-info'),
     url(r'class/add$', 'schedule_add', name='schedule-add'),    
     url(r'class/past$', 'past_schedules', name='past-classes'),    
