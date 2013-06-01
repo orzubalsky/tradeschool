@@ -19,13 +19,13 @@ def branch(request):
                }
         
     except Branch.DoesNotExist:
-        pass
-
+        branch = Branch(timezone=settings.TIME_ZONE)
+        return { 'branch' : branch, }
+         
     if branch_slug == None and url.app_name == 'admin' and request.user.is_staff:
         branch = request.user.branch_set.all()[0]
-
         translation.activate(branch.language)
-
+        
         return { 'branch' : branch, }
         
     else:
