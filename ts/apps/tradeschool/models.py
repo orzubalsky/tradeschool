@@ -447,7 +447,7 @@ class Time(Durational):
         verbose_name        = "Time Slot"
         verbose_name_plural = "Time Slots"
     
-    venue = ForeignKey(Venue, null=True, help_text="Is this time slot associated with a specific venue?")
+    venue = ForeignKey(Venue, null=True, blank=True, help_text="Is this time slot associated with a specific venue?")
     branch = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
 
     def __unicode__ (self):
