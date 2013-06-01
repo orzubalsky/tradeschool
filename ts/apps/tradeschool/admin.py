@@ -515,7 +515,7 @@ class ScheduleAdmin(BaseAdmin):
         """ Return related course's teacher's email so it can be used in list_display."""
         return obj.course.teacher.email
 
-    list_display    = ('course_title', 'teacher_fullname', 'teacher_email', 'start_time', 'end_time', 'venue', 'course_status', 'created', 'updated')
+    list_display    = ('course_title', 'teacher_fullname', 'teacher_email', 'start_time', 'end_time', 'venue', 'course_status', 'created')
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
