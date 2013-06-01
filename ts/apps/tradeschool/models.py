@@ -309,7 +309,7 @@ class Branch(Location):
         # copy branch notification from the branch notification templates
         default_email_container = DefaultEmailContainer.objects.all()[0]
         
-        branch_email_container = BranchEmailContainer(branch=self, site=self.site)
+        branch_email_container = BranchEmailContainer(branch=self)
         
         for fieldname, email_obj in default_email_container.emails.iteritems():
             new_email = copy_model_instance(email_obj)
