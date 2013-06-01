@@ -265,6 +265,14 @@ class BranchEmailContainer(EmailContainer):
         return u"for %s" % self.branch.title
 
 
+class Cluster(Base):
+    """Branches can be grouped together for possibly displaying them together on the website.
+        For example: multiple branches in one city can belong to the same group."""
+        
+    name = CharField(max_length=100) 
+    
+    
+
 class Branch(Location):
     """
     A branch is a ts organization in a specific location (usually city/region).
@@ -284,6 +292,7 @@ class Branch(Location):
     language    = CharField(max_length=50, choices=settings.LANGUAGES, null=True)
     organizers  = ManyToManyField(User)
     site        = ForeignKey(Site)
+    cluster     = ForeignKey(Cluster, null=True)
     header_copy = TextField(null=True)
     intro_copy  = TextField(null=True)
     footer_copy = TextField(null=True)    
