@@ -11,6 +11,14 @@ from tradeschool.utils import unique_slugify
 from tradeschool.models import *
 from tradeschool.forms import *
 
+from django.template.loader import select_template
+import os
+
+def branch_template(branch, template_file):
+    """ """
+    branch_template = os.path.join(branch.slug, template_file)
+    
+    print select_template([branch_template, template_file])
 
 def branch_list(request):
     """display all branches in current site."""
@@ -20,7 +28,7 @@ def branch_list(request):
     for branch in branches:
         branch.schedules = Schedule.public.filter(course__branch=branch)
         
-    return render_to_response('branch_list.html',{ 'branches': branches, }, context_instance=RequestContext(request))
+    return render_to_response('hub/branch_list.html',{ 'branches': branches, }, context_instance=RequestContext(request))
 
 
 def schedule_list(request, branch_slug=None, schedule_slug=None):
@@ -34,7 +42,9 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
         previewed_course = Schedule.objects.get(slug=schedule_slug)
     else:
         previewed_course = None
-    
+            
+    print branch_template(branch, 'schedule_list.html')            
+            
     return render_to_response('schedule_list.html',{ 
             'branch'            : branch,
             'schedules'         : schedules, 
