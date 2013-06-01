@@ -359,7 +359,7 @@ class Person(Base):
             
     fullname    = CharField(max_length=100, verbose_name="your name", help_text="This will appear on the site.")
     email       = EmailField(max_length=100, verbose_name="Email address", help_text="Used only for us to contact you.")
-    phone       = CharField(max_length=20, blank=False, null=True, verbose_name="Cell phone number", help_text="Used only for us to contact you.")
+    phone       = CharField(max_length=20, blank=True, null=True, verbose_name="Cell phone number", help_text="Optional. Used only for us to contact you.")
     bio         = TextField(blank=True, verbose_name="A few sentences about you", help_text="For prospective students to see on the website")
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
     hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
