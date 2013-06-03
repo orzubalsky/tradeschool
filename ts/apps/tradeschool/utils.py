@@ -1,7 +1,17 @@
+import os
 from django.template.defaultfilters import slugify
 from django.db.models import AutoField
+from django.template.loader import select_template
 
 
+
+def branch_template(branch, template_file):
+    """ """
+    branch_template = os.path.join('branches', branch.slug, template_file)
+    
+    return select_template([branch_template, template_file])
+    
+    
 def copy_model_instance(obj):
     initial = dict([(f.name, getattr(obj, f.name))
                     for f in obj._meta.fields
