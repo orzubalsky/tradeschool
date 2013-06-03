@@ -36,7 +36,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
         previewed_course = None
             
     template = branch_template(branch, 'schedule_list.html')
-    print template
     
     return render_to_response(template.name ,{ 
             'branch'            : branch,
@@ -93,8 +92,10 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
         mimetype = "application/json"
     else:
         mimetype = "text/html"
+        
+    template = branch_template(branch, 'schedule_register.html')
     
-    return render_to_response('schedule_register.html', 
+    return render_to_response(template.name, 
     {
         'branch'               : branch,
         'schedule'             : schedule,
@@ -110,7 +111,9 @@ def teacher_info(request, branch_slug=None):
     
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    return render_to_response('teacher-info.html', { 'branch' : branch, }, context_instance=RequestContext(request))
+    template = branch_template(branch, 'teacher-info.html')    
+    
+    return render_to_response(template.name, { 'branch' : branch, }, context_instance=RequestContext(request))
 
 
 def past_schedules(request, branch_slug=None):
@@ -120,7 +123,9 @@ def past_schedules(request, branch_slug=None):
     
     schedules = Schedule.past.all()
     
-    return render_to_response('schedule_list_past.html',{ 
+    template = branch_template(branch, 'schedule_list_past.html')        
+    
+    return render_to_response(template.name,{ 
             'branch'    : branch,
             'schedules' : schedules,
         }, context_instance=RequestContext(request))    
@@ -188,7 +193,9 @@ def schedule_add(request, branch_slug=None):
         teacher_form        = TeacherForm(prefix="teacher")
         time_form           = TimeSelectionForm(prefix="time")
 
-    return render_to_response('schedule_submit.html', {
+    template = branch_template(branch, 'schedule_submit.html')
+
+    return render_to_response(template.name, {
             'branch'               : branch,
             'barter_item_formset'  : barter_item_formset,
             'course_form'          : course_form,
@@ -244,19 +251,23 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
         course_form         = CourseForm(prefix="course", instance=schedule.course)
         teacher_form        = TeacherForm(prefix="teacher", instance=schedule.course.teacher)
 
-    return render_to_response(
-        'schedule_submit.html',
-        {'barter_item_formset'  : barter_item_formset,
-         'course_form'          : course_form,
-         'teacher_form'         : teacher_form,}, 
-        context_instance=RequestContext(request))    
+    template = branch_template(branch, 'schedule_submit.html')
+    
+    return render_to_response(template.name, {
+        'barter_item_formset'  : barter_item_formset,
+        'course_form'          : course_form,
+        'teacher_form'         : teacher_form, 
+    },context_instance=RequestContext(request))    
 
 
 def schedule_submitted(request, schedule_slug=None, branch_slug=None):
     """ loaded after a successful submission of the schedule form."""
+    
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     
-    return render_to_response('schedule_submitted.html', { 'schedule': schedule, }, context_instance=RequestContext(request))
+    template = branch_template(branch, 'schedule_submitted.html')
+        
+    return render_to_response(template.name, { 'schedule': schedule, }, context_instance=RequestContext(request))
 
 
 def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_slug=None):
@@ -267,8 +278,10 @@ def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_s
         registration.registration_status = 'unregistered'
         registration.save()
         return HttpResponseRedirect( reverse(schedule_list,kwargs={'branch_slug' : branch_slug,}) )
+
+    template = branch_template(branch, 'schedule_unregister.html')
         
-    return render_to_response('schedule_unregister.html', { 'registration' : registration }, context_instance=RequestContext(request))
+    return render_to_response(template.name, { 'registration' : registration }, context_instance=RequestContext(request))
 
 
 def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_type='student'):
@@ -292,7 +305,9 @@ def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_ty
     else :
         form = FeedbackForm()
     
-    return render_to_response('schedule_feedback.html', {'form' : form,},  context_instance=RequestContext(request))    
+    template = branch_template(branch, 'schedule_feedback.html')
+    
+    return render_to_response(template.name, {'form' : form,},  context_instance=RequestContext(request))    
     
 
 def branchpage(request, url, branch_slug=None):
