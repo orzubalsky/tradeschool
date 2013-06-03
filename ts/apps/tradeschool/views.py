@@ -38,7 +38,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     template = branch_template(branch, 'schedule_list.html')
     
     return render_to_response(template.name ,{ 
-            'branch'            : branch,
             'schedules'         : schedules, 
             'previewed_course'  : previewed_course
         }, context_instance=RequestContext(request))

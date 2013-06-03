@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block tradeschool_content %}
+{% block main_content %}
 <div id="teacherInfo">
 	<h2 class="subTitle">{% blocktrans %}I want to teach a class{% endblocktrans %}</h2>
 	<div class="subMain subWide">
@@ -31,4 +31,4 @@
 		<a class="submit" href="{% url 'schedule-add' branch_slug=branch.slug %}">{% blocktrans %}Sign up to teach{% endblocktrans %}</a>
 	</div>
 </div>
-{% endblock tradeschool_content %}
+{% endblock main_content %}

@@ -2,7 +2,7 @@
 
 {% load humanize smartdate i18n l10n %}
 
-{% block tradeschool_content %}
+{% block main_content %}
 <div id="teacherForm">
     <div class="formThanks">
         <p class="thanks_intro">{% blocktrans %}Thanks! Your class will be pending for now. It will be added to the site within 24 hours if it's approved. Here is what you submitted:{% endblocktrans %}</p>
@@ -42,4 +42,4 @@
         {{ schedule.course.teacher.phone }}
     </div>
 </div>
-{% endblock tradeschool_content %}
+{% endblock main_content %}

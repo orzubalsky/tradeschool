@@ -2,7 +2,7 @@
 
 {% load humanize i18n l10n %}
 
-{% block tradeschool_content %}
+{% block main_content %}
 <div id="teacherForm" style="background-color:transparent;">
     <form id="feedbackForm" method="post" action="{{ request.path }}">{% csrf_token %}
     {% if form.errors %}
@@ -32,4 +32,4 @@
         <input type="submit" value="Submit" class="submit" />
     </form>	
 </div>
-{%endblock %}
+{%endblock main_content %}
