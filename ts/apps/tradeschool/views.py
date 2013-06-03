@@ -7,18 +7,10 @@ from django.forms.formsets import formset_factory
 from django.utils import simplejson as json
 from django.contrib.sites.models import get_current_site
 from django.contrib.flatpages.views import render_flatpage
-from tradeschool.utils import unique_slugify
+from tradeschool.utils import unique_slugify, branch_template
 from tradeschool.models import *
 from tradeschool.forms import *
 
-from django.template.loader import select_template
-import os
-
-def branch_template(branch, template_file):
-    """ """
-    branch_template = os.path.join(branch.slug, template_file)
-    
-    print select_template([branch_template, template_file])
 
 def branch_list(request):
     """display all branches in current site."""
@@ -43,9 +35,10 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     else:
         previewed_course = None
             
-    print branch_template(branch, 'schedule_list.html')            
-            
-    return render_to_response('schedule_list.html',{ 
+    template = branch_template(branch, 'schedule_list.html')
+    print template
+    
+    return render_to_response(template.name ,{ 
             'branch'            : branch,
             'schedules'         : schedules, 
             'previewed_course'  : previewed_course
