@@ -10,7 +10,14 @@ from datetime import datetime
 # http://stackoverflow.com/questions/2345400/why-is-post-save-being-raised-twice-during-the-save-of-a-django-model
 @receiver(post_save, sender=Branch, dispatch_uid="ts.apps.tradeschool.signals")
 def branch_save_callback(sender, instance, **kwargs):
-    """ create notifications on creation of a new branch."""    
+    """ Create notifications on creation of a new branch.
+        Create a copy of the default template files when a new branch is created."""  
+
+    # create files
+    if kwargs.get('created'):
+        instance.generate_files()    
+
+    # populate notifications
     try:
         emails = BranchEmailContainer.objects.get(branch=instance)
     except BranchEmailContainer.DoesNotExist:

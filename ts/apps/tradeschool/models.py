@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from django.template import loader, Context
 from django.template import Template
 from django_countries import CountryField
-import pytz, uuid, random, time
+import pytz, uuid, random, time, shutil, errno, os
 from datetime import *
 from tradeschool.utils import copy_model_instance
 from tradeschool.widgets import *
@@ -30,7 +30,7 @@ class Base(Model):
     created     = DateTimeField(auto_now_add=True, editable=False)
     updated     = DateTimeField(auto_now=True, editable=False)
     is_active   = BooleanField(default=1)
-        
+
     def __unicode__ (self):
         if hasattr(self, "title") and self.title:
             return self.title
@@ -299,7 +299,19 @@ class Branch(Location):
 
     objects   = Manager()
     on_site   = CurrentSiteManager()
+
     
+    def save(self, *args, **kwargs):
+        """Check to see if the slug field's value has been changed. 
+        If it has, rename the branch's template dir name."""
+        
+        if self.pk is not None:
+            original = Branch.objects.get(pk=self.pk)
+            if original.slug != self.slug:
+                self.update_template_dir(original.slug, self.slug)
+        super(Branch, self).save(*args, **kwargs)        
+        
+
     def populate_notifications(self):
         "resets branch notification templates from the global branch notification templates"
                 
@@ -316,7 +328,33 @@ class Branch(Location):
             new_email.save()
             setattr(branch_email_container, fieldname, new_email)
         branch_email_container.save()
+    
 
+    def generate_files(self):
+        """ Create a directory in the templates directory for the branch.
+            Make a copy of all default template files.
+            Create a css and javascript file for the branch."""
+        src = settings.DEFAULT_BRANCH_TEMPLATE_DIR
+        dst = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
+        
+        try:
+            shutil.copytree(src, dst)
+        except OSError as exc: # python >2.5
+            if exc.errno == errno.ENOTDIR:
+                shutil.copy(src, dst)
+            else:
+                raise
+
+    
+    def update_template_dir(self, old_dirname, new_dirname):
+        """ Rename the branch's template directory name.
+            Call this method after the branch's slug field has changed."""
+    
+        old_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, old_dirname)
+        new_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, new_dirname)
+    
+        os.rename(old_dirname, new_dirname)
+        
 
 class Venue(Location):
     """Branches have venues in which scheduled classes take place."""
