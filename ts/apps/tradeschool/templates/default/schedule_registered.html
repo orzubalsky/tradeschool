@@ -1,0 +1,20 @@
+{% load humanize smartdate i18n l10n %}
+
+<div class="schedule_registered">
+    <div id="classPopup" style="background-color:#123123;">
+        <div id="popupHeader">
+            Thanks! You are signed up for<br />
+            <h3>{{ registration.schedule.course.title }}</h3>
+            {{ registration.schedule.start_time|date:"M j, Y"|localize }}<br />
+            at <strong>{{ registration.schedule.start_time|date:"g:ia"|localize }}</strong><br />
+        </div>
+        <div id="popupBody">
+            You are <strong>bringing the following</strong>:<br />
+            <div class="barterItems">
+            {% for item in registration.items.all %}
+                {{ item.title }}<br />
+            {% endfor %}
+            We have you down as <strong>{{ registration.student.fullname }}</strong>, reachable at <strong>{{ registration.student.phone }}</strong>. We've sent a confirmation email to you at <strong>{{ registration.student.email }}</strong>. See you in class!
+        </div>
+    </div>
+</div>

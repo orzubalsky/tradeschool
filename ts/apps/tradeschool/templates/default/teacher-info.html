@@ -1,0 +1,34 @@
+{% extends "subpage.html" %}
+
+{% load i18n %}
+
+{% block tradeschool_content %}
+<div id="teacherInfo">
+	<h2 class="subTitle">{% blocktrans %}I want to teach a class{% endblocktrans %}</h2>
+	<div class="subMain subWide">
+		<h3>{% blocktrans %}Here's a short orientation to get you situated.{% endblocktrans %}</h3>
+
+		<h4><strong>{% blocktrans %}How Trade School works{% endblocktrans %}</strong></h4>
+			<p>
+			    {% blocktrans %}Trade School is a non-traditional learning space where students barter with teachers.{% endblocktrans %}
+			</p>
+			<p>
+    			{% blocktrans %}After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.{% endblocktrans %}
+			</p>
+	
+			<h4><strong>{% blocktrans %}Your class{% endblocktrans %}</strong></h4>
+			<p>
+    			{% blocktrans %}Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.{% endblocktrans %}
+			</p>
+	
+			<h4><strong>{% blocktrans %}Your barter items{% endblocktrans %}</strong></h4>
+			<p>
+    			{% blocktrans %}Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).{% endblocktrans %}				
+			</p>
+	</div>
+  
+	<div class="subButtonBox">
+		<a class="submit" href="{% url 'schedule-add' branch_slug=branch.slug %}">{% blocktrans %}Sign up to teach{% endblocktrans %}</a>
+	</div>
+</div>
+{% endblock tradeschool_content %}

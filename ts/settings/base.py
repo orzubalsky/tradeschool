@@ -96,6 +96,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     PROJECT_DIR + '/apps/tradeschool/templates',
+    PROJECT_DIR + '/apps/tradeschool/templates/default',
     PROJECT_DIR + '/templates',
     PROJECT_DIR + '/../parts/django-admin-enhancer/admin_enhancer/templates/',    
 )
