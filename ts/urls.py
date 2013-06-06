@@ -52,6 +52,6 @@ if settings.DEBUG:
    
 # tradeschool app urls
 urlpatterns += patterns('',
-   url(r'^(?P<branch_slug>[0-9A-Za-z]+)/', include('tradeschool.urls')),
+   url(r'^(?P<branch_slug>[0-9A-Za-z\-]+)/', include('tradeschool.urls')),
    url(r'^$', 'tradeschool.views.branch_list', name='branch-list'),    
 )    
