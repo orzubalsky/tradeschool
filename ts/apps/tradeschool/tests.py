@@ -10,8 +10,9 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
+from django.conf import settings
 from datetime import *
-import shutil
+import shutil, os, os.path
 from tradeschool.models import *
 
 
@@ -78,7 +79,8 @@ class BranchSetupTestCase(TestCase):
 
 
     def test_branch_creation(self):
-
+        """Test valid and invalid branch form submission from admin."""
+        
         self.client.login(username=self.admin.username, password=self.password)
 
         # submit an empty form
@@ -99,12 +101,34 @@ class BranchSetupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # store branch in a variable
-        self.branch = Branch.objects.get(slug=self.branch_data['slug'])
+        self.branch = Branch.objects.get(slug=self.branch_data['slug'])   
+        
+        # check that one BranchEmailContainer was created for branch
+        self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
+        
+        # check that the BranchEmailContainer has all 7 Email objects
+        self.assertEqual(self.branch.emails.emails.__len__(), 7)
+        
+        # check that all branch templates and files were created
+        branch_files_dir = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.branch.slug)
+        
+        default_files_count = len([f for f in os.listdir(settings.DEFAULT_BRANCH_TEMPLATE_DIR) if os.path.isfile(os.path.join(settings.DEFAULT_BRANCH_TEMPLATE_DIR, f))])
+        branch_files_count = len([f for f in os.listdir(branch_files_dir) if os.path.isfile(os.path.join(branch_files_dir, f))])
+
+        self.assertEqual(default_files_count, branch_files_count)
         
         # Delete files that were created in the process of creating a branch.
-        self.branch.delete_files()        
+        self.branch.delete_files()
         
-        
+
+        def tearDown(self):
+            """Delete branch files in case something went wrong and the files weren't deleted."""
+
+            directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, 'test-branch')
+
+            if os.path.exists(directory):
+                shutil.rmtree(directory)
+                
 
 """
 class RegistrationTestCase(TestCase):
