@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from django.template import loader, Context
 from django.template import Template
 from django_countries import CountryField
+from tinymce.models import HTMLField
 import pytz, uuid, random, time, shutil, errno, os
 from datetime import *
 from tradeschool.utils import copy_model_instance
@@ -293,9 +294,9 @@ class Branch(Location):
     organizers  = ManyToManyField(User)
     site        = ForeignKey(Site)
     cluster     = ForeignKey(Cluster, null=True)
-    header_copy = TextField(null=True)
-    intro_copy  = TextField(null=True)
-    footer_copy = TextField(null=True)    
+    header_copy = HTMLField(null=True)
+    intro_copy  = HTMLField(null=True)
+    footer_copy = HTMLField(null=True)    
 
     objects   = Manager()
     on_site   = CurrentSiteManager()
