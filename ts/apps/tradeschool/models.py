@@ -346,6 +346,14 @@ class Branch(Location):
             else:
                 raise
 
+
+    def delete_files(self):
+        """Delete the branch's template directory with all of the files."""
+        directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
+        
+        if os.path.exists(directory):
+            shutil.rmtree(directory)        
+
     
     def update_template_dir(self, old_dirname, new_dirname):
         """ Rename the branch's template directory name.
