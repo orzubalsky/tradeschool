@@ -13,8 +13,22 @@ from datetime import *
 from tradeschool.models import *
 
 
+
+class BranchSetupTestCase(TestCase):
+    """Test the process of setting up a new branch."""
+    
+    def setUp(self):
+        self.client = Client()
+        
+        self.site   = Site(domain='http://test.tradeschool.coop', name='test site', id=2)
+        self.site.save()
+        
+        self.branch = Branch(title='test branch', city='test city', country='US', slug='test-branch', email='test@tradeschool.coop', timezone='America/New_York', site=self.site)
+        self.branch.save()
+
+
+"""
 class RegistrationTestCase(TestCase):
-    """ test student registration """
     def setUp(self):
         self.client = Client()
 
@@ -37,8 +51,7 @@ class RegistrationTestCase(TestCase):
         self.schedule.save()
     
     def test_registration(self):
-        """
-        """
         response = self.client.get(reverse('schedule-register', kwargs={ 'schedule_slug': self.schedule.slug }))        
         print response
         self.assertEqual(1 + 1, 2)
+"""

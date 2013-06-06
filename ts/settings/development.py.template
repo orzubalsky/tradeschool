@@ -29,6 +29,10 @@ DATABASES = {
         'PORT': '',                         # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+# use sqlite for testing
+if 'test' in sys.argv: 
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
  
 CACHES = {
     'default' : dict(
