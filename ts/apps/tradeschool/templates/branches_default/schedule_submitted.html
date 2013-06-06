@@ -1,0 +1,18 @@
+{% extends 'branches_base/schedule_submitted.html' %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+<div id="teacherForm">
+    <div class="formThanks">
+        
+        {% block schedule_complete_intro %}
+        {{ block.super }}
+        {% endblock schedule_complete_intro %}
+        
+        {% block schedule_complete_data %}
+        {{ block.super }}
+        {% endblock schedule_complete_data %}        
+    </div>
+</div>
+{% endblock main_content %}

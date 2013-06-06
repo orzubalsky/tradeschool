@@ -1,0 +1,28 @@
+{% extends 'branches_base/schedule_register.html' %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+
+<div class="type{{ schedule.course.category }} ">
+    <div id="classPopup" style="background-color:#567567;">
+
+        {% block registration_header %}
+        {{ block.super }}
+        {% endblock registration_header %}
+
+        {% block registration_body %}
+        <div id="popupBody">
+            {% block registration_body_seats %}
+            {{ block.super }}
+            {% endblock registration_body_seats %}
+
+            {% block registration_body_form %}
+            {{ block.super }}
+            {% endblock registration_body_form %}
+        </div>
+        {% endblock registration_body %}
+    </div>
+</div>
+
+{% endblock main_content %}

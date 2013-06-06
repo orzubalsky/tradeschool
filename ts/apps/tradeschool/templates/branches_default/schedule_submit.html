@@ -1,0 +1,18 @@
+{% extends 'branches_base/schedule_submit.html' %}
+
+{% load i18n tz render_field %}
+
+{% block main_content %}
+<div id="teacherForm">
+    <form id="addClass" method="post" action="{{ request.path }}">{% csrf_token %}
+        
+        {% block form_errors %}
+        {{ block.super }}
+        {% endblock form_errors %}
+        
+        {% block form_fields %}
+        {{ block.super }}
+        {% endblock form_fields %}        
+	</form>
+</div>
+{% endblock main_content %}

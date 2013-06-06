@@ -1,0 +1,43 @@
+{% extends 'branches_base/schedule_list.html' %}
+
+{# 
+    This template displays the list of scheduled classes
+    for a specific branch.
+    
+    It extends a parent template that's located in-
+    tradeschool/templates/branches_base/schedule_list.html
+    
+    In order to make edits to the html of this file, 
+        1.  Copy the content that's in either blocks inside of the parent template.
+        2.  Paste it inside the same block instead of the existing content,
+            or the {{ block.super }} template tag.
+        3.  Make any edits you wish!
+    
+    *** If you wish to edit the way each scheduled class looks, edit-
+    tradeschool/templates/{{ BRANCH_NAME }}/schedule_item.html
+    
+    *** Keep in mind that the template has django-specific template tags.
+    They affect the way if functions, so be careful with those.
+    It's probably best to just change / add to the html itself.
+#}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+
+<div class="classes" id="future">
+{% for schedule in schedules %}
+   
+   {% ifchanged schedules.start_time.day %}
+   {% block schedule_date_divider %}
+   {{ block.super }}
+   {% endblock schedule_date_divider %}    
+   {% endifchanged %}
+
+    {% with templates.prefix|add:'schedule_item.html' as schedule_item_template %}
+    {% include schedule_item_template %}
+    {% endwith %}
+
+{% endfor %}
+</div>
+{% endblock main_content %}

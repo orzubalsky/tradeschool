@@ -1,11 +1,15 @@
-{% extends extend_template %}
+{% extends templates.extend_template %}
 
 {% load humanize i18n l10n %}
 
 {% block main_content %}
 <div id="teacherForm" style="background-color:transparent;">
+    
+    {% block form %}
     <form id="feedbackForm" method="post" action="{{ request.path }}">{% csrf_token %}
-    {% if form.errors %}
+    
+        {% if form.errors %}
+        {% block form_errors %}
         <div class="formQ">
             <div class="formField">
                 <ul class="errors">                    
@@ -17,8 +21,10 @@
                 </ul>
             </div>
         </div>
-    {% endif %}
+        {% endblock form_errors %}        
+        {% endif %}
 
+        {% block form_fields %}
         <div class="formQ">
             <div class="formField">
                 {{ form.content.label }}<br />
@@ -27,9 +33,11 @@
             <div class="formNote">
                 {{ form.content.help_text }}
             </div>
-        </div>    
-
+        </div>
+        
         <input type="submit" value="Submit" class="submit" />
+        {% endblock form_fields %}        
     </form>	
+    {% endblock form %}    
 </div>
 {%endblock main_content %}

@@ -1,0 +1,46 @@
+{% extends 'branches_base/schedule_item.html' %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block schedule_item %}
+<div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
+    
+{% if schedule.registered_students >= schedule.course.max_students %}
+    {% block schedule_tag %}
+    {{ block.super }}
+    {% endblock schedule_tag %}
+{% endif %}
+
+    <div class="classInfo">
+        {% block schedule_header %}
+        {{ block.super }}
+        {% endblock schedule_header %}
+        
+        {% block schedule_body %}
+        <div class="classBody">
+            
+            {% block schedule_venue %}
+            {{ block.super }}
+            {% endblock schedule_venue %}            
+            
+            {% block schedule_description %}
+            {{ block.super }}
+            {% endblock schedule_description %}            
+            
+            {% block schedule_items %}
+            {{ block.super }}
+            {% endblock schedule_items %}            
+            
+            {% block schedule_teacher %}
+            {{ block.super }}
+            {% endblock schedule_teacher %}            
+            
+            {% block schedule_join_button %}
+            {{ block.super }}
+            {% endblock schedule_join_button %}            
+            
+        </div>
+        {% endblock schedule_body %}
+    </div>
+</div>
+{% endblock schedule_item %}

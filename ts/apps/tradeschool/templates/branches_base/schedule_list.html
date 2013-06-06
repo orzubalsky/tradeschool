@@ -1,0 +1,25 @@
+{% extends templates.extend_template %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+
+<div class="classes" id="future">
+{% for schedule in schedules %}
+   
+   {% ifchanged schedules.start_time.day %}
+   {% block schedule_date_divider %}
+    <div class="dateDivider">
+        <strong class="date1">{{ schedule.start_time|date:"M j, Y"|localize }}</strong>
+        <strong class="date2">{{ schedule.start_time|date:"l"|naturalday|localize }}</strong>
+    </div>
+    {% endblock schedule_date_divider %}    
+    {% endifchanged %}
+
+    {% with templates.prefix|add:'schedule_item.html' as schedule_item_template %}
+    {% include schedule_item_template %}
+    {% endwith %}
+
+{% endfor %}
+</div>
+{% endblock main_content %}

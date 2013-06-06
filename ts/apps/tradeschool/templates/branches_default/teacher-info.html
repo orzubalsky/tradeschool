@@ -1,0 +1,21 @@
+{% extends 'branches_base/teacher-info.html' %}
+
+{% load i18n %}
+
+{% block main_content %}
+<div id="teacherInfo">
+
+    {% block page_title %}
+    {{ block.super }}
+    {% endblock page_title %}    
+    
+    {% block teacher_info_copy %}
+    {{ block.super }}
+    {% endblock teacher_info_copy %}
+    
+    {% block submit_class_button %}
+    {{ block.super }}
+    {% endblock submit_class_button %}    
+    
+</div>
+{% endblock main_content %}

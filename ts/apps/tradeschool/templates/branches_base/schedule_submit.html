@@ -1,0 +1,102 @@
+{% extends templates.extend_template %}
+
+{% load i18n tz render_field %}
+
+{% block main_content %}
+<div id="teacherForm">
+    <form id="addClass" method="post" action="{{ request.path }}">{% csrf_token %}
+        
+        {% block form_errors %}
+        {% if course_form.errors or teacher_form.errors or time_form.errors or barter_item_formset.non_form_errors or barter_item_formset.errors %}
+        <div class="formQ">
+            <div class="formField">
+                <ul class="errors">                    
+                {% for field in course_form %}
+                    {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
+                {% endfor %}
+                {% for field in teacher_form %}
+                    {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
+                {% endfor %}
+                {% for field in time_form %}
+                    {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
+                {% endfor %}
+                {% for item_form in barter_item_formset %}
+                    {% for field in item_form %}
+                        {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
+                    {% endfor %}
+                {% endfor %}            	
+                {% if barter_item_formset.non_form_errors %}<li>{{ barter_item_formset.non_form_errors|striptags }}</li>{% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        {% endblock form_errors %}
+        
+        {% block form_fields %}
+
+        {% render_field branch teacher_form.fullname %}
+
+        {% render_field branch course_form.title False %}
+
+        {% render_field branch course_form.description False %}
+
+        {% block form_items %}
+        <div class="formQ">
+            <div class="formField">
+                <div class="items">
+                    <label>{% blocktrans context "Contextual help for barter items in class submission form" %}At least 5 items you want in exchange for teaching- and the quantity of each{% endblocktrans %}</label>
+                    {{ barter_item_formset.management_form }} 
+                    {% for barter_item_form in barter_item_formset %}
+                    {{ barter_item_form.title }}
+                    {{ barter_item_form.requested }}
+                    {% endfor %}
+                </div>
+                <a id="addItem" href="">{% blocktrans context "Add another barter item in class submission form" %}Add another item{% endblocktrans %}</a>
+            </div>
+            <div class="formNote">
+                {% blocktrans context "Examples for barter items" %}Past examples{% endblocktrans %}:<br />
+                <strong><ul>
+                    <li>{% blocktrans context "barter item example" %}Drawing paper{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}Tea leaves{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}Bike parts{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}Design help{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}Organic produce{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}Job-search help{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}A surprise{% endblocktrans %}</li>
+                    <li>{% blocktrans context "barter item example" %}Furniture{% endblocktrans %}</li>
+                </ul></strong>
+            </div>
+        </div>
+        {% endblock form_items %}
+        
+        {% block form_time %}
+        {% if time_form %}
+        <div class="formQ calBox">
+            <div class="formField">
+                <label for="">{% blocktrans %}When you'd like to teach{% endblocktrans %}:</label>
+                {{ time_form.time }}
+                <div id="calendar"></div>
+            </div>
+            <div class="formNote">
+            </div>
+        </div>
+        {% endif %}
+        {% endblock form_time %}
+
+        {% render_field branch course_form.max_students %}
+
+        {% render_field branch teacher_form.bio %}
+
+        {% render_field branch teacher_form.website %}
+
+        {% render_field branch teacher_form.email %}
+
+        {% render_field branch teacher_form.phone %}
+
+        <div class="classSubmit">
+            <input type="submit" value="{% blocktrans %}Submit{% endblocktrans %}" class="submit" />
+        </div>
+        {% endblock form_fields %}        
+	</form>
+</div>
+{% endblock main_content %}

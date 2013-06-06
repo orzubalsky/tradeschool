@@ -1,0 +1,36 @@
+{% extends 'branches_base/schedule_unregister.html' %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+<div id="unregister">
+    
+    {% block page_title %}
+    {{ block.super }}
+    {% endblock page_title %}    
+    
+    <div class="subMain">
+        
+        {% if registration.registration_status == 'unregistered' %}
+        {% block already_unregistered %}        
+        {{ block.super }}
+        {% endblock already_unregistered %}
+        
+        {% else %}
+       
+        {% block registration_data %}
+        {{ block.super }}
+        {% endblock registration_data %}        
+    </div>
+
+    {% block sidebar %}
+    {{ block.super }}
+    {% endblock sidebar %}    
+    
+    {% block unregister_submit %}
+    {{ block.super }}
+    {% endblock unregister_submit %}    
+    
+    {% endif %}    
+</div>
+{% endblock main_content %}

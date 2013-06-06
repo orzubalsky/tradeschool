@@ -1,12 +1,16 @@
-{% extends extend_template %}
+{% extends templates.extend_template %}
 
 {% load humanize smartdate i18n l10n %}
 
 {% block main_content %}
 <div id="teacherForm">
     <div class="formThanks">
+        
+        {% block schedule_complete_intro %}
         <p class="thanks_intro">{% blocktrans %}Thanks! Your class will be pending for now. It will be added to the site within 24 hours if it's approved. Here is what you submitted:{% endblocktrans %}</p>
-
+        {% endblock schedule_complete_intro %}
+        
+        {% block schedule_complete_data %}
         <h4>{% blocktrans %}Class title{% endblocktrans %}:</h4>
         {{ schedule.course.title }}
 
@@ -40,6 +44,7 @@
 
         <h4>{% blocktrans %}Cell phone number{% endblocktrans %}:</h4>
         {{ schedule.course.teacher.phone }}
+        {% endblock schedule_complete_data %}        
     </div>
 </div>
 {% endblock main_content %}

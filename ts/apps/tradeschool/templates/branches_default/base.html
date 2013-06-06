@@ -1,0 +1,89 @@
+{% extends 'branches_base/base.html' %}
+
+{% load i18n dajaxice_templatetags tz %}
+
+{% block page %}
+
+
+{% block head %}
+<head>
+	{% block title %}
+    {{ block.super }}
+	{% endblock title %}
+	
+	{% block meta %}
+    {{ block.super }}
+    {% endblock meta %}
+    
+    {% block css %}
+    {{ block.super }}
+    {% endblock css %}	
+    
+	{% block extra_css %}
+	{% endblock %}
+</head>
+{% block js_vars %}
+{{ block.super }}
+{% endblock js_vars %}
+
+{% endblock head %}
+
+
+{% block body %}
+<body>
+{% timezone branch.timezone %}
+
+{% block container %}
+<div id="container">
+    {% block content %}
+
+    {% block header %}
+    <div id="header">    
+        {% block logo %}	
+        {{ block.super }}
+        {% endblock logo %}	
+
+        {% block navigation %}
+        {{ block.super }}
+        {% endblock navigation %}		
+
+        {% block gallery %}
+        {{ block.super }}
+        {% endblock gallery %}	
+
+        {% block intro %}    
+        {{ block.super }}
+        {% endblock intro %}
+
+        {% block mailiing_list %}
+        {{ block.super }}
+        {% endblock mailiing_list %}
+    </div>
+    {% endblock header %}
+
+    <div id="main">
+    {% block main_content %}
+    {% endblock %}		
+    </div>
+
+    <div class="clear"></div>
+    {% endblock content %}
+</div>
+{% endblock container %}
+
+{% block lightbox %}	
+{{ block.super }}
+{% endblock %}	
+
+{% block js %}
+{{ block.super }}
+{% endblock js %}
+
+{% block extra_js %}
+{% endblock %}
+
+{% endtimezone %}
+</body>
+{% endblock body %}
+
+{% endblock page %}

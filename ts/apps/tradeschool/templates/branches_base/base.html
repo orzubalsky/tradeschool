@@ -1,22 +1,42 @@
 {% load i18n dajaxice_templatetags tz %}
+
+{% block page %}
 <!DOCTYPE html>
 <html>
+
+{% block head %}
 <head>
+	{% block title %}
 	<title>{% blocktrans context "Main header on the website" %}Trade School{% endblocktrans %}</title>
+	{% endblock title %}
+	
+	{% block meta %}
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="{% blocktrans context 'Page Meta Description' %}Take a class with a range of specialized teachers in exchange for basic items and services. Secure a spot in a TradeSchool class by meeting one of the teachers barter needs.{% endblocktrans %}" />
 	<meta name="keywords" content="{% blocktrans context 'Page Meta Keywords' %}tradeschool, trade, school, ourgoods, barter, trade, exchange, community{% endblocktrans %}" />
-
+    {% endblock meta %}
+    
+    {% block css %}
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/site.css" />
+    {% endblock css %}	
+    
 	{% block extra_css %}{% endblock %}
 </head>
+
+{% block js_vars %}
 <script type="text/javascript">
 	var branchUrl = '{{ branch.slug }}';
 </script>
+{% endblock js_vars %}
+
+{% endblock head %}
+
+{% block body %}
 <body>
 {% timezone branch.timezone %}
 
+{% block container %}
 <div id="container">
     {% block content %}
 
@@ -94,6 +114,7 @@
     <div class="clear"></div>
     {% endblock content %}
 </div>
+{% endblock container %}
 
 {% block lightbox %}	
 <div id="previewContainer">
@@ -103,11 +124,16 @@
 <div id="matte">&nbsp;</div>
 {% endblock %}	
 
+{% block js %}
 {% dajaxice_js_import %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.js"></script>	
 <script type="text/javascript" src="{{ STATIC_URL }}js/site.js"></script>
+{% endblock js %}
 {% block extra_js %}{% endblock %}
 
 {% endtimezone %}
 </body>
+{% endblock body %}
+
 </html>
+{% endblock page %}
