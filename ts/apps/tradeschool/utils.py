@@ -22,7 +22,7 @@ def branch_template(branch, template_file):
     """ Return a branch-specific template if it's found, 
         otherwise fall back to a template with the given name that's in the default folder.
     """
-    branch_template = os.path.join('branches', branch.slug, template_file)
+    branch_template = os.path.join(branch.slug, template_file)
     
     return select_template([branch_template, template_file])
 
@@ -34,7 +34,7 @@ def branch_templates(branch, template_file, extend_template):
     """
     prefix = 'branches_default/'
     if branch.slug in branch_template(branch, template_file):
-        prefix = 'branches/' + branch.slug
+        prefix = branch.slug
     
     branch_templates = Bunch(
         template        = branch_template(branch, template_file),

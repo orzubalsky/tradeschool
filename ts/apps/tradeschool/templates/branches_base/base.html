@@ -19,6 +19,7 @@
     {% block css %}
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/site.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}{{ branch.slug }}/branch.css" />	
     {% endblock css %}	
     
 	{% block extra_css %}{% endblock %}
@@ -128,7 +129,9 @@
 {% dajaxice_js_import %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.js"></script>	
 <script type="text/javascript" src="{{ STATIC_URL }}js/site.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}{{ branch.slug }}/branch.js"></script>
 {% endblock js %}
+
 {% block extra_js %}{% endblock %}
 
 {% endtimezone %}

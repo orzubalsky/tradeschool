@@ -23,6 +23,7 @@ ts/apps/migration/
 ts/media/uploads
 
 # ignore cache files
+tmp
 ts/tmp/
 ts/settings/tmp/
 
@@ -30,4 +31,4 @@ ts/settings/tmp/
 sample_data.json
 
 # ignore branch template files (for now)
-ts/apps/tradeschool/templates/branches/
+ts/apps/branches/

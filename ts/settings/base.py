@@ -40,7 +40,8 @@ STATICFILES_DIRS = (
     # Put strings here, like '/home/html/static' or 'C:/www/django/static'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_DIR, 'static/'),    
+    os.path.join(PROJECT_DIR, 'static/'), 
+    os.path.join(PROJECT_DIR, 'apps', 'branches')
 )
 
 # List of finder classes that know how to find static files in
@@ -93,13 +94,13 @@ ROOT_URLCONF = 'ts.urls'
 
 BASE_BRANCH_TEMPLATE_DIR    = PROJECT_DIR + '/apps/tradeschool/templates/branches_base'
 DEFAULT_BRANCH_TEMPLATE_DIR = PROJECT_DIR + '/apps/tradeschool/templates/branches_default'
-BRANCH_TEMPLATE_DIR         = PROJECT_DIR + '/apps/tradeschool/templates/branches'
-
+BRANCH_TEMPLATE_DIR         = PROJECT_DIR + '/apps/branches/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like '/home/html/django_templates' or 'C:/www/django/templates'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    BRANCH_TEMPLATE_DIR,
     DEFAULT_BRANCH_TEMPLATE_DIR,
     BASE_BRANCH_TEMPLATE_DIR,    
     PROJECT_DIR + '/apps/tradeschool/templates',    
@@ -142,6 +143,7 @@ INSTALLED_APPS = (
     'rosetta',                      # django admin translation interface
     #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
+    'branches',                     # holding all branch-specific files (templates, css, js)
     #'migration',                    # tradeschool (zend framework php version) db schema migration
 )
 
