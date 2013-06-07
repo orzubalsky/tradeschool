@@ -179,7 +179,26 @@ class BranchSetupTestCase(TestCase):
         
         # check that the branch is now there
         self.assertContains(response, self.branch_data['slug'])
-                
+        
+        # Delete files that were created in the process of creating a branch.
+        self.branch.delete_files()        
+
+
+    def test_branch_templates_loading(self):
+        """ Tests whether the branch-specific template files
+            are rendered in the various branch views.
+        """
+        # save a new branch
+        self.branch.save()
+        
+        # schedule-list view
+        response = self.client.get(reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, }))
+        self.assertEqual(response.status_code, 200)        
+        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
+
+        # Delete files that were created in the process of creating a branch.
+        self.branch.delete_files()        
+
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
@@ -190,6 +209,7 @@ class BranchSetupTestCase(TestCase):
         if os.path.exists(directory):
             shutil.rmtree(directory)
                 
+
 
 """
 class RegistrationTestCase(TestCase):
