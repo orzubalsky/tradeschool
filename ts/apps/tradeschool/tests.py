@@ -169,11 +169,17 @@ class BranchSetupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         
         # check that the branch is not there (sanity check)
-        self.assertNotContains(response, self.branch_data['title'])
+        self.assertNotContains(response, self.branch_data['slug'])
         
-        # create a new branch
+        # save a new branch
+        self.branch.save()
         
+        # render the homepage again
+        response = self.client.get(reverse('branch-list'))        
         
+        # check that the branch is now there
+        self.assertContains(response, self.branch_data['slug'])
+                
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
