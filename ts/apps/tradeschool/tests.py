@@ -95,22 +95,34 @@ class BranchSetupTestCase(TestCase):
         # now submit valid form
         response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)
         
+        # store branch in a variable
+        branch = Branch.objects.get(slug=self.branch_data['slug'])
+                
         # check that the branch was created successfully, following a redirect
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed('admin/change_list.html')
         self.assertEqual(response.status_code, 200)
 
+        # Delete files that were created in the process of creating a branch.
+        branch.delete_files()        
+
+
+    def test_branch_files(self):
+        """ Test that the branch-specific files are 
+            created properly when a new branch is saved.
+        """
+        
+        # login
+        self.client.login(username=self.admin.username, password=self.password)
+        
+        # submit a valid branch form
+        response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)        
+        
         # store branch in a variable
-        self.branch = Branch.objects.get(slug=self.branch_data['slug'])   
-        
-        # check that one BranchEmailContainer was created for branch
-        self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
-        
-        # check that the BranchEmailContainer has all 7 Email objects
-        self.assertEqual(self.branch.emails.emails.__len__(), 7)
+        branch = Branch.objects.get(slug=self.branch_data['slug'])
         
         # check that all branch templates and files were created
-        branch_files_dir = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.branch.slug)
+        branch_files_dir = os.path.join(settings.BRANCH_TEMPLATE_DIR, branch.slug)
         
         default_files_count = len([f for f in os.listdir(settings.DEFAULT_BRANCH_TEMPLATE_DIR) if os.path.isfile(os.path.join(settings.DEFAULT_BRANCH_TEMPLATE_DIR, f))])
         branch_files_count = len([f for f in os.listdir(branch_files_dir) if os.path.isfile(os.path.join(branch_files_dir, f))])
@@ -118,16 +130,40 @@ class BranchSetupTestCase(TestCase):
         self.assertEqual(default_files_count, branch_files_count)
         
         # Delete files that were created in the process of creating a branch.
-        self.branch.delete_files()
+        branch.delete_files()
+        
+        
+    def test_branch_emails(self):
+        """ Test that copies of the email templates were created
+            When a new branch is saved.
+        """
+        # login
+        self.client.login(username=self.admin.username, password=self.password)
+        
+        # submit a valid branch form
+        response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)        
+        
+        # store branch in a variable
+        branch = Branch.objects.get(slug=self.branch_data['slug'])
+                
+        # check that one BranchEmailContainer was created for branch
+        self.assertEqual(BranchEmailContainer.objects.filter(branch=branch).count(), 1)
+        
+        # check that the BranchEmailContainer has all 7 Email objects
+        self.assertEqual(branch.emails.emails.__len__(), 7)
+        
+        # Delete files that were created in the process of creating a branch.
+        branch.delete_files()        
         
 
-        def tearDown(self):
-            """Delete branch files in case something went wrong and the files weren't deleted."""
+    def tearDown(self):
+        """ Delete branch files in case something went wrong 
+            and the files weren't deleted.
+        """
+        directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, 'test-branch')
 
-            directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, 'test-branch')
-
-            if os.path.exists(directory):
-                shutil.rmtree(directory)
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
                 
 
 """
