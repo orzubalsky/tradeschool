@@ -294,9 +294,9 @@ class Branch(Location):
     organizers  = ManyToManyField(User)
     site        = ForeignKey(Site)
     cluster     = ForeignKey(Cluster, null=True)
-    header_copy = HTMLField(null=True)
-    intro_copy  = HTMLField(null=True)
-    footer_copy = HTMLField(null=True)    
+    header_copy = HTMLField(null=True, blank=True, default="Barter for knowledge")
+    intro_copy  = HTMLField(null=True, blank=True)
+    footer_copy = HTMLField(null=True, blank=True)
 
     objects   = Manager()
     on_site   = CurrentSiteManager()
