@@ -115,8 +115,26 @@
     "pk": 1, 
     "model": "sites.site", 
     "fields": {
-        "domain": "http://tradeschool.coop", 
-        "name": "Trade School Everywhere"
+        "domain": "http://test.tradeschool.coop", 
+        "name": "Test Site"
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "admin", 
+        "first_name": "admin", 
+        "last_name": "istrator", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2013-06-06T22:03:54Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin@test.tradeschool.coop", 
+        "date_joined": "2013-01-29T23:51:07Z"
     }
 }
 ]
