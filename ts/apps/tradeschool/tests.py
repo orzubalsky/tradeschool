@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from datetime import *
 import shutil, os, os.path
+from tradeschool.utils import Bunch
 from tradeschool.models import *
 
 
@@ -59,6 +60,19 @@ class BranchSetupTestCase(TestCase):
                 'photo_set-INITIAL_FORMS' : 0,
                 'photo_set-MAX_NUM_FORMS' : 1000,
             }
+        self.branch = Branch(
+                title       = self.branch_data['title'],
+                city        = self.branch_data['city'],
+                country     = self.branch_data['country'],
+                slug        = self.branch_data['slug'],
+                email       = self.branch_data['email'],
+                timezone    = self.branch_data['timezone'],
+                language    = self.branch_data['language'],
+                site        = self.site,
+                header_copy = self.branch_data['header_copy'],
+                intro_copy  = self.branch_data['intro_copy'],
+                footer_copy = self.branch_data['footer_copy'],                                
+            )
         
     def test_admin_login(self):
         """Test that logging in as an admin works."""
@@ -79,8 +93,9 @@ class BranchSetupTestCase(TestCase):
 
 
     def test_branch_creation(self):
-        """Test valid and invalid branch form submission from admin."""
-        
+        """ Test valid and invalid branch form submission from admin.
+        """
+        # Login
         self.client.login(username=self.admin.username, password=self.password)
 
         # submit an empty form
@@ -107,22 +122,32 @@ class BranchSetupTestCase(TestCase):
         branch.delete_files()        
 
 
+    def test_branch_emails(self):
+        """ Test that copies of the email templates were created
+            When a new branch is saved.
+        """
+        # save a new branch
+        self.branch.save()
+
+        # check that one BranchEmailContainer was created for branch
+        self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
+
+        # check that the BranchEmailContainer has all 7 Email objects
+        self.assertEqual(self.branch.emails.emails.__len__(), 7)
+
+        # Delete files that were created in the process of creating a branch.
+        self.branch.delete_files()
+
+
     def test_branch_files(self):
         """ Test that the branch-specific files are 
             created properly when a new branch is saved.
         """
-        
-        # login
-        self.client.login(username=self.admin.username, password=self.password)
-        
-        # submit a valid branch form
-        response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)        
-        
-        # store branch in a variable
-        branch = Branch.objects.get(slug=self.branch_data['slug'])
+        # save a new branch
+        self.branch.save()
         
         # check that all branch templates and files were created
-        branch_files_dir = os.path.join(settings.BRANCH_TEMPLATE_DIR, branch.slug)
+        branch_files_dir = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.branch.slug)
         
         default_files_count = len([f for f in os.listdir(settings.DEFAULT_BRANCH_TEMPLATE_DIR) if os.path.isfile(os.path.join(settings.DEFAULT_BRANCH_TEMPLATE_DIR, f))])
         branch_files_count = len([f for f in os.listdir(branch_files_dir) if os.path.isfile(os.path.join(branch_files_dir, f))])
@@ -130,30 +155,24 @@ class BranchSetupTestCase(TestCase):
         self.assertEqual(default_files_count, branch_files_count)
         
         # Delete files that were created in the process of creating a branch.
-        branch.delete_files()
-        
-        
-    def test_branch_emails(self):
-        """ Test that copies of the email templates were created
-            When a new branch is saved.
+        self.branch.delete_files()
+
+    
+    def test_branch_on_homepage(self):
+        """ Tests whether a new branch appears on the homepage.
         """
-        # login
-        self.client.login(username=self.admin.username, password=self.password)
+        # render the homepage
+        response = self.client.get(reverse('branch-list'))
         
-        # submit a valid branch form
-        response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)        
+        # make sure the view loads with the correct template
+        self.assertTemplateUsed('hub/branch_list.html')
+        self.assertEqual(response.status_code, 200)
         
-        # store branch in a variable
-        branch = Branch.objects.get(slug=self.branch_data['slug'])
-                
-        # check that one BranchEmailContainer was created for branch
-        self.assertEqual(BranchEmailContainer.objects.filter(branch=branch).count(), 1)
+        # check that the branch is not there (sanity check)
+        self.assertNotContains(response, self.branch_data['title'])
         
-        # check that the BranchEmailContainer has all 7 Email objects
-        self.assertEqual(branch.emails.emails.__len__(), 7)
+        # create a new branch
         
-        # Delete files that were created in the process of creating a branch.
-        branch.delete_files()        
         
 
     def tearDown(self):
