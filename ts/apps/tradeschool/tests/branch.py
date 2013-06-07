@@ -12,12 +12,11 @@ from tradeschool.models import *
 
 
 class BranchSetupTestCase(TestCase):
-    """Test the process of setting up a new branch."""
-    
+    """ Test the process of setting up a new branch.
+    """
     def setUp(self):
-        """Create a Site and an admin User for testing."""
-        
-        
+        """ Create a Site and an admin User for testing.
+        """
         self.site   = Site(domain='http://test.tradeschool.coop', name='test site', id=2)
         self.site.save()
         
