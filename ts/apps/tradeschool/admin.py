@@ -657,7 +657,7 @@ class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.
         qs = super(ScheduleEmailContainerAdmin, self).queryset(request)
       
         # other users see data filtered by the branch they're associated with
-        qs = qs.filter(course__branch__in=request.user.branch_set.all)
+        qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
