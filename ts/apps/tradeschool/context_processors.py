@@ -9,6 +9,13 @@ def branch(request):
     branch_slug = url.kwargs.get('branch_slug')
     
     try:
+        
+        if branch_slug == None and (url.app_name == 'admin' or url.app_name == 'rosetta') and request.user.is_staff:
+           branch = request.user.branch_set.all()[0]
+           translation.activate(branch.language)
+
+           return { 'branch' : branch, }
+        
         branch = Branch.objects.get(slug=branch_slug)
         pages  = BranchPage.objects.filter(branch=branch) 
         
@@ -22,11 +29,4 @@ def branch(request):
         branch = Branch(timezone=settings.TIME_ZONE)
         return { 'branch' : branch, }
          
-    if branch_slug == None and url.app_name == 'admin' and request.user.is_staff:
-        branch = request.user.branch_set.all()[0]
-        translation.activate(branch.language)
-        
-        return { 'branch' : branch, }
-        
-    else:
-        return {}
+   
