@@ -294,9 +294,9 @@ class Branch(Location):
     organizers  = ManyToManyField(User)
     site        = ForeignKey(Site)
     cluster     = ForeignKey(Cluster, null=True)
-    header_copy = HTMLField(null=True)
-    intro_copy  = HTMLField(null=True)
-    footer_copy = HTMLField(null=True)    
+    header_copy = HTMLField(null=True, blank=True, default="Barter for knowledge")
+    intro_copy  = HTMLField(null=True, blank=True)
+    footer_copy = HTMLField(null=True, blank=True)
 
     objects   = Manager()
     on_site   = CurrentSiteManager()
@@ -345,6 +345,14 @@ class Branch(Location):
                 shutil.copy(src, dst)
             else:
                 raise
+
+
+    def delete_files(self):
+        """Delete the branch's template directory with all of the files."""
+        directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
+        
+        if os.path.exists(directory):
+            shutil.rmtree(directory)        
 
     
     def update_template_dir(self, old_dirname, new_dirname):

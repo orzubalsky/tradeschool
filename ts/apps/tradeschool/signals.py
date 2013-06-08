@@ -78,7 +78,10 @@ def timerange_delete_callback(sender, instance, **kwargs):
             end_time    = datetime.combine(single_date, instance.end_time)
 
             # delete time
-            Time.objects.filter(start_time=start_time, end_time=end_time)[0].delete()
+            try:
+                Time.objects.filter(start_time=start_time, end_time=end_time)[0].delete()
+            except IndexError:
+                pass
 
 
 def daterange(start_date, end_date):

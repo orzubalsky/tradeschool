@@ -1,31 +1,12 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
+from django.conf import settings
 from datetime import *
+import shutil, os, os.path
 from tradeschool.models import *
-
-
-
-class BranchSetupTestCase(TestCase):
-    """Test the process of setting up a new branch."""
-    
-    def setUp(self):
-        self.client = Client()
-        
-        self.site   = Site(domain='http://test.tradeschool.coop', name='test site', id=2)
-        self.site.save()
-        
-        self.branch = Branch(title='test branch', city='test city', country='US', slug='test-branch', email='test@tradeschool.coop', timezone='America/New_York', site=self.site)
-        self.branch.save()
-
 
 """
 class RegistrationTestCase(TestCase):

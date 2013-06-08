@@ -38,8 +38,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
         previewed_course = None
     
     view_templates = branch_templates(branch, 'schedule_list.html', 'base.html')
-    print view_templates.prefix
-    print view_templates.template.name
     
     return render_to_response(view_templates.template.name ,{ 
             'schedules'         : schedules,

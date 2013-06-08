@@ -1,0 +1,65 @@
+[
+{
+    "pk": 5, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-06-07T17:18:32Z", 
+        "monday": true, 
+        "end_date": "2222-06-07", 
+        "created": "2013-06-07T17:16:48Z", 
+        "start_time": "18:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": false, 
+        "thursday": false, 
+        "saturday": false, 
+        "sunday": false, 
+        "end_time": "19:30:00", 
+        "branch": 13, 
+        "tuesday": true, 
+        "start_date": "2220-06-07"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-06-07T17:18:19Z", 
+        "monday": false, 
+        "end_date": "2222-06-07", 
+        "created": "2013-06-07T17:17:10Z", 
+        "start_time": "16:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": true, 
+        "thursday": false, 
+        "saturday": false, 
+        "sunday": false, 
+        "end_time": "18:00:00", 
+        "branch": 15, 
+        "tuesday": false, 
+        "start_date": "2220-06-07"
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-06-07T17:18:13Z", 
+        "monday": false, 
+        "end_date": "2222-06-07", 
+        "created": "2013-06-07T17:17:33Z", 
+        "start_time": "20:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": false, 
+        "thursday": false, 
+        "saturday": true, 
+        "sunday": false, 
+        "end_time": "22:00:00", 
+        "branch": 14, 
+        "tuesday": true, 
+        "start_date": "2220-06-07"
+    }
+}
+]

@@ -1,0 +1,137 @@
+[
+{
+    "pk": 24, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "", 
+        "bio": "", 
+        "updated": "2013-06-07T17:24:42Z", 
+        "created": "2013-06-07T17:24:42Z", 
+        "slug": "newyork-person-01", 
+        "is_active": true, 
+        "hashcode": "3c3787aecf9411e2927b14109fdfc929", 
+        "phone": "", 
+        "branch": [
+            13
+        ], 
+        "fullname": "newyork person 01", 
+        "email": "person01@email.com"
+    }
+},
+{
+    "pk": 27, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "http://website.com/", 
+        "bio": "hi24d", 
+        "updated": "2013-06-08T14:08:40Z", 
+        "created": "2013-06-08T14:08:29Z", 
+        "slug": "newyork-person-02", 
+        "is_active": true, 
+        "hashcode": "4c3787aecf9411e2927b14109fdfc929", 
+        "phone": "", 
+        "branch": [
+            13
+        ], 
+        "fullname": "newyork person 02", 
+        "email": "person02@email.com"
+    }
+},
+{
+    "pk": 29, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "", 
+        "bio": "", 
+        "updated": "2013-06-08T14:09:03Z", 
+        "created": "2013-06-08T14:09:03Z", 
+        "slug": "everywhere-person", 
+        "is_active": true, 
+        "hashcode": "6c3787aecf9411e2927b14109fdfc929", 
+        "phone": "", 
+        "branch": [
+            15, 
+            13, 
+            14
+        ], 
+        "fullname": "everywhere person", 
+        "email": "e@a.com"
+    }
+},
+{
+    "pk": 31, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "", 
+        "bio": "", 
+        "updated": "2013-06-08T14:10:10Z", 
+        "created": "2013-06-08T14:10:10Z", 
+        "slug": "new-york-student", 
+        "is_active": true, 
+        "hashcode": "8c3787aecf9411e2927b14109fdfc927", 
+        "phone": "", 
+        "branch": [
+            13
+        ], 
+        "fullname": "new york student", 
+        "email": "aaa@asd.com"
+    }
+},
+{
+    "pk": 33, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "", 
+        "bio": "", 
+        "updated": "2013-06-08T14:10:41Z", 
+        "created": "2013-06-08T14:10:41Z", 
+        "slug": "quito-person", 
+        "is_active": true, 
+        "hashcode": "9c3787aecf9411e2927b14109fdfc929", 
+        "phone": "", 
+        "branch": [
+            14
+        ], 
+        "fullname": "quito person", 
+        "email": "g@as.com"
+    }
+},
+{
+    "pk": 34, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "http://website.com/", 
+        "bio": "hello", 
+        "updated": "2013-06-08T14:11:16Z", 
+        "created": "2013-06-08T14:11:16Z", 
+        "slug": "barcelona-person", 
+        "is_active": true, 
+        "hashcode": "1c3787aecf9411e2927b14109fdfc929", 
+        "phone": "", 
+        "branch": [
+            15
+        ], 
+        "fullname": "barcelona person", 
+        "email": "ss@asd.com"
+    }
+},
+{
+    "pk": 36, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "website": "http://c.com/", 
+        "bio": "ho", 
+        "updated": "2013-06-08T14:11:40Z", 
+        "created": "2013-06-08T14:11:40Z", 
+        "slug": "barcelona-teacher", 
+        "is_active": true, 
+        "hashcode": "2c3787aecf9411e2927b14109fdfc929", 
+        "phone": "", 
+        "branch": [
+            15
+        ], 
+        "fullname": "barcelona teacher", 
+        "email": "b@t.com"
+    }
+}
+]

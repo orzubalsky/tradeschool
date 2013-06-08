@@ -43,8 +43,9 @@ class ScheduleInline(admin.TabularInline):
 
         qs = super(ScheduleInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -68,8 +69,9 @@ class RegistrationInline(admin.TabularInline):
 
         qs = super(RegistrationInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -93,8 +95,9 @@ class BarterItemInline(admin.TabularInline):
 
         qs = super(BarterItemInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -118,8 +121,9 @@ class RegisteredItemInline(admin.TabularInline):
 
         qs = super(RegisteredItemInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(registration__schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(registration__schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -143,8 +147,9 @@ class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stacke
 
         qs = super(BranchEmailContainerInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -169,8 +174,9 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
 
         qs = super(ScheduleEmailContainerInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -194,8 +200,9 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
 
         qs = super(PhotoInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -224,8 +231,9 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
 
         qs = super(FeedbackInline, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -256,8 +264,9 @@ class BranchAdmin(BaseAdmin):
 
         qs = super(BranchAdmin, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(pk__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(pk__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -295,8 +304,9 @@ class VenueAdmin(BaseAdmin):
 
         qs = super(VenueAdmin, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -329,8 +339,9 @@ class CourseAdmin(BaseAdmin):
 
         qs = super(CourseAdmin, self).queryset(request)        
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -342,7 +353,7 @@ class CourseAdmin(BaseAdmin):
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'branch')
     prepopulated_fields  = {'slug': ('title',)}
     
     
@@ -357,8 +368,10 @@ class PersonAdmin(BaseAdmin):
             registration_count   = Count('registrations', distinct=True), 
             courses_taught_count = Count('courses_taught', distinct=True)
         )
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        
+        if not request.user.is_superuser:        
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -394,8 +407,9 @@ class TeacherAdmin(PersonAdmin):
         """ Filter queryset by the courses taught count, so only people who taught at least one class are returned."""
         qs = super(TeacherAdmin, self).queryset(request).filter(courses_taught_count__gt=0)
        
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -416,8 +430,9 @@ class StudentAdmin(PersonAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(StudentAdmin, self).queryset(request).filter(registration_count__gt=0)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:      
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -443,8 +458,9 @@ class TimeAdmin(BaseAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(TimeAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:      
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -464,9 +480,10 @@ class TimeRangeAdmin(BaseAdmin):
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(TimeRangeAdmin, self).queryset(request)
-      
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -487,8 +504,9 @@ class ScheduleAdmin(BaseAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(ScheduleAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:      
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -540,8 +558,9 @@ class RegistrationAdmin(BaseAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(RegistrationAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:      
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -562,9 +581,10 @@ class RegisteredItemAdmin(BaseAdmin):
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(RegisteredItemAdmin, self).queryset(request)
-      
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(registration__schedule__course__branch__in=request.user.branch_set.all)
+
+        if not request.user.is_superuser:      
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(registration__schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -585,8 +605,9 @@ class BarterItemAdmin(BaseAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(BarterItemAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(registration__schedule__course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:      
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(registration__schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -609,8 +630,9 @@ class PhotoAdmin(BaseAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(PhotoAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -635,8 +657,9 @@ class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.Mo
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(BranchEmailContainerAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -656,8 +679,9 @@ class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(ScheduleEmailContainerAdmin, self).queryset(request)
       
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(course__branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(schedule__course__branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -681,8 +705,9 @@ class BranchPageAdmin(FlatPageAdmin):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(BranchPageAdmin, self).queryset(request)
 
-        # other users see data filtered by the branch they're associated with
-        qs = qs.filter(branch__in=request.user.branch_set.all)
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(branch__in=request.user.branch_set.all)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
