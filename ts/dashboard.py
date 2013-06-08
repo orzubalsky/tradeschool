@@ -100,7 +100,7 @@ class CustomIndexDashboard(Dashboard):
                   layout='inline',
                   column=1,
                   children=(
-                    ['Translate TS', '/rosetta'],
+                    ['Translate TS', '/rosetta/pick/'],
                     ['Talk TS', 'http://talk.tradeschool.coop', True],
                     ['Trade School', 'http://tradeschool.coop', True]
                   )

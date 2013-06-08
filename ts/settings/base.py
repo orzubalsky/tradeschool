@@ -80,8 +80,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MIDDLEWARE_CLASSES = (
     'johnny.middleware.LocalStoreClearMiddleware',
     'johnny.middleware.QueryCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -144,7 +145,7 @@ INSTALLED_APPS = (
     'rosetta',                      # django admin translation interface
     #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
-    'branches',                     # holding all branch-specific files (templates, css, js)
+    # 'branches',                     # holding all branch-specific files (templates, css, js)
     #'migration',                    # tradeschool (zend framework php version) db schema migration
 )
 
@@ -194,21 +195,23 @@ TINYMCE_DEFAULT_CONFIG = {
 GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
+# You can find more languages that Django supports @ http://www.i18nguy.com/unicode/language-identifiers.html
+
 ROSETTA_MESSAGES_PER_PAGE = 100
 LANGUAGES = (
     ('en', 'English'), 
-    ('es-ES', 'Spanish (Spain)'),
-    ('es-MX', 'Spanish (Mexico)'),
-    ('de-DE', 'German'),
-    ('ms-SG', 'Malay'),
-    ('zh-SG', 'Chinese (Singapore)'),
-    ('it-IT', 'Italian'),
+    ('es_es', 'Spanish (Spain)'),
+    ('es_mx', 'Spanish (Mexico)'),
+    ('de_de', 'German'),
+    ('ms_sg', 'Malay'),
+    ('zh_sg', 'Chinese (Singapore)'),
+    ('it_it', 'Italian'),
     ('tl', 'Tagalog'),
-    ('fr-FR', 'French'),
-    ('nl-NL', 'Dutch'),
+    ('fr_fr', 'French'),
+    ('nl_nl', 'Dutch'),
     ('th', 'Thai'),
-    ('pt-BR', 'Portuguese'),
-    ('el-GR', 'Greek'),
-    ('ru-RU', 'Russian'),
-    ('zh-CN', 'Chinese (China)')
+    ('pt_br', 'Portuguese'),
+    ('el_gr', 'Greek'),
+    ('ru_ru', 'Russian'),
+    ('zh_cn', 'Chinese (China)')
 )
