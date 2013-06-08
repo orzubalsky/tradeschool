@@ -991,7 +991,7 @@
         "city": "New York", 
         "updated": "2013-06-07T16:59:38Z", 
         "language": "en", 
-        "title": "New York", 
+        "title": "Test New York", 
         "intro_copy": "<p>Trade School is a self-organized learning space that runs on barter. Rather than paying for classes with money, sign up for classes by meeting your teacher's barter requests. In May and June, classes run every Tuesday night at 75 East 4th St. between Bowery/3rd and 2nd Ave. Click on a class below for information.</p>", 
         "country": "US", 
         "header_copy": "<p>barter for knowledge</p>", 
@@ -1004,7 +1004,7 @@
         "state": "NY", 
         "footer_copy": "", 
         "timezone": "America/New_York", 
-        "slug": "new-york"
+        "slug": "test-newyork"
     }
 },
 {
@@ -1018,7 +1018,7 @@
         "city": "Quito", 
         "updated": "2013-06-07T17:07:09Z", 
         "language": "es-MX", 
-        "title": "Quito", 
+        "title": "Test Quito", 
         "intro_copy": "<p><strong>LA TRUECA</strong>&nbsp;es un espacio de aprendizaje que funciona en base al trueque - compartiendo ideas, conocimientos, habilidades, pasiones, gustos y necesidades.</p>\r\n<p><a href=\"http://tradeschool.coop/quito/class/teacher-info\">COMPARTE TUS CONOCIMIENTOS</a></p>", 
         "country": "EC", 
         "header_copy": "<p>CONOCIMIENTOS POR TRUEQUE</p>", 
@@ -1031,7 +1031,7 @@
         "state": null, 
         "footer_copy": "<p><span>La SEGUNDA TEMPORADA de la TRUECA funcionar&aacute; de ABRIL a AGOSTO 2013.&nbsp;</span><a href=\"http://www.facebook.com/latrueca.quito?fref=ts\">S&iacute;guenos en facebook</a><span>. Si quieres ser voluntari@ o tienes inquietudes, comentarios o sugerencias para&nbsp;</span><strong>LA TRUECA</strong><span>escr&iacute;benos a&nbsp;</span><strong>latrueca@gmail.com</strong></p>", 
         "timezone": "Etc/GMT-5", 
-        "slug": "quito"
+        "slug": "test-quito"
     }
 },
 {
@@ -1044,7 +1044,7 @@
         "city": "Barcelona", 
         "updated": "2013-06-07T17:10:09Z", 
         "language": "es-ES", 
-        "title": "Barcelona", 
+        "title": "Test Barcelona", 
         "intro_copy": "<p>Los Espacios de Aprendizaje Colectivo funcionan a trav&eacute;s del trueque de ideas, bienes y conocimientos</p>\r\n<p><a href=\"http://tradeschool.coop/barcelona/class/teacher-info\">Quiero ofrecer una actividad</a>.</p>", 
         "country": "ES", 
         "header_copy": "<h2>CONOCIMIENTOS POR TRUEQUE</h2>", 
@@ -1057,7 +1057,7 @@
         "state": null, 
         "footer_copy": "<p><span>Trade School Barcelona funciona en&nbsp;</span><strong><a href=\"http://www.aureasocial.org/\">AureaSocial</a></strong><span>, calle Sarde&ntilde;a 261, 08013 Barcelona&nbsp;</span><strong><a href=\"mailto:barcelona@tradeschool.coop\">Contact</a></strong><span>&nbsp;&iquest;Quieres saber m&aacute;s? haz click aqu&iacute;&nbsp;</span><strong><a href=\"http://tradeschool.coop/\">Trade School</a></strong><span>.</span></p>", 
         "timezone": "Etc/GMT+1", 
-        "slug": "barcelona"
+        "slug": "test-barcelona"
     }
 }
 ]

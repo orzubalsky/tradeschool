@@ -14,6 +14,8 @@ from tradeschool.models import *
 class BranchSetupTestCase(TestCase):
     """ Test the process of setting up a new branch.
     """
+    fixtures = ['test_admin.json', 'test_branch.json']    
+    
     def setUp(self):
         """ Create a Site and an admin User for testing.
         """
@@ -82,7 +84,7 @@ class BranchSetupTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)        
         self.assertTemplateUsed('admin/change_form.html')
-
+        
 
     def test_branch_creation(self):
         """ Test valid and invalid branch form submission from admin.
@@ -110,9 +112,6 @@ class BranchSetupTestCase(TestCase):
         self.assertTemplateUsed('admin/change_list.html')
         self.assertEqual(response.status_code, 200)
 
-        # Delete files that were created in the process of creating a branch.
-        branch.delete_files()        
-
 
     def test_branch_emails(self):
         """ Test that copies of the email templates were created
@@ -126,9 +125,6 @@ class BranchSetupTestCase(TestCase):
 
         # check that the BranchEmailContainer has all 7 Email objects
         self.assertEqual(self.branch.emails.emails.__len__(), 7)
-
-        # Delete files that were created in the process of creating a branch.
-        self.branch.delete_files()
 
 
     def test_branch_files(self):
@@ -146,9 +142,6 @@ class BranchSetupTestCase(TestCase):
 
         self.assertEqual(default_files_count, branch_files_count)
         
-        # Delete files that were created in the process of creating a branch.
-        self.branch.delete_files()
-
     
     def test_branch_on_homepage(self):
         """ Tests whether a new branch appears on the homepage.
@@ -172,9 +165,6 @@ class BranchSetupTestCase(TestCase):
         # check that the branch is now there
         self.assertContains(response, self.branch_data['slug'])
         
-        # Delete files that were created in the process of creating a branch.
-        self.branch.delete_files()        
-
 
     def test_branch_templates_loading(self):
         """ Tests whether the branch-specific template files
@@ -188,9 +178,6 @@ class BranchSetupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
 
-        # Delete files that were created in the process of creating a branch.
-        self.branch.delete_files()        
-
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
@@ -200,3 +187,7 @@ class BranchSetupTestCase(TestCase):
 
         if os.path.exists(directory):
             shutil.rmtree(directory)
+            
+        # delete branches' files
+        for branch in Branch.objects.all():
+            branch.delete_files()            
