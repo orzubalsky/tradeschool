@@ -465,7 +465,7 @@ class Course(Base):
     teacher         = ForeignKey(Person, related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
-    title           = CharField(max_length=140, verbose_name="class title")    
+    title           = CharField(max_length=140, verbose_name="class title") 
     slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
     branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
