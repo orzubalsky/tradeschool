@@ -13,25 +13,28 @@ from tradeschool.models import *
 class ScheduleSubmissionTestCase(TestCase):
     """ Tests the process of submitting a schedule using the frontend form.
     """
+    fixtures = ['test_data.json']
+    
     def setUp(self):
         """ Create a Site and branch for testing.
         """
-        self.site   = Site(domain='http://test.tradeschool.coop', name='test site', id=2)
-        self.site.save()
-
-        self.branch = Branch(
-                title       = 'test branch',
-                city        = 'test city', 
-                country     = 'US', 
-                slug        = 'test-branch', 
-                email       = 'test@tradeschool.coop', 
-                timezone    = 'America/New_York',
-                language    = 'en',
-                site        = self.site,
-                header_copy = 'header',
-                intro_copy  = 'intro text',
-                footer_copy = 'footer text',
-            )
-        self.branch.save()
+        self.site   = Site.objects.all()[0]
+        self.branch = Branch.objects.all()[0]
+        self.venue  = Venue.objects.filter(branch=self.branch)[0]
+        self.course = Course.objects.filter(branch=self.branch)[0]
         
-        self.venue = Venue()
+
+    def test_test(self):
+        print self.site
+        print self.branch
+        print self.venue
+        print self.course
+        
+
+    def tearDown(self):
+        """ Delete branch files in case something went wrong 
+            and the files weren't deleted.
+        """
+        # delete branches' files
+        for branch in Branch.objects.all():
+            branch.delete_files()
