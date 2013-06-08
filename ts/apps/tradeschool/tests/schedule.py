@@ -23,6 +23,8 @@ class ScheduleSubmissionTestCase(TestCase):
         
         self.site   = Site.objects.all()[0]
         self.branch = Branch.objects.all()[0]
+        self.url    = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
+        
         self.new_teacher_data = {
                 'teacher-fullname'  : 'test branch', 
                 'teacher-bio'       : 'test city', 
@@ -52,21 +54,24 @@ class ScheduleSubmissionTestCase(TestCase):
         """ Tests that the schedule-add view loads properly.
             If there's a branch-specific template file, make sure it's loaded as well.
         """
-        response = self.client.get(reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug }))
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.branch.slug + '/schedule_add.html')
 
 
     def test_empty_submission(self):
         """ Tests that submitting an empty form results in the expected error messages.
-        """
-        url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
-        response = self.client.get(url)
-        
-        empty_form_response = self.client.post(url, data=self.empty_data)
+        """        
+        response = self.client.post(self.url, data=self.empty_data)
 
         # an empty form should return 8 errors for the required fields
-        self.assertContains(empty_form_response, 'Please', count=8)
+        self.assertContains(response, 'Please', count=8)
+
+
+    def test_schedule_submission(self):
+        """ Tests the submission of a schedule of a new class by a new teacher.
+        """
+        
 
 
     def tearDown(self):
