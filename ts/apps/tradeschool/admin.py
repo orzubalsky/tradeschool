@@ -353,7 +353,7 @@ class CourseAdmin(BaseAdmin):
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'branch')
     prepopulated_fields  = {'slug': ('title',)}
     
     
