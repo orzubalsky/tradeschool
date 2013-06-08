@@ -98,7 +98,7 @@ class BranchSetupTestCase(TestCase):
         # check that the same template is displayed (form + errors)
         self.assertTemplateUsed('admin/change_form.html')
         
-        # an empty form should return 12 errors for the required fields
+        # an empty form should return 9 errors for the required fields
         self.assertContains(response, 'This field is required', count=9)
         
         # now submit valid form
