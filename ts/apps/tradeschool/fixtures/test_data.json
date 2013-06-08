@@ -791,14 +791,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-07T17:24:53Z", 
+        "updated": "2013-06-08T15:01:19Z", 
         "description": "this is a class.", 
         "created": "2013-06-07T17:24:53Z", 
         "slug": "newyork-class-01", 
         "title": "newyork_class_01", 
         "is_active": true, 
         "teacher": 24, 
-        "branch": [], 
+        "branch": [
+            13
+        ], 
         "max_students": 20
     }
 },
@@ -807,14 +809,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 6, 
-        "updated": "2013-06-07T17:25:22Z", 
+        "updated": "2013-06-08T15:01:15Z", 
         "description": "this is another class", 
         "created": "2013-06-07T17:25:22Z", 
         "slug": "newyork_class_02", 
         "title": "newyork_class_02", 
         "is_active": true, 
         "teacher": 24, 
-        "branch": [], 
+        "branch": [
+            13
+        ], 
         "max_students": 20
     }
 },
@@ -823,14 +827,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:23:55Z", 
+        "updated": "2013-06-08T15:01:10Z", 
         "description": "yes", 
         "created": "2013-06-08T14:23:55Z", 
         "slug": "newyork-class-03", 
         "title": "newyork class 03", 
         "is_active": true, 
         "teacher": 27, 
-        "branch": [], 
+        "branch": [
+            13
+        ], 
         "max_students": 10
     }
 },
@@ -839,14 +845,18 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:24:11Z", 
+        "updated": "2013-06-08T15:01:06Z", 
         "description": "it's everywhere", 
         "created": "2013-06-08T14:24:11Z", 
         "slug": "everywhere-class-01", 
         "title": "everywhere class 01", 
         "is_active": true, 
         "teacher": 29, 
-        "branch": [], 
+        "branch": [
+            15, 
+            13, 
+            14
+        ], 
         "max_students": 20
     }
 },
@@ -855,14 +865,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:24:26Z", 
+        "updated": "2013-06-08T15:00:38Z", 
         "description": "s", 
         "created": "2013-06-08T14:24:26Z", 
         "slug": "quito-class-01", 
         "title": "quito class 01", 
         "is_active": true, 
         "teacher": 29, 
-        "branch": [], 
+        "branch": [
+            14
+        ], 
         "max_students": 20
     }
 },
@@ -871,14 +883,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:24:41Z", 
+        "updated": "2013-06-08T15:00:31Z", 
         "description": "f", 
         "created": "2013-06-08T14:24:41Z", 
         "slug": "barcelona-class-01", 
         "title": "barcelona class 01", 
         "is_active": true, 
         "teacher": 36, 
-        "branch": [], 
+        "branch": [
+            15
+        ], 
         "max_students": 20
     }
 },
@@ -989,7 +1003,7 @@
             6
         ], 
         "city": "New York", 
-        "updated": "2013-06-07T16:59:38Z", 
+        "updated": "2013-06-08T15:02:00Z", 
         "language": "en", 
         "title": "Test New York", 
         "intro_copy": "<p>Trade School is a self-organized learning space that runs on barter. Rather than paying for classes with money, sign up for classes by meeting your teacher's barter requests. In May and June, classes run every Tuesday night at 75 East 4th St. between Bowery/3rd and 2nd Ave. Click on a class below for information.</p>", 
@@ -1004,7 +1018,7 @@
         "state": "NY", 
         "footer_copy": "", 
         "timezone": "America/New_York", 
-        "slug": "test-newyork"
+        "slug": "test-new-ork"
     }
 },
 {
@@ -1016,7 +1030,7 @@
             6
         ], 
         "city": "Quito", 
-        "updated": "2013-06-07T17:07:09Z", 
+        "updated": "2013-06-08T15:02:12Z", 
         "language": "es-MX", 
         "title": "Test Quito", 
         "intro_copy": "<p><strong>LA TRUECA</strong>&nbsp;es un espacio de aprendizaje que funciona en base al trueque - compartiendo ideas, conocimientos, habilidades, pasiones, gustos y necesidades.</p>\r\n<p><a href=\"http://tradeschool.coop/quito/class/teacher-info\">COMPARTE TUS CONOCIMIENTOS</a></p>", 
@@ -1042,7 +1056,7 @@
             5
         ], 
         "city": "Barcelona", 
-        "updated": "2013-06-07T17:10:09Z", 
+        "updated": "2013-06-08T15:01:48Z", 
         "language": "es-ES", 
         "title": "Test Barcelona", 
         "intro_copy": "<p>Los Espacios de Aprendizaje Colectivo funcionan a trav&eacute;s del trueque de ideas, bienes y conocimientos</p>\r\n<p><a href=\"http://tradeschool.coop/barcelona/class/teacher-info\">Quiero ofrecer una actividad</a>.</p>", 

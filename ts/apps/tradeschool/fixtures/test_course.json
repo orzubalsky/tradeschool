@@ -4,14 +4,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-07T17:24:53Z", 
+        "updated": "2013-06-08T15:01:19Z", 
         "description": "this is a class.", 
         "created": "2013-06-07T17:24:53Z", 
         "slug": "newyork-class-01", 
         "title": "newyork_class_01", 
         "is_active": true, 
         "teacher": 24, 
-        "branch": [], 
+        "branch": [
+            13
+        ], 
         "max_students": 20
     }
 },
@@ -20,14 +22,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 6, 
-        "updated": "2013-06-07T17:25:22Z", 
+        "updated": "2013-06-08T15:01:15Z", 
         "description": "this is another class", 
         "created": "2013-06-07T17:25:22Z", 
         "slug": "newyork_class_02", 
         "title": "newyork_class_02", 
         "is_active": true, 
         "teacher": 24, 
-        "branch": [], 
+        "branch": [
+            13
+        ], 
         "max_students": 20
     }
 },
@@ -36,14 +40,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:23:55Z", 
+        "updated": "2013-06-08T15:01:10Z", 
         "description": "yes", 
         "created": "2013-06-08T14:23:55Z", 
         "slug": "newyork-class-03", 
         "title": "newyork class 03", 
         "is_active": true, 
         "teacher": 27, 
-        "branch": [], 
+        "branch": [
+            13
+        ], 
         "max_students": 10
     }
 },
@@ -52,14 +58,18 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:24:11Z", 
+        "updated": "2013-06-08T15:01:06Z", 
         "description": "it's everywhere", 
         "created": "2013-06-08T14:24:11Z", 
         "slug": "everywhere-class-01", 
         "title": "everywhere class 01", 
         "is_active": true, 
         "teacher": 29, 
-        "branch": [], 
+        "branch": [
+            15, 
+            13, 
+            14
+        ], 
         "max_students": 20
     }
 },
@@ -68,14 +78,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:24:26Z", 
+        "updated": "2013-06-08T15:00:38Z", 
         "description": "s", 
         "created": "2013-06-08T14:24:26Z", 
         "slug": "quito-class-01", 
         "title": "quito class 01", 
         "is_active": true, 
         "teacher": 29, 
-        "branch": [], 
+        "branch": [
+            14
+        ], 
         "max_students": 20
     }
 },
@@ -84,14 +96,16 @@
     "model": "tradeschool.course", 
     "fields": {
         "category": 5, 
-        "updated": "2013-06-08T14:24:41Z", 
+        "updated": "2013-06-08T15:00:31Z", 
         "description": "f", 
         "created": "2013-06-08T14:24:41Z", 
         "slug": "barcelona-class-01", 
         "title": "barcelona class 01", 
         "is_active": true, 
         "teacher": 36, 
-        "branch": [], 
+        "branch": [
+            15
+        ], 
         "max_students": 20
     }
 }
