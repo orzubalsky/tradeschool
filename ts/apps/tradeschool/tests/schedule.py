@@ -3,6 +3,7 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 from django.conf import settings
 from datetime import *
 import shutil, os, os.path
@@ -27,7 +28,7 @@ class ScheduleSubmissionTestCase(TestCase):
         self.branch = Branch.objects.all()[0]
         self.branch.language = 'en'
         self.branch.save()
-
+        
         self.url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
         
         self.new_teacher_data = {
@@ -96,6 +97,62 @@ class ScheduleSubmissionTestCase(TestCase):
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
         
+        
+    def test_schedule_submission_existing_teacher_new_course(self):
+        """ Tests the submission of a schedule of a new class by an existing teacher.
+        """
+        # get a Person who teaches in the branch
+        existing_teacher = Teacher.objects.filter(branch=self.branch)[0]
+
+        # use the existing teacher's email for the form submission
+        # when the teacher-email matches an existing objects,
+        # the schedule should be saved to the existing teacher object
+        self.new_teacher_data['teacher-email'] = existing_teacher.email
+        
+        # merge the items of course, teacher, and barter item data
+        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
+
+        # post the data to the schedule submission form
+        response = self.client.post(self.url, data=data, follow=True)
+        
+        # check that the schedule got saved correctly
+        self.assertEqual(response.context['schedule'].course.title, self.new_course_data['course-title'])
+        
+        # check that the teacher got saved correctly        
+        self.assertEqual(response.context['schedule'].course.teacher.fullname, self.new_teacher_data['teacher-fullname'])
+
+
+    def test_schedule_submission_existing_teacher_existing_course(self):
+        """ Tests the submission of a schedule of an existing class by an existing teacher.
+        """
+        # get a Person who teaches in the branch
+        existing_teacher = Teacher.objects.filter(branch=self.branch)[0]
+
+        # use the existing teacher's email for the form submission
+        # when the teacher-email matches an existing Person object,
+        # the schedule should be saved to the existing Person object
+        self.new_teacher_data['teacher-email'] = existing_teacher.email
+
+        # get an existing course in the branch
+        existing_course = Course.objects.filter(branch=self.branch)[0]
+
+        # use the existing course's title for the form submission
+        # when the course-title matches an existing Course object,
+        # the schedule should be saved to the existing Course object
+        self.new_course_data['course-title'] = existing_course.title
+        
+        # merge the items of course, teacher, and barter item data
+        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
+
+        # post the data to the schedule submission form
+        response = self.client.post(self.url, data=data, follow=True)
+
+        # check that the schedule got saved correctly
+        self.assertEqual(response.context['schedule'].course.description, self.new_course_data['course-description'])
+
+        # check that the teacher got saved correctly        
+        self.assertEqual(response.context['schedule'].course.teacher.fullname, self.new_teacher_data['teacher-fullname'])
+                                
 
     def test_time_deleted_after_successful_submission(self):
         """ Tests that the selected Time object gets deleted 
