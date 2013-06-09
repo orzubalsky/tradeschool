@@ -43,7 +43,7 @@ class ScheduleSubmissionTestCase(TestCase):
                 'course-max_students' : '20', 
             }
         self.time_data = {
-                'time-time'             : ''
+                'time-time'             : Time.objects.all()[0].pk
             } 
         self.barter_items_data = {
                 'item-TOTAL_FORMS'      : 5,
@@ -84,16 +84,34 @@ class ScheduleSubmissionTestCase(TestCase):
         self.assertContains(response, 'Please', count=8)
 
 
-    def test_schedule_submission(self):
+    def test_schedule_submission_new_teacher_new_course(self):
         """ Tests the submission of a schedule of a new class by a new teacher.
         """
         # merge the items of course, teacher, and barter item data
         data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
         
         # post the data to the schedule submission form
-        response = self.client.post(self.url, data=data)
+        response = self.client.post(self.url, data=data, follow=True)
         
-        print response.templates[0].name
+        self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
+        self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
+        
+
+    def test_time_deleted_after_successful_submission(self):
+        """ Tests that the selected Time object gets deleted 
+            after a schedule has been submitted successfully.
+        """
+        # get Time object
+        time = Time.objects.get(pk=self.time_data['time-time'])
+                
+        # merge the items of course, teacher, and barter item data
+        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
+
+        # post the data to the schedule submission form
+        response = self.client.post(self.url, data=data, follow=True)
+
+        # check that the time object got deleted 
+        self.assertFalse(Time.objects.filter(pk=time.pk).exists())
 
 
     def tearDown(self):
