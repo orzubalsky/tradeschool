@@ -156,21 +156,54 @@ def schedule_add(request, branch_slug=None):
         if barter_item_formset.is_valid() and course_form.is_valid() and teacher_form.is_valid() and time_form.is_valid():
             current_site = Site.objects.get_current()
             
-            # save teacher
+            # process teacher
             teacher = teacher_form.save(commit=False)
             teacher_data = teacher_form.cleaned_data
-            teacher_data['slug'] = unique_slugify(Teacher, teacher.fullname)
-            teacher, created = Person.objects.get_or_create(fullname=teacher.fullname, defaults=teacher_data)
+            
+            # check if the submitting teacher already exists in the system
+            # we determine an existing teacher by their email
+            teacher, teacher_created = Person.objects.get_or_create(email=teacher.email, defaults=teacher_data)
+            
+            # if this is an existing teacher, update the field with the data from the form
+            if not teacher_created:
+                teacher.fullname = teacher_form.cleaned_data['fullname']
+                teacher.bio      = teacher_form.cleaned_data['bio']
+                teacher.website  = teacher_form.cleaned_data['website']
+                teacher.phone    = teacher_form.cleaned_data['phone']                                                
+
+            # create a slug for the teacher object
+            teacher_data['slug'] = unique_slugify(Teacher, teacher.fullname)                
+
+            # add a teacher-branch relationship to the current branch
             teacher.branch.add(branch)
+            
+            # save teacher
             teacher.save()
 
-            # save course
+            # process course
             course  = course_form.save(commit=False)
             course_data = course_form.cleaned_data
+
+            # create a slug for the course object                
             course_data['slug'] = unique_slugify(Course, course.title)
+            
+            # add the teacher as a foreign key
             course_data['teacher'] = teacher
-            course, created = Course.objects.get_or_create(title=course.title, defaults=course_data)
+
+            # check if the submited course already exists in the system
+            # we determine an existing course by its title
+            course, course_created = Course.objects.get_or_create(title=course.title, defaults=course_data)
+            
+            # if this is an existing course, update the field with the data from the form
+            if not course_created:
+                course.title        = course_form.cleaned_data['title']
+                course.description  = course_form.cleaned_data['description']
+                course.max_students = course_form.cleaned_data['max_students']
+            
+            # add a course-branch relationship to the current branch
             course.branch.add(branch)
+            
+            # save course
             course.save()
 
             # save schedule
