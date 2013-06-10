@@ -217,8 +217,9 @@ def schedule_add(request, branch_slug=None):
             # save barter items
             for barter_item_form in barter_item_formset:
                 barter_item_form_data = barter_item_form.cleaned_data
-                barter_item = BarterItem(title=barter_item_form_data['title'], requested=barter_item_form_data['requested'], schedule=schedule)
+                barter_item = BarterItem(title=barter_item_form_data['title'])
                 barter_item.save()
+                schedule.items.add(barter_item)
 
             # send confirmation email to teacher
             schedule.emails.email_teacher(schedule.emails.teacher_confirmation)
