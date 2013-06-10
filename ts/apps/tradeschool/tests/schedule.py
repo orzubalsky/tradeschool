@@ -31,7 +31,7 @@ class ScheduleSubmissionTestCase(TestCase):
         
         self.url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
         
-        self.time = Time.objects.all()[0]
+        self.time = Time.objects.filter(venue__isnull=True)[0]
         
         self.new_teacher_data = {
                 'teacher-fullname'  : 'new test teahcer', 
