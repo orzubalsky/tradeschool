@@ -73,14 +73,15 @@ class ScheduleSubmissionTestCase(TestCase):
         """ Asserts that the objects that were created after a successful schedule submission
             match the data that was used in the forms.
         """
-        self.assertEqual(schedule_obj.course.title, self.new_course_data['course-title'])        
-        self.assertEqual(schedule_obj.course.description, self.new_course_data['course-description'])        
+        self.assertEqual(schedule_obj.course.title, self.new_course_data['course-title'])
+        self.assertEqual(schedule_obj.course.description, self.new_course_data['course-description']) 
         self.assertEqual(schedule_obj.course.max_students, int(self.new_course_data['course-max_students']))
         self.assertEqual(schedule_obj.start_time, self.time.start_time)
         self.assertEqual(schedule_obj.end_time, self.time.end_time)
-        self.assertEqual(schedule_obj.course.teacher.fullname, self.new_teacher_data['teacher-fullname'])        
-        self.assertEqual(schedule_obj.course.teacher.bio, self.new_teacher_data['teacher-bio'])  
-        self.assertEqual(schedule_obj.course.teacher.email, self.new_teacher_data['teacher-email'])        
+        self.assertEqual(schedule_obj.venue, self.time.venue)        
+        self.assertEqual(schedule_obj.course.teacher.fullname, self.new_teacher_data['teacher-fullname'])
+        self.assertEqual(schedule_obj.course.teacher.bio, self.new_teacher_data['teacher-bio'])
+        self.assertEqual(schedule_obj.course.teacher.email, self.new_teacher_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.new_teacher_data['teacher-phone'])
 
 
@@ -103,6 +104,7 @@ class ScheduleSubmissionTestCase(TestCase):
         
         # the same template should be rendered
         self.assertTemplateUsed(self.branch.slug + '/schedule_submit.html')
+
 
     def is_successful_submission(self, data):
         """ Tests that the submission of a schedule with valid data works.
@@ -180,7 +182,25 @@ class ScheduleSubmissionTestCase(TestCase):
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
-                                
+
+
+    def test_venue_is_saved(self):
+        """ Tests a successful submission with a Time object that has 
+            a Venue foreignkey.
+        """
+        # save a time-venue relationship
+        self.time.venue = Venue.objects.filter(branch=self.branch)[0]
+        self.time.save()
+        
+        # merge the items of course, teacher, and barter item data
+        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
+        
+        # test that the form submission worked
+        response = self.is_successful_submission(data)
+
+        # check that the schedule got saved correctly
+        self.compare_schedule_to_data(response.context['schedule'])
+        
 
     def test_time_deleted_after_successful_submission(self):
         """ Tests that the selected Time object gets deleted 
