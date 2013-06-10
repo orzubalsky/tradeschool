@@ -48,7 +48,6 @@
                     {{ barter_item_formset.management_form }} 
                     {% for barter_item_form in barter_item_formset %}
                     {{ barter_item_form.title }}
-                    {{ barter_item_form.requested }}
                     {% endfor %}
                 </div>
                 <a id="addItem" href="">{% blocktrans context "Add another barter item in class submission form" %}Add another item{% endblocktrans %}</a>

@@ -53,15 +53,10 @@ class ScheduleSubmissionTestCase(TestCase):
                 'item-INITIAL_FORMS'    : 0,
                 'item-MAX_NUM_FORMS'    : 1000,
                 'item-0-title'          : 'test item 01',
-                'item-0-requested'      : '1',
                 'item-1-title'          : 'test item 02',
-                'item-1-requested'      : '1',
                 'item-2-title'          : 'test item 03',
-                'item-2-requested'      : '1',
                 'item-3-title'          : 'test item 04',
-                'item-3-requested'      : '1',
                 'item-4-title'          : 'test item 05',
-                'item-4-requested'      : '1',                                                                
             }
         self.empty_data = {
                 'item-TOTAL_FORMS'      : 0,

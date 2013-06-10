@@ -554,6 +554,19 @@ class ScheduleEmailContainer(EmailContainer):
         return u"for %s" % self.schedule.course.title
 
 
+class BarterItem(Base):
+    """
+    Barter items are the items that teachers request for a class they're teaching.
+    The items themselves can be requested in various classes.
+    """
+
+    title = CharField(max_length=255)
+
+    def __unicode__ (self):
+        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
+        return u"%s (%i are bringing)" % (self.title, registered_count)
+
+
 class ScheduleManager(Manager):
    def get_query_set(self):
       return super(ScheduleManager, self).get_query_set().annotate(registered_students=Count('students')).prefetch_related('course')
@@ -592,6 +605,7 @@ class Schedule(Durational):
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
     hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
+    items           = ManyToManyField(BarterItem)    
     slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
 
     objects   = ScheduleManager()
@@ -644,20 +658,6 @@ class Schedule(Durational):
 
     def __unicode__ (self):
         return "%s" % (self.course.title)
-
-
-class BarterItem(Base):
-    """
-    Barter items are the items that teachers request for a class they're teaching.
-    The items themselves can be requested in various classes, but this model
-    keeps track of the items that were requested for a class.
-    """
-
-    title = CharField(max_length=255)
-    
-    def __unicode__ (self):
-        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
-        return u"%s (%i are bringing)" % (self.title, registered_count)
 
 
 class Registration(Base):
