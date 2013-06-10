@@ -31,6 +31,8 @@ class ScheduleSubmissionTestCase(TestCase):
         
         self.url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
         
+        self.time = Time.objects.all()[0]
+        
         self.new_teacher_data = {
                 'teacher-fullname'  : 'new test teahcer', 
                 'teacher-bio'       : 'biobiobio', 
@@ -44,7 +46,7 @@ class ScheduleSubmissionTestCase(TestCase):
                 'course-max_students' : '20', 
             }
         self.time_data = {
-                'time-time'             : Time.objects.all()[0].pk
+                'time-time'             : self.time.pk
             } 
         self.barter_items_data = {
                 'item-TOTAL_FORMS'      : 5,
@@ -67,6 +69,21 @@ class ScheduleSubmissionTestCase(TestCase):
                 'item-MAX_NUM_FORMS'    : 1000,
             }
 
+    def compare_schedule_to_data(self, schedule_obj):
+        """ Asserts that the objects that were created after a successful schedule submission
+            match the data that was used in the forms.
+        """
+        self.assertEqual(schedule_obj.course.title, self.new_course_data['course-title'])        
+        self.assertEqual(schedule_obj.course.description, self.new_course_data['course-description'])        
+        self.assertEqual(schedule_obj.course.max_students, int(self.new_course_data['course-max_students']))
+        self.assertEqual(schedule_obj.start_time, self.time.start_time)
+        self.assertEqual(schedule_obj.end_time, self.time.end_time)
+        self.assertEqual(schedule_obj.course.teacher.fullname, self.new_teacher_data['teacher-fullname'])        
+        self.assertEqual(schedule_obj.course.teacher.bio, self.new_teacher_data['teacher-bio'])  
+        self.assertEqual(schedule_obj.course.teacher.email, self.new_teacher_data['teacher-email'])        
+        self.assertEqual(schedule_obj.course.teacher.phone, self.new_teacher_data['teacher-phone'])
+
+
     def test_view_loading(self):
         """ Tests that the schedule-add view loads properly.
             If there's a branch-specific template file, make sure it's loaded as well.
@@ -83,7 +100,24 @@ class ScheduleSubmissionTestCase(TestCase):
 
         # an empty form should return 8 errors for the required fields
         self.assertContains(response, 'Please', count=8)
+        
+        # the same template should be rendered
+        self.assertTemplateUsed(self.branch.slug + '/schedule_submit.html')
 
+    def is_successful_submission(self, data):
+        """ Tests that the submission of a schedule with valid data works.
+        """
+        # post the data to the schedule submission form
+        response = self.client.post(self.url, data=data, follow=True)
+        
+        self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
+        self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
+        
+        # check that the schedule got saved correctly
+        self.compare_schedule_to_data(response.context['schedule'])
+        
+        return response
+                
 
     def test_schedule_submission_new_teacher_new_course(self):
         """ Tests the submission of a schedule of a new class by a new teacher.
@@ -91,11 +125,11 @@ class ScheduleSubmissionTestCase(TestCase):
         # merge the items of course, teacher, and barter item data
         data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
         
-        # post the data to the schedule submission form
-        response = self.client.post(self.url, data=data, follow=True)
-        
-        self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
-        self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
+        # test that the form submission worked
+        response = self.is_successful_submission(data)
+
+        # check that the schedule got saved correctly
+        self.compare_schedule_to_data(response.context['schedule'])
         
         
     def test_schedule_submission_existing_teacher_new_course(self):
@@ -112,14 +146,11 @@ class ScheduleSubmissionTestCase(TestCase):
         # merge the items of course, teacher, and barter item data
         data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
 
-        # post the data to the schedule submission form
-        response = self.client.post(self.url, data=data, follow=True)
-        
+        # test that the form submission worked
+        response = self.is_successful_submission(data)
+
         # check that the schedule got saved correctly
-        self.assertEqual(response.context['schedule'].course.title, self.new_course_data['course-title'])
-        
-        # check that the teacher got saved correctly        
-        self.assertEqual(response.context['schedule'].course.teacher.fullname, self.new_teacher_data['teacher-fullname'])
+        self.compare_schedule_to_data(response.context['schedule'])
 
 
     def test_schedule_submission_existing_teacher_existing_course(self):
@@ -144,14 +175,11 @@ class ScheduleSubmissionTestCase(TestCase):
         # merge the items of course, teacher, and barter item data
         data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
 
-        # post the data to the schedule submission form
-        response = self.client.post(self.url, data=data, follow=True)
+        # test that the form submission worked
+        response = self.is_successful_submission(data)
 
         # check that the schedule got saved correctly
-        self.assertEqual(response.context['schedule'].course.description, self.new_course_data['course-description'])
-
-        # check that the teacher got saved correctly        
-        self.assertEqual(response.context['schedule'].course.teacher.fullname, self.new_teacher_data['teacher-fullname'])
+        self.compare_schedule_to_data(response.context['schedule'])
                                 
 
     def test_time_deleted_after_successful_submission(self):
