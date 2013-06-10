@@ -217,7 +217,10 @@ def schedule_add(request, branch_slug=None):
             # save barter items
             for barter_item_form in barter_item_formset:
                 barter_item_form_data = barter_item_form.cleaned_data
-                barter_item = BarterItem(title=barter_item_form_data['title'])
+                
+                # check if the submited barter item already exists in the system
+                # we determine an existing barter item by its title
+                barter_item, barter_item_created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], defaults=barter_item_form_data)                
                 barter_item.save()
                 schedule.items.add(barter_item)
 

@@ -537,7 +537,7 @@ class ScheduleAdmin(BaseAdmin):
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
     list_filter     = ('course_status', 'venue__title', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
-    inlines         = (BarterItemInline, RegistrationInline, ScheduleEmailContainerInline, FeedbackInline)
+    inlines         = (RegistrationInline, ScheduleEmailContainerInline, FeedbackInline)
     actions         = ('approve_courses', 'populate_notifications')
     fieldsets = (
         ('Class Schedule Info', {
@@ -546,6 +546,9 @@ class ScheduleAdmin(BaseAdmin):
         ('Class Time', {
             'fields': ('start_time', 'end_time',)
         }),
+        ('Barter Items', {
+            'fields': ('items',)
+        }),        
     )
     prepopulated_fields  = {'slug': ('start_time',) }
 

@@ -26,7 +26,7 @@
         <h4>{% blocktrans %}Items you want in exchange for teaching{% endblocktrans %}:</h4>
         <ul>
         {% for item in schedule.items.all %}
-            <li><strong>{{ item.requested }} x {{ item.title|capfirst }}</strong></li>
+            <li><strong>{{ item.title|capfirst }}</strong></li>
         {% endfor %}
         </ul>
 
