@@ -653,9 +653,7 @@ class BarterItem(Base):
     keeps track of the items that were requested for a class.
     """
 
-    title       = CharField(max_length=255)
-    requested   = IntegerField(max_length=3, default=1)
-    schedule    = ForeignKey(Schedule, null=True, blank=False)
+    title = CharField(max_length=255)
     
     def __unicode__ (self):
         registered_count = RegisteredItem.objects.filter(barter_item=self).count()

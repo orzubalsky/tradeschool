@@ -616,10 +616,9 @@ class BarterItemAdmin(BaseAdmin):
             qs = qs.order_by(*ordering)
         return qs
             
-    list_display    = ('title', 'requested',)    
-    list_filter     = ('requested',)
+    list_display    = ('title',)    
     search_fields   = ('title',)
-    fields          = ('title', 'requested')
+    fields          = ('title',)
 
 
 class PhotoAdmin(BaseAdmin):
