@@ -19,6 +19,9 @@ class BranchSetupTestCase(TestCase):
     def setUp(self):
         """ Create a Site and an admin User for testing.
         """
+        # test in english so we count html strings correctly
+        settings.LANGUAGE_CODE = 'en'
+                
         self.site   = Site(domain='http://test.tradeschool.coop', name='test site', id=2)
         self.site.save()
         
