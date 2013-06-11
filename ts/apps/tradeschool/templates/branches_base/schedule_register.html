@@ -56,8 +56,9 @@
                 {{ student_form.phone.label }}<br />
                 {{ student_form.phone }}<br />
                 
-                <div class="legal"><p><strong>We trust you, so please trust us. Trade School is a litigation free zone.</strong></p></div>
+                {% if schedule.registered_students < schedule.course.max_students %}                
                 <input type="submit" class="join" value="Join" />
+                {% endif %}
             </form>
             {% endblock registration_body_form %}
 

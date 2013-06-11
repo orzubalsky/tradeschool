@@ -3,36 +3,78 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 from django.conf import settings
 from datetime import *
 import shutil, os, os.path
 from tradeschool.models import *
 
-"""
-class RegistrationTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
 
-        self.site     = Site(domain="http://test.tradeschool.coop/", name="test ts", id=2)
-        self.site.save()
+
+class RegistrationTestCase(TestCase):
+    """ Tests the process of registering and unregistering to a schedule using the frontend forms.
+    """
+    fixtures = ['test_data.json', 'test_schedule.json']
+    
+    def setUp(self):
+        """ 
+        """
+        # test in english so we count html strings correctly
+        settings.LANGUAGE_CODE = 'en'
         
-        self.branch   = Branch(title="test trade school", phone="123-123-1234", city="testown", country="US", slug="test", email="test@ts.coop", timezone="America/New_York", site=self.site)
+        # change the language to english for language-based assertations
+        self.branch = Branch.objects.all()[0]
+        self.branch.language = 'en'
         self.branch.save()
         
-        self.venue    = Venue(title="test venue", phone="234-234-2345", city="testown", country="US", venue_type=0, address_1="123 test st", capacity=20, site=self.site)
-        self.venue.save()
+        self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
         
-        self.teacher  = Person(fullname="test teacher", email="test@teacher.com", phone="123-123-1234", bio="test bio", website="http://test.com", slug="testteacher")
-        self.teacher.save()
+        self.url = reverse('schedule-register', kwargs={'branch_slug': self.branch.slug, 'schedule_slug': self.schedule.slug })
         
-        self.course   = Course(teacher=self.teacher, category=0, max_students=20, title="test course", slug="testcourse", description="this a test class")
-        self.course.save()
         
-        self.schedule = Schedule(start_time=datetime(2020, 1, 31, 18, 00, 00), end_time=datetime(2020, 1, 31, 21, 00, 00), venue=self.venue, course=self.course, course_status=3, slug="test-course-01")    
-        self.schedule.save()
+    def test_view_is_loading(self):
+        """ Tests that the schedule-register view loads with the correct template.
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.branch.slug + '/schedule_register.html')
+
+
+    def test_capacity(self):
+        """ Tests that the Join button is only visible if there are empty seats in the schedule.
+            This should also test that a POST request can't be made to a schedule in full capacity.
+        """
+        response = self.client.get(self.url)
+        
+        # the schedule has not registrations, 
+        # so the join button should be in the HTML
+        self.assertContains(response, 'value="Join"')
+
+        # add registrations to fill the schedule
+        for i in range(self.schedule.course.max_students):
+            # first create a student to register to the scheduled class
+            student_fullname = "student-%i" % i
+            student_email    = "%i@email.com" % i
+            student = Person(fullname=student_fullname, email=student_email, slug=student_fullname)
+            student.save()
+            student.branch.add(self.branch)
+            
+            # then create the registration itself
+            registration = Registration(schedule=self.schedule, student=student)
+            registration.save()
+
+        # visit the page again
+        response = self.client.get(self.url)
+
+        # the schedule should be full, 
+        # so the join button should NOT be in the HTML
+        self.assertNotContains(response, 'value="Join"')            
     
-    def test_registration(self):
-        response = self.client.get(reverse('schedule-register', kwargs={ 'schedule_slug': self.schedule.slug }))        
-        print response
-        self.assertEqual(1 + 1, 2)
-"""
+    
+    def tearDown(self):
+        """ Delete branch files in case something went wrong 
+            and the files weren't deleted.
+        """
+        # delete branches' files
+        for branch in Branch.objects.all():
+            branch.delete_files()
