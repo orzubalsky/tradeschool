@@ -53,7 +53,10 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
     seats_left           = schedule.course.max_students - schedule.registered_students
 
-    if data != None:
+    if request.method == 'POST':
+        data = request.POST
+
+    if data != None or request.method == 'POST':
         student_form      = StudentForm(data=data, prefix="student")
         registration_form = RegistrationForm(data=data, schedule=schedule, prefix="item")        
    

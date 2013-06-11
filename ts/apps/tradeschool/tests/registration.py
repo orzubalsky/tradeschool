@@ -26,12 +26,12 @@ class RegistrationTestCase(TestCase):
         self.branch = Branch.objects.all()[0]
         self.branch.language = 'en'
         self.branch.save()
-        
+
         self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
-        
+
         self.url = reverse('schedule-register', kwargs={'branch_slug': self.branch.slug, 'schedule_slug': self.schedule.slug })
-        
-        
+
+
     def test_view_is_loading(self):
         """ Tests that the schedule-register view loads with the correct template.
         """
@@ -43,11 +43,13 @@ class RegistrationTestCase(TestCase):
     def test_registration_empty_form(self):
         """ 
         """
-        data = {'student-fullname': 'test student',}
+        data = {}
+        
         # post an empty form
         response = self.client.post(self.url, data=data, follow=True)
-
-        print response
+        
+        # an empty form should return 3 errors for the required fields
+        self.assertContains(response, 'Please', count=3)
 
 
     def test_capacity(self):
