@@ -205,9 +205,30 @@ class ScheduleSubmissionTestCase(TestCase):
         self.assertFalse(Time.objects.filter(pk=time.pk).exists())
 
 
-    def test_edit_schedule(self):
-        pass
+    def test_edit_schedule_template(self):
+        """ Test that the schedule-edit view doesn't load unless 
+            a schedule_slug for an existing Schedule object is provided.
+        """
+        # try to load the schedule-edit view without a schedule slug
+        response = self.client.get(reverse('schedule-edit', kwargs={'branch_slug':self.branch.slug, 'schedule_slug':None}))
         
+        # this should lead to a 404 page
+        self.assertEqual(response.status_code, 404)
+        
+        # post a valid schedule data to save a new schedule
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+        
+        # this is the schedule that was just saved
+        schedule = response.context['schedule']
+        
+        # try loading the schedule-edit view for the saved schedule
+        response = self.client.get(reverse('schedule-edit', kwargs={'branch_slug':self.branch.slug, 'schedule_slug':response.context['schedule'].slug }))
+        
+        # this should lead to a 404 page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.branch.slug + '/schedule_edit.html')
+        
+                
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 

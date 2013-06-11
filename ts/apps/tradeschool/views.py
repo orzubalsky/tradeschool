@@ -291,8 +291,8 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
 
     else :
         initial_item_data = []
-        for item in schedule.barteritem_set.all():
-            initial_item_data.append({'title':item.title, 'requested':item.requested})
+        for item in schedule.items.all():
+            initial_item_data.append({'title':item.title, })
 
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=0, formset=BaseBarterItemFormSet,)
         barter_item_formset = BarterItemFormSet(prefix="item", initial=initial_item_data)
