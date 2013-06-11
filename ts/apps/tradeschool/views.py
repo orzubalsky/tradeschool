@@ -281,13 +281,18 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             schedule.slug = unique_slugify(Schedule, course.title)
             schedule.save()
 
-            # save barter items
+            # remove all barter item relationships before saving them again
+            for item in schedule.items.all():
+                schedule.items.remove(item)
+
+            # save updated barter items
             for barter_item_form in barter_item_formset:
                 barter_item_form_data = barter_item_form.cleaned_data
-                barter_item, created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], requested=barter_item_form_data['requested'], schedule=schedule)
+                barter_item, created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'])
                 barter_item.save()
+                schedule.items.add(barter_item)
 
-            return HttpResponseRedirect( reverse(schedule_submitted, args=[schedule.slug]) )
+            return HttpResponseRedirect( reverse(schedule_submitted, kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule.slug} ))
 
     else :
         initial_item_data = []

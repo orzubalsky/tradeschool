@@ -82,7 +82,10 @@ class ScheduleSubmissionTestCase(TestCase):
         self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.valid_data['teacher-phone'])
+        #print self.valid_data.items()
+        #print schedule_obj.items.all()
         for item in schedule_obj.items.all():
+            #print item.title
             self.assertTrue(item.title in self.valid_data.values())            
 
 
@@ -218,15 +221,68 @@ class ScheduleSubmissionTestCase(TestCase):
         # post a valid schedule data to save a new schedule
         response = self.client.post(self.url, data=self.valid_data, follow=True)
         
-        # this is the schedule that was just saved
-        schedule = response.context['schedule']
-        
         # try loading the schedule-edit view for the saved schedule
         response = self.client.get(reverse('schedule-edit', kwargs={'branch_slug':self.branch.slug, 'schedule_slug':response.context['schedule'].slug }))
         
-        # this should lead to a 404 page
+        # check that the correct template was loaded sucessfully
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(self.branch.slug + '/schedule_edit.html')
+        
+        
+    def test_editing_schedule_with_empty_data(self):
+        """ Test that editting an existing Schedule and submitting an empty
+            form results in the expected number of errors.
+        """
+        # post a valid schedule data to save a new schedule
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+        
+        schedule = response.context['schedule']
+        schedule_edit_url = reverse('schedule-edit', kwargs={'branch_slug':self.branch.slug, 'schedule_slug':schedule.slug })
+        
+        # post empty data to the form
+        response = self.client.post(schedule_edit_url, data=self.empty_data)
+        
+        # an empty form should return 7 errors for the required fields
+        # there's one less error when editing a schedule sine the time 
+        # is already saved and can't be edited in the form
+        self.assertContains(response, 'Please', count=7)
+
+
+    def test_editing_schedule_with_valid_data(self):
+        """ Test that editting an existing Schedule and submitting edited
+            fields results in the new data being saved correctly.
+            This includes any new BarterItem objects that may have been added
+            to the form.
+        """        
+        # post a valid schedule data to save a new schedule
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+
+        schedule = response.context['schedule']
+        schedule_edit_url = reverse('schedule-edit', kwargs={'branch_slug':self.branch.slug, 'schedule_slug':schedule.slug })
+    
+        # make some changes to the data
+        for key, value in self.new_teacher_data.items():
+            self.valid_data[key] = "1%s" % value
+        for key, value in self.new_course_data.items():
+            self.valid_data[key] = "1%s" % value
+        
+        # edit a barter item 
+        self.barter_items_data['item-0-title'] = 'edited item'
+        
+        # add a barter item
+        self.barter_items_data['item-5-title'] = 'new barter item'
+        
+        # update the barter item formset number
+        self.barter_items_data['item-TOTAL_FORMS'] = 6
+        
+        # combine all dictionaries
+        self.valid_data = dict(self.new_teacher_data.items() + self.new_course_data.items() + self.barter_items_data.items() + self.time_data.items())
+        
+        # post edited data to the form
+        response = self.client.post(schedule_edit_url, data=self.valid_data, follow=True)
+
+        # check that the schedule got saved correctly
+        self.compare_schedule_to_data(response.context['schedule'])
         
                 
 
