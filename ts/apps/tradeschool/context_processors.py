@@ -11,10 +11,13 @@ def branch(request):
     try:
         
         if branch_slug == None and (url.app_name == 'admin' or url.app_name == 'rosetta') and request.user.is_staff:
-           branch = request.user.branch_set.all()[0]
-           translation.activate(branch.language)
+            if request.user.branch_set.count() > 0:
+                branch = request.user.branch_set.all()[0]
+                translation.activate(branch.language)
+            else:
+                branch = Branch(timezone=settings.TIME_ZONE)
 
-           return { 'branch' : branch, }
+            return { 'branch' : branch, }
         
         branch = Branch.objects.get(slug=branch_slug)
         pages  = BranchPage.objects.filter(branch=branch) 
