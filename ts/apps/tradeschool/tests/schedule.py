@@ -49,14 +49,14 @@ class ScheduleSubmissionTestCase(TestCase):
                 'time-time'             : self.time.pk
             } 
         self.barter_items_data = {
-                'item-TOTAL_FORMS'      : 5,
-                'item-INITIAL_FORMS'    : 0,
-                'item-MAX_NUM_FORMS'    : 1000,
                 'item-0-title'          : 'test item 01',
                 'item-1-title'          : 'test item 02',
                 'item-2-title'          : 'test item 03',
                 'item-3-title'          : 'test item 04',
                 'item-4-title'          : 'test item 05',
+                'item-TOTAL_FORMS'      : 5,
+                'item-INITIAL_FORMS'    : 0,
+                'item-MAX_NUM_FORMS'    : 1000,                
             }
         self.empty_data = {
                 'item-TOTAL_FORMS'      : 0,
@@ -78,6 +78,8 @@ class ScheduleSubmissionTestCase(TestCase):
         self.assertEqual(schedule_obj.course.teacher.bio, self.new_teacher_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.new_teacher_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.new_teacher_data['teacher-phone'])
+        for item in schedule_obj.items.all():
+            self.assertTrue(item.title in self.barter_items_data.values())            
 
 
     def test_view_loading(self):
