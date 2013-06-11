@@ -917,7 +917,9 @@ iframe{
 	background-color: black;
 	opacity: 0.8;
 }
-
+#matte.visible {
+    display: block;
+}
 #previewContainer {
     border-radius: 3px 3px 3px 3px;
     display: none;
@@ -929,6 +931,9 @@ iframe{
     width: 60%;
     z-index: 900;
     margin: 0 0 50px 0;
+}
+#previewContainer.visible {
+    display: block;
 }
 #preview {
 	height:100%;
