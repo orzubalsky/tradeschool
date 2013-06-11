@@ -63,23 +63,27 @@ class ScheduleSubmissionTestCase(TestCase):
                 'item-INITIAL_FORMS'    : 0,
                 'item-MAX_NUM_FORMS'    : 1000,
             }
+        
+        # merge the items of course, teacher, and barter item data
+        self.valid_data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
+        
 
     def compare_schedule_to_data(self, schedule_obj):
         """ Asserts that the objects that were created after a successful schedule submission
             match the data that was used in the forms.
         """
-        self.assertEqual(schedule_obj.course.title, self.new_course_data['course-title'])
-        self.assertEqual(schedule_obj.course.description, self.new_course_data['course-description']) 
-        self.assertEqual(schedule_obj.course.max_students, int(self.new_course_data['course-max_students']))
+        self.assertEqual(schedule_obj.course.title, self.valid_data['course-title'])
+        self.assertEqual(schedule_obj.course.description, self.valid_data['course-description']) 
+        self.assertEqual(schedule_obj.course.max_students, int(self.valid_data['course-max_students']))
         self.assertEqual(schedule_obj.start_time, self.time.start_time)
         self.assertEqual(schedule_obj.end_time, self.time.end_time)
         self.assertEqual(schedule_obj.venue, self.time.venue)        
-        self.assertEqual(schedule_obj.course.teacher.fullname, self.new_teacher_data['teacher-fullname'])
-        self.assertEqual(schedule_obj.course.teacher.bio, self.new_teacher_data['teacher-bio'])
-        self.assertEqual(schedule_obj.course.teacher.email, self.new_teacher_data['teacher-email'])
-        self.assertEqual(schedule_obj.course.teacher.phone, self.new_teacher_data['teacher-phone'])
+        self.assertEqual(schedule_obj.course.teacher.fullname, self.valid_data['teacher-fullname'])
+        self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
+        self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])
+        self.assertEqual(schedule_obj.course.teacher.phone, self.valid_data['teacher-phone'])
         for item in schedule_obj.items.all():
-            self.assertTrue(item.title in self.barter_items_data.values())            
+            self.assertTrue(item.title in self.valid_data.values())            
 
 
     def test_view_loading(self):
@@ -121,11 +125,8 @@ class ScheduleSubmissionTestCase(TestCase):
     def test_schedule_submission_new_teacher_new_course(self):
         """ Tests the submission of a schedule of a new class by a new teacher.
         """
-        # merge the items of course, teacher, and barter item data
-        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
-        
         # test that the form submission worked
-        response = self.is_successful_submission(data)
+        response = self.is_successful_submission(self.valid_data)
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
@@ -140,13 +141,10 @@ class ScheduleSubmissionTestCase(TestCase):
         # use the existing teacher's email for the form submission
         # when the teacher-email matches an existing objects,
         # the schedule should be saved to the existing teacher object
-        self.new_teacher_data['teacher-email'] = existing_teacher.email
+        self.valid_data['teacher-email'] = existing_teacher.email
         
-        # merge the items of course, teacher, and barter item data
-        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
-
         # test that the form submission worked
-        response = self.is_successful_submission(data)
+        response = self.is_successful_submission(self.valid_data)
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
@@ -161,7 +159,7 @@ class ScheduleSubmissionTestCase(TestCase):
         # use the existing teacher's email for the form submission
         # when the teacher-email matches an existing Person object,
         # the schedule should be saved to the existing Person object
-        self.new_teacher_data['teacher-email'] = existing_teacher.email
+        self.valid_data['teacher-email'] = existing_teacher.email
 
         # get an existing course in the branch
         existing_course = Course.objects.filter(branch=self.branch)[0]
@@ -169,13 +167,10 @@ class ScheduleSubmissionTestCase(TestCase):
         # use the existing course's title for the form submission
         # when the course-title matches an existing Course object,
         # the schedule should be saved to the existing Course object
-        self.new_course_data['course-title'] = existing_course.title
+        self.valid_data['course-title'] = existing_course.title
         
-        # merge the items of course, teacher, and barter item data
-        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
-
         # test that the form submission worked
-        response = self.is_successful_submission(data)
+        response = self.is_successful_submission(self.valid_data)
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
@@ -189,11 +184,8 @@ class ScheduleSubmissionTestCase(TestCase):
         self.time.venue = Venue.objects.filter(branch=self.branch)[0]
         self.time.save()
         
-        # merge the items of course, teacher, and barter item data
-        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
-        
         # test that the form submission worked
-        response = self.is_successful_submission(data)
+        response = self.is_successful_submission(self.valid_data)
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
@@ -206,15 +198,16 @@ class ScheduleSubmissionTestCase(TestCase):
         # get Time object
         time = Time.objects.get(pk=self.time_data['time-time'])
                 
-        # merge the items of course, teacher, and barter item data
-        data = dict(self.new_course_data.items() + self.new_teacher_data.items() + self.barter_items_data.items() + self.time_data.items())
-
         # post the data to the schedule submission form
-        response = self.client.post(self.url, data=data, follow=True)
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
 
         # check that the time object got deleted 
         self.assertFalse(Time.objects.filter(pk=time.pk).exists())
 
+
+    def test_edit_schedule(self):
+        pass
+        
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
