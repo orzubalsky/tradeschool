@@ -40,6 +40,16 @@ class RegistrationTestCase(TestCase):
         self.assertTemplateUsed(self.branch.slug + '/schedule_register.html')
 
 
+    def test_registration_empty_form(self):
+        """ 
+        """
+        data = {'student-fullname': 'test student',}
+        # post an empty form
+        response = self.client.post(self.url, data=data, follow=True)
+
+        print response
+
+
     def test_capacity(self):
         """ Tests that the Join button is only visible if there are empty seats in the schedule.
             This should also test that a POST request can't be made to a schedule in full capacity.
