@@ -82,10 +82,7 @@ class ScheduleSubmissionTestCase(TestCase):
         self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.valid_data['teacher-phone'])
-        #print self.valid_data.items()
-        #print schedule_obj.items.all()
         for item in schedule_obj.items.all():
-            #print item.title
             self.assertTrue(item.title in self.valid_data.values())            
 
 
