@@ -395,7 +395,6 @@ class Person(Base):
     """
     Person in the tradeschool system is either a teacher or a student.
     A person submitting a class as a teacher will have to supply a bio as well.
-    Hash is used in public urls that involve teachers editing classes & students unregistering
     """
     
     class Meta:
@@ -409,7 +408,6 @@ class Person(Base):
     phone       = CharField(max_length=20, blank=True, null=True, verbose_name="Cell phone number", help_text="Optional. Used only for us to contact you.")
     bio         = TextField(blank=True, verbose_name="A few sentences about you", help_text="For prospective students to see on the website")
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
-    hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
     branch      = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
     
@@ -603,7 +601,6 @@ class Schedule(Durational):
     venue           = ForeignKey(Venue, null=True, blank=True, help_text="Where is this class taking place?")
     course          = ForeignKey(Course, help_text="What class are you scheduling?")
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
-    hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
     items           = ManyToManyField(BarterItem)    
     slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
