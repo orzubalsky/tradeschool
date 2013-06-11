@@ -2,8 +2,9 @@
 
 {% load humanize smartdate i18n l10n %}
 
-{% block main_content %}
+{% block popup_container_class %}{{ popup_container_class }}{% endblock popup_container_class %}
 
+{% block popup_content %}
 <div class="type{{ schedule.course.category }} ">
     <div id="classPopup" style="background-color:#567567;">
 
@@ -67,4 +68,4 @@
     </div>
 </div>
 
-{% endblock main_content %}
+{% endblock popup_content %}

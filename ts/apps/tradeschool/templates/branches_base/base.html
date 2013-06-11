@@ -118,9 +118,12 @@
 {% endblock container %}
 
 {% block lightbox %}	
-<div id="previewContainer">
-    <img id="loader" src="{{ STATIC_URL }}/images/ajax-loader.gif" />
-    <div id="preview">&nbsp;</div>
+<div id="previewContainer" class="{% block popup_container_class %}{% endblock popup_container_class %}">
+    <img id="loader" src="{{ STATIC_URL }}/images/ajax-loader.gif" style="display:none;" />
+    <div id="preview">
+    {% block popup_content %}
+    {% endblock popup_content %}    
+    </div>
 </div>
 <div id="matte">&nbsp;</div>
 {% endblock %}	

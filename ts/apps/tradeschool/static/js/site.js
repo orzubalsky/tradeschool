@@ -103,12 +103,19 @@ var site = window.site = new function()
         var height    = $('#preview #classPopup').height();
         var width     = $('#preview #classPopup').width();
         var topOffset = $(document).scrollTop() + 50;
-
-        $('#preview, #previewContainer').css({
-            'height': height + 'px', 
-            'width'	: width + 'px',
-            'top'	: topOffset
-        }).show();
+        
+        if ($('#previewContainer').hasClass('visible'))
+        {
+            
+        }
+        else
+        {
+            $('#preview, #previewContainer').css({
+                'height': height + 'px', 
+                'width'	: width + 'px',
+                'top'	: topOffset
+            }).show();
+        }
     };
 
 

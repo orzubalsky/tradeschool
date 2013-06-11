@@ -934,6 +934,10 @@ iframe{
 }
 #previewContainer.visible {
     display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0 auto;
 }
 #preview {
 	height:100%;

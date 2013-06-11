@@ -96,9 +96,11 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     # return content as either json or html depending on request type
     if request.is_ajax():
         view_templates = branch_templates(branch, 'schedule_register.html', 'base_ajax.html')
+        popup_container_class = ''
         mimetype = "application/json"
     else:
         view_templates = branch_templates(branch, 'schedule_register.html', 'base.html')
+        popup_container_class = 'visible'
         mimetype = "text/html"
         
     return render_to_response(view_templates.template.name, {
@@ -108,7 +110,8 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
             'seats_left'           : seats_left,
             'registration_form'    : registration_form,
             'student_form'         : student_form,    
-            'templates'            : view_templates
+            'templates'            : view_templates,
+            'popup_container_class': popup_container_class 
         }, context_instance=RequestContext(request), mimetype=mimetype)
     
 
