@@ -206,6 +206,22 @@ class ScheduleTestCase(TestCase):
         self.assertFalse(Time.objects.filter(pk=time.pk).exists())
 
     
+    def test_schedule_emails_are_generated(self):
+        """ Tests that a ScheduleEmailContainer is created after a successful schedule submission,
+            and that 7 emails are copied to it from the BranchEmailContainer.
+        """
+        # submit a schedule
+        response = self.is_successful_submission(self.valid_data)
+        
+        schedule = response.context['schedule']        
+        
+        # check that one ScheduleEmailContainer was created for the schedule
+        self.assertEqual(ScheduleEmailContainer.objects.filter(schedule=schedule).count(), 1)
+
+        # check that the ScheduleEmailContainer has all 7 Email objects
+        self.assertEqual(schedule.emails.emails.__len__(), 7)
+        
+    
     def test_teacher_confirmation_email(self):
         """ Tests that the TeacherConfirmation is sent after
             a successful submission.
