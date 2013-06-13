@@ -143,7 +143,9 @@ class RegistrationTestCase(TestCase):
 
     def test_unregistration(self):
         """ Tests that the schedule-unregister view loads with the 
-            correct template.
+            correct template, that unregistering changes the status in
+            the Registration object, and that it is not possible to
+            unregister more than once.
         """
         # register
         response = self.do_register()

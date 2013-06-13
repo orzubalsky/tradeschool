@@ -616,6 +616,13 @@ class Schedule(Durational):
             return True
         return False
 
+    @property
+    def is_past(self):
+        now = datetime.utcnow().replace(tzinfo=utc) 
+        if self.end_time < now:
+            return True
+        return False
+
     def populate_notifications(self):
         "resets course notification templates from the branch notification templates"
                 

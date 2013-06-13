@@ -14,7 +14,7 @@ from django.db import IntegrityError
 from tradeschool.utils import unique_slugify, branch_template, branch_templates
 from tradeschool.models import *
 from tradeschool.forms import *
-
+from datetime import datetime, timedelta
 
 def branch_list(request):
     """display all branches in current site."""
@@ -366,10 +366,15 @@ def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_s
 
 def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_type='student'):
     """ """
-    schedule = get_object_or_404(Schedule, slug=schedule_slug)
+    # don't display form unless schedule is approved
+    schedule = get_object_or_404(Schedule, slug=schedule_slug, course_status=3)
     branch   = get_object_or_404(Branch, slug=branch_slug)
-    
-    if request.method == 'POST':
+
+    # don't display form unless the scheduled class took place
+    if schedule.is_past == False:
+        raise Http404
+
+    if request.method == 'POST' and schedule.is_past:
          form = FeedbackForm(data=request.POST)
 
          if form.is_valid():
