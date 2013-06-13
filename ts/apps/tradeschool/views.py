@@ -351,7 +351,7 @@ def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_s
     registration = get_object_or_404(Registration, student__slug=student_slug, schedule__slug=schedule_slug)
     branch       = get_object_or_404(Branch, slug=branch_slug)
     
-    if request.method == 'POST':
+    if request.method == 'POST':        
         registration.registration_status = 'unregistered'
         registration.save()
         return HttpResponseRedirect( reverse(schedule_list,kwargs={'branch_slug' : branch_slug,}) )

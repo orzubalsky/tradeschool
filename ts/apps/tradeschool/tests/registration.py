@@ -49,6 +49,18 @@ class RegistrationTestCase(TestCase):
             self.assertEqual(registered_item.registered, 1)            
 
 
+    def do_register(self):
+        """ Register to a given schedule.
+        """
+        item = self.schedule.items.all()[0]
+        self.valid_data['item-items'] = [ item.pk, ]
+        
+        # post a valid form
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+        
+        return response
+                
+        
     def test_view_is_loading(self):
         """ Tests that the schedule-register view loads with the correct template.
         """
@@ -73,12 +85,8 @@ class RegistrationTestCase(TestCase):
     def test_registration_valid_form(self):
         """ Tests that a submission of valid data results in a successful registration.
         """
-        item = self.schedule.items.all()[0]
-        self.valid_data['item-items'] = [ item.pk, ]
+        response = self.do_register()
         
-        # post a valid form
-        response = self.client.post(self.url, data=self.valid_data, follow=True)
-
         self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')
 
         # check that the registration got saved correctly
@@ -89,14 +97,11 @@ class RegistrationTestCase(TestCase):
         """ Tests that a student who is already registered to a scheduled class
             can't register to it again.
         """
-        item = self.schedule.items.all()[0]
-        self.valid_data['item-items'] = [ item.pk, ]
-
-        # post a valid form
-        response = self.client.post(self.url, data=self.valid_data, follow=True)
+        # register
+        response = self.do_register()
 
         # register again
-        response = self.client.post(self.url, data=self.valid_data, follow=True)        
+        response = self.do_register()
         
         # make sure the same template is used (didn't redirect)
         self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')        
@@ -134,8 +139,47 @@ class RegistrationTestCase(TestCase):
         # the schedule should be full, 
         # so the join button should NOT be in the HTML
         self.assertNotContains(response, 'value="Join"')
-    
-    
+
+
+    def test_unregistration(self):
+        """ Tests that the schedule-unregister view loads with the 
+            correct template.
+        """
+        # register
+        response = self.do_register()
+        
+        registration = response.context['registration']
+        
+        # construct unregister url from branch, schedule, and saved registration
+        url = reverse('schedule-unregister', kwargs={'branch_slug' : self.branch.slug, 'schedule_slug' : self.schedule.slug, 'student_slug' : registration.student.slug })        
+
+        # go to the url
+        response = self.client.get(url)
+        
+        # check that the correct template is loading
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.branch.slug + '/schedule_register.html')
+        
+        # unregister
+        response = self.client.post(url, data={}, follow=True)
+        
+        # check that the page was redirected
+        self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
+        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
+        
+        # get registration again after it was saved in the view function
+        registration = Registration.objects.get(pk=registration.pk)
+        
+        # check that the registration status was changed
+        self.assertEqual(registration.registration_status, 'unregistered')
+        
+        # try unregistering again
+        response = self.client.get(url)
+        
+        # make sure it's not possible
+        self.assertContains(response, 'already unregistered')
+
+
     def tearDown(self):
         """ Delete branch files in case something went wrong 
             and the files weren't deleted.
