@@ -664,7 +664,9 @@ class Registration(Base):
     We do this because we also want to keep track of students who registered
     and then unregistered from a class.
     """
-
+    class Meta:
+        unique_together = ('schedule', 'student')
+        
     REGISTRATION_CHOICES = (('registered', 'Registered'),('unregistered', 'Unregistereed'))
     
     schedule            = ForeignKey(Schedule)

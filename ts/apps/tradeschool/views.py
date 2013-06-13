@@ -5,8 +5,12 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpRespons
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.utils import simplejson as json
+from django.forms.util import ErrorList
+from django.forms.forms import NON_FIELD_ERRORS
 from django.contrib.sites.models import get_current_site
 from django.contrib.flatpages.views import render_flatpage
+from django.utils.translation import ugettext_lazy as _
+from django.db import IntegrityError
 from tradeschool.utils import unique_slugify, branch_template, branch_templates
 from tradeschool.models import *
 from tradeschool.forms import *
@@ -53,7 +57,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     open_seat_percentage = round((float(schedule.registered_students) / float(schedule.course.max_students)) * 100);
     seats_left           = schedule.course.max_students - schedule.registered_students
 
-    if request.method == 'POST':
+    if request.method == 'POST' and not request.is_ajax():
         data = request.POST
 
     if data != None or request.method == 'POST':
@@ -61,36 +65,44 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
         registration_form = RegistrationForm(data=data, schedule=schedule, prefix="item")        
    
         if registration_form.is_valid() and student_form.is_valid():
-           current_site = Site.objects.get_current()
+            # save student
+            student = student_form.save(commit=False)
+            student_data = student_form.cleaned_data
+            student_data['slug'] = unique_slugify(Student, student.fullname)
+            student, created = Person.objects.get_or_create(email=student.email, defaults=student_data)
+            student.branch.add(branch)
+            student.save()
            
-           # save student
-           student = student_form.save(commit=False)
-           student_data = student_form.cleaned_data
-           student_data['slug'] = unique_slugify(Student, student.fullname)
-           student, created = Person.objects.get_or_create(fullname=student.fullname, defaults=student_data)
-           student.branch.add(branch)
-           student.save()
-                       
-           # save registration
-           registration = registration_form.save(commit=False)
-           registration.student = student
-           registration.schedule = schedule
-           registration.save()
+            # save registration
+            registration = registration_form.save(commit=False)
+            registration.student = student
+            registration.schedule = schedule
+            
+            # try saving the registration. 
+            # this may fail because of the unique_together db constraint on student and schedule fields
+            # if this Student is registered to this Schedule an IntegrityError will occur
+            try:
+                registration.save()
 
-           # save items in registration through RegisteredItem
-           for barter_item in registration_form.cleaned_data['items']:
-               registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
-               registered_item.save()
-   
-           # email confirmation to student
-           schedule.emails.email_student(schedule.emails.student_confirmation, registration)
-           
-           # render thank you template
-           view_templates = branch_templates(branch, 'schedule_registered.html', 'base.html')           
-           return render_to_response(view_templates.template.name, {
-                    'registration' : registration, 
-                    'templates' : view_templates 
-                }, context_instance=RequestContext(request), mimetype="application/json")    
+                # save items in registration through RegisteredItem
+                for barter_item in registration_form.cleaned_data['items']:
+                   registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
+                   registered_item.save()
+
+                # email confirmation to student
+                schedule.emails.email_student(schedule.emails.student_confirmation, registration)
+
+                # render thank you template
+                view_templates = branch_templates(branch, 'schedule_registered.html', 'base.html')           
+                return render_to_response(view_templates.template.name, {
+                        'registration' : registration, 
+                        'templates' : view_templates 
+                    }, context_instance=RequestContext(request), mimetype="application/json")    
+
+            # in case saving the registration failed (see comment above the try block),
+            # add an error to the registration form
+            except IntegrityError:
+                registration_form._errors['items'] = registration_form.error_class([_('You are already registered to this class')])
 
     else :            
         student_form      = StudentForm(prefix="student")
@@ -105,7 +117,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
         view_templates = branch_templates(branch, 'schedule_register.html', 'base.html')
         popup_container_class = 'visible'
         mimetype = "text/html"
-        
+    
     return render_to_response(view_templates.template.name, {
             'branch'               : branch,
             'schedule'             : schedule,

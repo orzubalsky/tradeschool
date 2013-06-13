@@ -98,7 +98,7 @@ class StudentForm(ModelForm):
            super (StudentForm,self ).__init__(*args,**kwargs) 
            self.fields['fullname'].error_messages['required'] =  _("Please enter your name")
            self.fields['email'].error_messages['required']    =  _("Please enter your email") 
-           self.fields['phone'].error_messages['required']    =  _("Please enter your phone number")           
+           self.fields['phone'].error_messages['required']    =  _("Please enter your phone number")
                
     class Meta:
         model       = Person

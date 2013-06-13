@@ -28,8 +28,25 @@ class RegistrationTestCase(TestCase):
         self.branch.save()
 
         self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
-
+        self.valid_data = {
+                'student-fullname' : 'test student',
+                'student-email'    : 'test123!@email.com',
+                'student-phone'    : '',
+            }
         self.url = reverse('schedule-register', kwargs={'branch_slug': self.branch.slug, 'schedule_slug': self.schedule.slug })
+
+
+    def compare_registration_to_data(self, registration_obj):
+        """ Asserts that the objects that were created after a successful 
+            registration submission match the data that was used in the forms.
+        """
+        self.assertEqual(registration_obj.schedule, self.schedule)
+        self.assertEqual(registration_obj.student.fullname, self.valid_data['student-fullname'])
+        self.assertEqual(registration_obj.registration_status, 'registered')
+        self.assertTrue(self.branch in registration_obj.student.branch.all())
+        for registered_item in registration_obj.registereditem_set.all():
+            self.assertEqual(registered_item.barter_item.pk, int(self.valid_data['item-items'][0]))
+            self.assertEqual(registered_item.registered, 1)            
 
 
     def test_view_is_loading(self):
@@ -41,7 +58,8 @@ class RegistrationTestCase(TestCase):
 
 
     def test_registration_empty_form(self):
-        """ 
+        """ Test that an empty submitted registration form returns the expected
+            number of errors, for fullname, email, and at least one checked item.
         """
         data = {}
         
@@ -51,6 +69,41 @@ class RegistrationTestCase(TestCase):
         # an empty form should return 3 errors for the required fields
         self.assertContains(response, 'Please', count=3)
 
+
+    def test_registration_valid_form(self):
+        """ Tests that a submission of valid data results in a successful registration.
+        """
+        item = self.schedule.items.all()[0]
+        self.valid_data['item-items'] = [ item.pk, ]
+        
+        # post a valid form
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+
+        self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')
+
+        # check that the registration got saved correctly
+        self.compare_registration_to_data(response.context['registration'])
+        
+        
+    def test_register_again(self):
+        """ Tests that a student who is already registered to a scheduled class
+            can't register to it again.
+        """
+        item = self.schedule.items.all()[0]
+        self.valid_data['item-items'] = [ item.pk, ]
+
+        # post a valid form
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+
+        # register again
+        response = self.client.post(self.url, data=self.valid_data, follow=True)        
+        
+        # make sure the same template is used (didn't redirect)
+        self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')        
+        
+        # check that the error message is in the page
+        self.assertContains(response, 'You are already registered to this class')
+                
 
     def test_capacity(self):
         """ Tests that the Join button is only visible if there are empty seats in the schedule.
@@ -80,7 +133,7 @@ class RegistrationTestCase(TestCase):
 
         # the schedule should be full, 
         # so the join button should NOT be in the HTML
-        self.assertNotContains(response, 'value="Join"')            
+        self.assertNotContains(response, 'value="Join"')
     
     
     def tearDown(self):

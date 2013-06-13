@@ -19,7 +19,11 @@
             {% for item in registration.items.all %}
                 {{ item.title }}<br />
             {% endfor %}
-            We have you down as <strong>{{ registration.student.fullname }}</strong>, reachable at <strong>{{ registration.student.phone }}</strong>. We've sent a confirmation email to you at <strong>{{ registration.student.email }}</strong>. See you in class!
+            We have you down as <strong>{{ registration.student.fullname }}</strong>
+            {% if registration.student.phone %}
+            , reachable at <strong>{{ registration.student.phone }}</strong>
+            {% endif %}
+            . We've sent a confirmation email to you at <strong>{{ registration.student.email }}</strong>. See you in class!
         </div>
         {% endblock registration_complete_body %}        
     </div>
