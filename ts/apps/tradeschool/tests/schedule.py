@@ -248,9 +248,35 @@ class ScheduleTestCase(TestCase):
         response = self.client.get(url)
         
         # verify that the schedule appears on the page
-        self.assertContains(response, schedule.course.title)        
+        self.assertContains(response, schedule.course.title)
         
+    
+    def test_teacher_approval_email(self):
+        """ Tests that the TeacherClassApproval is sent after a schedule is approved.
+        """
+        # submit a schedule
+        response = self.is_successful_submission(self.valid_data)        
+        
+        schedule = response.context['schedule']
+        url = reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, })        
+        
+        # empty the test outbox
+        mail.outbox = []
+                
+        # approve the schedule
+        schedule.course_status = 3 
+        schedule.save()
+        
+        # test that one message was sent.
+        self.assertEqual(len(mail.outbox), 1)        
 
+        # verify the email status was updated
+        email = schedule.emails.teacher_class_approval        
+        
+        # verify that the subject of the message is correct.
+        self.assertEqual(mail.outbox[0].subject, email.subject)
+                
+        
     def test_edit_schedule_template(self):
         """ Test that the schedule-edit view doesn't load unless 
             a schedule_slug for an existing Schedule object is provided.
