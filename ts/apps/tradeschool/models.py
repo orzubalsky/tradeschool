@@ -120,7 +120,7 @@ class Email(Base):
         return c
 
     def __unicode__ (self):
-        return self.content
+        return self.subject
 
 
 class TimedEmail(Email):

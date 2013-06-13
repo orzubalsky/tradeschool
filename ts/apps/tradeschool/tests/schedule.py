@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
+from django.core import mail
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -204,6 +205,51 @@ class ScheduleTestCase(TestCase):
         # check that the time object got deleted 
         self.assertFalse(Time.objects.filter(pk=time.pk).exists())
 
+    
+    def test_teacher_confirmation_email(self):
+        """ Tests that the TeacherConfirmation is sent after
+            a successful submission.
+        """
+        # submit a schedule
+        response = self.is_successful_submission(self.valid_data)        
+        
+        schedule = response.context['schedule']
+        
+        # test that one message was sent.
+        self.assertEqual(len(mail.outbox), 1)        
+
+        # verify the email status was updated
+        email = schedule.emails.teacher_confirmation        
+        
+        # verify that the subject of the message is correct.
+        self.assertEqual(mail.outbox[0].subject, email.subject)
+
+
+    def test_schedule_status(self):
+        """ Tests that the only approved schedules appear on the schedule-list view.
+        """
+        # submit a schedule
+        response = self.is_successful_submission(self.valid_data)        
+        
+        schedule = response.context['schedule']
+        url = reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, })
+        
+        # go to schedule-list view
+        response = self.client.get(url)
+        
+        # verify that the schedule is not on the page
+        self.assertNotContains(response, schedule.course.title)
+        
+        # approve the schedule
+        schedule.course_status = 3 
+        schedule.save()
+        
+        # reload the page
+        response = self.client.get(url)
+        
+        # verify that the schedule appears on the page
+        self.assertContains(response, schedule.course.title)        
+        
 
     def test_edit_schedule_template(self):
         """ Test that the schedule-edit view doesn't load unless 
