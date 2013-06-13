@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
+from django.core import mail
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -91,6 +92,21 @@ class RegistrationTestCase(TestCase):
 
         # check that the registration got saved correctly
         self.compare_registration_to_data(response.context['registration'])
+        
+    
+    def test_student_confirmation_email(self):
+        """ Tests that the StudentConfirmation is sent after a schedule is approved.
+        """
+        # register to a schedule
+        response = self.do_register()
+        
+        # test that one message was sent.
+        self.assertEqual(len(mail.outbox), 1)        
+
+        email = self.schedule.emails.student_confirmation        
+        
+        # verify that the subject of the message is correct.
+        self.assertEqual(mail.outbox[0].subject, email.subject)        
         
         
     def test_register_again(self):

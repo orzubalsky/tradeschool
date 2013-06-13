@@ -413,7 +413,8 @@ class ScheduleTestCase(TestCase):
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
         self.assertEqual(schedule.feedback_set.count(), 1)
-            
+
+
     def tearDown(self):
         """ Delete branch files in case something went wrong 
             and the files weren't deleted.
