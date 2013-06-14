@@ -66,31 +66,29 @@ class EmailTestCase(TestCase):
         self.assertEqual(message_obj.body, email_obj.preview(self.schedule))        
 
 
-    def test_email_teacher_reminder(self):
-        """ Tests that the TeacherReminder Email is sent with 
-            the correct data.
+    def verify_email_teacher(self, email_obj):
+        """ Tests that the an Email is sent to a teacher 
+            with the correct data.
         """
         # send email via the ScheduleEmailContainer object
         sec = self.schedule.emails
         
         # send email
-        sec.email_teacher(sec.teacher_reminder)
+        sec.email_teacher(email_obj)
         
         # verify the email is in the outbox
         self.assertEqual(len(mail.outbox), 1)
         
         # verify the email data is correct
         sent_email = mail.outbox[0]
-        self.verify_email_data(sent_email, sec.teacher_reminder)
+        self.verify_email_data(sent_email, email_obj)
         self.assertTrue(self.schedule.course.teacher.email in sent_email.to)
 
 
-    def test_email_student_reminders(self):
-        """ Tests that the StudentReminder Email is sent with 
+    def verify_email_students(self, email_obj, registration_count = 5):
+        """ Tests that an Email is sent to students with 
             the correct data to all registered students.
-        """
-        registration_count = 5
-        
+        """        
         # register multiple times to the schedule
         self.do_registration(registration_count)
         
@@ -98,7 +96,7 @@ class EmailTestCase(TestCase):
         sec = self.schedule.emails
 
         # send emails
-        sec.email_students(sec.student_reminder)
+        sec.email_students(email_obj)
 
         # verify the email is in the outbox
         self.assertEqual(len(mail.outbox), registration_count)
@@ -106,9 +104,29 @@ class EmailTestCase(TestCase):
         # verify the email data is correct
         for i in range(registration_count):
             sent_email = mail.outbox[i]
-            self.verify_email_data(sent_email, sec.student_reminder)
+            self.verify_email_data(sent_email, email_obj)
             self.assertTrue(self.schedule.students.all()[i].email in sent_email.to) 
         
+        
+    def test_teacher_reminder(self):
+        """ Tests the TeacherReminder Email."""
+        self.verify_email_teacher(self.schedule.emails.teacher_reminder)
+
+
+    def test_teacher_feedback(self):
+        """ Tests the TeacherFeedback Email."""        
+        self.verify_email_teacher(self.schedule.emails.teacher_feedback)
+
+
+    def test_student_reminder(self):
+        """ Tests the StudentReminder Email."""        
+        self.verify_email_students(self.schedule.emails.student_reminder)
+
+
+    def test_student_feedback(self):
+        """ Tests the StudentFeedback Email."""        
+        self.verify_email_students(self.schedule.emails.student_feedback)
+
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
