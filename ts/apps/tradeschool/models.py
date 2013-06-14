@@ -64,11 +64,11 @@ class Email(Base):
         return body
 
     def send(self, schedule_obj, recipient, registration=None):
-        body = self.preview(schedule_obj)
-        site = Site.objects.get_current()
-        branch = schedule_obj.course.branch.all()[0]
+        body    = self.preview(schedule_obj)
+        branch  = schedule_obj.course.branch.all()[0]
         send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
+        self.save()
 
     def template_context(self, schedule_obj, registration=None):
         """ """
@@ -542,7 +542,7 @@ class ScheduleEmailContainer(EmailContainer):
         """shortcut method to send an email via the ScheduleEmailContainer object."""
         for registration in self.schedule.registration_set.all():
             if registration.registration_status == 'registered':
-                return self.email_student(email, registration)
+                self.email_student(email, registration)
 
     def preview(self, email):
         """shortcut method to preview an email via the ScheduleEmailContainer object."""

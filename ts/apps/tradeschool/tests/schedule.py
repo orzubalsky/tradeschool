@@ -236,9 +236,11 @@ class ScheduleTestCase(TestCase):
 
         # verify the email status was updated
         email = schedule.emails.teacher_confirmation        
+        self.assertEqual(email.email_status, 'sent')
         
         # verify that the subject of the message is correct.
         self.assertEqual(mail.outbox[0].subject, email.subject)
+        
 
 
     def test_schedule_status(self):
@@ -287,7 +289,8 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)        
 
         # verify the email status was updated
-        email = schedule.emails.teacher_class_approval        
+        email = schedule.emails.teacher_class_approval
+        self.assertEqual(email.email_status, 'sent')            
         
         # verify that the subject of the message is correct.
         self.assertEqual(mail.outbox[0].subject, email.subject)

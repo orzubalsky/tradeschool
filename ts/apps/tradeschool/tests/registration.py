@@ -104,6 +104,7 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)        
 
         email = self.schedule.emails.student_confirmation        
+        self.assertEqual(email.email_status, 'sent')
         
         # verify that the subject of the message is correct.
         self.assertEqual(mail.outbox[0].subject, email.subject)        
