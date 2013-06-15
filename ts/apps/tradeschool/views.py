@@ -143,7 +143,7 @@ def teacher_info(request, branch_slug=None):
         }, context_instance=RequestContext(request))
 
 
-def past_schedules(request, branch_slug=None):
+def schedule_list_past(request, branch_slug=None):
     """display a list of past classes for the current branch."""
 
     branch = get_object_or_404(Branch, slug=branch_slug)

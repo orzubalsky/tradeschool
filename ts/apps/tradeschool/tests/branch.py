@@ -220,7 +220,7 @@ class BranchTestCase(TestCase):
 
         # verify the page is not loading
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)        
+        self.assertEqual(response.status_code, 404)
         
         # delete the page
         branch_page.delete()
