@@ -272,6 +272,9 @@ class BranchTestCase(TestCase):
         # load a page to check the timezone setting
         response = self.client.get(url)
 
+        # verify the branch's timezone is in the context
+        self.assertEqual(response.context['TIME_ZONE'], branch.timezone)
+        
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
