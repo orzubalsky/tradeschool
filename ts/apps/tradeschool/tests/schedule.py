@@ -221,6 +221,19 @@ class ScheduleTestCase(TestCase):
         # check that the ScheduleEmailContainer has all 7 Email objects
         self.assertEqual(schedule.emails.emails.__len__(), 7)
         
+        # store this object in a variable for convenience 
+        bec = BranchEmailContainer.objects.filter(branch__in=schedule.course.branch.all())[0]
+                
+        # iterate over the emails in the schedule's ScheduleEmailContainer
+        for email_name, schedule_email_obj in schedule.emails.emails.items():
+            # find the same email type in the BranchEmailContainer, 
+            # where the schedule emails were copied from
+            default_email = getattr(bec, email_name)
+
+            # verify that the email was copied correctly
+            self.assertEqual(schedule_email_obj.subject, default_email.subject)
+            self.assertEqual(schedule_email_obj.content, default_email.content)        
+        
     
     def test_teacher_confirmation_email(self):
         """ Tests that the TeacherConfirmation is sent after
@@ -240,35 +253,8 @@ class ScheduleTestCase(TestCase):
         
         # verify that the subject of the message is correct.
         self.assertEqual(mail.outbox[0].subject, email.subject)
-        
 
 
-    def test_schedule_status(self):
-        """ Tests that the only approved schedules appear on the schedule-list view.
-        """
-        # submit a schedule
-        response = self.is_successful_submission(self.valid_data)        
-        
-        schedule = response.context['schedule']
-        url = reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, })
-        
-        # go to schedule-list view
-        response = self.client.get(url)
-        
-        # verify that the schedule is not on the page
-        self.assertNotContains(response, schedule.course.title)
-        
-        # approve the schedule
-        schedule.course_status = 3 
-        schedule.save()
-        
-        # reload the page
-        response = self.client.get(url)
-        
-        # verify that the schedule appears on the page
-        self.assertContains(response, schedule.course.title)
-        
-    
     def test_teacher_approval_email(self):
         """ Tests that the TeacherClassApproval is sent after a schedule is approved.
         """
@@ -373,66 +359,78 @@ class ScheduleTestCase(TestCase):
         self.compare_schedule_to_data(response.context['schedule'])
 
 
-    def test_schedule_feedback(self):
-        """ Tests that the schedule-feedback page loads, that it's only
-            possible to post feedback after a scheduled class had taken
-            place, and that the submitted form is saved correctly.
+    def test_schedule_status(self):
+        """ Tests that the only approved schedules appear on the schedule-list view.
         """
-        # save a new schedule
+        # submit a schedule
         response = self.is_successful_submission(self.valid_data)        
-        
-        # new schedule object 
-        schedule = response.context['schedule']
-        
-        # make sure schedule is 'pending'
-        self.assertEqual(schedule.course_status, 0)
-        
-        # construct feedback url
-        feedback_url = reverse('schedule-feedback', kwargs={'branch_slug' : self.branch.slug, 'schedule_slug' : schedule.slug, 'feedback_type' : 'student' })
-        
-        # load url
-        response = self.client.get(feedback_url)
-        
-        # page should not load if the schedule is not approved
-        self.assertEqual(response.status_code, 404)
-        
-        # approve schedule and save
-        schedule.course_status = 3
-        schedule.save()
-        
-        # loading the url again
-        response = self.client.get(feedback_url)
 
-        # if scheduled class didn't take place yet, the page should not load
-        self.assertEqual(response.status_code, 404)
+        schedule = response.context['schedule']
+        url = reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, })
+
+        # go to schedule-list view
+        response = self.client.get(url)
+
+        # verify that the schedule is not on the page
+        self.assertNotContains(response, schedule.course.title)
+
+        # approve the schedule
+        schedule.course_status = 3 
+        schedule.save()
+
+        # reload the page
+        response = self.client.get(url)
+
+        # verify that the schedule appears on the page
+        self.assertContains(response, schedule.course.title)
+
+
+    def test_schedule_past_page(self):
+        """ Tests that the schedule-past page loads and displays
+            only approved scheduled classes that took place in the branch.
+        """
+        # submit a schedule
+        response = self.is_successful_submission(self.valid_data)
+        schedule = response.context['schedule']
+        branch   = schedule.course.branch.all()[0]
         
-        # move the schedule to a time in the past
+        # there should be no past schedules at this point, 
+        # so the link to past scheduled should not appear 
+        # on the branch's schedule-list view
+        schedule_list_url = reverse('schedule-list', kwargs={'branch_slug' : branch.slug })
+        response = self.client.get(schedule_list_url)
+        #self.assertNotContains(response, 'Past') ** NOTE: not implemented yet -Or
+        
+        # past schedules url
+        url = reverse('schedule-list-past', kwargs={'branch_slug' : branch.slug })
+        
+        # verify page loads with the branch's template
+        response = self.client.get(url) 
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(self.branch.slug + '/schedule_list_past.html')
+        
+        # verify the scheduled class is not in there
+        self.assertNotContains(response, schedule.course.title)
+                
+        # move schedule to a past time
         now = datetime.utcnow().replace(tzinfo=utc) 
         schedule.start_time = now - timedelta(hours=47)
-        schedule.end_time = now - timedelta(hours=48)
+        schedule.end_time   = now - timedelta(hours=48)
+        schedule.course_status = 0
         schedule.save()
         
-        # loading the url again
-        response = self.client.get(feedback_url)
+        # schedule should still not appear, since it's approved
+        response = self.client.get(url) 
+        self.assertNotContains(response, schedule.course.title)
         
-        # view should load now
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_feedback.html')
-        
-        # test an empty form submission
-        response = self.client.post(feedback_url, data={}, follow=True)
-        
-        # an empty form should return 1 error for the required fields
-        self.assertContains(response, 'Please', count=1)
-        
-        # post a valid form
-        response = self.client.post(feedback_url, data={'content' : 'test feedback' }, follow=True)
-        
-        # check the form was submitted successfully
-        self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
-        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
-        self.assertEqual(schedule.feedback_set.count(), 1)
+        # change the scheduled class's status to approved
+        schedule.course_status = 3
+        schedule.save()
 
+        # verify that the scheduled class now appears 
+        response = self.client.get(url) 
+        self.assertContains(response, schedule.course.title)
+        
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 

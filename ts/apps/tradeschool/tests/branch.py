@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import translation
 from datetime import *
 import shutil, os, os.path
 from tradeschool.utils import Bunch
@@ -11,7 +12,7 @@ from tradeschool.models import *
 
 
 
-class BranchSetupTestCase(TestCase):
+class BranchTestCase(TestCase):
     """ Test the process of setting up a new branch.
     """
     fixtures = ['test_admin.json', 'test_branch.json']    
@@ -120,14 +121,24 @@ class BranchSetupTestCase(TestCase):
         """ Test that copies of the email templates were created
             When a new branch is saved.
         """
-        # save a new branch
-        self.branch.save()
-
-        # check that one BranchEmailContainer was created for branch
+        # verify that one BranchEmailContainer was created for branch
         self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
 
-        # check that the BranchEmailContainer has all 7 Email objects
+        # verify that the BranchEmailContainer has all 7 Email objects
         self.assertEqual(self.branch.emails.emails.__len__(), 7)
+
+        # store this object in a variable for convenience 
+        dec = DefaultEmailContainer.objects.all()[0]
+
+        # iterate over the emails in the branch's BranchEmailContainer
+        for email_name, branch_email_obj in self.branch.emails.emails.items():
+            # find the same email type in the DefaultEmailContainer, 
+            # where the branch emails were copied from
+            default_email = getattr(dec, email_name)
+
+            # verify that the email was copied correctly
+            self.assertEqual(branch_email_obj.subject, default_email.subject)
+            self.assertEqual(branch_email_obj.content, default_email.content)
 
 
     def test_branch_files(self):
@@ -180,6 +191,74 @@ class BranchSetupTestCase(TestCase):
         response = self.client.get(reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, }))
         self.assertEqual(response.status_code, 200)        
         self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
+
+
+    def test_branch_page(self):
+        """ Tests that creating a BranchPage results in the page displaying on the website.
+        """
+        # save a new branch
+        self.branch.save()
+                
+        # save a new BranchPage
+        branch_page = BranchPage(branch=self.branch, url='/test-page/', title='test page', content='test page content')
+        branch_page.save()
+
+        # go to the new page's url
+        url = reverse('branch-page', kwargs={'branch_slug' : self.branch.slug, 'url' : branch_page.url })
+        response = self.client.get(url)
+        
+        # verify the page is loading 
+        self.assertEqual(response.status_code, 200)        
+        
+        # verify that the BranchPage data is correct
+        self.assertContains(response, 'Test Page')
+        self.assertContains(response, 'test page content')
+        
+        # change the page's status to inactive
+        # inactive pages should stay in the db but not on the website
+        branch_page.is_active = False
+        branch_page.save()
+
+        # verify the page is not loading
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
+        # delete the page
+        branch_page.delete()
+          
+        # verify the page is gone
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+    
+    
+    def test_branch_language(self):
+        """ Tests that the templates are rendered with the branch's language settings.
+            Language is one of the fields in the Branch model.
+        """
+        # get a branch and set its language to Englisgh
+        branch = Branch.objects.all()[0]
+        
+        # verify that all languages that are defined in the base.py settings file
+        # can be loaded correctly
+        for language_code, language_name in settings.LANGUAGES:
+            # save language in branch
+            branch.language = language_code
+            branch.save()
+        
+            # it's not possible to use translation.activate in the context of a unittest-
+            # what happens is that once a get/post request is made, django calls translation.activate
+            # with the language that's defined in settings (or the testcase's settings override).
+            # This means we can't really test the language switching unless we override the settings.
+            settings.LANGUAGE_CODE = language_code
+        
+            # load a page to check the language setting
+            url = reverse('schedule-list', kwargs={'branch_slug' : branch.slug })
+            response = self.client.get(url)
+
+            # verify the languages match. test in 2 parts, since the language codes don't really match-
+            # they're both es_es and es-es. 
+            self.assertEqual(branch.language[:2], response.context['LANGUAGE_CODE'][:2])
+            self.assertEqual(branch.language[3:], response.context['LANGUAGE_CODE'][3:])
 
 
     def tearDown(self):

@@ -59,10 +59,11 @@
             <ul>
             {% for page in branch_pages %}
                 <li><a href="/{{ branch.slug }}/page{{ page.url }}">{{ page.title|title }}</a></li>
-            {% endfor %}        		    
-                <li><a href="{% url 'past-classes' branch_slug=branch.slug %}">{% blocktrans context "Past Classes" %}Past{% endblocktrans %}</a></li>
+            {% endfor %}
+                <li><a href="{% url 'schedule-list-past' branch_slug=branch.slug %}">{% blocktrans context "Past Classes" %}Past{% endblocktrans %}</a></li>               
                 <li class="tshq"><a href="/">{% blocktrans context "Text for the Tradeschool.coop link" %}TS HQ{% endblocktrans %}</a></li>
             </ul>
+            
         </div>
         {% endblock navigation %}		
 

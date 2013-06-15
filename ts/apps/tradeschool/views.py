@@ -143,7 +143,7 @@ def teacher_info(request, branch_slug=None):
         }, context_instance=RequestContext(request))
 
 
-def past_schedules(request, branch_slug=None):
+def schedule_list_past(request, branch_slug=None):
     """display a list of past classes for the current branch."""
 
     branch = get_object_or_404(Branch, slug=branch_slug)
@@ -399,7 +399,7 @@ def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_ty
         },context_instance=RequestContext(request))    
     
 
-def branchpage(request, url, branch_slug=None):
+def branch_page(request, url, branch_slug=None):
     """this is copied from django.contrib.flatpages.views only in order to 
        query the BranchPage table instead of FlatPage."""
         
@@ -407,11 +407,11 @@ def branchpage(request, url, branch_slug=None):
         url = '/' + url
     
     try:
-        branch_page = get_object_or_404(BranchPage, url__exact=url)
+        branch_page = get_object_or_404(BranchPage, url__exact=url, is_active=True)
     except Http404:
         if not url.endswith('/') and settings.APPEND_SLASH:
             url += '/'
-            branch_page = get_object_or_404(BranchPage, url__exact=url)
+            branch_page = get_object_or_404(BranchPage, url__exact=url, is_active=True)
             return HttpResponsePermanentRedirect('%s/' % request.path)
         else:
             raise
