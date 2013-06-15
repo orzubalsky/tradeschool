@@ -58,8 +58,6 @@
 </head>
 <body class="{% if is_popup %}grp-popup {% endif %}{% block bodyclass %}{% endblock %}{% if LANGUAGE_BIDI %} rtl{% endif %}">
     
-    {% timezone branch.timezone %}
-    
     <div id="grp-container">
 
         <!-- HEADER -->
@@ -122,7 +120,5 @@
         {% block footer %}{% endblock %}
 
     </div>
-
-{% endtimezone %}	    
 </body>
 </html>

@@ -2,6 +2,7 @@ from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib.flatpages.models import FlatPage
 from flatpages_tinymce.admin import FlatPageAdmin
@@ -514,7 +515,16 @@ class ScheduleAdmin(BaseAdmin):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
-            
+
+    def save_model(self, request, obj, form, change):
+        """
+        """
+        from django.utils import timezone
+
+
+           
+        obj.save()
+                           
     def populate_notifications(self, request, queryset):
         """ call the populate_notifications() method in order to reset email templates for the schedule."""        
         for schedule in queryset:
