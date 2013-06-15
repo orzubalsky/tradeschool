@@ -27,10 +27,15 @@ class Base(Model):
     
     class Meta:
         abstract = True
-                    
-    created     = DateTimeField(auto_now_add=True, editable=False)
-    updated     = DateTimeField(auto_now=True, editable=False)
-    is_active   = BooleanField(default=1)
+    
+    # Translators:  Used wherever a created time stamp is needed.                   
+    created     = DateTimeField(verbose_name=_("created"), auto_now_add=True, editable=False)
+    
+    # Translators: Used wherever an update time stamp is needed.
+    updated     = DateTimeField(verbose_name=_("updated"), auto_now=True, editable=False)
+    
+    # Translators: Used to determine whether something is active in the front end or not.
+    is_active   = BooleanField(verbose_name=_("is active"), default=1)
 
     def __unicode__ (self):
         if hasattr(self, "title") and self.title:
@@ -48,14 +53,24 @@ class Email(Base):
         abstract = True
 
     EMAIL_CHOICES = (
-        ('disabled', 'Disabled'),
-        ('not_sent', 'Not Sent Yet'),
-        ('sent', 'Sent')
+        # Translators: Determines the status of an e-mail - disabled.
+        ('disabled', _('Disabled')),
+        
+        # Translators: Determines the status of an e-mail - Not Sent.
+        ('not_sent', _('Not Sent Yet')),
+        
+        # Translators: Determines the status of an e-mail - Sent.
+        ('sent', _('Sent'))
     )
-
-    subject      = CharField(max_length=140)
-    content      = TextField()
-    email_status = CharField(max_length=30, choices=EMAIL_CHOICES, default='not_sent')
+    
+    # Translators: The subject of an e-mail.
+    subject      = CharField(verbose_name=_("subject"), max_length=140)
+    
+    # Translators: The content of an e-mail.
+    content      = TextField(verbose_name=_("content"))
+    
+    # Translators: The status of an e-mail. See the Toople list above. 
+    email_status = CharField(verbose_name=_("email status"), max_length=30, choices=EMAIL_CHOICES, default='not_sent')
 
     def preview(self, schedule_obj, registration=None):
         template = Template(self.content)
@@ -131,10 +146,15 @@ class TimedEmail(Email):
     """
     class Meta:
         abstract = True
-
-    send_on      = DateTimeField(blank=True, null=True)
-    days_delta   = IntegerField(default=-1)
-    send_time    = TimeField(default=time(10,0,0))
+    
+    # Translators: The date for when an e-mail will be sent.
+    send_on      = DateTimeField(verbose_name=_("Send on"), blank=True, null=True)
+    
+    # Translators: How many days before the class the email will be sent.
+    days_delta   = IntegerField(verbose_name=_("Days before"), default=-1)
+    
+    # Translators: The time for when an e-mail will be sent.
+    send_time    = TimeField(verbose_name=_("Send time"), default=time(10,0,0))
 
     def set_send_on(self, event_datetime):
         # construct a datetime object after adding / subtracting the days delta
@@ -158,11 +178,26 @@ class TimedEmail(Email):
 
 class StudentConfirmation(Email):
     """An email that is sent when a student registered to a scheduled class."""
-    pass
-
-
+    
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Student confirmation")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Student confirmations")
+        
 class StudentReminder(TimedEmail):
     """An email that is sent to a registered student a day before a class is scheduled to start."""
+    
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Student reminder")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Student reminders")
+    
     def save(self, *args, **kwargs):
         self.days_delta = -1
         self.send_time = time(10,0,0)
@@ -172,6 +207,14 @@ class StudentReminder(TimedEmail):
 class StudentFeedback(TimedEmail):
     """An email that is sent to a student a day after a scheduled class took place."""
 
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Student feedback e-mail")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Student feedback e-mails")
+
     def save(self, *args, **kwargs):
         self.days_delta = 1
         self.send_time = time(16,0,0)
@@ -180,7 +223,14 @@ class StudentFeedback(TimedEmail):
 
 class TeacherConfirmation(Email):
     """An email that is sent when a teacher submitted a class."""
-    pass
+
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Teacher confirmation")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Teacher confirmations")
 
 
 class TeacherClassApproval(Email):
@@ -191,6 +241,14 @@ class TeacherClassApproval(Email):
 class TeacherReminder(TimedEmail):
     """An email that is sent to a teacher a day before their class takes place."""
     
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Teacher reminder")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Teacher reminders")
+    
     def save(self, *args, **kwargs):
         self.days_delta = -1
         self.send_time = time(18,0,0)
@@ -200,6 +258,14 @@ class TeacherReminder(TimedEmail):
 class TeacherFeedback(TimedEmail):
     """An email that is sent to a teacher a day after a scheduled class took place."""
 
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Teacher feedback e-mail")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Teacher feedback e-mails")
+        
     def save(self, *args, **kwargs):
         self.days_delta = 1
         self.send_time = time(18,0,0)
@@ -211,14 +277,27 @@ class EmailContainer(Base):
     """
     class Meta:
         abstract = True
-
-    student_confirmation   = ForeignKey(StudentConfirmation)
-    student_reminder       = ForeignKey(StudentReminder)
-    student_feedback       = ForeignKey(StudentFeedback)
-    teacher_confirmation   = ForeignKey(TeacherConfirmation)
-    teacher_class_approval = ForeignKey(TeacherClassApproval)
-    teacher_reminder       = ForeignKey(TeacherReminder)
-    teacher_feedback       = ForeignKey(TeacherFeedback)
+    
+    # Translators: In the Branch E-mail page, the label for student confirmation e-mail
+    student_confirmation   = ForeignKey(StudentConfirmation, verbose_name=_("Student Confirmation"))
+    
+    # Translators: ... The lable for Student Reminder e-mail
+    student_reminder       = ForeignKey(StudentReminder, verbose_name=_("Student Reminder"))
+    
+    # Translators: ... The lable for Student Feedback e-mail
+    student_feedback       = ForeignKey(StudentFeedback, verbose_name=_("Student Feedback"))
+    
+    # Translators: ... The lable for Teacher confirmation e-mail
+    teacher_confirmation   = ForeignKey(TeacherConfirmation, verbose_name=_("Teacher Confirmation"))
+    
+    # Translators: ... The lable for Teacher Class Approval e-mail
+    teacher_class_approval = ForeignKey(TeacherClassApproval, verbose_name=_("Teacher Class Approval"))
+    
+    # Translators: ... The lable for Teacher Reminder e-mail
+    teacher_reminder       = ForeignKey(TeacherReminder, verbose_name=_("Teacher Reminder"))
+    
+    # Translators: ... The lable for Teacher Feedback e-mail
+    teacher_feedback       = ForeignKey(TeacherFeedback, verbose_name=_("Teacher Feedback"))
 
     def emails():
         def fget(self):
@@ -238,6 +317,14 @@ class EmailContainer(Base):
 class DefaultEmailContainer(EmailContainer):
     """
     """
+    
+    class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Default e-mail container")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Default e-mail containers")
 
 class Location(Base):
     """
@@ -245,22 +332,54 @@ class Location(Base):
     """
     class Meta:
         abstract = True
-
-    title   = CharField(max_length=100, help_text="The name of the space")
-    phone   = CharField(max_length=20, blank=True, null=True, help_text="Optional.")
-    city    = CharField(max_length=100)
-    state   = USStateField(null=True, blank=True, verbose_name="State", help_text="If in the US.")
-    country = CountryField()
+    
+    title   = CharField(
+                    # Translators: This is for the name of a Trade School location or venue.
+                    verbose_name=_("title"), 
+                    max_length=100, 
+                    # Translators: Contextual Help.
+                    help_text=_("The name of the space")
+                )
+    
+    phone   = CharField(
+                    verbose_name=_("phone"),
+                    max_length=20, 
+                    blank=True, 
+                    null=True,
+                    # Transalators: Contextual Help. 
+                    help_text=_("Optional.")
+                )
+    
+    city    = CharField(
+                    verbose_name=_("city"),
+                    max_length=100
+                )
+    
+    state   = USStateField(
+                    verbose_name=_("state"),
+                    null=True, 
+                    blank=True,
+                    # Translators: Contextual Help
+                    help_text=_("If in the US.")
+                )
+    
+    country = CountryField(
+                    verbose_name=_("country")
+                )
 
 
 class BranchEmailContainer(EmailContainer):
     """
     """        
     class Meta:
-        verbose_name = "Branch Emails"
-        verbose_name_plural = "Branch Emails"
-
-    branch = OneToOneField("Branch", related_name="emails")
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Branch Emails")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Branch Emails")
+    
+    branch = OneToOneField("Branch", verbose_name=_("branch"), related_name="emails")
 
     def __unicode__ (self):
         return u"for %s" % self.branch.title
@@ -269,8 +388,9 @@ class BranchEmailContainer(EmailContainer):
 class Cluster(Base):
     """Branches can be grouped together for possibly displaying them together on the website.
         For example: multiple branches in one city can belong to the same group."""
-        
-    name = CharField(max_length=100) 
+    
+    # Translators: The name of a cluster if there is one.    
+    name = CharField(verbose_name=_("name"), max_length=100) 
     
     
 
@@ -282,21 +402,44 @@ class Branch(Location):
     """    
     
     class Meta:
-        verbose_name_plural = 'Branches'
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Branch')
+        
+        # Translators: Plural.
+        verbose_name_plural = _('Branches')
+        
         ordering = ['title']
         
     COMMON_TIMEZONE_CHOICES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
     
-    slug        = SlugField(max_length=120, help_text="This is the part that comes after 'http://tradeschool.coop/' in the URL")
-    email       = EmailField(max_length=100)
-    timezone    = CharField(max_length=100, choices=COMMON_TIMEZONE_CHOICES)
-    language    = CharField(max_length=50, choices=settings.LANGUAGES, null=True)
-    organizers  = ManyToManyField(User)
-    site        = ForeignKey(Site)
-    cluster     = ForeignKey(Cluster, null=True)
-    header_copy = HTMLField(null=True, blank=True, default="Barter for knowledge")
-    intro_copy  = HTMLField(null=True, blank=True)
-    footer_copy = HTMLField(null=True, blank=True)
+    slug        = SlugField(
+                        # Translators: This is the part that comes after tradeschool.coop/ en el URL.
+                        verbose_name=_("slug"),
+                        max_length=120, 
+                        # Translators: Contextual Help.
+                        help_text=_("This is the part that comes after 'http://tradeschool.coop/' in the URL")
+                    )
+                     
+    email       = EmailField(verbose_name=_("e-mail"), max_length=100)
+    timezone    = CharField(verbose_name=_("timezone"), max_length=100, choices=COMMON_TIMEZONE_CHOICES)
+    language    = CharField(verbose_name=_("language"), max_length=50, choices=settings.LANGUAGES, null=True)
+    organizers  = ManyToManyField(User, verbose_name=_("organizers"))
+    
+    # Translators: This is the Branches domain address.
+    site        = ForeignKey(Site, verbose_name=_("site"))
+    
+    # Translators: If this Trade School belogns to a set of Trade Schools.
+    cluster     = ForeignKey(Cluster, verbose_name=_("cluster"), null=True)
+    
+    # Translators: This is the part that says 'Barter for Knowledge' which is also editable.
+    header_copy = HTMLField(verbose_name=_("header"), null=True, blank=True, default="Barter for knowledge")
+    
+    # Translators: This is the part with room for a small statement.
+    intro_copy  = HTMLField(verbose_name=_("intro"), null=True, blank=True)
+    
+    # Translators: This is the part at the end of the page. 
+    footer_copy = HTMLField(verbose_name=_("footer"), null=True, blank=True)
 
     objects   = Manager()
     on_site   = CurrentSiteManager()
@@ -374,13 +517,32 @@ class Venue(Location):
         colorValue = random.randint(0, 16777215)
         return "#%x" % colorValue
 
-    venue_type  = SmallIntegerField(max_length=1, choices=TYPE_CHOICES, default=0)
-    address_1   = CharField(max_length=50, verbose_name="Street")
-    address_2   = CharField(max_length=100, blank=True, null=True)
-    capacity    = SmallIntegerField(max_length=4, default=20, help_text="How many people fit in the space?")     
-    resources   = TextField(null=True, default="Chairs, Tables", help_text="What resources are available at the space?")
-    color       = CharField(max_length=7, default=random_color)
-    branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+    venue_type  = SmallIntegerField(max_length=1, choices=TYPE_CHOICES, default=0) 
+    address_1   = CharField(max_length=50, verbose_name=_("Address 1"))
+    address_2   = CharField(max_length=100, blank=True, null=True, verbose_name=_("Address 2"))
+    capacity    = SmallIntegerField(
+                        max_length=4, 
+                        default=20, 
+                        # Translators: the capacity of the venue where you are hosting classes.
+                        verbose_name=_("capacity"),
+                        # Translators: Contextual Help
+                        help_text=_("How many people fit in the space?")
+                    )
+                    
+    resources   = TextField(
+                        # Translators: The field name for resources of a venue.
+                        verbose_name=_("resources"),
+                        null=True, 
+                        default="For Example: Chairs, Tables",
+                        # Translators: Contextual Help 
+                        help_text=_("What resources are available at the space?")
+                    )
+    color       = CharField(verbose_name=_("color"), max_length=7, default=random_color)
+    branch      = ForeignKey(
+                        Branch, 
+                        verbose_name=_("branch"), 
+                        help_text="What tradeschool is this object related to?"
+                    )
 
 
 class PersonManager(Manager):
@@ -398,18 +560,63 @@ class Person(Base):
     """
     
     class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = "Person"
+        
+        # Translators: Plural.
         verbose_name_plural = "People"
+        
         permissions = (
             ('view_object', 'View object'),
         )        
             
-    fullname    = CharField(max_length=100, verbose_name="your name", help_text="This will appear on the site.")
-    email       = EmailField(max_length=100, verbose_name="Email address", help_text="Used only for us to contact you.")
-    phone       = CharField(max_length=20, blank=True, null=True, verbose_name="Cell phone number", help_text="Optional. Used only for us to contact you.")
-    bio         = TextField(blank=True, verbose_name="A few sentences about you", help_text="For prospective students to see on the website")
-    website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
+    fullname    = CharField(
+                        max_length=100, 
+                        verbose_name=_("your name"), 
+                        # Translators: Contextual Help.
+                        help_text=_("This will appear on the site.")
+                    )
+                    
+    email       = EmailField(
+                        max_length=100, 
+                        verbose_name=_("Email address"),
+                        # Translators: Contextual Help. 
+                        help_text=_("Used only for us to contact you.")
+                    )
+                    
+    phone       = CharField(
+                        max_length=20, 
+                        blank=True, 
+                        null=True, 
+                        verbose_name=_("Phone number"), 
+                        # Translators: Contextual Help
+                        help_text=_("Optional. Used only for us to contact you.")
+                    )
+                        
+    bio         = TextField(
+                        blank=True, 
+                        verbose_name=_("A few sentences about you"), 
+                        # Translators: Contextual Help
+                        help_text=_("For prospective students to see on the website")
+                    )
+                    
+    website     = URLField(
+                        max_length=200, 
+                        blank=True, 
+                        null=True, 
+                        verbose_name=_("Your website / blog URL"), 
+                        # Translators: Contextual Help
+                        help_text=_("Optional.")
+                    )
+                    
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-    branch      = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
+    branch      = ManyToManyField(
+                        Branch, 
+                        verbose_name=_("branch"), 
+                        # Translators: Contextual Help
+                        help_text=_("What tradeschool is this object related to?")
+                    )
     
     objects = Manager()
 
@@ -424,6 +631,13 @@ class TeacherManager(PersonManager):
 
 class Teacher(Person):
     class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Teacher")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Teachers")
+        
         proxy = True
         
     objects = TeacherManager()
@@ -436,6 +650,13 @@ class StudentManager(PersonManager):
 
 class Student(Person):
     class Meta:
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Student")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Students")
+        
         proxy = True
  
     objects = StudentManager()
@@ -447,8 +668,10 @@ class Course(Base):
     """
 
     class Meta:
+        
         # Translators: Any times that the word class is shown as singular
         verbose_name = _("Class")
+        
         # Translators: Any times that the word class is shown as plural
         verbose_name_plural = _("Classes")
 
@@ -461,13 +684,13 @@ class Course(Base):
         (5, 'Music'),
         (6, 'Org')
     )
-
-    teacher         = ForeignKey(Person, related_name='courses_taught')
+    
+    teacher         = ForeignKey(Person, verbose_name=_("teacher"), related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
-    max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
-    title           = CharField(max_length=140, verbose_name="class title") 
-    slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
-    description     = TextField(blank=False, verbose_name="Class description")
+    max_students    = IntegerField(max_length=4, verbose_name=_("Maximum number of students in your class"))
+    title           = CharField(max_length=140, verbose_name=_("class title")) 
+    slug            = SlugField(max_length=120,blank=False, null=True, verbose_name=_("URL Slug"))
+    description     = TextField(blank=False, verbose_name=_("Class description"))
     branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
 
 
@@ -478,9 +701,12 @@ class Durational(Base):
     """
     class Meta:
 		abstract = True
-
-    start_time  = DateTimeField(default=datetime.now())
-    end_time    = DateTimeField(default=datetime.now())
+		
+    # Translators: Used to lable the beginning and endings of classes
+    start_time  = DateTimeField(verbose_name=_("start time"), default=datetime.now())
+    
+    # Translators: Used to lable the beginning and endings of classes
+    end_time    = DateTimeField(verbose_name=_("end time"), default=datetime.now())
     
     
 class Time(Durational):
@@ -491,10 +717,22 @@ class Time(Durational):
     """
     
     class Meta:
-        verbose_name        = "Time Slot"
-        verbose_name_plural = "Time Slots"
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name        = _("Time Slot")
+       
+       # Translators: Plural
+        verbose_name_plural = _("Time Slots")
     
-    venue = ForeignKey(Venue, null=True, blank=True, help_text="Is this time slot associated with a specific venue?")
+    venue = ForeignKey(
+                Venue, 
+                verbose_name=_("venue"), 
+                null=True, 
+                blank=True, 
+                # Translators: Contextual Help
+                help_text=_("Is this time slot associated with a specific venue?")
+            )
+            
     branch = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
 
     def __unicode__ (self):
@@ -505,20 +743,24 @@ class TimeRange(Base):
     """
     """
     class Meta:
-        verbose_name        = "Time Slot Range"
-        verbose_name_plural = "Time Slot Ranges"
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name        = _("Time Slot Range")
+        
+        # Translators: Plural.
+        verbose_name_plural = _("Time Slot Ranges")
 
-    start_date  = DateField(default=datetime.now())
-    end_date    = DateField(default=datetime.now())
-    start_time  = TimeField(default=datetime(2008, 1, 31, 18, 00, 00))
-    end_time    = TimeField(default=datetime(2008, 1, 31, 19, 30, 00))
-    sunday      = BooleanField()
-    monday      = BooleanField()
-    tuesday     = BooleanField()
-    wednesday   = BooleanField()
-    thursday    = BooleanField()
-    friday      = BooleanField()
-    saturday    = BooleanField()
+    start_date  = DateField(verbose_name=_("Start date"), default=datetime.now())
+    end_date    = DateField(verbose_name=_("End date"), default=datetime.now())
+    start_time  = TimeField(verbose_name=_("Start time"), default=datetime(2008, 1, 31, 18, 00, 00))
+    end_time    = TimeField(verbose_name=_("End time"), default=datetime(2008, 1, 31, 19, 30, 00))
+    sunday      = BooleanField(verbose_name=_("Sunday"))
+    monday      = BooleanField(verbose_name=_("Monday"))
+    tuesday     = BooleanField(verbose_name=_("Tuesday"))
+    wednesday   = BooleanField(verbose_name=_("Wednesday"))
+    thursday    = BooleanField(verbose_name=_("Thursday"))
+    friday      = BooleanField(verbose_name=_("Friday"))
+    saturday    = BooleanField(verbose_name=_("Saturday"))
     
     branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
         
@@ -527,7 +769,11 @@ class ScheduleEmailContainer(EmailContainer):
     """
     """
     class Meta:
-        verbose_name = "Schedule Emails"
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Schedule Email")
+        
+        # Translators: Plural
         verbose_name_plural = "Schedule Emails"
 
     schedule = OneToOneField("Schedule", related_name="emails")
@@ -559,8 +805,8 @@ class BarterItem(Base):
     Barter items are the items that teachers request for a class they're teaching.
     The items themselves can be requested in various classes.
     """
-
-    title = CharField(max_length=255)
+    # Translators: Wherever the barter item shows up.
+    title = CharField(verbose_name=_("title"), max_length=255)
 
     def __unicode__ (self):
         registered_count = RegisteredItem.objects.filter(barter_item=self).count()
@@ -588,24 +834,56 @@ class Schedule(Durational):
     """
     """
     class Meta:
-        verbose_name        = 'Class Schedule'
-        verbose_name_plural = 'Class Schedules'
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name        = _('Class Schedule')
+        
+        # Translators: Plural
+        verbose_name_plural = _('Class Schedules')
+        
         ordering            = ['course_status', 'start_time', '-venue']
 		
     STATUS_CHOICES = (
-        (0, 'Pending'),
-        (1, 'Contacted'),
-        (2, 'Updated'),
-        (3, 'Approved'),
-        (4, 'Rejected')
+        # Translators: The thing that shows what the status of the class is
+        (0, _('Pending')),
+        (1, _('Contacted')),
+        (2, _('Updated')),
+        (3, _('Approved')),
+        (4, _('Rejected'))
     )
 
-    venue           = ForeignKey(Venue, null=True, blank=True, help_text="Where is this class taking place?")
-    course          = ForeignKey(Course, help_text="What class are you scheduling?")
-    course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
-    students        = ManyToManyField(Person, through="Registration")    
-    items           = ManyToManyField(BarterItem)    
-    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
+    venue           = ForeignKey(
+                            Venue, 
+                            verbose_name=_("venue"),
+                            null=True, 
+                            blank=True, 
+                            # Translators: Contextual Help
+                            help_text=_("Where is this class taking place?")
+                        )
+                        
+    course          = ForeignKey(
+                            Course, 
+                            verbose_name=_("course"),
+                            # Translators: Contextual Help
+                            help_text=_("What class are you scheduling?")
+                        )
+                        
+    course_status   = SmallIntegerField(
+                            max_length=1, 
+                            verbose_name=_("course status"),
+                            choices=STATUS_CHOICES, 
+                            default=0, 
+                            # Translators: Contextual Help
+                            help_text=_("What is the current status of the class?")
+                        )
+                        
+    students        = ManyToManyField(
+                            Person, 
+                            verbose_name=_("students"),
+                            through="Registration"
+                        )
+                                                        
+    items           = ManyToManyField(BarterItem, verbose_name=_("items"))    
+    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name=_("URL Slug"))
 
     objects   = ScheduleManager()
     public    = SchedulePublicManager()
@@ -676,12 +954,14 @@ class Registration(Base):
     class Meta:
         unique_together = ('schedule', 'student')
         
-    REGISTRATION_CHOICES = (('registered', 'Registered'),('unregistered', 'Unregistereed'))
+    # Translators: Student registration buttons.     
+    REGISTRATION_CHOICES = (('registered', _('Registered')),
+                            ('unregistered', _('Unregistereed')))
     
-    schedule            = ForeignKey(Schedule)
-    student             = ForeignKey(Person, related_name='registrations')
-    registration_status = CharField(max_length=20, choices=REGISTRATION_CHOICES, default='registered')
-    items               = ManyToManyField(BarterItem, through="RegisteredItem", blank=False)
+    schedule            = ForeignKey(Schedule, verbose_name=_("schedule"))
+    student             = ForeignKey(Person, verbose_name=_("student"), related_name='registrations')
+    registration_status = CharField(verbose_name=_("registration status"), max_length=20, choices=REGISTRATION_CHOICES, default='registered')
+    items               = ManyToManyField(BarterItem, verbose_name=_("items"), through="RegisteredItem", blank=False)
 
     def __unicode__ (self):      
         return "%s: %s" % (self.student.fullname, self.registration_status)
@@ -691,10 +971,10 @@ class RegisteredItem(Base):
     """
 
     """
-
-    registration    = ForeignKey(Registration)
-    barter_item     = ForeignKey(BarterItem)
-    registered      = IntegerField(max_length=3, default=1)
+    # Transalations: These next three are for the registered item.
+    registration    = ForeignKey(Registration, verbose_name=_("registration"))
+    barter_item     = ForeignKey(BarterItem, verbose_name=_("barter item"))
+    registered      = IntegerField(verbose_name=_("registered"), max_length=3, default=1)
     
     def __unicode__ (self):
         return "%s: %i" % (self.barter_item.title, self.registered)
@@ -704,12 +984,13 @@ class Feedback(Base):
     """
     Feedback is collected after courses take place.
     """
+    # Translations: These next three are for the feedback form.
+    FEEDBACK_TYPE_CHOICES = (('teacher', _('From the Teacher')),('student', _('From a student')))    
 
-    FEEDBACK_TYPE_CHOICES = (('teacher', 'From the Teacher'),('student', 'From a student'))    
-
-    schedule      = ForeignKey(Schedule)
-    feedback_type = CharField(max_length=20, choices=FEEDBACK_TYPE_CHOICES, default='student')
-    content       = TextField(verbose_name='Your Feedback', help_text='your feedback')
+    schedule      = ForeignKey(Schedule, verbose_name=_("schedule"))
+    feedback_type = CharField(verbose_name=_("feedback type"), max_length=20, choices=FEEDBACK_TYPE_CHOICES, default='student')
+    # Translators: Contextual Help
+    content       = TextField(help_text='your feedback', verbose_name=_('Your Feedback'))
         
     def __unicode__ (self):
         return u'%s: feedback %s' % (self.schedule.course.title, self.feedback_type)
@@ -725,8 +1006,9 @@ class Photo(Base):
     def upload_path(self, filename):
         return "uploads/%s/images/%s" % (self.branch.slug, filename)
     
-    filename    = ImageField("Photo",upload_to=upload_path)    
-    position    = PositiveSmallIntegerField('Position', default=0)    
+    # Translators: These next three are for the photograph files
+    filename    = ImageField(_("Photo"), upload_to=upload_path)    
+    position    = PositiveSmallIntegerField(_('Position'), default=0)    
     branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
         
     def thumbnail(self):
@@ -741,9 +1023,10 @@ class Photo(Base):
 
 class BranchPage(FlatPage):
     """Extending the FlatPage model to provide branch-specific content pages."""
-
-    branch   = ForeignKey(Branch)
-    position = PositiveSmallIntegerField('Position', default=0)    
+    
+    # Translators: These one is for the dynamic custom pages.
+    branch   = ForeignKey(Branch, verbose_name=_("branch"))
+    position = PositiveSmallIntegerField(_('Position'), default=0)    
 
 
 # signals are separated to signals.py 

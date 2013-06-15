@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-13 11:37-0400\n"
+"POT-Creation-Date: 2013-06-15 15:36-0400\n"
 "PO-Revision-Date: 2013-06-08 11:50-0500\n"
 "Last-Translator:   <xthian@riseup.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,15 +38,15 @@ msgstr ""
 msgid "Everything Else"
 msgstr ""
 
-#: apps/tradeschool/admin.py:722
+#: apps/tradeschool/admin.py:724
 msgid "Advanced options"
 msgstr ""
 
-#: apps/tradeschool/forms.py:12 apps/tradeschool/forms.py:101
+#: apps/tradeschool/forms.py:12 apps/tradeschool/forms.py:99
 msgid "Please enter your name"
 msgstr ""
 
-#: apps/tradeschool/forms.py:13 apps/tradeschool/forms.py:102
+#: apps/tradeschool/forms.py:13 apps/tradeschool/forms.py:100
 msgid "Please enter your email"
 msgstr ""
 
@@ -58,12 +58,13 @@ msgstr ""
 msgid "Please enter phone number"
 msgstr ""
 
-#: apps/tradeschool/forms.py:22
+#: apps/tradeschool/forms.py:22 apps/tradeschool/models.py:599
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:39
 msgid "A few sentences about you"
 msgstr ""
 
-#: apps/tradeschool/forms.py:22
+#. Translators: Contextual Help
+#: apps/tradeschool/forms.py:22 apps/tradeschool/models.py:601
 msgid "For prospective students to see on the website"
 msgstr ""
 
@@ -79,47 +80,643 @@ msgstr ""
 msgid "Please enter the maximum number of students in your class"
 msgstr ""
 
-#: apps/tradeschool/forms.py:44
+#: apps/tradeschool/forms.py:43
 msgid "Barter item cannot be blank"
 msgstr ""
 
-#: apps/tradeschool/forms.py:45
-msgid "Barter item quantity cannot be blank"
-msgstr ""
-
-#: apps/tradeschool/forms.py:65
+#: apps/tradeschool/forms.py:63
 #, python-format
 msgid "Please add at least %i barter items"
 msgstr ""
 
-#: apps/tradeschool/forms.py:82
+#: apps/tradeschool/forms.py:80
 msgid "Please select a time"
 msgstr ""
 
-#: apps/tradeschool/forms.py:89
+#: apps/tradeschool/forms.py:87
 msgid "Please select at least one item"
 msgstr ""
 
-#: apps/tradeschool/forms.py:103
+#: apps/tradeschool/forms.py:101
 msgid "Please enter your phone number"
 msgstr ""
 
-#: apps/tradeschool/forms.py:113
+#: apps/tradeschool/forms.py:111
 msgid "Please enter your feedback"
 msgstr ""
 
+#. Translators:  Used wherever a created time stamp is needed.
+#: apps/tradeschool/models.py:32
+msgid "created"
+msgstr ""
+
+#. Translators: Used wherever an update time stamp is needed.
+#: apps/tradeschool/models.py:35
+msgid "updated"
+msgstr ""
+
+#. Translators: Used to determine whether something is active in the front end or not.
+#: apps/tradeschool/models.py:38
+msgid "is active"
+msgstr ""
+
+#. Translators: Determines the status of an e-mail - disabled.
+#: apps/tradeschool/models.py:57
+msgid "Disabled"
+msgstr ""
+
+#. Translators: Determines the status of an e-mail - Not Sent.
+#: apps/tradeschool/models.py:60
+msgid "Not Sent Yet"
+msgstr ""
+
+#. Translators: Determines the status of an e-mail - Sent.
+#: apps/tradeschool/models.py:63
+msgid "Sent"
+msgstr ""
+
+#. Translators: The subject of an e-mail.
+#: apps/tradeschool/models.py:67
+msgid "subject"
+msgstr ""
+
+#. Translators: The content of an e-mail.
+#: apps/tradeschool/models.py:70
+msgid "content"
+msgstr ""
+
+#. Translators: The status of an e-mail. See the Toople list above.
+#: apps/tradeschool/models.py:73
+msgid "email status"
+msgstr ""
+
+#. Translators: The date for when an e-mail will be sent.
+#: apps/tradeschool/models.py:151
+msgid "Send on"
+msgstr ""
+
+#. Translators: How many days before the class the email will be sent.
+#: apps/tradeschool/models.py:154
+msgid "Days before"
+msgstr ""
+
+#. Translators: The time for when an e-mail will be sent.
+#: apps/tradeschool/models.py:157
+msgid "Send time"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:185
+msgid "Student confirmation"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:188
+msgid "Student confirmations"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:196
+msgid "Student reminder"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:199
+msgid "Student reminders"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:213
+msgid "Student feedback e-mail"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:216
+msgid "Student feedback e-mails"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:230
+msgid "Teacher confirmation"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:233
+msgid "Teacher confirmations"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:247
+msgid "Teacher reminder"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:250
+msgid "Teacher reminders"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:264
+msgid "Teacher feedback e-mail"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:267
+msgid "Teacher feedback e-mails"
+msgstr ""
+
+#. Translators: In the Branch E-mail page, the label for student confirmation e-mail
+#: apps/tradeschool/models.py:282
+msgid "Student Confirmation"
+msgstr ""
+
+#. Translators: ... The lable for Student Reminder e-mail
+#: apps/tradeschool/models.py:285
+msgid "Student Reminder"
+msgstr ""
+
+#. Translators: ... The lable for Student Feedback e-mail
+#: apps/tradeschool/models.py:288
+msgid "Student Feedback"
+msgstr ""
+
+#. Translators: ... The lable for Teacher confirmation e-mail
+#: apps/tradeschool/models.py:291
+msgid "Teacher Confirmation"
+msgstr ""
+
+#. Translators: ... The lable for Teacher Class Approval e-mail
+#: apps/tradeschool/models.py:294
+msgid "Teacher Class Approval"
+msgstr ""
+
+#. Translators: ... The lable for Teacher Reminder e-mail
+#: apps/tradeschool/models.py:297
+msgid "Teacher Reminder"
+msgstr ""
+
+#. Translators: ... The lable for Teacher Feedback e-mail
+#: apps/tradeschool/models.py:300
+msgid "Teacher Feedback"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:324
+msgid "Default e-mail container"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:327
+msgid "Default e-mail containers"
+msgstr ""
+
+#. Translators: This is for the name of a Trade School location or venue.
+#. Translators: Wherever the barter item shows up.
+#: apps/tradeschool/models.py:338 apps/tradeschool/models.py:809
+msgid "title"
+msgstr ""
+
+#. Translators: Contextual Help.
+#: apps/tradeschool/models.py:341
+msgid "The name of the space"
+msgstr ""
+
+#: apps/tradeschool/models.py:345
+msgid "phone"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:350 apps/tradeschool/models.py:610
+msgid "Optional."
+msgstr ""
+
+#: apps/tradeschool/models.py:354
+msgid "city"
+msgstr ""
+
+#: apps/tradeschool/models.py:359
+msgid "state"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:363
+msgid "If in the US."
+msgstr ""
+
+#: apps/tradeschool/models.py:367
+msgid "country"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#. Translators: Plural.
+#: apps/tradeschool/models.py:377 apps/tradeschool/models.py:380
+msgid "Branch Emails"
+msgstr ""
+
+#. Translators: These one is for the dynamic custom pages.
+#: apps/tradeschool/models.py:382 apps/tradeschool/models.py:543
+#: apps/tradeschool/models.py:616 apps/tradeschool/models.py:1028
+msgid "branch"
+msgstr ""
+
+#. Translators: The name of a cluster if there is one.
+#: apps/tradeschool/models.py:393
+msgid "name"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:407
+msgid "Branch"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:410
+msgid "Branches"
+msgstr ""
+
+#. Translators: This is the part that comes after tradeschool.coop/ en el URL.
+#: apps/tradeschool/models.py:418
+msgid "slug"
+msgstr ""
+
+#. Translators: Contextual Help.
+#: apps/tradeschool/models.py:421
+msgid "This is the part that comes after 'http://tradeschool.coop/' in the URL"
+msgstr ""
+
+#: apps/tradeschool/models.py:424
+msgid "e-mail"
+msgstr ""
+
+#: apps/tradeschool/models.py:425
+msgid "timezone"
+msgstr ""
+
+#: apps/tradeschool/models.py:426
+msgid "language"
+msgstr ""
+
+#: apps/tradeschool/models.py:427
+msgid "organizers"
+msgstr ""
+
+#. Translators: This is the Branches domain address.
+#: apps/tradeschool/models.py:430
+msgid "site"
+msgstr ""
+
+#. Translators: If this Trade School belogns to a set of Trade Schools.
+#: apps/tradeschool/models.py:433
+msgid "cluster"
+msgstr ""
+
+#. Translators: This is the part that says 'Barter for Knowledge' which is also editable.
+#: apps/tradeschool/models.py:436
+msgid "header"
+msgstr ""
+
+#. Translators: This is the part with room for a small statement.
+#: apps/tradeschool/models.py:439
+msgid "intro"
+msgstr ""
+
+#. Translators: This is the part at the end of the page.
+#: apps/tradeschool/models.py:442
+msgid "footer"
+msgstr ""
+
+#: apps/tradeschool/models.py:521
+msgid "Address 1"
+msgstr ""
+
+#: apps/tradeschool/models.py:522
+msgid "Address 2"
+msgstr ""
+
+#. Translators: the capacity of the venue where you are hosting classes.
+#: apps/tradeschool/models.py:527
+msgid "capacity"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:529
+msgid "How many people fit in the space?"
+msgstr ""
+
+#. Translators: The field name for resources of a venue.
+#: apps/tradeschool/models.py:534
+msgid "resources"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:538
+msgid "What resources are available at the space?"
+msgstr ""
+
+#: apps/tradeschool/models.py:540
+msgid "color"
+msgstr ""
+
+#: apps/tradeschool/models.py:576
+msgid "your name"
+msgstr ""
+
+#. Translators: Contextual Help.
+#: apps/tradeschool/models.py:578
+msgid "This will appear on the site."
+msgstr ""
+
+#: apps/tradeschool/models.py:583
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:42
+msgid "Email address"
+msgstr ""
+
+#. Translators: Contextual Help.
+#: apps/tradeschool/models.py:585
+msgid "Used only for us to contact you."
+msgstr ""
+
+#: apps/tradeschool/models.py:592
+msgid "Phone number"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:594
+msgid "Optional. Used only for us to contact you."
+msgstr ""
+
+#: apps/tradeschool/models.py:608
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:36
+msgid "Your website / blog URL"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:618
+msgid "What tradeschool is this object related to?"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:636
+msgid "Teacher"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:639
+msgid "Teachers"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:655
+msgid "Student"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:658
+msgid "Students"
+msgstr ""
+
 #. Translators: Any times that the word class is shown as singular
-#: apps/tradeschool/models.py:453
+#: apps/tradeschool/models.py:673
 msgid "Class"
 msgstr ""
 
 #. Translators: Any times that the word class is shown as plural
-#: apps/tradeschool/models.py:455
+#: apps/tradeschool/models.py:676
 msgid "Classes"
 msgstr ""
 
-#: apps/tradeschool/models.py:458
-msgid "Arts"
+#: apps/tradeschool/models.py:688
+msgid "teacher"
+msgstr ""
+
+#: apps/tradeschool/models.py:690
+msgid "Maximum number of students in your class"
+msgstr ""
+
+#: apps/tradeschool/models.py:691
+msgid "class title"
+msgstr ""
+
+#: apps/tradeschool/models.py:692 apps/tradeschool/models.py:886
+msgid "URL Slug"
+msgstr ""
+
+#: apps/tradeschool/models.py:693
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:17
+msgid "Class description"
+msgstr ""
+
+#. Translators: Used to lable the beginning and endings of classes
+#: apps/tradeschool/models.py:706
+msgid "start time"
+msgstr ""
+
+#. Translators: Used to lable the beginning and endings of classes
+#: apps/tradeschool/models.py:709
+msgid "end time"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:722
+msgid "Time Slot"
+msgstr ""
+
+#. Translators: Plural
+#: apps/tradeschool/models.py:725
+msgid "Time Slots"
+msgstr ""
+
+#: apps/tradeschool/models.py:729 apps/tradeschool/models.py:856
+msgid "venue"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:733
+msgid "Is this time slot associated with a specific venue?"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:748
+msgid "Time Slot Range"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:751
+msgid "Time Slot Ranges"
+msgstr ""
+
+#: apps/tradeschool/models.py:753
+msgid "Start date"
+msgstr ""
+
+#: apps/tradeschool/models.py:754
+msgid "End date"
+msgstr ""
+
+#: apps/tradeschool/models.py:755
+msgid "Start time"
+msgstr ""
+
+#: apps/tradeschool/models.py:756
+msgid "End time"
+msgstr ""
+
+#: apps/tradeschool/models.py:757
+msgid "Sunday"
+msgstr ""
+
+#: apps/tradeschool/models.py:758
+msgid "Monday"
+msgstr ""
+
+#: apps/tradeschool/models.py:759
+msgid "Tuesday"
+msgstr ""
+
+#: apps/tradeschool/models.py:760
+msgid "Wednesday"
+msgstr ""
+
+#: apps/tradeschool/models.py:761
+msgid "Thursday"
+msgstr ""
+
+#: apps/tradeschool/models.py:762
+msgid "Friday"
+msgstr ""
+
+#: apps/tradeschool/models.py:763
+msgid "Saturday"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:774
+msgid "Schedule Email"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:838
+msgid "Class Schedule"
+msgstr ""
+
+#. Translators: Plural
+#: apps/tradeschool/models.py:841
+msgid "Class Schedules"
+msgstr ""
+
+#. Translators: The thing that shows what the status of the class is
+#: apps/tradeschool/models.py:847
+msgid "Pending"
+msgstr ""
+
+#: apps/tradeschool/models.py:848
+msgid "Contacted"
+msgstr ""
+
+#: apps/tradeschool/models.py:849
+msgid "Updated"
+msgstr ""
+
+#: apps/tradeschool/models.py:850
+msgid "Approved"
+msgstr ""
+
+#: apps/tradeschool/models.py:851
+msgid "Rejected"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:860
+msgid "Where is this class taking place?"
+msgstr ""
+
+#: apps/tradeschool/models.py:865
+msgid "course"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:867
+msgid "What class are you scheduling?"
+msgstr ""
+
+#: apps/tradeschool/models.py:872
+msgid "course status"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:876
+msgid "What is the current status of the class?"
+msgstr ""
+
+#: apps/tradeschool/models.py:881
+msgid "students"
+msgstr ""
+
+#: apps/tradeschool/models.py:885 apps/tradeschool/models.py:964
+msgid "items"
+msgstr ""
+
+#. Translators: Student registration buttons.
+#: apps/tradeschool/models.py:958
+msgid "Registered"
+msgstr ""
+
+#: apps/tradeschool/models.py:959
+msgid "Unregistereed"
+msgstr ""
+
+#: apps/tradeschool/models.py:961 apps/tradeschool/models.py:990
+msgid "schedule"
+msgstr ""
+
+#: apps/tradeschool/models.py:962
+msgid "student"
+msgstr ""
+
+#: apps/tradeschool/models.py:963
+msgid "registration status"
+msgstr ""
+
+#: apps/tradeschool/models.py:975
+msgid "registration"
+msgstr ""
+
+#: apps/tradeschool/models.py:976
+msgid "barter item"
+msgstr ""
+
+#: apps/tradeschool/models.py:977
+msgid "registered"
+msgstr ""
+
+#: apps/tradeschool/models.py:988
+msgid "From the Teacher"
+msgstr ""
+
+#: apps/tradeschool/models.py:988
+msgid "From a student"
+msgstr ""
+
+#: apps/tradeschool/models.py:991
+msgid "feedback type"
+msgstr ""
+
+#. Translators: Contextual Help
+#: apps/tradeschool/models.py:993
+msgid "Your Feedback"
+msgstr ""
+
+#. Translators: These next three are for the photograph files
+#: apps/tradeschool/models.py:1010
+msgid "Photo"
+msgstr ""
+
+#: apps/tradeschool/models.py:1011 apps/tradeschool/models.py:1029
+msgid "Position"
+msgstr ""
+
+#: apps/tradeschool/views.py:105
+msgid "You are already registered to this class"
 msgstr ""
 
 #: apps/tradeschool/templates/admin/batch_time_add.html:18
@@ -219,7 +816,7 @@ msgctxt "Join a class button"
 msgid "Join"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_register.html:12
+#: apps/tradeschool/templates/branches_base/schedule_register.html:13
 msgid "I would like to join"
 msgstr ""
 
@@ -229,62 +826,62 @@ msgid ""
 "At least 5 items you want in exchange for teaching- and the quantity of each"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:54
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:53
 msgctxt "Add another barter item in class submission form"
 msgid "Add another item"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:57
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:56
 msgctxt "Examples for barter items"
 msgid "Past examples"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:59
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:58
 msgctxt "barter item example"
 msgid "Drawing paper"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:60
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:59
 msgctxt "barter item example"
 msgid "Tea leaves"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:61
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:60
 msgctxt "barter item example"
 msgid "Bike parts"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:62
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:61
 msgctxt "barter item example"
 msgid "Design help"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:63
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:62
 msgctxt "barter item example"
 msgid "Organic produce"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:64
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:63
 msgctxt "barter item example"
 msgid "Job-search help"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:65
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:64
 msgctxt "barter item example"
 msgid "A surprise"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:66
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:65
 msgctxt "barter item example"
 msgid "Furniture"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:76
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:75
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:20
 msgid "When you'd like to teach"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submit.html:97
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:96
 msgid "Submit"
 msgstr ""
 
@@ -298,10 +895,6 @@ msgstr ""
 msgid "Class title"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/schedule_submitted.html:17
-msgid "Class description"
-msgstr ""
-
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:23
 msgid "Maximum students in your class"
 msgstr ""
@@ -312,14 +905,6 @@ msgstr ""
 
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:33
 msgid "Your name"
-msgstr ""
-
-#: apps/tradeschool/templates/branches_base/schedule_submitted.html:36
-msgid "Your website / blog URL"
-msgstr ""
-
-#: apps/tradeschool/templates/branches_base/schedule_submitted.html:42
-msgid "Email address"
 msgstr ""
 
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:45
