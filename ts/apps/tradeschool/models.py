@@ -739,7 +739,7 @@ class Photo(Base):
         return "%s: %s" % (self.branch.title, self.filename)
         
 
-class BranchPage(FlatPage):
+class BranchPage(FlatPage, Base):
     """Extending the FlatPage model to provide branch-specific content pages."""
 
     branch   = ForeignKey(Branch)

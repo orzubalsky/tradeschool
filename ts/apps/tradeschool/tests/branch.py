@@ -11,7 +11,7 @@ from tradeschool.models import *
 
 
 
-class BranchSetupTestCase(TestCase):
+class BranchTestCase(TestCase):
     """ Test the process of setting up a new branch.
     """
     fixtures = ['test_admin.json', 'test_branch.json']    
@@ -191,6 +191,44 @@ class BranchSetupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)        
         self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
 
+
+    def test_branch_page(self):
+        """ Tests that creating a BranchPage results in the page displaying on the website.
+        """
+        # save a new branch
+        self.branch.save()
+                
+        # save a new BranchPage
+        branch_page = BranchPage(branch=self.branch, url='/test-page/', title='test page', content='test page content')
+        branch_page.save()
+
+        # go to the new page's url
+        url = reverse('branch-page', kwargs={'branch_slug' : self.branch.slug, 'url' : branch_page.url })
+        response = self.client.get(url)
+        
+        # verify the page is loading 
+        self.assertEqual(response.status_code, 200)        
+        
+        # verify that the BranchPage data is correct
+        self.assertContains(response, 'Test Page')
+        self.assertContains(response, 'test page content')
+        
+        # change the page's status to inactive
+        # inactive pages should stay in the db but not on the website
+        branch_page.is_active = False
+        branch_page.save()
+
+        # verify the page is not loading
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)        
+        
+        # delete the page
+        branch_page.delete()
+          
+        # verify the page is gone
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 

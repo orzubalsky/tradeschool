@@ -105,7 +105,7 @@ class EmailTestCase(TestCase):
         for i in range(registration_count):
             sent_email = mail.outbox[i]
             self.verify_email_data(sent_email, email_obj)
-            self.assertTrue(self.schedule.students.all()[i].email in sent_email.to)          
+            self.assertTrue(self.schedule.students.all()[i].email in sent_email.to)
 
 
     def test_teacher_reminder(self):
