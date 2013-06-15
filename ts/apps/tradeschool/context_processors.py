@@ -18,7 +18,7 @@ def branch(request):
                 branch = Branch(timezone=settings.TIME_ZONE)
 
             return { 'branch' : branch, }
-        
+
         branch = Branch.objects.get(slug=branch_slug)
         pages  = BranchPage.objects.filter(branch=branch) 
         

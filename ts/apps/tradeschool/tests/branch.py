@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import translation
 from datetime import *
 import shutil, os, os.path
 from tradeschool.utils import Bunch
@@ -228,7 +229,37 @@ class BranchTestCase(TestCase):
         # verify the page is gone
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+    
+    
+    def test_branch_language(self):
+        """ Tests that the templates are rendered with the branch's language settings.
+            Language is one of the fields in the Branch model.
+        """
+        # get a branch and set its language to Englisgh
+        branch = Branch.objects.all()[0]
         
+        # verify that all languages that are defined in the base.py settings file
+        # can be loaded correctly
+        for language_code, language_name in settings.LANGUAGES:
+            # save language in branch
+            branch.language = language_code
+            branch.save()
+        
+            # it's not possible to use translation.activate in the context of a unittest-
+            # what happens is that once a get/post request is made, django calls translation.activate
+            # with the language that's defined in settings (or the testcase's settings override).
+            # This means we can't really test the language switching unless we override the settings.
+            settings.LANGUAGE_CODE = language_code
+        
+            # load a page to check the language setting
+            url = reverse('schedule-list', kwargs={'branch_slug' : branch.slug })
+            response = self.client.get(url)
+
+            # verify the languages match. test in 2 parts, since the language codes don't really match-
+            # they're both es_es and es-es. 
+            self.assertEqual(branch.language[:2], response.context['LANGUAGE_CODE'][:2])
+            self.assertEqual(branch.language[3:], response.context['LANGUAGE_CODE'][3:])
+
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
