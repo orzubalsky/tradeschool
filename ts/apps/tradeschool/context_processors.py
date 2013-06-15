@@ -31,5 +31,4 @@ def branch(request):
     except Branch.DoesNotExist:
         branch = Branch(timezone=settings.TIME_ZONE)
         return { 'branch' : branch, }
-         
    

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-27 07:12-0500\n"
+"POT-Creation-Date: 2013-06-13 11:37-0400\n"
 "PO-Revision-Date: 2012-12-27 06:58\n"
 "Last-Translator:   <juviley@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.6.8\n"
 
-#: dashboard.py:39
-msgid "Admin"
-msgstr ""
-
-#: dashboard.py:44
-msgid "Everything"
-msgstr ""
-
-#: dashboard.py:57
+#: dashboard.py:41
 msgid "Scheduling"
 msgstr ""
 
-#: dashboard.py:69
+#: dashboard.py:54
 msgid "Emails"
 msgstr ""
 
-#: dashboard.py:78
+#: dashboard.py:63
 msgid "Website Content"
 msgstr ""
 
-#: dashboard.py:84
+#: dashboard.py:71
 msgid "Settings"
 msgstr ""
 
-#: dashboard.py:90
+#: dashboard.py:77
 msgid "Everything Else"
 msgstr ""
 
-#: dashboard.py:105
-msgid "Recent TalkTS Posts"
+#: apps/tradeschool/admin.py:722
+msgid "Advanced options"
 msgstr ""
 
-#: apps/tradeschool/forms.py:12 apps/tradeschool/forms.py:98
+#: apps/tradeschool/forms.py:12 apps/tradeschool/forms.py:101
 msgid "Please enter your name"
 msgstr ""
 
-#: apps/tradeschool/forms.py:13 apps/tradeschool/forms.py:99
+#: apps/tradeschool/forms.py:13 apps/tradeschool/forms.py:102
 msgid "Please enter your email"
 msgstr ""
 
@@ -67,6 +59,7 @@ msgid "Please enter phone number"
 msgstr ""
 
 #: apps/tradeschool/forms.py:22
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:39
 msgid "A few sentences about you"
 msgstr ""
 
@@ -99,236 +92,34 @@ msgstr ""
 msgid "Please add at least %i barter items"
 msgstr ""
 
-#: apps/tradeschool/forms.py:79
+#: apps/tradeschool/forms.py:82
 msgid "Please select a time"
 msgstr ""
 
-#: apps/tradeschool/forms.py:86
+#: apps/tradeschool/forms.py:89
 msgid "Please select at least one item"
 msgstr ""
 
-#: apps/tradeschool/forms.py:100
-msgid "Please enter your name number"
+#: apps/tradeschool/forms.py:103
+msgid "Please enter your phone number"
 msgstr ""
 
-#: apps/tradeschool/templates/add.html:5
-msgctxt "page title"
-msgid "Submit a Class"
+#: apps/tradeschool/forms.py:113
+msgid "Please enter your feedback"
 msgstr ""
 
-#: apps/tradeschool/templates/add.html:61
-msgctxt "Contextual help for barter items in class submission form"
-msgid ""
-"At least 5 items you want in exchange for teaching- and the quantity of each"
+#. Translators: Any times that the word class is shown as singular
+#: apps/tradeschool/models.py:453
+msgid "Class"
 msgstr ""
 
-#: apps/tradeschool/templates/add.html:68
-msgctxt "Add another barter item in class submission form"
-msgid "Add another item"
+#. Translators: Any times that the word class is shown as plural
+#: apps/tradeschool/models.py:455
+msgid "Classes"
 msgstr ""
 
-#: apps/tradeschool/templates/add.html:71
-msgctxt "Examples for barter items"
-msgid "Past examples"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:73
-msgctxt "barter item example"
-msgid "Drawing paper"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:74
-msgctxt "barter item example"
-msgid "Tea leaves"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:75
-msgctxt "barter item example"
-msgid "Bike parts"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:76
-msgctxt "barter item example"
-msgid "Design help"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:77
-msgctxt "barter item example"
-msgid "Organic produce"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:78
-msgctxt "barter item example"
-msgid "Job-search help"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:79
-msgctxt "barter item example"
-msgid "A surprise"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:80
-msgctxt "barter item example"
-msgid "Furniture"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:87
-msgid "When you'd like to teach"
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:92
-msgctxt "class submission form calendar contextual help"
-msgid ""
-"Click on a time slot to choose it for your class - if you need more time "
-"select two consecutive slots.<br /><br /> If there are multiple venues, the "
-"color of each time slot will correspond to a venue in the list below."
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:147
-msgid ""
-"We trust you, so please trust us. Trade School is a litigation free zone."
-msgstr ""
-
-#: apps/tradeschool/templates/add.html:151
-msgid "Submit"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:7
-msgid ""
-"Take a class with a range of specialized teachers in exchange for basic "
-"items and services. Secure a spot in a TradeSchool class by meeting one of "
-"the teachers barter needs."
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:8
-msgid ""
-"tradeschool, trade, school, grand, opening, grandopening, ourgoods, art, "
-"artist, barter, trade, exchange, community, pop-up, storefront, new york "
-"city, lower east side "
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:34
-msgctxt "Past Classes"
-msgid "Past"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:35
-msgctxt "Text for the Tradeschool.coop link"
-msgid "TS HQ"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:48
-msgctxt "header on front page"
-msgid "Barter for knowledge"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:50
-msgctxt "description on front page"
-msgid "Trade School is a self-organized learning space that runs on barter."
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:51
-msgid "We will open again soon."
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:52
-msgid "Want to open a Trade School?"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:56
-msgid "Join our list"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:59
-msgid "GO"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:73
-msgid "What Trade School is about"
-msgstr ""
-
-#: apps/tradeschool/templates/base.html:75
-msgctxt "ts movie credit"
-msgid "Trade School New York 2011, shot and edited by"
-msgstr ""
-
-#: apps/tradeschool/templates/classes.html:18
-msgctxt "Class full tag"
-msgid "Full"
-msgstr ""
-
-#: apps/tradeschool/templates/classes.html:37
-msgid "About the teacher"
-msgstr ""
-
-#: apps/tradeschool/templates/classes.html:43
-msgctxt "Join a class button"
-msgid "Join"
-msgstr ""
-
-#: apps/tradeschool/templates/register.html:10
-msgid "I would like to join"
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:7
-msgid "I want to teach a class"
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:9
-msgid "Here's a short orientation to get you situated."
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:11
-msgid "How Trade School works"
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:13
-msgid ""
-"Trade School is a non-traditional learning space where students barter with "
-"teachers."
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:16
-msgid ""
-"After you submit your class idea, when you'd like to teach, and what you "
-"want in exchange for teaching, Trade School organizers will review your "
-"submission. If your submission is approved, it will be posted on the website "
-"for students to sign up. On the day of class, you will meet your students at "
-"Trade School, receive your barter items, and enjoy the class."
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:19
-msgid "Your class"
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:21
-msgid ""
-"Your class can be about anything and can be structured in any way you like. "
-"Just be sure that you feel comfortable setting the tone and sharing "
-"information. You are in charge during your class! Past topics and approaches "
-"to teaching have ranged from butter-making workshops to foraging walking "
-"tours; from business lectures to group discussions. We find that students "
-"want to get to know each other, so classes work best with break-out groups, "
-"work in pairs, and lots of student participation."
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:24
-msgid "Your barter items"
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:26
-msgid ""
-"Think of the barter items you ask for as a giant wish list. Make it as long "
-"and as creative as you can. Last year, someone asked for new size 9.5 "
-"women's running shoes, and got them. This is a way for students to get to "
-"know you, or to begin learning about your topic before class begins. Try to "
-"ask for skills and non-monetary things (like research, advice, tips, help "
-"cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, "
-"materials, etc.)."
-msgstr ""
-
-#: apps/tradeschool/templates/teacher-info.html:31
-msgid "Sign up to teach"
+#: apps/tradeschool/models.py:458
+msgid "Arts"
 msgstr ""
 
 #: apps/tradeschool/templates/admin/batch_time_add.html:18
@@ -341,6 +132,274 @@ msgid_plural "Please correct the errors below."
 msgstr[0] ""
 msgstr[1] ""
 
+#: apps/tradeschool/templates/branches_base/base.html:10
+#: apps/tradeschool/templates/branches_base/base.html:50
+msgctxt "Main header on the website"
+msgid "Trade School"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/base.html:15
+#: apps/tradeschool/templates/hub/base.html:8
+msgctxt "Page Meta Description"
+msgid ""
+"Take a class with a range of specialized teachers in exchange for basic "
+"items and services. Secure a spot in a TradeSchool class by meeting one of "
+"the teachers barter needs."
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/base.html:16
+msgctxt "Page Meta Keywords"
+msgid ""
+"tradeschool, trade, school, ourgoods, barter, trade, exchange, community"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/base.html:63
+msgctxt "Past Classes"
+msgid "Past"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/base.html:64
+msgctxt "Text for the Tradeschool.coop link"
+msgid "TS HQ"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/base.html:85
+msgctxt "header on front page"
+msgid "Barter for knowledge"
+msgstr ""
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: apps/tradeschool/templates/branches_base/base.html:92
+#, fuzzy
+msgctxt "intro on front page"
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-27 07:12-0500\n"
+"PO-Revision-Date: 2012-12-27 06:58\n"
+"Last-Translator:   <juviley@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.6.8\n"
+
+#: apps/tradeschool/templates/branches_base/base.html:100
+msgid "Join our list"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/base.html:103
+msgctxt "mailing list join button text"
+msgid "GO"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_item.html:9
+msgctxt "Class full tag"
+msgid "Full"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_item.html:42
+#: apps/tradeschool/templates/hub/branch_list.html:70
+msgid "Bring one of the following"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_item.html:51
+#: apps/tradeschool/templates/hub/branch_list.html:76
+msgid "About the teacher"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_item.html:60
+msgctxt "Join a class button"
+msgid "Join"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_register.html:12
+msgid "I would like to join"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:47
+msgctxt "Contextual help for barter items in class submission form"
+msgid ""
+"At least 5 items you want in exchange for teaching- and the quantity of each"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:54
+msgctxt "Add another barter item in class submission form"
+msgid "Add another item"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:57
+msgctxt "Examples for barter items"
+msgid "Past examples"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:59
+msgctxt "barter item example"
+msgid "Drawing paper"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:60
+msgctxt "barter item example"
+msgid "Tea leaves"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:61
+msgctxt "barter item example"
+msgid "Bike parts"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:62
+msgctxt "barter item example"
+msgid "Design help"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:63
+msgctxt "barter item example"
+msgid "Organic produce"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:64
+msgctxt "barter item example"
+msgid "Job-search help"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:65
+msgctxt "barter item example"
+msgid "A surprise"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:66
+msgctxt "barter item example"
+msgid "Furniture"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:76
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:20
+msgid "When you'd like to teach"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submit.html:97
+msgid "Submit"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:10
+msgid ""
+"Thanks! Your class will be pending for now. It will be added to the site "
+"within 24 hours if it's approved. Here is what you submitted:"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:14
+msgid "Class title"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:17
+msgid "Class description"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:23
+msgid "Maximum students in your class"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:26
+msgid "Items you want in exchange for teaching"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:33
+msgid "Your name"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:36
+msgid "Your website / blog URL"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:42
+msgid "Email address"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/schedule_submitted.html:45
+msgid "Cell phone number"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:9
+msgid "I want to teach a class"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:14
+msgid "Here's a short orientation to get you situated."
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:16
+msgid "How Trade School works"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:18
+msgid ""
+"Trade School is a non-traditional learning space where students barter with "
+"teachers."
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:21
+msgid ""
+"After you submit your class idea, when you'd like to teach, and what you "
+"want in exchange for teaching, Trade School organizers will review your "
+"submission. If your submission is approved, it will be posted on the website "
+"for students to sign up. On the day of class, you will meet your students at "
+"Trade School, receive your barter items, and enjoy the class."
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:24
+msgid "Your class"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:26
+msgid ""
+"Your class can be about anything and can be structured in any way you like. "
+"Just be sure that you feel comfortable setting the tone and sharing "
+"information. You are in charge during your class! Past topics and approaches "
+"to teaching have ranged from butter-making workshops to foraging walking "
+"tours; from business lectures to group discussions. We find that students "
+"want to get to know each other, so classes work best with break-out groups, "
+"work in pairs, and lots of student participation."
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:29
+msgid "Your barter items"
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:31
+msgid ""
+"Think of the barter items you ask for as a giant wish list. Make it as long "
+"and as creative as you can. Last year, someone asked for new size 9.5 "
+"women's running shoes, and got them. This is a way for students to get to "
+"know you, or to begin learning about your topic before class begins. Try to "
+"ask for skills and non-monetary things (like research, advice, tips, help "
+"cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, "
+"materials, etc.)."
+msgstr ""
+
+#: apps/tradeschool/templates/branches_base/teacher-info.html:38
+msgid "Sign up to teach"
+msgstr ""
+
+#: apps/tradeschool/templates/hub/base.html:9
+msgctxt "Page Meta Keywords"
+msgid ""
+"tradeschool, trade, school, grand, opening, grandopening, ourgoods, art, "
+"artist, barter, trade, exchange, community, pop-up, storefront, new york "
+"city, lower east side "
+msgstr ""
+
+#: apps/tradeschool/templates/hub/branch_list.html:81
+msgctxt "Go to class button"
+msgid "GO TO CLASS"
+msgstr ""
+
 #: templates/admin/404.html:7 templates/admin/404.html.py:11
 msgid "Page not found"
 msgstr ""
@@ -350,7 +409,7 @@ msgid "We're sorry, but the requested page could not be found."
 msgstr ""
 
 #: templates/admin/500.html:9 templates/admin/app_index.html:12
-#: templates/admin/base.html:75 templates/admin/change_form.html:108
+#: templates/admin/base.html:78 templates/admin/change_form.html:108
 #: templates/admin/change_list.html:130
 #: templates/admin/change_list_filter_sidebar.html:126
 #: templates/admin/csv_export_selected_confirmation.html:9
