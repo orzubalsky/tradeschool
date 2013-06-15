@@ -386,67 +386,6 @@ class ScheduleTestCase(TestCase):
         self.compare_schedule_to_data(response.context['schedule'])
 
 
-    def test_schedule_feedback(self):
-        """ Tests that the schedule-feedback page loads, that it's only
-            possible to post feedback after a scheduled class had taken
-            place, and that the submitted form is saved correctly.
-        """
-        # save a new schedule
-        response = self.is_successful_submission(self.valid_data)        
-        
-        # new schedule object 
-        schedule = response.context['schedule']
-        
-        # make sure schedule is 'pending'
-        self.assertEqual(schedule.course_status, 0)
-        
-        # construct feedback url
-        feedback_url = reverse('schedule-feedback', kwargs={'branch_slug' : self.branch.slug, 'schedule_slug' : schedule.slug, 'feedback_type' : 'student' })
-        
-        # load url
-        response = self.client.get(feedback_url)
-        
-        # page should not load if the schedule is not approved
-        self.assertEqual(response.status_code, 404)
-        
-        # approve schedule and save
-        schedule.course_status = 3
-        schedule.save()
-        
-        # loading the url again
-        response = self.client.get(feedback_url)
-
-        # if scheduled class didn't take place yet, the page should not load
-        self.assertEqual(response.status_code, 404)
-        
-        # move the schedule to a time in the past
-        now = datetime.utcnow().replace(tzinfo=utc) 
-        schedule.start_time = now - timedelta(hours=47)
-        schedule.end_time = now - timedelta(hours=48)
-        schedule.save()
-        
-        # loading the url again
-        response = self.client.get(feedback_url)
-        
-        # view should load now
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_feedback.html')
-        
-        # test an empty form submission
-        response = self.client.post(feedback_url, data={}, follow=True)
-        
-        # an empty form should return 1 error for the required fields
-        self.assertContains(response, 'Please', count=1)
-        
-        # post a valid form
-        response = self.client.post(feedback_url, data={'content' : 'test feedback' }, follow=True)
-        
-        # check the form was submitted successfully
-        self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
-        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
-        self.assertEqual(schedule.feedback_set.count(), 1)
-
-
     def tearDown(self):
         """ Delete branch files in case something went wrong 
             and the files weren't deleted.
