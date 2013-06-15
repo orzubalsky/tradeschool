@@ -2,8 +2,9 @@
 
 {% load humanize smartdate i18n l10n %}
 
-{% block main_content %}
+{% block popup_container_class %}{{ popup_container_class }}{% endblock popup_container_class %}
 
+{% block popup_content %}
 <div class="type{{ schedule.course.category }} ">
     <div id="classPopup" style="background-color:#567567;">
 
@@ -39,7 +40,6 @@
                 {% for field in registration_form %}
                     {% if field.errors %}<li>{{ field.errors|striptags }}</li>{% endif %}
                 {% endfor %}
-                
                 </ul>
                 {% endif %}
                 
@@ -56,8 +56,9 @@
                 {{ student_form.phone.label }}<br />
                 {{ student_form.phone }}<br />
                 
-                <div class="legal"><p><strong>We trust you, so please trust us. Trade School is a litigation free zone.</strong></p></div>
+                {% if schedule.registered_students < schedule.course.max_students %}                
                 <input type="submit" class="join" value="Join" />
+                {% endif %}
             </form>
             {% endblock registration_body_form %}
 
@@ -66,4 +67,4 @@
     </div>
 </div>
 
-{% endblock main_content %}
+{% endblock popup_content %}

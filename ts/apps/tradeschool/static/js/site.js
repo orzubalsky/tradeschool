@@ -103,12 +103,19 @@ var site = window.site = new function()
         var height    = $('#preview #classPopup').height();
         var width     = $('#preview #classPopup').width();
         var topOffset = $(document).scrollTop() + 50;
-
-        $('#preview, #previewContainer').css({
-            'height': height + 'px', 
-            'width'	: width + 'px',
-            'top'	: topOffset
-        }).show();
+        
+        if ($('#previewContainer').hasClass('visible'))
+        {
+            
+        }
+        else
+        {
+            $('#preview, #previewContainer').css({
+                'height': height + 'px', 
+                'width'	: width + 'px',
+                'top'	: topOffset
+            }).show();
+        }
     };
 
 
@@ -175,11 +182,8 @@ var site = window.site = new function()
             var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
 
             var field_1 = $('.barter_item:first').clone(true).get(0);
-            var field_2 = $('.barter_qty:first').clone(true).get(0);
-            $(field_1).val('').insertAfter($('.barter_qty:last')).children('.hidden').removeClass('hidden');
-            $(field_2).val(1).insertAfter($('.barter_item:last')).children('.hidden').removeClass('hidden');            
+            $(field_1).val('').insertAfter($('.barter_item:last')).children('.hidden').removeClass('hidden');
             updateElementIndex($(field_1), prefix, formCount);
-            updateElementIndex($(field_2), prefix, formCount);
             
             $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
             return false;

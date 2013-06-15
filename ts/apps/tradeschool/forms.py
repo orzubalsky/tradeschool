@@ -40,13 +40,11 @@ class BarterItemForm (ModelForm):
         "Sets custom meta data to the form's fields"
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs['class']          = 'barter_item'
-        self.fields['requested'].widget.attrs['class']      = 'barter_qty'
-        self.fields['title'].error_messages['required']     = _("Barter item cannot be blank")        
-        self.fields['requested'].error_messages['required'] = _("Barter item quantity cannot be blank")
+        self.fields['title'].error_messages['required']     = _("Barter item cannot be blank")
         
     class Meta:
         model   = BarterItem
-        fields  = ('title', 'requested')
+        fields  = ('title',)
 
 
 class BaseBarterItemFormSet(BaseFormSet):
@@ -100,7 +98,7 @@ class StudentForm(ModelForm):
            super (StudentForm,self ).__init__(*args,**kwargs) 
            self.fields['fullname'].error_messages['required'] =  _("Please enter your name")
            self.fields['email'].error_messages['required']    =  _("Please enter your email") 
-           self.fields['phone'].error_messages['required']    =  _("Please enter your phone number")           
+           self.fields['phone'].error_messages['required']    =  _("Please enter your phone number")
                
     class Meta:
         model       = Person

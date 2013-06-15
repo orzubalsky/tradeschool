@@ -64,11 +64,11 @@ class Email(Base):
         return body
 
     def send(self, schedule_obj, recipient, registration=None):
-        body = self.preview(schedule_obj)
-        site = Site.objects.get_current()
-        branch = schedule_obj.course.branch.all()[0]
+        body    = self.preview(schedule_obj)
+        branch  = schedule_obj.course.branch.all()[0]
         send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
+        self.save()
 
     def template_context(self, schedule_obj, registration=None):
         """ """
@@ -120,7 +120,7 @@ class Email(Base):
         return c
 
     def __unicode__ (self):
-        return self.content
+        return self.subject
 
 
 class TimedEmail(Email):
@@ -395,7 +395,6 @@ class Person(Base):
     """
     Person in the tradeschool system is either a teacher or a student.
     A person submitting a class as a teacher will have to supply a bio as well.
-    Hash is used in public urls that involve teachers editing classes & students unregistering
     """
     
     class Meta:
@@ -409,7 +408,6 @@ class Person(Base):
     phone       = CharField(max_length=20, blank=True, null=True, verbose_name="Cell phone number", help_text="Optional. Used only for us to contact you.")
     bio         = TextField(blank=True, verbose_name="A few sentences about you", help_text="For prospective students to see on the website")
     website     = URLField(max_length=200, blank=True, null=True, verbose_name="Your website / blog URL", help_text="Optional.")
-    hashcode    = CharField(max_length=32, unique=True, default=uuid.uuid1().hex)
     slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
     branch      = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
     
@@ -467,7 +465,7 @@ class Course(Base):
     teacher         = ForeignKey(Person, related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name="Maximum number of students in your class")
-    title           = CharField(max_length=140, verbose_name="class title")    
+    title           = CharField(max_length=140, verbose_name="class title") 
     slug            = SlugField(max_length=120,blank=False, null=True, verbose_name="URL Slug")
     description     = TextField(blank=False, verbose_name="Class description")
     branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
@@ -546,7 +544,7 @@ class ScheduleEmailContainer(EmailContainer):
         """shortcut method to send an email via the ScheduleEmailContainer object."""
         for registration in self.schedule.registration_set.all():
             if registration.registration_status == 'registered':
-                return self.email_student(email, registration)
+                self.email_student(email, registration)
 
     def preview(self, email):
         """shortcut method to preview an email via the ScheduleEmailContainer object."""
@@ -554,6 +552,19 @@ class ScheduleEmailContainer(EmailContainer):
 
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
+
+
+class BarterItem(Base):
+    """
+    Barter items are the items that teachers request for a class they're teaching.
+    The items themselves can be requested in various classes.
+    """
+
+    title = CharField(max_length=255)
+
+    def __unicode__ (self):
+        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
+        return u"%s (%i are bringing)" % (self.title, registered_count)
 
 
 class ScheduleManager(Manager):
@@ -592,8 +603,8 @@ class Schedule(Durational):
     venue           = ForeignKey(Venue, null=True, blank=True, help_text="Where is this class taking place?")
     course          = ForeignKey(Course, help_text="What class are you scheduling?")
     course_status   = SmallIntegerField(max_length=1, choices=STATUS_CHOICES, default=0, help_text="What is the current status of the class?")
-    hashcode        = CharField(max_length=32, default=uuid.uuid1().hex, unique=True)
     students        = ManyToManyField(Person, through="Registration")    
+    items           = ManyToManyField(BarterItem)    
     slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name="URL Slug")
 
     objects   = ScheduleManager()
@@ -604,6 +615,13 @@ class Schedule(Durational):
     def is_within_a_day(self):
         now = datetime.utcnow().replace(tzinfo=utc) 
         if (self.start_time - now) < timedelta(hours=24):
+            return True
+        return False
+
+    @property
+    def is_past(self):
+        now = datetime.utcnow().replace(tzinfo=utc) 
+        if self.end_time < now:
             return True
         return False
 
@@ -648,22 +666,6 @@ class Schedule(Durational):
         return "%s" % (self.course.title)
 
 
-class BarterItem(Base):
-    """
-    Barter items are the items that teachers request for a class they're teaching.
-    The items themselves can be requested in various classes, but this model
-    keeps track of the items that were requested for a class.
-    """
-
-    title       = CharField(max_length=255)
-    requested   = IntegerField(max_length=3, default=1)
-    schedule    = ForeignKey(Schedule, null=True, blank=False)
-    
-    def __unicode__ (self):
-        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
-        return u"%s (%i are bringing)" % (self.title, registered_count)
-
-
 class Registration(Base):
     """
     Registrations represent connections between students and classes.
@@ -671,7 +673,9 @@ class Registration(Base):
     We do this because we also want to keep track of students who registered
     and then unregistered from a class.
     """
-
+    class Meta:
+        unique_together = ('schedule', 'student')
+        
     REGISTRATION_CHOICES = (('registered', 'Registered'),('unregistered', 'Unregistereed'))
     
     schedule            = ForeignKey(Schedule)

@@ -53,8 +53,18 @@ def timerange_save_callback(sender, instance, **kwargs):
             start_time  = datetime.combine(single_date, instance.start_time)
             end_time    = datetime.combine(single_date, instance.end_time)
 
+            # now do timezone conversion
+            current_tz = timezone.get_current_timezone()
+            utc = pytz.timezone('UTC')
+
+            localized_start_time = current_tz.localize(start_time)
+            localized_end_time = current_tz.localize(end_time)
+          
+            normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
+            normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
+
             # append a time object to the list so all of them can be inserted in one query
-            timeList.append(Time(start_time=start_time, end_time=end_time, branch=instance.branch))                                    
+            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch))                                    
 
     # save time slots
     Time.objects.bulk_create(timeList)

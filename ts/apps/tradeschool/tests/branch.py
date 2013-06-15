@@ -19,6 +19,9 @@ class BranchSetupTestCase(TestCase):
     def setUp(self):
         """ Create a Site and an admin User for testing.
         """
+        # test in english so we count html strings correctly
+        settings.LANGUAGE_CODE = 'en'
+                
         self.site   = Site(domain='http://test.tradeschool.coop', name='test site', id=2)
         self.site.save()
         
@@ -98,7 +101,7 @@ class BranchSetupTestCase(TestCase):
         # check that the same template is displayed (form + errors)
         self.assertTemplateUsed('admin/change_form.html')
         
-        # an empty form should return 12 errors for the required fields
+        # an empty form should return 9 errors for the required fields
         self.assertContains(response, 'This field is required', count=9)
         
         # now submit valid form
