@@ -221,6 +221,19 @@ class ScheduleTestCase(TestCase):
         # check that the ScheduleEmailContainer has all 7 Email objects
         self.assertEqual(schedule.emails.emails.__len__(), 7)
         
+        # store this object in a variable for convenience 
+        bec = BranchEmailContainer.objects.filter(branch__in=schedule.course.branch.all())[0]
+                
+        # iterate over the emails in the schedule's ScheduleEmailContainer
+        for email_name, schedule_email_obj in schedule.emails.emails.items():
+            # find the same email type in the BranchEmailContainer, 
+            # where the schedule emails were copied from
+            default_email = getattr(bec, email_name)
+
+            # verify that the email was copied correctly
+            self.assertEqual(schedule_email_obj.subject, default_email.subject)
+            self.assertEqual(schedule_email_obj.content, default_email.content)        
+        
     
     def test_teacher_confirmation_email(self):
         """ Tests that the TeacherConfirmation is sent after

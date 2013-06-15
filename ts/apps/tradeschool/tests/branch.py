@@ -120,14 +120,24 @@ class BranchSetupTestCase(TestCase):
         """ Test that copies of the email templates were created
             When a new branch is saved.
         """
-        # save a new branch
-        self.branch.save()
-
-        # check that one BranchEmailContainer was created for branch
+        # verify that one BranchEmailContainer was created for branch
         self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
 
-        # check that the BranchEmailContainer has all 7 Email objects
+        # verify that the BranchEmailContainer has all 7 Email objects
         self.assertEqual(self.branch.emails.emails.__len__(), 7)
+
+        # store this object in a variable for convenience 
+        dec = DefaultEmailContainer.objects.all()[0]
+
+        # iterate over the emails in the branch's BranchEmailContainer
+        for email_name, branch_email_obj in self.branch.emails.emails.items():
+            # find the same email type in the DefaultEmailContainer, 
+            # where the branch emails were copied from
+            default_email = getattr(dec, email_name)
+
+            # verify that the email was copied correctly
+            self.assertEqual(branch_email_obj.subject, default_email.subject)
+            self.assertEqual(branch_email_obj.content, default_email.content)
 
 
     def test_branch_files(self):
