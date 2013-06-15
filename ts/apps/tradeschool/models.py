@@ -449,8 +449,10 @@ class Course(Base):
     """
 
     class Meta:
-        verbose_name = "Class"
-        verbose_name_plural = "Classes"
+        # Translators: Any times that the word class is shown as singular
+        verbose_name = _("Class")
+        # Translators: Any times that the word class is shown as plural
+        verbose_name_plural = _("Classes")
 
     CATEGORIES = (
         (0, 'Arts'),
