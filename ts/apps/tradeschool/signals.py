@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from time import strftime
 from datetime import datetime
+from tradeschool.utils import daterange
 
 # adding 'dispatch_uid' because this signal was getting reigstered twice. 'dispatch_uid' just needs to be some unique string.
 #
@@ -95,9 +96,3 @@ def timerange_delete_callback(sender, instance, **kwargs):
                 Time.objects.filter(start_time=start_time, end_time=end_time)[0].delete()
             except IndexError:
                 pass
-
-
-def daterange(start_date, end_date):
-    """ construct a date range from start and end dates."""
-    for n in range(int ((end_date - start_date).days)):
-        yield start_date + timedelta(n)

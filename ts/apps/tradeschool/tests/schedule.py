@@ -9,6 +9,7 @@ from django.conf import settings
 from datetime import *
 import shutil, os, os.path
 from tradeschool.models import *
+from tradeschool.utils import daterange
 
 
 
@@ -92,6 +93,28 @@ class ScheduleTestCase(TestCase):
         for item in schedule_obj.items.all():
             self.assertTrue(item.title in self.valid_data.values())            
 
+    
+    def verify_timezone(self, saved_datetime_obj, saved_time):
+        """ Verifies that a time was saved in a tz-aware way according to the branch's timeezone.
+        """
+        # verify branch's timezone
+        current_tz = timezone.get_current_timezone()
+        utc = pytz.timezone('UTC')
+        self.assertEqual(current_tz.zone, self.branch.timezone)
+
+        # do manual timezone conversion to the submitted date
+        # start with localizing the non-aware dates to the branch's timezone
+        localized_time = current_tz.localize(saved_datetime_obj)
+        
+        # verify that the dates now have the branch's tzinfo
+        self.assertEqual(localized_time.tzinfo.zone, self.branch.timezone)
+      
+        # normalize dates to utc for storing in the database
+        normalized_time = utc.normalize(localized_time.astimezone(utc))
+        
+        # verify that the normalized dates are the ones that were saved in the db
+        self.assertEqual(normalized_time, saved_time)
+                
 
     def test_timeslot_creation(self):
         """ Tests that time slots can be created from the admin backend,
@@ -128,32 +151,57 @@ class ScheduleTestCase(TestCase):
         # saved time
         time = Time.objects.latest('created')
 
-        # verify branch's timezone
-        current_tz = timezone.get_current_timezone()
-        utc = pytz.timezone('UTC')
-        self.assertEqual(current_tz.zone, self.branch.timezone)
-
-        # do manual timezone conversion to the submitted date
-        # start with localizing the non-aware dates to the branch's timezone
-        localized_start_time = current_tz.localize(start_time)
-        localized_end_time   = current_tz.localize(end_time)
-        
-        # verify that the dates now have the branch's tzinfo
-        self.assertEqual(localized_start_time.tzinfo.zone, self.branch.timezone)
-        self.assertEqual(localized_end_time.tzinfo.zone, self.branch.timezone)
-      
-        # normalize dates to utc for storing in the database
-        normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
-        normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
-        
-        # verify that the normalized dates are the ones that were saved in the db
-        self.assertEqual(normalized_start_time, time.start_time)
-        self.assertEqual(normalized_end_time, time.end_time)
+        # verify date and time were saved in a tz-aware way, normalized to UTC
+        self.verify_timezone(start_time, time.start_time)
+        self.verify_timezone(end_time, time.end_time)
         
         # verify that the timeslot appears on the schedule-submit form
         url = reverse('schedule-add', kwargs={ 'branch_slug' : self.branch.slug })
         response = self.client.get(url)
         self.assertContains(response, time.pk)
+        
+        
+    def test_timerange_creation(self):
+        """ Tests that a TimeRange saved in the admin backend results in the correct
+            number of Time objects with data as it was set in the TimeRange form.
+        """
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)     
+
+        # admin time add view
+        url = reverse('admin:tradeschool_timerange_add')
+        
+        # these will become not-tz-aware strings, but they should be converted        
+        # to the branch's timezone 
+        start_time = datetime(2030, 02, 02, 10, 0, 0)
+        end_time   = datetime(2030, 04, 02, 12, 30, 0)
+        
+        # save a new time object
+        data = {
+                'start_time' : start_time.strftime('%H:%M:%S'),
+                'start_date' : start_time.strftime('%Y-%m-%d'),
+                'end_time'   : end_time.strftime('%H:%M:%S'),
+                'end_date'   : end_time.strftime('%Y-%m-%d'),
+                'monday'     : 1,
+                'branch'     : self.branch.pk,
+            }
+        
+        response = self.client.post(url, data=data, follow=True)
+
+        # verify the form was submitted successfully
+        self.assertEqual(response.status_code, 200)        
+        self.assertTemplateUsed('admin/change_form.html')        
+        
+        # saved timerange
+        timerange = TimeRange.objects.latest('created')
+        
+        # saved time slots
+        start_time  = datetime.combine(timerange.start_date, timerange.start_time)
+        end_time    = datetime.combine(timerange.end_date, timerange.end_time)
+        times = Time.objects.filter(start_time__gte=start_time, end_time__lte=end_time)
+        
+        # verify times were saved
+        self.assertTrue(times.count > 4)
         
 
     def test_view_loading(self):
@@ -259,6 +307,24 @@ class ScheduleTestCase(TestCase):
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
+
+
+    def test_time_is_saved(self):
+        """ Tests that the selected time in the form is saved in
+            a tz-aware way in the database.
+        """
+        # get Time object
+        time = Time.objects.get(pk=self.time_data['time-time'])
+
+        # post the data to the schedule submission form
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+
+        # the saved schedule
+        schedule = Schedule.objects.latest('created')
+        
+        # verify the Schedule times match the Time's times
+        self.assertEqual(schedule.start_time, time.start_time)
+        self.assertEqual(schedule.end_time, time.end_time)
 
 
     def test_time_deleted_after_successful_submission(self):
