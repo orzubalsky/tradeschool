@@ -1,6 +1,7 @@
 from tradeschool.models import *
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
+from django.utils import timezone
 from time import strftime
 from datetime import datetime
 
@@ -62,9 +63,11 @@ def timerange_save_callback(sender, instance, **kwargs):
           
             normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
             normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
-
+            
+            now = timezone.now()
+            
             # append a time object to the list so all of them can be inserted in one query
-            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch))                                    
+            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch, created=now, updated=now) )
 
     # save time slots
     Time.objects.bulk_create(timeList)
