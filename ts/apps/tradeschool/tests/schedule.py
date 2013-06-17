@@ -15,7 +15,7 @@ from tradeschool.models import *
 class ScheduleTestCase(TestCase):
     """ Tests the process of submitting a schedule using the frontend form.
     """
-    fixtures = ['test_data.json', 'test_timerange.json']
+    fixtures = ['test_data.json', 'test_timerange.json', 'tet_admin.json']
     
     def setUp(self):
         """ Create a Site and branch for testing.
@@ -29,6 +29,12 @@ class ScheduleTestCase(TestCase):
         self.branch = Branch.objects.all()[0]
         self.branch.language = 'en'
         self.branch.save()
+        
+        # admin user for the branch
+        self.password = 'testts123!'
+        self.admin = User.objects.create_superuser('test_admin', 'tester@tradeschool.coop', self.password)
+        self.admin.branch_set.add(self.branch)
+        self.admin.save()
         
         self.url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
         
@@ -86,6 +92,69 @@ class ScheduleTestCase(TestCase):
         for item in schedule_obj.items.all():
             self.assertTrue(item.title in self.valid_data.values())            
 
+
+    def test_timeslot_creation(self):
+        """ Tests that time slots can be created from the admin backend,
+            that they are stored and displayed with the branch's timezone,
+            and that they are displayed in the schedule-submit view.
+        """
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)     
+
+        # admin time add view
+        url = reverse('admin:tradeschool_time_add')
+        
+        # these will become not-tz-aware strings, but they should be converted
+        # to the branch's timezone 
+        start_time = datetime(2030, 02, 02, 10, 0, 0)
+        end_time   = datetime(2030, 02, 02, 12, 30, 0)
+        
+        # save a new time object
+        data = {
+                'start_time_0' : start_time.strftime('%Y-%m-%d'),
+                'start_time_1' : start_time.strftime('%H:%M:%S'),
+                'end_time_0'   : end_time.strftime('%Y-%m-%d'),
+                'end_time_1'   : end_time.strftime('%H:%M:%S'),
+                'venue'        : Venue.objects.filter(branch=self.branch)[0].pk,
+                'branch'       : self.branch.pk,
+            }
+        
+        response = self.client.post(url, data=data, follow=True)
+        
+        # verify the form was submitted successfully
+        self.assertEqual(response.status_code, 200)        
+        self.assertTemplateUsed('admin/change_form.html')        
+        
+        # saved time
+        time = Time.objects.latest('created')
+
+        # verify branch's timezone
+        current_tz = timezone.get_current_timezone()
+        utc = pytz.timezone('UTC')
+        self.assertEqual(current_tz.zone, self.branch.timezone)
+
+        # do manual timezone conversion to the submitted date
+        # start with localizing the non-aware dates to the branch's timezone
+        localized_start_time = current_tz.localize(start_time)
+        localized_end_time   = current_tz.localize(end_time)
+        
+        # verify that the dates now have the branch's tzinfo
+        self.assertEqual(localized_start_time.tzinfo.zone, self.branch.timezone)
+        self.assertEqual(localized_end_time.tzinfo.zone, self.branch.timezone)
+      
+        # normalize dates to utc for storing in the database
+        normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
+        normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
+        
+        # verify that the normalized dates are the ones that were saved in the db
+        self.assertEqual(normalized_start_time, time.start_time)
+        self.assertEqual(normalized_end_time, time.end_time)
+        
+        # verify that the timeslot appears on the schedule-submit form
+        url = reverse('schedule-add', kwargs={ 'branch_slug' : self.branch.slug })
+        response = self.client.get(url)
+        self.assertContains(response, time.pk)
+        
 
     def test_view_loading(self):
         """ Tests that the schedule-add view loads properly.
@@ -190,7 +259,7 @@ class ScheduleTestCase(TestCase):
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
-        
+
 
     def test_time_deleted_after_successful_submission(self):
         """ Tests that the selected Time object gets deleted 
