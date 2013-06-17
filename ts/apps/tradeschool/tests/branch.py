@@ -263,7 +263,7 @@ class BranchTestCase(TestCase):
 
     def test_branch_timezone(self):
         """ Tests that the timezone stored with the branch 
-            is used to calculate dates on the website.
+            is used to calculate dates both on the frontend and backend.
         """
         # get a branch 
         branch = Branch.objects.all()[0]
@@ -275,6 +275,15 @@ class BranchTestCase(TestCase):
         # verify the branch's timezone is in the context
         self.assertEqual(response.context['TIME_ZONE'], branch.timezone)
         
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)        
+
+        # get an admin page
+        response = self.client.get(self.branch_add_url)        
+        
+        # verify the branch's timezone is in the context
+        self.assertEqual(response.context['TIME_ZONE'], branch.timezone)        
+
 
     def tearDown(self):
         """ Delete branch files in case something went wrong 
