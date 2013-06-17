@@ -14,7 +14,6 @@ from tradeschool.utils import daterange
 def branch_save_callback(sender, instance, **kwargs):
     """ Create notifications on creation of a new branch.
         Create a copy of the default template files when a new branch is created."""  
-
     # create files
     if kwargs.get('created'):
         instance.generate_files()    

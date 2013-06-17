@@ -121,6 +121,9 @@ class BranchTestCase(TestCase):
         """ Test that copies of the email templates were created
             When a new branch is saved.
         """
+        # save branch
+        self.branch.save()
+        
         # verify that one BranchEmailContainer was created for branch
         self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
 
