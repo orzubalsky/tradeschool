@@ -20,8 +20,8 @@ urlpatterns = patterns('',
 urlpatterns += patterns('',
     url(r'^rosetta/', include('rosetta.urls')),
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
 )
 
 # tinyMCE editor
@@ -51,6 +51,6 @@ if settings.DEBUG:
    
 # tradeschool app urls
 urlpatterns += patterns('',
-   url(r'^(?P<branch_slug>[0-9A-Za-z\-]+)/', include('tradeschool.urls')),
+   url(r'^(?P<branch_slug>[0-9A-Za-z\-_]+)/', include('tradeschool.urls')),
    url(r'^$', 'tradeschool.views.branch_list', name='branch-list'),    
 )    
