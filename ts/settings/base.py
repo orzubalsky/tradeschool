@@ -121,6 +121,7 @@ FIXTURE_DIRS = (
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
 ADMIN_MEDIA_PREFIX = '/admin/media/'
+LOGIN_URL = '/admin'
 
 #BRANCH_FILES = MEDIA_ROOT + '/branches_files'
 
