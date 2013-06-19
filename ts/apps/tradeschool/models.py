@@ -351,7 +351,7 @@ class Location(Base):
     
     phone   = CharField(
                     verbose_name=_("phone"),
-                    max_length=20, 
+                    max_length=30, 
                     blank=True, 
                     null=True,
                     # Transalators: Contextual Help. 
@@ -457,7 +457,9 @@ class Branch(Location):
         """Check to see if the slug field's value has been changed. 
         If it has, rename the branch's template dir name."""
         
-        if self.pk is not None:
+        template_directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
+
+        if self.pk is not None and os.path.exists(template_directory):
             original = Branch.objects.get(pk=self.pk)
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
@@ -526,7 +528,7 @@ class Venue(Location):
         return "#%x" % colorValue
 
     venue_type  = SmallIntegerField(max_length=1, choices=TYPE_CHOICES, default=0) 
-    address_1   = CharField(max_length=50, verbose_name=_("Address 1"))
+    address_1   = CharField(max_length=200, verbose_name=_("Address 1"))
     address_2   = CharField(max_length=100, blank=True, null=True, verbose_name=_("Address 2"))
     capacity    = SmallIntegerField(
                         max_length=4, 
@@ -580,7 +582,7 @@ class Person(Base):
         )        
             
     fullname    = CharField(
-                        max_length=100, 
+                        max_length=200, 
                         verbose_name=_("your name"), 
                         # Translators: Contextual Help.
                         help_text=_("This will appear on the site.")
@@ -618,7 +620,7 @@ class Person(Base):
                         help_text=_("Optional.")
                     )
                     
-    slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
+    slug        = SlugField(max_length=220, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
     branch      = ManyToManyField(
                         Branch, 
                         verbose_name=_("branch"), 
@@ -696,8 +698,8 @@ class Course(Base):
     teacher         = ForeignKey(Person, verbose_name=_("teacher"), related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name=_("Maximum number of students in your class"))
-    title           = CharField(max_length=140, verbose_name=_("class title")) 
-    slug            = SlugField(max_length=120,blank=False, null=True, verbose_name=_("URL Slug"))
+    title           = CharField(max_length=255, verbose_name=_("class title")) 
+    slug            = SlugField(max_length=255,blank=False, null=True, verbose_name=_("URL Slug"))
     description     = TextField(blank=False, verbose_name=_("Class description"))
     branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
 
@@ -891,7 +893,7 @@ class Schedule(Durational):
                         )
                                                         
     items           = ManyToManyField(BarterItem, verbose_name=_("items"))    
-    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name=_("URL Slug"))
+    slug            = SlugField(max_length=255,blank=False, null=True, unique=True, verbose_name=_("URL Slug"))
 
     objects   = ScheduleManager()
     public    = SchedulePublicManager()
@@ -915,20 +917,24 @@ class Schedule(Durational):
         "resets course notification templates from the branch notification templates"
                 
         # delete existing branch emails
-        schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self).delete()
+        schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self)
+        if schedule_emails.exists():
+            schedule_emails.delete()
             
         # copy course notification from the branch notification templates
-        branch_email_container = BranchEmailContainer.objects.filter(branch__in=self.course.branch.all())[0]
+        branch_email_containers = BranchEmailContainer.objects.filter(branch__in=self.course.branch.all())
+        if branch_email_containers.exists():
+            branch_email_container = branch_email_containers[0]
         
-        schedule_email_container = ScheduleEmailContainer(schedule=self)
+            schedule_email_container = ScheduleEmailContainer(schedule=self)
         
-        for fieldname, email_obj in branch_email_container.emails.iteritems():
-            new_email = copy_model_instance(email_obj)
-            if isinstance(new_email, TimedEmail):
-                new_email.set_send_on(self.start_time)
-            new_email.save()
-            setattr(schedule_email_container, fieldname, new_email)
-        schedule_email_container.save()
+            for fieldname, email_obj in branch_email_container.emails.iteritems():
+                new_email = copy_model_instance(email_obj)
+                if isinstance(new_email, TimedEmail):
+                    new_email.set_send_on(self.start_time)
+                new_email.save()
+                setattr(schedule_email_container, fieldname, new_email)
+            schedule_email_container.save()
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"
