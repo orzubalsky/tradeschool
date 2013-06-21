@@ -86,6 +86,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'tradeschool.middleware.BranchMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',    
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -122,7 +123,7 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
 ADMIN_MEDIA_PREFIX = '/admin/media/'
 LOGIN_URL = '/admin'
-
+INTERNAL_IPS = ('127.0.0.1',)
 #BRANCH_FILES = MEDIA_ROOT + '/branches_files'
 
 INSTALLED_APPS = (
@@ -145,6 +146,7 @@ INSTALLED_APPS = (
     'pytz',                         # python timezone library
     'dajaxice',                     # django ajax app    
     'rosetta',                      # django admin translation interface
+    'debug_toolbar',
     #'django_mailer',               # handle outgoing email queue
     'tradeschool',                  # tradeschool branch app
     # 'branches',                     # holding all branch-specific files (templates, css, js)
@@ -193,6 +195,18 @@ TINYMCE_DEFAULT_CONFIG = {
     'plugins': 'table,spellchecker,paste,searchreplace',
     'theme': 'advanced',
 }
+
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
 
 GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
