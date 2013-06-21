@@ -520,7 +520,10 @@ class Branch(Location):
 
 class Venue(Location):
     """Branches have venues in which scheduled classes take place."""
-
+    class Meta:
+        ordering = ['branch', 'is_active', 'title']
+        
+    
     TYPE_CHOICES = ((0, 'Normal'), (1, 'Alternative'))
 
     def random_color():
@@ -577,10 +580,8 @@ class Person(Base):
         # Translators: Plural.
         verbose_name_plural = "People"
         
-        permissions = (
-            ('view_object', 'View object'),
-        )        
-            
+        ordering = ['fullname', ]
+        
     fullname    = CharField(
                         max_length=200, 
                         verbose_name=_("your name"), 
@@ -630,6 +631,10 @@ class Person(Base):
     
     objects = Manager()
 
+    def branches(self):
+        """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
+        return ','.join( str(branch) for branch in self.branch.all())
+        
     def __unicode__ (self):
         return self.fullname
             
@@ -684,6 +689,8 @@ class Course(Base):
         
         # Translators: Any times that the word class is shown as plural
         verbose_name_plural = _("Classes")
+        
+        ordering = ['title',]
 
     CATEGORIES = (
         (0, 'Arts'),
@@ -805,7 +812,10 @@ class ScheduleEmailContainer(EmailContainer):
     def preview(self, email):
         """shortcut method to preview an email via the ScheduleEmailContainer object."""
         return email.preview(self.schedule)
-
+    
+    def branches(self):
+        return ','.join( str(branch) for branch in self.schedule.course.branch.all())
+        
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
 
@@ -815,12 +825,14 @@ class BarterItem(Base):
     Barter items are the items that teachers request for a class they're teaching.
     The items themselves can be requested in various classes.
     """
+    class Meta:
+        ordering = ['title', ]
     # Translators: Wherever the barter item shows up.
-    title = CharField(verbose_name=_("title"), max_length=255)
+    title    = CharField(verbose_name=_("title"), max_length=255)
+    schedule = ForeignKey('Schedule', verbose_name=_('schedule')) 
 
     def __unicode__ (self):
-        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
-        return u"%s (%i are bringing)" % (self.title, registered_count)
+        return u"%s" % (self.title,)
 
 
 class ScheduleManager(Manager):
@@ -892,7 +904,6 @@ class Schedule(Durational):
                             through="Registration"
                         )
                                                         
-    items           = ManyToManyField(BarterItem, verbose_name=_("items"))    
     slug            = SlugField(max_length=255,blank=False, null=True, unique=True, verbose_name=_("URL Slug"))
 
     objects   = ScheduleManager()
@@ -967,6 +978,7 @@ class Registration(Base):
     """
     class Meta:
         unique_together = ('schedule', 'student')
+        ordering = ['schedule', 'registration_status', 'student']
         
     # Translators: Student registration buttons.     
     REGISTRATION_CHOICES = (('registered', _('Registered')),
@@ -975,23 +987,18 @@ class Registration(Base):
     schedule            = ForeignKey(Schedule, verbose_name=_("schedule"))
     student             = ForeignKey(Person, verbose_name=_("student"), related_name='registrations')
     registration_status = CharField(verbose_name=_("registration status"), max_length=20, choices=REGISTRATION_CHOICES, default='registered')
-    items               = ManyToManyField(BarterItem, verbose_name=_("items"), through="RegisteredItem", blank=False)
+    items               = ManyToManyField(BarterItem, verbose_name=_("items"), blank=False)
 
-    def __unicode__ (self):      
-        return "%s: %s" % (self.student.fullname, self.registration_status)
-
-
-class RegisteredItem(Base):
-    """
-
-    """
-    # Transalations: These next three are for the registered item.
-    registration    = ForeignKey(Registration, verbose_name=_("registration"))
-    barter_item     = ForeignKey(BarterItem, verbose_name=_("barter item"))
-    registered      = IntegerField(verbose_name=_("registered"), max_length=3, default=1)
+    def branches(self):
+        """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
+        return ','.join( str(branch) for branch in self.schedule.course.branch.all())
     
-    def __unicode__ (self):
-        return "%s: %i" % (self.barter_item.title, self.registered)
+    def registered_items(self):
+        """ Return the registered items as a string. Used in the admin."""
+        return ','.join( str(item) for item in self.items.all())        
+        
+    def __unicode__ (self):      
+        return "%s: %s" % (self.student, self.registration_status)
 
 
 class Feedback(Base):
@@ -1036,8 +1043,11 @@ class Photo(Base):
         
 
 class BranchPage(FlatPage, Base):
-    """Extending the FlatPage model to provide branch-specific content pages."""
-    
+    """Extending the FlatPage model to provide branch-specific content pages.
+    """
+    class Meta:
+        ordering = ['branch', 'title']
+        
     # Translators: These one is for the dynamic custom pages.
     branch   = ForeignKey(Branch, verbose_name=_("branch"))
     position = PositiveSmallIntegerField(_('Position'), default=0)    

@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.core import mail
+from django.core.cache import cache
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -42,7 +43,7 @@ class ScheduleTestCase(TestCase):
         self.time = Time.objects.filter(venue__isnull=True)[0]
         
         self.new_teacher_data = {
-                'teacher-fullname'  : 'new test teahcer', 
+                'teacher-fullname'  : 'new test teacher', 
                 'teacher-bio'       : 'biobiobio', 
                 'teacher-website'   : 'http://website.com', 
                 'teacher-email'     : 'email@email.com', 
@@ -90,7 +91,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.valid_data['teacher-phone'])
-        for item in schedule_obj.items.all():
+        for item in schedule_obj.barteritem_set.all():
             self.assertTrue(item.title in self.valid_data.values())            
 
     
@@ -233,13 +234,12 @@ class ScheduleTestCase(TestCase):
         
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
-        
+
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
         
         return response
-                
-
+        
     def test_schedule_submission_new_teacher_new_course(self):
         """ Tests the submission of a schedule of a new class by a new teacher.
         """
@@ -347,7 +347,7 @@ class ScheduleTestCase(TestCase):
         """
         # submit a schedule
         response = self.is_successful_submission(self.valid_data)
-        
+
         schedule = response.context['schedule']        
         
         # check that one ScheduleEmailContainer was created for the schedule
@@ -574,3 +574,6 @@ class ScheduleTestCase(TestCase):
         # delete branches' files
         for branch in Branch.objects.all():
             branch.delete_files()
+
+        # clear cache
+        cache.clear()

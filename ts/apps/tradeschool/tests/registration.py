@@ -47,15 +47,14 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(registration_obj.student.fullname, self.valid_data['student-fullname'])
         self.assertEqual(registration_obj.registration_status, 'registered')
         self.assertTrue(self.branch in registration_obj.student.branch.all())
-        for registered_item in registration_obj.registereditem_set.all():
-            self.assertEqual(registered_item.barter_item.pk, int(self.valid_data['item-items'][0]))
-            self.assertEqual(registered_item.registered, 1)            
+        for registered_item in registration_obj.items.all():
+            self.assertEqual(registered_item.pk, int(self.valid_data['item-items'][0]))
 
 
     def do_register(self):
         """ Register to a given schedule.
         """
-        item = self.schedule.items.all()[0]
+        item = self.schedule.barteritem_set.all()[0]
         self.valid_data['item-items'] = [ item.pk, ]
         
         # post a valid form
