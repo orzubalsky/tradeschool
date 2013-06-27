@@ -257,12 +257,12 @@ class BranchAdmin(BaseAdmin):
                    
     actions             = ['populate_notifications']            
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'is_active')
-    list_editable       = ('is_active','site',)
+    list_editable       = ('is_active',)
     prepopulated_fields = {'slug': ('title',)}
     inlines             = (BranchEmailContainerInline, PhotoInline)
     fieldsets = (
         ('Basic Info', {
-            'fields': ('title', 'slug', 'site', 'timezone', 'language')
+            'fields': ('title', 'slug', 'timezone', 'language')
         }),
         ('Contact Info', {
             'fields': ('city', 'state', 'country', 'email', 'phone')
