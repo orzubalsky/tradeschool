@@ -208,6 +208,10 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.logger.LoggingPanel',
 )
 
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+
 GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
