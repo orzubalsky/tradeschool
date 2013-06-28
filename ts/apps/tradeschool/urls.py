@@ -12,6 +12,8 @@ urlpatterns = patterns('tradeschool.views',
     url(r'class/(?P<schedule_slug>[0-9A-Za-z\-_]+)/edit$', 'schedule_edit', name='schedule-edit'),
     url(r'class/(?P<schedule_slug>[0-9A-Za-z\-_]+)/feedback/(?P<feedback_type>[0-9A-Za-z\-_]+)$', 'schedule_feedback', name='schedule-feedback'),
     url(r'class/(?P<schedule_slug>[0-9A-Za-z\-_]+)$', 'schedule_list', name='schedule-view'),
+    url(r'class/$', 'redirect_to_schedule_list', name='redirect-to-schedule-list'),
+    url(r'class$', 'redirect_to_schedule_list', name='redirect-to-schedule-list'),    
     url(r'page/(?P<url>.*)$', 'branch_page', name='branch-page'),
     url(r'$', 'schedule_list', name='schedule-list'),    
 )

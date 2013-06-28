@@ -50,6 +50,13 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
         }, context_instance=RequestContext(request))
 
 
+def redirect_to_schedule_list(request, branch_slug=None):
+    """
+    """
+    print 'a'
+    return HttpResponseRedirect( reverse(schedule_list, kwargs={'branch_slug': branch_slug, }))
+
+
 def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     """ """
     branch               = get_object_or_404(Branch, slug=branch_slug)
