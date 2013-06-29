@@ -376,6 +376,12 @@ class Location(Base):
                 )
 
 
+class BranchEmailContainerManager(Manager):
+    use_for_related_fields = True
+    def get_query_set(self):
+        return super(BranchEmailContainerManager, self).get_query_set().select_related()
+
+
 class BranchEmailContainer(EmailContainer):
     """
     """        
@@ -389,6 +395,8 @@ class BranchEmailContainer(EmailContainer):
     
     branch = OneToOneField("Branch", verbose_name=_("branch"), related_name="emails")
 
+    objects = BranchEmailContainerManager()
+    
     def __unicode__ (self):
         return u"for %s" % self.branch.title
 
@@ -399,8 +407,7 @@ class Cluster(Base):
     
     # Translators: The name of a cluster if there is one.    
     name = CharField(verbose_name=_("name"), max_length=100) 
-    
-    
+
 
 class Branch(Location):
     """
@@ -516,7 +523,7 @@ class Branch(Location):
         new_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, new_dirname)
     
         os.rename(old_dirname, new_dirname)
-        
+
 
 class Venue(Location):
     """Branches have venues in which scheduled classes take place."""
@@ -559,11 +566,13 @@ class Venue(Location):
 
 
 class PersonManager(Manager):
+    use_for_related_fields = True
+    
     def get_query_set(self):
         return super(PersonManager, self).get_query_set().annotate(
             registration_count  =Count('registrations', distinct=True), 
             courses_taught_count=Count('courses_taught', distinct=True)
-        )
+        ).select_related().prefetch_related('branch')
 
 
 class Person(Base):
@@ -629,7 +638,7 @@ class Person(Base):
                         help_text=_("What tradeschool is this object related to?")
                     )
     
-    objects = Manager()
+    objects = PersonManager()
 
     def branches(self):
         """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
@@ -640,6 +649,7 @@ class Person(Base):
             
 
 class TeacherManager(PersonManager):
+    use_for_related_fields = True    
     def get_query_set(self):
         return super(TeacherManager, self).get_query_set().filter(courses_taught_count__gt=0)
 
@@ -659,6 +669,7 @@ class Teacher(Person):
 
 
 class StudentManager(PersonManager):
+    use_for_related_fields = True    
     def get_query_set(self):
         return super(StudentManager, self).get_query_set().filter(registration_count__gt=0)
 
@@ -676,7 +687,7 @@ class Student(Person):
  
     objects = StudentManager()
  
-            
+
 class Course(Base):
     """
     The Course class
@@ -710,6 +721,8 @@ class Course(Base):
     description     = TextField(blank=False, verbose_name=_("Class description"))
     branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
 
+    objects = Manager()
+    
 
 class Durational(Base):
     """
@@ -836,9 +849,25 @@ class BarterItem(Base):
 
 
 class ScheduleManager(Manager):
-   def get_query_set(self):
-      return super(ScheduleManager, self).get_query_set().annotate(registered_students=Count('students')).prefetch_related('course')
+    use_for_related_fields = True    
+    def get_query_set(self):
+        qs = super(ScheduleManager, self).get_query_set().annotate(
+            registered_students=Count('students')
+        ).select_related(
+            'venue__title',
+            'course__title',
+            'course__teacher__fullname',
+            'course__teacher__email',
+            'emails__student_confirmation__subject',
+            'emails__student_reminder__subject',
+            'emails__student_feedback__subject',
+            'emails__teacher_confirmation__subject',
+            'emails__teacher_class_approval__subject',
+            'emails__teacher_reminder__subject',
+            'emails__teacher_feedback__subject',                                                                        
+        )
 
+        return qs
 
 class SchedulePublicManager(ScheduleManager):
     def get_query_set(self):
@@ -969,6 +998,12 @@ class Schedule(Durational):
         return "%s" % (self.course.title)
 
 
+class RegistrationManager(Manager):
+    use_for_related_fields = True    
+    def get_query_set(self):
+        return super(RegistrationManager, self).get_query_set().select_related('schedule', 'student').prefetch_related('items')
+
+
 class Registration(Base):
     """
     Registrations represent connections between students and classes.
@@ -989,6 +1024,8 @@ class Registration(Base):
     registration_status = CharField(verbose_name=_("registration status"), max_length=20, choices=REGISTRATION_CHOICES, default='registered')
     items               = ManyToManyField(BarterItem, verbose_name=_("items"), blank=False)
 
+    objects = RegistrationManager()
+    
     def branches(self):
         """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.schedule.course.branch.all())

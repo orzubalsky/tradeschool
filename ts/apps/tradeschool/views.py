@@ -53,7 +53,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 def redirect_to_schedule_list(request, branch_slug=None):
     """
     """
-    print 'a'
     return HttpResponseRedirect( reverse(schedule_list, kwargs={'branch_slug': branch_slug, }))
 
 

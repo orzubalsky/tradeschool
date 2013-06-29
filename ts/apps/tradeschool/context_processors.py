@@ -23,13 +23,10 @@ def branch(request):
             return { 'branch' : branch, }
 
         branch = Branch.objects.get(slug=branch_slug)
-        pages  = BranchPage.objects.filter(branch=branch) 
         
         translation.activate(branch.language)
         
-        return { 'branch'       : branch, 
-                 'branch_pages' : pages,
-               }
+        return { 'branch'       : branch, }
         
     except Branch.DoesNotExist:
         branch = Branch(timezone=settings.TIME_ZONE)

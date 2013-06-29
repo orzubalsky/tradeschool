@@ -60,7 +60,7 @@ class ScheduleInline(admin.TabularInline):
     fields  = ('start_time', 'end_time', 'venue')
 
 
-class RegistrationInline(admin.TabularInline):
+class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularInline):
     """Registration model inline object. 
         Used in the Schedule Admin view in order 
         to give an overview of students registered."""
@@ -148,7 +148,6 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
     """BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
         an overview of the branch's emails."""
-
     def queryset(self, request):
         """Filter the queryset in order to only display objects from the current branch."""
 
@@ -164,7 +163,17 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
-                    
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(ScheduleEmailContainerInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if (
+            db_field.name == 'student_confirmation' or 'student_reminder' or 'student_feedback' or 
+            'teacher_confirmation' or 'teacher_class_approval' or 'teacher_reminder' or 'teacher_feedback'
+            ):
+                # dirty trick so queryset is evaluated and cached in .choices
+                formfield.choices = formfield.choices
+        return formfield            
+
     model           = ScheduleEmailContainer
     fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
     extra           = 0
@@ -551,9 +560,25 @@ class ScheduleAdmin(BaseAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        request = kwargs['request']
+        formfield = super(ScheduleAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'venue':
+            venue_choices_cache = getattr(request, 'venue_choices_cache', None)
+            if venue_choices_cache is not None:
+                formfield.choices = venue_choices_cache
+            else:
+                request.venue_choices_cache = formfield.choices
+        return formfield
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'venue':
-            qs = Venue.objects.filter(branch__in=request.user.branch_set.all)
+            qs_cache = getattr(request, 'qs_cache', None)
+            if qs_cache is not None:
+                qs = qs_cache
+            else:
+                qs = Venue.objects.filter(branch__in=request.user.branch_set.all)
+                request.qs_cache = qs
             kwargs['queryset'] = qs
             kwargs['initial'] = qs[0]
         if db_field.name == 'course':
@@ -581,7 +606,7 @@ class ScheduleAdmin(BaseAdmin):
 
     list_display    = ('course_title', 'teacher_fullname', 'teacher_email', 'start_time', 'end_time', 'venue', 'course_status', 'created')
     list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
-    list_filter     = ('course_status', 'venue__title', 'start_time')
+    list_filter     = ('course_status', 'venue', 'start_time')
     search_fields   = ('get_course_title', 'get_teacher_fullname')
     inlines         = (BarterItemInline, RegistrationInline, ScheduleEmailContainerInline, FeedbackInline)
     actions         = ('approve_courses', 'populate_notifications')
