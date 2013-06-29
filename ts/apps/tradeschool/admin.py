@@ -58,7 +58,7 @@ class ScheduleInline(admin.TabularInline):
         return qs
                     
     model   = Schedule
-    extra   = 1
+    extra   = 0
     fields  = ('start_time', 'end_time', 'venue')
 
 
@@ -90,7 +90,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
         
     model   = Registration 
     fields  = ('student', 'registration_status',)
-    extra   = 1
+    extra   = 0
 
 
 class BarterItemInline(admin.TabularInline):
@@ -116,7 +116,7 @@ class BarterItemInline(admin.TabularInline):
                     
     model   = BarterItem
     exclude = ('is_active',)    
-    extra   = 2
+    extra   = 0
 
 
 class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
@@ -618,7 +618,7 @@ class ScheduleAdmin(BaseAdmin):
         teacher = obj.course.teacher
         # link to teacher edit admin form 
         url = reverse('admin:tradeschool_teacher_change', args=(teacher.pk,))
-        html = '<a href="%s">%s</a>' % (url, teacher.fullname)
+        html = '<a target="_blank" href="%s">%s</a>' % (url, teacher.fullname)
         return mark_safe(html)
         
     def teacher_email(self, obj):
@@ -676,7 +676,7 @@ class ScheduleAdmin(BaseAdmin):
     inlines         = (
                         BarterItemInline, 
                         RegistrationInline, 
-                        ScheduleEmailContainerInline, 
+                        #ScheduleEmailContainerInline, 
                         FeedbackInline
                         )
     actions         = (
@@ -690,7 +690,7 @@ class ScheduleAdmin(BaseAdmin):
         ('Teacher Info', {
             'fields': ('teacher_fullname', 'teacher_email', 'teacher_phone', 'teacher_bio', 'teacher_website')
         }),        
-        ('Class Time', {
+        ('Class Schedule', {
             'fields': ('venue', 'start_time', 'end_time', 'course_status')
         }),     
     )
