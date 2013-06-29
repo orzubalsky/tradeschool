@@ -857,7 +857,14 @@ class ScheduleManager(Manager):
             'venue__title',
             'course__title',
             'course__teacher__fullname',
-            'course__teacher__email'
+            'course__teacher__email',
+            'emails__student_confirmation__subject',
+            'emails__student_reminder__subject',
+            'emails__student_feedback__subject',
+            'emails__teacher_confirmation__subject',
+            'emails__teacher_class_approval__subject',
+            'emails__teacher_reminder__subject',
+            'emails__teacher_feedback__subject',                                                                        
         )
 
         return qs
