@@ -44,7 +44,7 @@
         <div class="formQ">
             <div class="formField">
                 <div class="items">
-                    <label>{% blocktrans context "Contextual help for barter items in class submission form" %}At least 5 items you want in exchange for teaching- and the quantity of each{% endblocktrans %}</label>
+                    <label>{% blocktrans context "Contextual help for barter items in class submission form" %}At least 5 items you want in exchange for teaching{% endblocktrans %}</label>
                     {{ barter_item_formset.management_form }} 
                     {% for barter_item_form in barter_item_formset %}
                     {{ barter_item_form.title }}

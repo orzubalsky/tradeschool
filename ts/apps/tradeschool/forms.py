@@ -60,8 +60,7 @@ class BaseBarterItemFormSet(BaseFormSet):
                 if form['title'].data:
                     count += 1
         if count < required:
-            raise forms.ValidationError( _('Please add at least %i barter items' % required) ) 
-
+            raise forms.ValidationError( _("Please add at least 5 barter items") ) 
 
 class TimeModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
@@ -78,7 +77,6 @@ class TimeModelChoiceField(forms.ModelChoiceField):
 class TimeSelectionForm(Form):
     "A simple dropdown menu for teachers to select an available time when submitting a class. Uses the Time model"
     time = TimeModelChoiceField(queryset=Time.objects.all(), error_messages={'required': _('Please select a time') } )
-
 
 class RegistrationForm(ModelForm):
     def __init__(self, schedule, *args, **kwargs):
