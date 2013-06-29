@@ -40,7 +40,7 @@ class CustomIndexDashboard(Dashboard):
                 modules.ModelList(
                     title=_('Scheduling'),
                     column=1,
-                    collapsible=True,
+                    collapsible=False,
                     models=('tradeschool.models.Schedule', 
                             'tradeschool.models.Time',
                             'tradeschool.models.TimeRange',
@@ -52,6 +52,7 @@ class CustomIndexDashboard(Dashboard):
                 ),
                 modules.ModelList(
                     title=_('Emails'),
+                    collapsible=False,                    
                     column=1,
                     models=('tradeschool.models.BranchNotificationTemplate', 
                             'tradeschool.models.BranchNotification',
@@ -61,6 +62,7 @@ class CustomIndexDashboard(Dashboard):
                 ),
                 modules.ModelList(
                     title=_('Website Content'),
+                    collapsible=False,                    
                     column=1,
                     models=('tradeschool.models.Photo',
                             'tradeschool.models.BranchPage',                    
@@ -69,6 +71,7 @@ class CustomIndexDashboard(Dashboard):
                 ),   
                 modules.ModelList(
                     title=_('Settings'),
+                    collapsible=False,                    
                     column=1,
                     models=('django.contrib.auth.models.Group', 
                             'django.contrib.auth.models.User',),
@@ -76,7 +79,7 @@ class CustomIndexDashboard(Dashboard):
                 modules.AppList(
                     title=_('Everything Else'),
                     column=1,
-                    collapsible=True,
+                    collapsible=False,
                     exclude=('',
                              ),
                 )                 

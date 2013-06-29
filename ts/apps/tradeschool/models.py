@@ -29,14 +29,22 @@ class Base(Model):
         abstract = True
     
     # Translators:  Used wherever a created time stamp is needed.                   
-    created     = DateTimeField(verbose_name=_("created"), auto_now_add=True, editable=False)
+    created     = DateTimeField(verbose_name=_("created"), editable=False)
     
     # Translators: Used wherever an update time stamp is needed.
-    updated     = DateTimeField(verbose_name=_("updated"), auto_now=True, editable=False)
+    updated     = DateTimeField(verbose_name=_("updated"), editable=False)
     
     # Translators: Used to determine whether something is active in the front end or not.
     is_active   = BooleanField(verbose_name=_("is active"), default=1)
-
+    
+    def save(self, *args, **kwargs):
+        """ Save timezone-aware values for created and updated fields.
+        """
+        if self.pk is None:
+            self.created = timezone.now()
+        self.updated = timezone.now()
+        super(Base, self).save(*args, **kwargs)
+        
     def __unicode__ (self):
         if hasattr(self, "title") and self.title:
             return self.title
@@ -343,7 +351,7 @@ class Location(Base):
     
     phone   = CharField(
                     verbose_name=_("phone"),
-                    max_length=20, 
+                    max_length=30, 
                     blank=True, 
                     null=True,
                     # Transalators: Contextual Help. 
@@ -427,7 +435,7 @@ class Branch(Location):
     organizers  = ManyToManyField(User, verbose_name=_("organizers"))
     
     # Translators: This is the Branches domain address.
-    site        = ForeignKey(Site, verbose_name=_("site"))
+    site        = ForeignKey(Site, verbose_name=_("site"), default=Site.objects.get_current())
     
     # Translators: If this Trade School belogns to a set of Trade Schools.
     cluster     = ForeignKey(Cluster, verbose_name=_("cluster"), null=True)
@@ -449,7 +457,9 @@ class Branch(Location):
         """Check to see if the slug field's value has been changed. 
         If it has, rename the branch's template dir name."""
         
-        if self.pk is not None:
+        template_directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
+
+        if self.pk is not None and os.path.exists(template_directory):
             original = Branch.objects.get(pk=self.pk)
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
@@ -510,7 +520,10 @@ class Branch(Location):
 
 class Venue(Location):
     """Branches have venues in which scheduled classes take place."""
-
+    class Meta:
+        ordering = ['branch', 'is_active', 'title']
+        
+    
     TYPE_CHOICES = ((0, 'Normal'), (1, 'Alternative'))
 
     def random_color():
@@ -518,7 +531,7 @@ class Venue(Location):
         return "#%x" % colorValue
 
     venue_type  = SmallIntegerField(max_length=1, choices=TYPE_CHOICES, default=0) 
-    address_1   = CharField(max_length=50, verbose_name=_("Address 1"))
+    address_1   = CharField(max_length=200, verbose_name=_("Address 1"))
     address_2   = CharField(max_length=100, blank=True, null=True, verbose_name=_("Address 2"))
     capacity    = SmallIntegerField(
                         max_length=4, 
@@ -567,12 +580,10 @@ class Person(Base):
         # Translators: Plural.
         verbose_name_plural = "People"
         
-        permissions = (
-            ('view_object', 'View object'),
-        )        
-            
+        ordering = ['fullname', ]
+        
     fullname    = CharField(
-                        max_length=100, 
+                        max_length=200, 
                         verbose_name=_("your name"), 
                         # Translators: Contextual Help.
                         help_text=_("This will appear on the site.")
@@ -610,7 +621,7 @@ class Person(Base):
                         help_text=_("Optional.")
                     )
                     
-    slug        = SlugField(max_length=120, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
+    slug        = SlugField(max_length=220, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
     branch      = ManyToManyField(
                         Branch, 
                         verbose_name=_("branch"), 
@@ -620,6 +631,10 @@ class Person(Base):
     
     objects = Manager()
 
+    def branches(self):
+        """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
+        return ','.join( str(branch) for branch in self.branch.all())
+        
     def __unicode__ (self):
         return self.fullname
             
@@ -674,6 +689,8 @@ class Course(Base):
         
         # Translators: Any times that the word class is shown as plural
         verbose_name_plural = _("Classes")
+        
+        ordering = ['title',]
 
     CATEGORIES = (
         (0, 'Arts'),
@@ -688,8 +705,8 @@ class Course(Base):
     teacher         = ForeignKey(Person, verbose_name=_("teacher"), related_name='courses_taught')
     category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))    
     max_students    = IntegerField(max_length=4, verbose_name=_("Maximum number of students in your class"))
-    title           = CharField(max_length=140, verbose_name=_("class title")) 
-    slug            = SlugField(max_length=120,blank=False, null=True, verbose_name=_("URL Slug"))
+    title           = CharField(max_length=255, verbose_name=_("class title")) 
+    slug            = SlugField(max_length=255,blank=False, null=True, verbose_name=_("URL Slug"))
     description     = TextField(blank=False, verbose_name=_("Class description"))
     branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
 
@@ -795,7 +812,10 @@ class ScheduleEmailContainer(EmailContainer):
     def preview(self, email):
         """shortcut method to preview an email via the ScheduleEmailContainer object."""
         return email.preview(self.schedule)
-
+    
+    def branches(self):
+        return ','.join( str(branch) for branch in self.schedule.course.branch.all())
+        
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
 
@@ -805,12 +825,14 @@ class BarterItem(Base):
     Barter items are the items that teachers request for a class they're teaching.
     The items themselves can be requested in various classes.
     """
+    class Meta:
+        ordering = ['title', ]
     # Translators: Wherever the barter item shows up.
-    title = CharField(verbose_name=_("title"), max_length=255)
+    title    = CharField(verbose_name=_("title"), max_length=255)
+    schedule = ForeignKey('Schedule', verbose_name=_('schedule')) 
 
     def __unicode__ (self):
-        registered_count = RegisteredItem.objects.filter(barter_item=self).count()
-        return u"%s (%i are bringing)" % (self.title, registered_count)
+        return u"%s" % (self.title,)
 
 
 class ScheduleManager(Manager):
@@ -882,8 +904,7 @@ class Schedule(Durational):
                             through="Registration"
                         )
                                                         
-    items           = ManyToManyField(BarterItem, verbose_name=_("items"))    
-    slug            = SlugField(max_length=120,blank=False, null=True, unique=True, verbose_name=_("URL Slug"))
+    slug            = SlugField(max_length=255,blank=False, null=True, unique=True, verbose_name=_("URL Slug"))
 
     objects   = ScheduleManager()
     public    = SchedulePublicManager()
@@ -907,20 +928,24 @@ class Schedule(Durational):
         "resets course notification templates from the branch notification templates"
                 
         # delete existing branch emails
-        schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self).delete()
+        schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self)
+        if schedule_emails.exists():
+            schedule_emails.delete()
             
         # copy course notification from the branch notification templates
-        branch_email_container = BranchEmailContainer.objects.filter(branch__in=self.course.branch.all())[0]
+        branch_email_containers = BranchEmailContainer.objects.filter(branch__in=self.course.branch.all())
+        if branch_email_containers.exists():
+            branch_email_container = branch_email_containers[0]
         
-        schedule_email_container = ScheduleEmailContainer(schedule=self)
+            schedule_email_container = ScheduleEmailContainer(schedule=self)
         
-        for fieldname, email_obj in branch_email_container.emails.iteritems():
-            new_email = copy_model_instance(email_obj)
-            if isinstance(new_email, TimedEmail):
-                new_email.set_send_on(self.start_time)
-            new_email.save()
-            setattr(schedule_email_container, fieldname, new_email)
-        schedule_email_container.save()
+            for fieldname, email_obj in branch_email_container.emails.iteritems():
+                new_email = copy_model_instance(email_obj)
+                if isinstance(new_email, TimedEmail):
+                    new_email.set_send_on(self.start_time)
+                new_email.save()
+                setattr(schedule_email_container, fieldname, new_email)
+            schedule_email_container.save()
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"
@@ -953,6 +978,7 @@ class Registration(Base):
     """
     class Meta:
         unique_together = ('schedule', 'student')
+        ordering = ['schedule', 'registration_status', 'student']
         
     # Translators: Student registration buttons.     
     REGISTRATION_CHOICES = (('registered', _('Registered')),
@@ -961,23 +987,18 @@ class Registration(Base):
     schedule            = ForeignKey(Schedule, verbose_name=_("schedule"))
     student             = ForeignKey(Person, verbose_name=_("student"), related_name='registrations')
     registration_status = CharField(verbose_name=_("registration status"), max_length=20, choices=REGISTRATION_CHOICES, default='registered')
-    items               = ManyToManyField(BarterItem, verbose_name=_("items"), through="RegisteredItem", blank=False)
+    items               = ManyToManyField(BarterItem, verbose_name=_("items"), blank=False)
 
-    def __unicode__ (self):      
-        return "%s: %s" % (self.student.fullname, self.registration_status)
-
-
-class RegisteredItem(Base):
-    """
-
-    """
-    # Transalations: These next three are for the registered item.
-    registration    = ForeignKey(Registration, verbose_name=_("registration"))
-    barter_item     = ForeignKey(BarterItem, verbose_name=_("barter item"))
-    registered      = IntegerField(verbose_name=_("registered"), max_length=3, default=1)
+    def branches(self):
+        """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
+        return ','.join( str(branch) for branch in self.schedule.course.branch.all())
     
-    def __unicode__ (self):
-        return "%s: %i" % (self.barter_item.title, self.registered)
+    def registered_items(self):
+        """ Return the registered items as a string. Used in the admin."""
+        return ','.join( str(item) for item in self.items.all())        
+        
+    def __unicode__ (self):      
+        return "%s: %s" % (self.student, self.registration_status)
 
 
 class Feedback(Base):
@@ -1022,8 +1043,11 @@ class Photo(Base):
         
 
 class BranchPage(FlatPage, Base):
-    """Extending the FlatPage model to provide branch-specific content pages."""
-    
+    """Extending the FlatPage model to provide branch-specific content pages.
+    """
+    class Meta:
+        ordering = ['branch', 'title']
+        
     # Translators: These one is for the dynamic custom pages.
     branch   = ForeignKey(Branch, verbose_name=_("branch"))
     position = PositiveSmallIntegerField(_('Position'), default=0)    

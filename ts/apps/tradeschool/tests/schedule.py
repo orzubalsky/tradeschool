@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.core import mail
+from django.core.cache import cache
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -9,13 +10,14 @@ from django.conf import settings
 from datetime import *
 import shutil, os, os.path
 from tradeschool.models import *
+from tradeschool.utils import daterange
 
 
 
 class ScheduleTestCase(TestCase):
     """ Tests the process of submitting a schedule using the frontend form.
     """
-    fixtures = ['test_data.json', 'test_timerange.json']
+    fixtures = ['test_data.json', 'test_timerange.json', 'test_admin.json']
     
     def setUp(self):
         """ Create a Site and branch for testing.
@@ -30,12 +32,18 @@ class ScheduleTestCase(TestCase):
         self.branch.language = 'en'
         self.branch.save()
         
+        # admin user for the branch
+        self.password = 'testts123!'
+        self.admin = User.objects.create_superuser('test_admin', 'tester@tradeschool.coop', self.password)
+        self.admin.branch_set.add(self.branch)
+        self.admin.save()
+        
         self.url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
         
         self.time = Time.objects.filter(venue__isnull=True)[0]
         
         self.new_teacher_data = {
-                'teacher-fullname'  : 'new test teahcer', 
+                'teacher-fullname'  : 'new test teacher', 
                 'teacher-bio'       : 'biobiobio', 
                 'teacher-website'   : 'http://website.com', 
                 'teacher-email'     : 'email@email.com', 
@@ -83,9 +91,119 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.valid_data['teacher-phone'])
-        for item in schedule_obj.items.all():
+        for item in schedule_obj.barteritem_set.all():
             self.assertTrue(item.title in self.valid_data.values())            
 
+    
+    def verify_timezone(self, saved_datetime_obj, saved_time):
+        """ Verifies that a time was saved in a tz-aware way according to the branch's timeezone.
+        """
+        # verify branch's timezone
+        current_tz = timezone.get_current_timezone()
+        utc = pytz.timezone('UTC')
+        self.assertEqual(current_tz.zone, self.branch.timezone)
+
+        # do manual timezone conversion to the submitted date
+        # start with localizing the non-aware dates to the branch's timezone
+        localized_time = current_tz.localize(saved_datetime_obj)
+        
+        # verify that the dates now have the branch's tzinfo
+        self.assertEqual(localized_time.tzinfo.zone, self.branch.timezone)
+      
+        # normalize dates to utc for storing in the database
+        normalized_time = utc.normalize(localized_time.astimezone(utc))
+        
+        # verify that the normalized dates are the ones that were saved in the db
+        self.assertEqual(normalized_time, saved_time)
+                
+
+    def test_timeslot_creation(self):
+        """ Tests that time slots can be created from the admin backend,
+            that they are stored and displayed with the branch's timezone,
+            and that they are displayed in the schedule-submit view.
+        """
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)     
+
+        # admin time add view
+        url = reverse('admin:tradeschool_time_add')
+        
+        # these will become not-tz-aware strings, but they should be converted
+        # to the branch's timezone 
+        start_time = datetime(2030, 02, 02, 10, 0, 0)
+        end_time   = datetime(2030, 02, 02, 12, 30, 0)
+        
+        # save a new time object
+        data = {
+                'start_time_0' : start_time.strftime('%Y-%m-%d'),
+                'start_time_1' : start_time.strftime('%H:%M:%S'),
+                'end_time_0'   : end_time.strftime('%Y-%m-%d'),
+                'end_time_1'   : end_time.strftime('%H:%M:%S'),
+                'venue'        : Venue.objects.filter(branch=self.branch)[0].pk,
+                'branch'       : self.branch.pk,
+            }
+        
+        response = self.client.post(url, data=data, follow=True)
+        
+        # verify the form was submitted successfully
+        self.assertEqual(response.status_code, 200)        
+        self.assertTemplateUsed('admin/change_form.html')        
+        
+        # saved time
+        time = Time.objects.latest('created')
+
+        # verify date and time were saved in a tz-aware way, normalized to UTC
+        self.verify_timezone(start_time, time.start_time)
+        self.verify_timezone(end_time, time.end_time)
+        
+        # verify that the timeslot appears on the schedule-submit form
+        url = reverse('schedule-add', kwargs={ 'branch_slug' : self.branch.slug })
+        response = self.client.get(url)
+        self.assertContains(response, time.pk)
+        
+        
+    def test_timerange_creation(self):
+        """ Tests that a TimeRange saved in the admin backend results in the correct
+            number of Time objects with data as it was set in the TimeRange form.
+        """
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)     
+
+        # admin time add view
+        url = reverse('admin:tradeschool_timerange_add')
+        
+        # these will become not-tz-aware strings, but they should be converted        
+        # to the branch's timezone 
+        start_time = datetime(2030, 02, 02, 10, 0, 0)
+        end_time   = datetime(2030, 04, 02, 12, 30, 0)
+        
+        # save a new time object
+        data = {
+                'start_time' : start_time.strftime('%H:%M:%S'),
+                'start_date' : start_time.strftime('%Y-%m-%d'),
+                'end_time'   : end_time.strftime('%H:%M:%S'),
+                'end_date'   : end_time.strftime('%Y-%m-%d'),
+                'monday'     : 1,
+                'branch'     : self.branch.pk,
+            }
+        
+        response = self.client.post(url, data=data, follow=True)
+
+        # verify the form was submitted successfully
+        self.assertEqual(response.status_code, 200)        
+        self.assertTemplateUsed('admin/change_form.html')        
+        
+        # saved timerange
+        timerange = TimeRange.objects.latest('created')
+        
+        # saved time slots
+        start_time  = datetime.combine(timerange.start_date, timerange.start_time)
+        end_time    = datetime.combine(timerange.end_date, timerange.end_time)
+        times = Time.objects.filter(start_time__gte=start_time, end_time__lte=end_time)
+        
+        # verify times were saved
+        self.assertTrue(times.count > 4)
+        
 
     def test_view_loading(self):
         """ Tests that the schedule-add view loads properly.
@@ -116,13 +234,12 @@ class ScheduleTestCase(TestCase):
         
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
-        
+
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
         
         return response
-                
-
+        
     def test_schedule_submission_new_teacher_new_course(self):
         """ Tests the submission of a schedule of a new class by a new teacher.
         """
@@ -190,7 +307,25 @@ class ScheduleTestCase(TestCase):
 
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
+
+
+    def test_time_is_saved(self):
+        """ Tests that the selected time in the form is saved in
+            a tz-aware way in the database.
+        """
+        # get Time object
+        time = Time.objects.get(pk=self.time_data['time-time'])
+
+        # post the data to the schedule submission form
+        response = self.client.post(self.url, data=self.valid_data, follow=True)
+
+        # the saved schedule
+        schedule = Schedule.objects.latest('created')
         
+        # verify the Schedule times match the Time's times
+        self.assertEqual(schedule.start_time, time.start_time)
+        self.assertEqual(schedule.end_time, time.end_time)
+
 
     def test_time_deleted_after_successful_submission(self):
         """ Tests that the selected Time object gets deleted 
@@ -212,7 +347,7 @@ class ScheduleTestCase(TestCase):
         """
         # submit a schedule
         response = self.is_successful_submission(self.valid_data)
-        
+
         schedule = response.context['schedule']        
         
         # check that one ScheduleEmailContainer was created for the schedule
@@ -439,3 +574,6 @@ class ScheduleTestCase(TestCase):
         # delete branches' files
         for branch in Branch.objects.all():
             branch.delete_files()
+
+        # clear cache
+        cache.clear()

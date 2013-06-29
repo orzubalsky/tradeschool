@@ -40,7 +40,7 @@
             {% block schedule_items %}
             <p class="description">
                 {% blocktrans %}Bring one of the following{% endblocktrans %}:<br />
-            {% for item in schedule.items.all %}
+            {% for item in schedule.barteritem_set.all %}
                 {{ item.title }}<br />
             {% endfor %}
             </p>

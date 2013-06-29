@@ -1,8 +1,10 @@
 from tradeschool.models import *
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
+from django.utils import timezone
 from time import strftime
 from datetime import datetime
+from tradeschool.utils import daterange
 
 # adding 'dispatch_uid' because this signal was getting reigstered twice. 'dispatch_uid' just needs to be some unique string.
 #
@@ -12,7 +14,6 @@ from datetime import datetime
 def branch_save_callback(sender, instance, **kwargs):
     """ Create notifications on creation of a new branch.
         Create a copy of the default template files when a new branch is created."""  
-
     # create files
     if kwargs.get('created'):
         instance.generate_files()    
@@ -62,9 +63,11 @@ def timerange_save_callback(sender, instance, **kwargs):
           
             normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
             normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
-
+            
+            now = timezone.now()
+            
             # append a time object to the list so all of them can be inserted in one query
-            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch))                                    
+            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch, created=now, updated=now) )
 
     # save time slots
     Time.objects.bulk_create(timeList)
@@ -92,9 +95,3 @@ def timerange_delete_callback(sender, instance, **kwargs):
                 Time.objects.filter(start_time=start_time, end_time=end_time)[0].delete()
             except IndexError:
                 pass
-
-
-def daterange(start_date, end_date):
-    """ construct a date range from start and end dates."""
-    for n in range(int ((end_date - start_date).days)):
-        yield start_date + timedelta(n)

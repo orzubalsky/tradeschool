@@ -121,6 +121,9 @@ class BranchTestCase(TestCase):
         """ Test that copies of the email templates were created
             When a new branch is saved.
         """
+        # save branch
+        self.branch.save()
+        
         # verify that one BranchEmailContainer was created for branch
         self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
 
@@ -235,8 +238,9 @@ class BranchTestCase(TestCase):
         """ Tests that the templates are rendered with the branch's language settings.
             Language is one of the fields in the Branch model.
         """
-        # get a branch and set its language to Englisgh
+        # get a branch 
         branch = Branch.objects.all()[0]
+        url = reverse('schedule-list', kwargs={'branch_slug' : branch.slug })
         
         # verify that all languages that are defined in the base.py settings file
         # can be loaded correctly
@@ -252,13 +256,36 @@ class BranchTestCase(TestCase):
             settings.LANGUAGE_CODE = language_code
         
             # load a page to check the language setting
-            url = reverse('schedule-list', kwargs={'branch_slug' : branch.slug })
             response = self.client.get(url)
 
             # verify the languages match. test in 2 parts, since the language codes don't really match-
             # they're both es_es and es-es. 
             self.assertEqual(branch.language[:2], response.context['LANGUAGE_CODE'][:2])
             self.assertEqual(branch.language[3:], response.context['LANGUAGE_CODE'][3:])
+
+
+    def test_branch_timezone(self):
+        """ Tests that the timezone stored with the branch 
+            is used to calculate dates both on the frontend and backend.
+        """
+        # get a branch 
+        branch = Branch.objects.all()[0]
+        url = reverse('schedule-list', kwargs={'branch_slug' : branch.slug })
+        
+        # load a page to check the timezone setting
+        response = self.client.get(url)
+
+        # verify the branch's timezone is in the context
+        self.assertEqual(response.context['TIME_ZONE'], branch.timezone)
+        
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)        
+
+        # get an admin page
+        response = self.client.get(self.branch_add_url)        
+        
+        # verify the branch's timezone is in the context
+        self.assertEqual(response.context['TIME_ZONE'], branch.timezone)        
 
 
     def tearDown(self):

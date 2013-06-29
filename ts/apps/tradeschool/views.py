@@ -50,6 +50,13 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
         }, context_instance=RequestContext(request))
 
 
+def redirect_to_schedule_list(request, branch_slug=None):
+    """
+    """
+    print 'a'
+    return HttpResponseRedirect( reverse(schedule_list, kwargs={'branch_slug': branch_slug, }))
+
+
 def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     """ """
     branch               = get_object_or_404(Branch, slug=branch_slug)
@@ -86,9 +93,10 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
 
                 # save items in registration through RegisteredItem
                 for barter_item in registration_form.cleaned_data['items']:
-                   registered_item = RegisteredItem(registration=registration, barter_item=barter_item)
-                   registered_item.save()
+                    registration.items.add(barter_item)
 
+                registration.save()
+                
                 # email confirmation to student
                 schedule.emails.email_student(schedule.emails.student_confirmation, registration)
 
@@ -238,16 +246,15 @@ def schedule_add(request, branch_slug=None):
                 
                 # check if the submited barter item already exists in the system
                 # we determine an existing barter item by its title
-                barter_item, barter_item_created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], defaults=barter_item_form_data)                
+                barter_item, barter_item_created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], schedule=schedule, defaults=barter_item_form_data)                
                 barter_item.save()
-                schedule.items.add(barter_item)
 
             # send confirmation email to teacher
             schedule.emails.email_teacher(schedule.emails.teacher_confirmation)
 
             # delete the selected time slot
             Time.objects.get(pk=selected_time.pk).delete()
-            
+
             # redirect to thank you page
             return HttpResponseRedirect( reverse(schedule_submitted, kwargs={'schedule_slug' : schedule.slug, 'branch_slug': branch.slug}))            
 
@@ -298,30 +305,28 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             # save schedule
             schedule.slug = unique_slugify(Schedule, course.title)
             schedule.save()
-
+            
             # remove all barter item relationships before saving them again
-            for item in schedule.items.all():
-                schedule.items.remove(item)
+            for item in schedule.barteritem_set.all():
+                item.delete()
 
             # save updated barter items
             for barter_item_form in barter_item_formset:
                 barter_item_form_data = barter_item_form.cleaned_data
-                barter_item, created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'])
+                barter_item, created = BarterItem.objects.get_or_create(title=barter_item_form_data['title'], schedule=schedule, defaults=barter_item_form_data)
                 barter_item.save()
-                schedule.items.add(barter_item)
-
             return HttpResponseRedirect( reverse(schedule_submitted, kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule.slug} ))
 
     else :
         initial_item_data = []
-        for item in schedule.items.all():
+        for item in schedule.barteritem_set.all():
             initial_item_data.append({'title':item.title, })
 
         BarterItemFormSet   = formset_factory(BarterItemForm, extra=0, formset=BaseBarterItemFormSet,)
         barter_item_formset = BarterItemFormSet(prefix="item", initial=initial_item_data)
         course_form         = CourseForm(prefix="course", instance=schedule.course)
         teacher_form        = TeacherForm(prefix="teacher", instance=schedule.course.teacher)
-
+    
     view_templates = branch_templates(branch, 'schedule_submit.html', 'subpage.html')    
 
     return render_to_response(view_templates.template.name, {
@@ -337,7 +342,7 @@ def schedule_submitted(request, schedule_slug=None, branch_slug=None):
     
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     branch   = get_object_or_404(Branch, slug=branch_slug)
-    
+
     view_templates = branch_templates(branch, 'schedule_submitted.html', 'subpage.html')    
         
     return render_to_response(view_templates.template.name, {

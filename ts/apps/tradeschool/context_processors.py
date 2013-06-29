@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import resolve
 from django.utils import translation
+from django.utils import timezone
 from tradeschool.models import *
 
 def branch(request):

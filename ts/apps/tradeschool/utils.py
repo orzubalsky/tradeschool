@@ -2,6 +2,7 @@ import os
 from django.template.defaultfilters import slugify
 from django.db.models import AutoField
 from django.template.loader import select_template
+from datetime import datetime, timedelta
 
 
 class Bunch:
@@ -91,3 +92,9 @@ def unique_slugify(model, value, slugfield="slug"):
                         return potential
                 # we hit a conflicting slug, so bump the suffix & try again
                 suffix += 1
+                
+
+def daterange(start_date, end_date):
+    """ construct a date range from start and end dates."""
+    for n in range(int ((end_date - start_date).days)):
+        yield start_date + timedelta(n)

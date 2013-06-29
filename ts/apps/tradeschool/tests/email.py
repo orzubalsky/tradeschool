@@ -52,8 +52,7 @@ class EmailTestCase(TestCase):
             registration.save()
             
             # add an item to the registration
-            registered_item = RegisteredItem(barter_item=self.schedule.items.all()[0])
-            registration.registereditem_set.add(registered_item)
+            registration.items.add(self.schedule.barteritem_set.all()[0])
             registration.save()
 
 
