@@ -97,8 +97,8 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
         return mark_safe(html)
         
     model           = Registration 
-    readonly_fields = ('registration_link', 'registration_status')
-    fields          = ('registration_link', 'registration_status',)
+    readonly_fields = ('registration_link', 'items', 'registration_status')
+    fields          = ('registration_link', 'items', 'registration_status',)
     extra           = 0
 
 

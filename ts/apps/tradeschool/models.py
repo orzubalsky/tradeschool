@@ -844,17 +844,6 @@ class BarterItem(Base):
     title    = CharField(verbose_name=_("title"), max_length=255)
     schedule = ForeignKey('Schedule', verbose_name=_('schedule')) 
 
-    def __unicode__ (self):
-        registrations = self.registration_set.all().filter(registration_status='registered').count()
-
-        if registrations == 0:
-            string = u"%s (be the first one to bring this!)" % (self.title)
-        elif registrations == 1:
-            string = u"%s (%i is bringing)" % (self.title, registrations)
-        else:
-            string = u"%s (%i are bringing)" % (self.title, registrations)
-        return string
-
 
 class ScheduleManager(Manager):
     use_for_related_fields = True    
@@ -1014,7 +1003,7 @@ class Schedule(Durational):
 class RegistrationManager(Manager):
     use_for_related_fields = True    
     def get_query_set(self):
-        return super(RegistrationManager, self).get_query_set().select_related('schedule', 'student').prefetch_related('items')
+        return super(RegistrationManager, self).get_query_set().select_related('schedule', 'student', 'student__fullname', 'items__title').prefetch_related('items')
 
 
 class Registration(Base):
