@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-15 15:36-0400\n"
-"PO-Revision-Date: 2013-06-15 15:42-0500\n"
+"POT-Creation-Date: 2013-06-15 16:23-0400\n"
+"PO-Revision-Date: 2013-06-15 16:25-0500\n"
 "Last-Translator: admin istrator <admin@test.tradeschool.coop>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,11 +42,11 @@ msgstr "Otras cosas"
 msgid "Advanced options"
 msgstr "Opciones avanzadas"
 
-#: apps/tradeschool/forms.py:12 apps/tradeschool/forms.py:99
+#: apps/tradeschool/forms.py:12 apps/tradeschool/forms.py:97
 msgid "Please enter your name"
 msgstr "Por favor ingrese su nombre"
 
-#: apps/tradeschool/forms.py:13 apps/tradeschool/forms.py:100
+#: apps/tradeschool/forms.py:13 apps/tradeschool/forms.py:98
 msgid "Please enter your email"
 msgstr "Por favor ingrese su correo"
 
@@ -61,7 +61,7 @@ msgstr "Por favor ingrese su número de teléfono"
 #: apps/tradeschool/forms.py:22 apps/tradeschool/models.py:599
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:39
 msgid "A few sentences about you"
-msgstr "Un par de horaciones acerca de ti"
+msgstr "Un parca de ti"
 
 #. Translators: Contextual Help
 #: apps/tradeschool/forms.py:22 apps/tradeschool/models.py:601
@@ -70,38 +70,38 @@ msgstr "Para que los estudiantes la vean en la página."
 
 #: apps/tradeschool/forms.py:29
 msgid "Please enter a class title"
-msgstr "El título de tu clase"
+msgstr "Por favor llena el título de tu clase"
 
 #: apps/tradeschool/forms.py:30
 msgid "Please enter a class description"
-msgstr ""
+msgstr "Por favor llena la descripción de la clase"
 
 #: apps/tradeschool/forms.py:31
 msgid "Please enter the maximum number of students in your class"
-msgstr ""
+msgstr "Por favos dinos la máxima cantidad de estudiantes para tu clase"
 
 #: apps/tradeschool/forms.py:43
 msgid "Barter item cannot be blank"
-msgstr ""
+msgstr "Necesitas llenar los artículos de trueque"
 
 #: apps/tradeschool/forms.py:63
-#, python-format
-msgid "Please add at least %i barter items"
-msgstr ""
+#, fuzzy
+msgid "Please add at least 5 barter items"
+msgstr "Por favor llena minimo 5 articulos de trueque"
 
-#: apps/tradeschool/forms.py:80
+#: apps/tradeschool/forms.py:79
 msgid "Please select a time"
-msgstr ""
+msgstr "Por fxxxxbxbxbbxbxbxb"
 
-#: apps/tradeschool/forms.py:87
+#: apps/tradeschool/forms.py:85
 msgid "Please select at least one item"
-msgstr ""
+msgstr "Por favor selecciona minimo un artículo"
 
-#: apps/tradeschool/forms.py:101
+#: apps/tradeschool/forms.py:99
 msgid "Please enter your phone number"
 msgstr "Por favor ingrese su número de teléfono"
 
-#: apps/tradeschool/forms.py:111
+#: apps/tradeschool/forms.py:109
 msgid "Please enter your feedback"
 msgstr "Por favor ingrese su correo"
 
@@ -785,7 +785,7 @@ msgctxt "Text for the Tradeschool.coop link"
 msgid "TS HQ"
 msgstr ""
 
-#: apps/tradeschool/templates/branches_base/base.html:85
+#: apps/tradeschool/templates/branches_base/base.html:86
 msgctxt "header on front page"
 msgid "Barter for knowledge"
 msgstr ""
@@ -795,7 +795,7 @@ msgstr ""
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-#: apps/tradeschool/templates/branches_base/base.html:92
+#: apps/tradeschool/templates/branches_base/base.html:93
 msgctxt "intro on front page"
 msgid ""
 msgstr ""
@@ -811,11 +811,11 @@ msgstr ""
 "Language: \r\n"
 "X-Translated-Using: django-rosetta 0.7.2\r\n"
 
-#: apps/tradeschool/templates/branches_base/base.html:100
+#: apps/tradeschool/templates/branches_base/base.html:101
 msgid "Join our list"
 msgstr "Uneté a nuestr"
 
-#: apps/tradeschool/templates/branches_base/base.html:103
+#: apps/tradeschool/templates/branches_base/base.html:104
 msgctxt "mailing list join button text"
 msgid "GO"
 msgstr ""
@@ -846,8 +846,7 @@ msgstr ""
 
 #: apps/tradeschool/templates/branches_base/schedule_submit.html:47
 msgctxt "Contextual help for barter items in class submission form"
-msgid ""
-"At least 5 items you want in exchange for teaching- and the quantity of each"
+msgid "At least 5 items you want in exchange for teaching"
 msgstr ""
 
 #: apps/tradeschool/templates/branches_base/schedule_submit.html:53
