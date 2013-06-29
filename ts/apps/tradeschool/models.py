@@ -845,7 +845,15 @@ class BarterItem(Base):
     schedule = ForeignKey('Schedule', verbose_name=_('schedule')) 
 
     def __unicode__ (self):
-        return u"%s" % (self.title,)
+        registrations = self.registration_set.all().filter(registration_status='registered').count()
+
+        if registrations == 0:
+            string = u"%s (be the first one to bring this!)" % (self.title)
+        elif registrations == 1:
+            string = u"%s (%i is bringing)" % (self.title, registrations)
+        else:
+            string = u"%s (%i are bringing)" % (self.title, registrations)
+        return string
 
 
 class ScheduleManager(Manager):

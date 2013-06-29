@@ -88,9 +88,18 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
             kwargs["queryset"] = Student.objects.filter(branch__in=request.user.branch_set.all)
         return super(RegistrationInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
-    model   = Registration 
-    fields  = ('student', 'registration_status',)
-    extra   = 0
+    def registration_link(self, obj):
+        """
+        """
+        # link to item edit admin form 
+        url = reverse('admin:tradeschool_registration_change', args=(obj.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.student.fullname)
+        return mark_safe(html)
+        
+    model           = Registration 
+    readonly_fields = ('registration_link', 'registration_status')
+    fields          = ('registration_link', 'registration_status',)
+    extra           = 0
 
 
 class BarterItemInline(admin.TabularInline):
@@ -113,10 +122,19 @@ class BarterItemInline(admin.TabularInline):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
-                    
-    model   = BarterItem
-    exclude = ('is_active',)    
-    extra   = 0
+    
+    def title_link(self, obj):
+        """
+        """
+        # link to item edit admin form 
+        url = reverse('admin:tradeschool_barteritem_change', args=(obj.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.title)
+        return mark_safe(html)
+         
+    model           = BarterItem
+    fields          = ('title_link',)
+    readonly_fields = ('title_link',)
+    extra           = 0
 
 
 class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
@@ -677,7 +695,7 @@ class ScheduleAdmin(BaseAdmin):
                         BarterItemInline, 
                         RegistrationInline, 
                         #ScheduleEmailContainerInline, 
-                        FeedbackInline
+                        FeedbackInline,
                         )
     actions         = (
                         'approve_courses', 
@@ -725,11 +743,15 @@ class RegistrationAdmin(BaseAdmin):
         
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'items':
-            kwargs['queryset'] = BarterItem.objects.filter(schedule__course__branch__in=request.user.branch_set.all)
+            # parsing the object id from the URL. **This is very ugly! is there a way to get the obj from the request --Or
+            registration_pk = int(request.path.split('/')[4])
+            registration = Registration.objects.get(pk=registration_pk)
+            kwargs['queryset'] = BarterItem.objects.filter(schedule=registration.schedule)
         return super(RegistrationAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)        
             
-    fields = ()
-    list_display = ('student', 'schedule', 'registered_items', 'registration_status', 'branches')
+    fields          = ('student', 'schedule', 'items', 'registration_status')
+    readonly_fields = ('student', 'schedule',)
+    list_display    = ('student', 'schedule', 'registered_items', 'registration_status', 'branches')
 
 
 class BarterItemAdmin(BaseAdmin):
