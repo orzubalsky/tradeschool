@@ -856,15 +856,20 @@ class ScheduleManager(Manager):
         ).select_related(
             'venue__title',
             'course__title',
+            'course__description',
+            'course__max_students',                        
             'course__teacher__fullname',
             'course__teacher__email',
+            'course__teacher__phone',            
+            'course__teacher__website',            
+            'course__teacher__bio',
             'emails__student_confirmation__subject',
             'emails__student_reminder__subject',
             'emails__student_feedback__subject',
             'emails__teacher_confirmation__subject',
             'emails__teacher_class_approval__subject',
             'emails__teacher_reminder__subject',
-            'emails__teacher_feedback__subject',                                                                        
+            'emails__teacher_feedback__subject',   
         )
 
         return qs
