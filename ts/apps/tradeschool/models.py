@@ -530,11 +530,11 @@ class Venue(Location):
     class Meta:
         ordering = ['branch', 'is_active', 'title']
         
-    # Translators: This is used in the header navigation to let you know where you are.
-    verbose_name = _('Venue')
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Venue')
     
-    # Translators: Plural
-    verbose_name_plural = _('Venues')
+        # Translators: Plural
+        verbose_name_plural = _('Venues')
     
     TYPE_CHOICES = ((0, 'Normal'), (1, 'Alternative'))
 
@@ -845,6 +845,13 @@ class BarterItem(Base):
     """
     class Meta:
         ordering = ['title', ]
+        
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Barter item')
+        
+        # Translators: Plural
+        verbose_name_plural = _('Barter items')
+        
     # Translators: Wherever the barter item shows up.
     title    = CharField(verbose_name=_("title"), max_length=255)
     schedule = ForeignKey('Schedule', verbose_name=_('schedule')) 
@@ -1022,11 +1029,11 @@ class Registration(Base):
         unique_together = ('schedule', 'student')
         ordering = ['schedule', 'registration_status', 'student']
         
-    # Translators: This is used in the header navigation to let you know where you are.
-    verbose_name = _('Registration')
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Registration')
     
-    # Translators: Plural
-    verbose_name_plural = _('Registrations')
+        # Translators: Plural
+        verbose_name_plural = _('Registrations')
         
     # Translators: Student registration buttons.     
     REGISTRATION_CHOICES = (('registered', _('Registered')),
@@ -1055,6 +1062,13 @@ class Feedback(Base):
     """
     Feedback is collected after courses take place.
     """
+    class Meta:
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Feedback')
+        
+        # Translators: Plural
+        verbose_name_plural = _('Feedbacks')
+        
     # Translations: These next three are for the feedback form.
     FEEDBACK_TYPE_CHOICES = (('teacher', _('From the Teacher')),('student', _('From a student')))    
 
@@ -1074,12 +1088,12 @@ class Photo(Base):
     class Meta:
         ordering = ['position',]
         
-    # Translators: This is used in the header navigation to let you know where you are.
-    verbose_name = _('Photo')
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Photo')
     
-    # Translators: Plural
-    verbose_name_plural = _('Photos')
-        
+        # Translators: Plural
+        verbose_name_plural = _('Photos')
+    
     def upload_path(self, filename):
         return "uploads/%s/images/%s" % (self.branch.slug, filename)
     
@@ -1104,11 +1118,11 @@ class BranchPage(FlatPage, Base):
     class Meta:
         ordering = ['branch', 'title']
 
-    # Translators: This is used in the header navigation to let you know where you are.
-    verbose_name = _('Branch Page')
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Branch Page')
     
-    # Translators: Plural
-    verbose_name_plural = _('Branch Pages')
+        # Translators: Plural
+        verbose_name_plural = _('Branch Pages')
         
     # Translators: These one is for the dynamic custom pages.
     branch   = ForeignKey(Branch, verbose_name=_("branch"))
