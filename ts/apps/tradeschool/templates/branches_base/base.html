@@ -82,15 +82,11 @@
             <h2>
             {% if branch.header_copy %}
                 {{ branch.header_copy|safe }}
-            {% else %}
-                {% blocktrans context "header on front page" %}Barter for knowledge{% endblocktrans %}
             {% endif %}                    
             </h2>
             <p>
             {% if branch.intro_copy %}
                 {{ branch.intro_copy|safe }}
-            {% else %}
-                {% blocktrans context "intro on front page" %}{% endblocktrans %}
             {% endif %}
             </p>
         </div>

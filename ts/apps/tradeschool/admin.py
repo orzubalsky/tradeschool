@@ -290,16 +290,20 @@ class BranchAdmin(BaseAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines             = (BranchEmailContainerInline, PhotoInline)
     fieldsets = (
-        ('Basic Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Basic Info'), {
             'fields': ('title', 'slug', 'timezone', 'language')
         }),
-        ('Contact Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Contact Info'), {
             'fields': ('city', 'state', 'country', 'email', 'phone')
         }),
-        ('Website Content', {
+        # Translators: This is the a header in the branch admin form
+        (_('Website Content'), {
             'fields': ('header_copy', 'intro_copy', 'footer_copy')
-        }),        
-        ('Organizers', {
+        }), 
+        # Translators: This is the a header in the branch admin form       
+        (_('Organizers'), {
             'fields': ('organizers',)
         }),        
     )
@@ -341,7 +345,8 @@ class VenueAdmin(BaseAdmin):
     list_display    = ('title', 'branch', 'address_1', 'city', 'capacity', 'is_active')
     list_editable   = ('address_1', 'city', 'capacity', 'is_active',)
     fieldsets = (
-        ('Basic Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Basic Info'), {
             'fields': ('title', 'branch',)
         }),
         ('Contact Info', {

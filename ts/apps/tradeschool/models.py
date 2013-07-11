@@ -451,10 +451,10 @@ class Branch(Location):
     header_copy = HTMLField(verbose_name=_("header"), null=True, blank=True, default="Barter for knowledge")
     
     # Translators: This is the part with room for a small statement.
-    intro_copy  = HTMLField(verbose_name=_("intro"), null=True, blank=True)
+    intro_copy  = HTMLField(verbose_name=_("intro"), null=True, blank=True, default="Information for the header of the page")
     
     # Translators: This is the part at the end of the page. 
-    footer_copy = HTMLField(verbose_name=_("footer"), null=True, blank=True)
+    footer_copy = HTMLField(verbose_name=_("footer"), null=True, blank=True, default="Information for the footer of the page")
 
     objects   = Manager()
     on_site   = CurrentSiteManager()

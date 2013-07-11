@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-29 13:06-0400\n"
-"PO-Revision-Date: 2013-06-29 13:08-0500\n"
+"POT-Creation-Date: 2013-07-11 13:05-0400\n"
+"PO-Revision-Date: 2013-07-11 13:12-0500\n"
 "Last-Translator: Christhian Diaz <xthian@riseup.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,8 @@ msgstr "Horarios"
 msgid "Emails"
 msgstr "Correos"
 
-#: dashboard.py:64
+#. Translators: This is the a header in the branch admin form
+#: dashboard.py:64 apps/tradeschool/admin.py:302
 msgid "Website Content"
 msgstr "Contenido de la página"
 
@@ -38,7 +39,28 @@ msgstr "Ajustes"
 msgid "Everything Else"
 msgstr "Otras cosas"
 
-#: apps/tradeschool/admin.py:798
+#: apps/tradeschool/admin.py:269
+msgid "Populate Email Notifications"
+msgstr ""
+
+#. Translators: This is the a header in the branch admin form
+#: apps/tradeschool/admin.py:294 apps/tradeschool/admin.py:349
+msgid "Basic Info"
+msgstr "Información básica"
+
+#. Translators: This is the a header in the branch admin form
+#: apps/tradeschool/admin.py:298
+#, fuzzy
+msgid "Contact Info"
+msgstr "Contactado"
+
+#. Translators: This is the a header in the branch admin form
+#: apps/tradeschool/admin.py:306
+#, fuzzy
+msgid "Organizers"
+msgstr "Organizadores"
+
+#: apps/tradeschool/admin.py:901
 msgid "Advanced options"
 msgstr "Opciones avanzadas"
 
@@ -326,7 +348,7 @@ msgstr "Correos"
 
 #. Translators: These one is for the dynamic custom pages.
 #: apps/tradeschool/models.py:396 apps/tradeschool/models.py:563
-#: apps/tradeschool/models.py:636 apps/tradeschool/models.py:1089
+#: apps/tradeschool/models.py:636 apps/tradeschool/models.py:1091
 msgid "branch"
 msgstr "Sucursal"
 
@@ -517,7 +539,7 @@ msgstr "Maximo número de estudiantes en tu clase"
 msgid "class title"
 msgstr "Nombre de la clase"
 
-#: apps/tradeschool/models.py:720 apps/tradeschool/models.py:936
+#: apps/tradeschool/models.py:720 apps/tradeschool/models.py:938
 msgid "URL Slug"
 msgstr "URL Slug"
 
@@ -547,7 +569,7 @@ msgstr "Hora"
 msgid "Time Slots"
 msgstr "Horas"
 
-#: apps/tradeschool/models.py:759 apps/tradeschool/models.py:907
+#: apps/tradeschool/models.py:759 apps/tradeschool/models.py:909
 msgid "venue"
 msgstr "Lugar"
 
@@ -618,116 +640,116 @@ msgstr "Sábado"
 msgid "Schedule Email"
 msgstr "Horario de correos"
 
-#: apps/tradeschool/models.py:845 apps/tradeschool/models.py:1022
-#: apps/tradeschool/models.py:1048
+#: apps/tradeschool/models.py:845 apps/tradeschool/models.py:1024
+#: apps/tradeschool/models.py:1050
 #, fuzzy
 msgid "schedule"
 msgstr "Horario"
 
 #. Translators: This is used in the header navigation to let you know where
 #. you are.
-#: apps/tradeschool/models.py:889
+#: apps/tradeschool/models.py:891
 msgid "Class Schedule"
 msgstr "Horario de clases"
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:892
+#: apps/tradeschool/models.py:894
 #, fuzzy
 msgid "Class Schedules"
 msgstr "Horarios de Clases"
 
 #. Translators: The thing that shows what the status of the class is
-#: apps/tradeschool/models.py:898
+#: apps/tradeschool/models.py:900
 msgid "Pending"
 msgstr "Esperando"
 
-#: apps/tradeschool/models.py:899
+#: apps/tradeschool/models.py:901
 msgid "Contacted"
 msgstr "Contactado"
 
-#: apps/tradeschool/models.py:900
+#: apps/tradeschool/models.py:902
 msgid "Updated"
 msgstr "Revisado"
 
-#: apps/tradeschool/models.py:901
+#: apps/tradeschool/models.py:903
 msgid "Approved"
 msgstr "Aprovado"
 
-#: apps/tradeschool/models.py:902
+#: apps/tradeschool/models.py:904
 msgid "Rejected"
 msgstr "Rechazado"
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:911
+#: apps/tradeschool/models.py:913
 msgid "Where is this class taking place?"
 msgstr "Donde va a suceder la clase?"
 
-#: apps/tradeschool/models.py:916
+#: apps/tradeschool/models.py:918
 msgid "course"
 msgstr "Clase"
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:918
+#: apps/tradeschool/models.py:920
 msgid "What class are you scheduling?"
 msgstr "Cual es la clase que estas programando?"
 
-#: apps/tradeschool/models.py:923
+#: apps/tradeschool/models.py:925
 msgid "course status"
 msgstr "Estatus de la clase"
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:927
+#: apps/tradeschool/models.py:929
 msgid "What is the current status of the class?"
 msgstr "Cual es el estatus de la clase ahora mismo?"
 
-#: apps/tradeschool/models.py:932
+#: apps/tradeschool/models.py:934
 msgid "students"
 msgstr "Estudiantes"
 
 #. Translators: Student registration buttons.
-#: apps/tradeschool/models.py:1019
+#: apps/tradeschool/models.py:1021
 msgid "Registered"
 msgstr "Registrado"
 
-#: apps/tradeschool/models.py:1020
+#: apps/tradeschool/models.py:1022
 msgid "Unregistereed"
 msgstr "no registrado"
 
-#: apps/tradeschool/models.py:1023
+#: apps/tradeschool/models.py:1025
 msgid "student"
 msgstr "Estudiante"
 
-#: apps/tradeschool/models.py:1024
+#: apps/tradeschool/models.py:1026
 msgid "registration status"
 msgstr "Estatus de registración"
 
-#: apps/tradeschool/models.py:1025
+#: apps/tradeschool/models.py:1027
 msgid "items"
 msgstr "Objetos"
 
-#: apps/tradeschool/models.py:1046
+#: apps/tradeschool/models.py:1048
 msgid "From the Teacher"
 msgstr "Del maestro/a"
 
-#: apps/tradeschool/models.py:1046
+#: apps/tradeschool/models.py:1048
 msgid "From a student"
 msgstr "Del estudiante"
 
-#: apps/tradeschool/models.py:1049
+#: apps/tradeschool/models.py:1051
 msgid "feedback type"
 msgstr "Clase de comentario"
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:1051
+#: apps/tradeschool/models.py:1053
 msgid "Your Feedback"
 msgstr "Tus comentarios"
 
 #. Translators: These next three are for the photograph files
-#: apps/tradeschool/models.py:1068
+#: apps/tradeschool/models.py:1070
 msgid "Photo"
 msgstr "Foto"
 
-#: apps/tradeschool/models.py:1069 apps/tradeschool/models.py:1090
+#: apps/tradeschool/models.py:1071 apps/tradeschool/models.py:1092
 msgid "Position"
 msgstr "Posición"
 
