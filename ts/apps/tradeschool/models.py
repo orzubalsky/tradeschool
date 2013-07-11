@@ -804,8 +804,8 @@ class ScheduleEmailContainer(EmailContainer):
         verbose_name = _("Schedule Email")
         
         # Translators: Plural
-        verbose_name_plural = "Schedule Emails"
-
+        verbose_name_plural = _("Schedule Emails")
+        
     schedule = OneToOneField("Schedule", related_name="emails")
 
     def email_teacher(self, email):
@@ -888,7 +888,7 @@ class Schedule(Durational):
     """
     class Meta:
         # Translators: This is used in the header navigation to let you know where you are.
-        verbose_name        = _('Class Schedule')
+        verbose_name = _('Class Schedule')
         
         # Translators: Plural
         verbose_name_plural = _('Class Schedules')

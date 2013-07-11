@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-11 13:57-0400\n"
-"PO-Revision-Date: 2013-07-11 13:45-0500\n"
+"POT-Creation-Date: 2013-07-11 14:35-0400\n"
+"PO-Revision-Date: 2013-07-11 14:10-0500\n"
 "Last-Translator: Christhian Diaz <xthian@riseup.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -64,31 +64,75 @@ msgstr "Organizadores"
 #. Translators: This is the a header in the branch admin form
 #: apps/tradeschool/admin.py:357
 msgid "Additional Info"
-msgstr ""
+msgstr "Información adicional"
 
 #: apps/tradeschool/admin.py:446
 msgid "Courses Taught"
+msgstr "Cantidad de clases enseñadas"
+
+#: apps/tradeschool/admin.py:625
+#, fuzzy
+msgid "Courses Title"
+msgstr "Cantidad de clases enseñadas"
+
+#: apps/tradeschool/admin.py:633
+msgid "Course title link"
 msgstr ""
 
+#: apps/tradeschool/admin.py:638
+#, fuzzy
+msgid "Course description"
+msgstr "Descripción de la clase"
+
+#: apps/tradeschool/admin.py:643
+#, fuzzy
+msgid "Course Max Students"
+msgstr "Estatus de la clase"
+
+#: apps/tradeschool/admin.py:652
+#, fuzzy
+msgid "Teacher Fullname"
+msgstr "Maestra/o"
+
+#: apps/tradeschool/admin.py:658
+#, fuzzy
+msgid "Teacher Email"
+msgstr "Maestra/o"
+
+#: apps/tradeschool/admin.py:663
+#, fuzzy
+msgid "Teacher phone"
+msgstr "Maestra/o"
+
+#: apps/tradeschool/admin.py:668
+#, fuzzy
+msgid "Teacher bio"
+msgstr "Maestra/o"
+
+#: apps/tradeschool/admin.py:673
+#, fuzzy
+msgid "Teacher website"
+msgstr "Recordatorio para el/la maestra/o"
+
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:713
+#: apps/tradeschool/admin.py:722
 #, fuzzy
 msgid "Class Info"
 msgstr "Información básica"
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:717
+#: apps/tradeschool/admin.py:726
 #, fuzzy
 msgid "Teacher Info"
 msgstr "Maestra/o"
 
 #. Translators: This is the a header in the branch admin form
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/admin.py:721 apps/tradeschool/models.py:891
+#: apps/tradeschool/admin.py:730 apps/tradeschool/models.py:891
 msgid "Class Schedule"
 msgstr "Horario de clases"
 
-#: apps/tradeschool/admin.py:906
+#: apps/tradeschool/admin.py:915
 msgid "Advanced options"
 msgstr "Opciones avanzadas"
 
@@ -508,7 +552,7 @@ msgstr "Tu página web o blog"
 #. Translators: Contextual Help
 #: apps/tradeschool/models.py:638
 msgid "What tradeschool is this object related to?"
-msgstr ""
+msgstr "A que sucursal se relaciona este objeto"
 
 #. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:661
@@ -648,6 +692,12 @@ msgstr "Sábado"
 #: apps/tradeschool/models.py:804
 #, fuzzy
 msgid "Schedule Email"
+msgstr "Horario de correos"
+
+#. Translators: Plural
+#: apps/tradeschool/models.py:807
+#, fuzzy
+msgid "Schedule Emails"
 msgstr "Horario de correos"
 
 #: apps/tradeschool/models.py:845 apps/tradeschool/models.py:1024
@@ -1076,7 +1126,7 @@ msgstr "Deshaces la selección"
 #: templates/admin/app_index.html:14
 #, python-format
 msgid "<li>%(name)s</li>"
-msgstr "jjk"
+msgstr "nombre??"
 
 #: templates/admin/app_index.html:31 templates/admin/change_form.html:111
 msgid "Add"

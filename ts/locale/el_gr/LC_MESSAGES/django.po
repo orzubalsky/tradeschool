@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-11 13:57-0400\n"
+"POT-Creation-Date: 2013-07-11 14:35-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,23 +66,59 @@ msgstr ""
 msgid "Courses Taught"
 msgstr ""
 
+#: apps/tradeschool/admin.py:625
+msgid "Courses Title"
+msgstr ""
+
+#: apps/tradeschool/admin.py:633
+msgid "Course title link"
+msgstr ""
+
+#: apps/tradeschool/admin.py:638
+msgid "Course description"
+msgstr ""
+
+#: apps/tradeschool/admin.py:643
+msgid "Course Max Students"
+msgstr ""
+
+#: apps/tradeschool/admin.py:652
+msgid "Teacher Fullname"
+msgstr ""
+
+#: apps/tradeschool/admin.py:658
+msgid "Teacher Email"
+msgstr ""
+
+#: apps/tradeschool/admin.py:663
+msgid "Teacher phone"
+msgstr ""
+
+#: apps/tradeschool/admin.py:668
+msgid "Teacher bio"
+msgstr ""
+
+#: apps/tradeschool/admin.py:673
+msgid "Teacher website"
+msgstr ""
+
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:713
+#: apps/tradeschool/admin.py:722
 msgid "Class Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:717
+#: apps/tradeschool/admin.py:726
 msgid "Teacher Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/admin.py:721 apps/tradeschool/models.py:891
+#: apps/tradeschool/admin.py:730 apps/tradeschool/models.py:891
 msgid "Class Schedule"
 msgstr ""
 
-#: apps/tradeschool/admin.py:906
+#: apps/tradeschool/admin.py:915
 msgid "Advanced options"
 msgstr ""
 
@@ -635,6 +671,11 @@ msgstr ""
 #. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:804
 msgid "Schedule Email"
+msgstr ""
+
+#. Translators: Plural
+#: apps/tradeschool/models.py:807
+msgid "Schedule Emails"
 msgstr ""
 
 #: apps/tradeschool/models.py:845 apps/tradeschool/models.py:1024

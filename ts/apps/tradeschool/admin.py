@@ -571,7 +571,7 @@ class TimeRangeAdmin(BaseAdmin):
 class ScheduleAdmin(BaseAdmin):
     """ ScheduleAdmin lets you add and edit class schedules,
         their barter items, registrations, and email templates.
-    """
+    """ 
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
         qs = super(ScheduleAdmin, self).queryset(request)
@@ -622,21 +622,25 @@ class ScheduleAdmin(BaseAdmin):
     def course_title(self, obj):
         """ Return related course title so it can be used in list_display."""
         return obj.course.title
-
+    course_title.short_description = _('Courses Title')
+    
     def course_title_link(self, obj):
         """ Return related course title so it can be used in list_display."""
         # link to course edit admin form 
         url = reverse('admin:tradeschool_course_change', args=(obj.course.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, obj.course.title)
         return mark_safe(html)
+    course_title_link.short_description = _('Course title link')
 
     def course_description(self, obj):
         """ Return related course's description so it can be used in list_display."""
         return obj.course.description
+    course_description.short_description = _('Course description')
 
     def course_max_students(self, obj):
         """ Return related course's max students so it can be used in list_display."""
         return obj.course.max_students
+    course_max_students.short_description = _('Course Max Students')
             
     def teacher_fullname(self, obj):
         """ Return related course's teacher so it can be used in list_display."""        
@@ -645,24 +649,29 @@ class ScheduleAdmin(BaseAdmin):
         url = reverse('admin:tradeschool_teacher_change', args=(teacher.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, teacher.fullname)
         return mark_safe(html)
+    teacher_fullname.short_description = _('Teacher Fullname')
         
     def teacher_email(self, obj):
         """ Return related course's teacher's email so it can be used in list_display."""
         html = '<a href="mailto:%s">%s</a>' % (obj.course.teacher.email, obj.course.teacher.email)
         return mark_safe(html)
-
+    teacher_email.short_description = _('Teacher Email')
+    
     def teacher_phone(self, obj):
         """ Return related course's teacher's phone so it can be used in list_display."""
         return obj.course.teacher.phone
-
+    teacher_phone.short_description = _('Teacher phone')
+    
     def teacher_bio(self, obj):
         """ Return related course's teacher's bio so it can be used in list_display."""
         return obj.course.teacher.bio
-
+    teacher_bio.short_description = _('Teacher bio')
+    
     def teacher_website(self, obj):
         """ Return related course's teacher's website so it can be used in list_display."""
         return obj.course.teacher.website
-
+    teacher_website.short_description = _('Teacher website')
+    
     list_display    = (
                         'course_title', 
                         'teacher_fullname', 
