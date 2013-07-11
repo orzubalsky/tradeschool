@@ -530,6 +530,11 @@ class Venue(Location):
     class Meta:
         ordering = ['branch', 'is_active', 'title']
         
+    # Translators: This is used in the header navigation to let you know where you are.
+    verbose_name = _('Venue')
+    
+    # Translators: Plural
+    verbose_name_plural = _('Venues')
     
     TYPE_CHOICES = ((0, 'Normal'), (1, 'Alternative'))
 
