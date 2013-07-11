@@ -837,7 +837,7 @@ class PhotoAdmin(BaseAdmin):
     def get_thumbnail(self, obj):
         """ """
         return obj.thumbnail() 
-    get_thumbnail.short_description = 'thumbnail'
+    get_thumbnail.short_description = _('Thumbnail')
     get_thumbnail.allow_tags = True        
 
 

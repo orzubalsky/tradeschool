@@ -1123,7 +1123,6 @@ class Photo(Base):
         else:
             # Translators: If there are no images
             return _('(No Image)')
-        
         thumbnail.short_description = _('Thumbnail')
         
     def __unicode__ (self):

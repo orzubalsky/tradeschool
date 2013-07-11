@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-11 16:58-0400\n"
-"PO-Revision-Date: 2013-07-11 16:19-0500\n"
+"POT-Creation-Date: 2013-07-11 17:19-0400\n"
+"PO-Revision-Date: 2013-07-11 17:13-0500\n"
 "Last-Translator: Christhian Diaz <xthian@riseup.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -118,6 +118,10 @@ msgstr "Acerca del maestro/a"
 #: apps/tradeschool/admin.py:734 apps/tradeschool/models.py:913
 msgid "Class Schedule"
 msgstr "Horario de clases"
+
+#: apps/tradeschool/admin.py:840 apps/tradeschool/models.py:1126
+msgid "Thumbnail"
+msgstr "Miniatura"
 
 #: apps/tradeschool/admin.py:919
 msgid "Advanced options"
@@ -397,7 +401,7 @@ msgstr "Correos"
 #: apps/tradeschool/models.py:396 apps/tradeschool/models.py:568
 #: apps/tradeschool/models.py:641 apps/tradeschool/models.py:773
 #: apps/tradeschool/models.py:807 apps/tradeschool/models.py:1115
-#: apps/tradeschool/models.py:1146
+#: apps/tradeschool/models.py:1145
 msgid "branch"
 msgstr "Sucursal"
 
@@ -831,26 +835,22 @@ msgstr "Foto"
 msgid "Photos"
 msgstr "Foto"
 
-#: apps/tradeschool/models.py:1112 apps/tradeschool/models.py:1147
+#: apps/tradeschool/models.py:1112 apps/tradeschool/models.py:1146
 msgid "Position"
 msgstr "Posición"
 
 #. Translators: If there are no images
 #: apps/tradeschool/models.py:1125
 msgid "(No Image)"
-msgstr ""
-
-#: apps/tradeschool/models.py:1127
-msgid "Thumbnail"
-msgstr ""
+msgstr "(no hay imagenes)"
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:1140
+#: apps/tradeschool/models.py:1139
 msgid "Branch Page"
 msgstr "Página de la sucursal"
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1143
+#: apps/tradeschool/models.py:1142
 msgid "Branch Pages"
 msgstr "Páginas de las Sucursales"
 
