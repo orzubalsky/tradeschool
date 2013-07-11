@@ -1,5 +1,6 @@
 # Django settings for ts project.
 import os, sys
+from django.utils.translation import ugettext_lazy as _
 
 ADMINS = (
     # ('Or Zubalsky', 'juviley@gmail.com'),
@@ -214,7 +215,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
-GRAPPELLI_ADMIN_TITLE = 'Trade School Admin'
+GRAPPELLI_ADMIN_TITLE = _('Trade School Admin')
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
 # You can find more languages that Django supports @ http://www.i18nguy.com/unicode/language-identifiers.html

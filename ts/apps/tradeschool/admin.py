@@ -246,7 +246,7 @@ class BranchAdmin(BaseAdmin):
         
         for branch in queryset:
             branch.populate_notifications()
-    populate_notifications.short_description = "Populate Email Notifications"
+    populate_notifications.short_description = _("Populate Email Notifications")
 
     def queryset(self, request):
         """Filter the queryset in order to only display objects from the current branch."""
