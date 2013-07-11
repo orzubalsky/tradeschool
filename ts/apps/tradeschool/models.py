@@ -768,7 +768,12 @@ class Time(Durational):
                 help_text=_("Is this time slot associated with a specific venue?")
             )
             
-    branch = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+    branch = ForeignKey(
+                Branch, 
+                verbose_name=_("branch"),
+                # Translators: Contextual Help
+                help_text=_("What tradeschool is this object related to?")
+            )
 
     def __unicode__ (self):
         return u"%s" % self.start_time
@@ -797,7 +802,12 @@ class TimeRange(Base):
     friday      = BooleanField(verbose_name=_("Friday"))
     saturday    = BooleanField(verbose_name=_("Saturday"))
     
-    branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+    branch = ForeignKey(
+                Branch, 
+                verbose_name=_("branch"),
+                # Translators: Contextual Help
+                help_text=_("What tradeschool is this object related to?")
+            )
         
 
 class ScheduleEmailContainer(EmailContainer):
@@ -1100,13 +1110,21 @@ class Photo(Base):
     # Translators: These next three are for the photograph files
     filename    = ImageField(_("Photo"), upload_to=upload_path)    
     position    = PositiveSmallIntegerField(_('Position'), default=0)    
-    branch      = ForeignKey(Branch, help_text="What tradeschool is this object related to?")
+    branch = ForeignKey(
+                Branch, 
+                verbose_name=_("branch"),
+                # Translators: Contextual Help
+                help_text=_("What tradeschool is this object related to?")
+            )
         
     def thumbnail(self):
         if self.filename:
             return u'<img src="%s" class="branch_image" />' % self.filename.url
         else:
-            return '(No Image)'
+            # Translators: If there are no images
+            return _('(No Image)')
+        
+        thumbnail.short_description = _('Thumbnail')
         
     def __unicode__ (self):
         return "%s: %s" % (self.branch.title, self.filename)
