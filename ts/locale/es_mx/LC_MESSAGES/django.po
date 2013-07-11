@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-11 13:05-0400\n"
-"PO-Revision-Date: 2013-07-11 13:12-0500\n"
+"POT-Creation-Date: 2013-07-11 13:57-0400\n"
+"PO-Revision-Date: 2013-07-11 13:45-0500\n"
 "Last-Translator: Christhian Diaz <xthian@riseup.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.3\n"
 
 #: dashboard.py:41
@@ -39,9 +39,10 @@ msgstr "Ajustes"
 msgid "Everything Else"
 msgstr "Otras cosas"
 
-#: apps/tradeschool/admin.py:269
-msgid "Populate Email Notifications"
-msgstr ""
+#: apps/tradeschool/admin.py:269 apps/tradeschool/admin.py:620
+#, fuzzy
+msgid "Generate Email Notifications"
+msgstr "Crear los correos de notificación"
 
 #. Translators: This is the a header in the branch admin form
 #: apps/tradeschool/admin.py:294 apps/tradeschool/admin.py:349
@@ -49,10 +50,10 @@ msgid "Basic Info"
 msgstr "Información básica"
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:298
+#: apps/tradeschool/admin.py:298 apps/tradeschool/admin.py:353
 #, fuzzy
 msgid "Contact Info"
-msgstr "Contactado"
+msgstr "Información de contacto"
 
 #. Translators: This is the a header in the branch admin form
 #: apps/tradeschool/admin.py:306
@@ -60,7 +61,34 @@ msgstr "Contactado"
 msgid "Organizers"
 msgstr "Organizadores"
 
-#: apps/tradeschool/admin.py:901
+#. Translators: This is the a header in the branch admin form
+#: apps/tradeschool/admin.py:357
+msgid "Additional Info"
+msgstr ""
+
+#: apps/tradeschool/admin.py:446
+msgid "Courses Taught"
+msgstr ""
+
+#. Translators: This is the a header in the branch admin form
+#: apps/tradeschool/admin.py:713
+#, fuzzy
+msgid "Class Info"
+msgstr "Información básica"
+
+#. Translators: This is the a header in the branch admin form
+#: apps/tradeschool/admin.py:717
+#, fuzzy
+msgid "Teacher Info"
+msgstr "Maestra/o"
+
+#. Translators: This is the a header in the branch admin form
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/admin.py:721 apps/tradeschool/models.py:891
+msgid "Class Schedule"
+msgstr "Horario de clases"
+
+#: apps/tradeschool/admin.py:906
 msgid "Advanced options"
 msgstr "Opciones avanzadas"
 
@@ -137,8 +165,7 @@ msgstr "Creado"
 msgid "updated"
 msgstr "Actualizado"
 
-#. Translators: Used to determine whether something is active in the front end
-#. or not.
+#. Translators: Used to determine whether something is active in the front end or not.
 #: apps/tradeschool/models.py:38
 msgid "is active"
 msgstr "Activo"
@@ -188,8 +215,7 @@ msgstr "Cuantos días antes?"
 msgid "Send time"
 msgstr "Mandar... (hora)"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:193
 msgid "Student confirmation"
 msgstr "Confirmación para el estudiante"
@@ -199,8 +225,7 @@ msgstr "Confirmación para el estudiante"
 msgid "Student confirmations"
 msgstr "Confirmaciones para el estudiante"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:204
 msgid "Student reminder"
 msgstr "Recordatorio para el estudiante"
@@ -210,8 +235,7 @@ msgstr "Recordatorio para el estudiante"
 msgid "Student reminders"
 msgstr "Recordatorios para el estudiante"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:221
 msgid "Student feedback e-mail"
 msgstr "Comentario del estudiante"
@@ -221,8 +245,7 @@ msgstr "Comentario del estudiante"
 msgid "Student feedback e-mails"
 msgstr "Comentarios del estudiante"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:238
 msgid "Teacher confirmation"
 msgstr "Confirmación para el/la maestra/o"
@@ -232,8 +255,7 @@ msgstr "Confirmación para el/la maestra/o"
 msgid "Teacher confirmations"
 msgstr "Confirmaciones para les maestres"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:255
 msgid "Teacher reminder"
 msgstr "Recordatorio para el/la maestra/o"
@@ -243,8 +265,7 @@ msgstr "Recordatorio para el/la maestra/o"
 msgid "Teacher reminders"
 msgstr "Recordatorio para les maestres"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:272
 msgid "Teacher feedback e-mail"
 msgstr "Comentarios del maestre"
@@ -254,8 +275,7 @@ msgstr "Comentarios del maestre"
 msgid "Teacher feedback e-mails"
 msgstr "Comentarios de les maestres"
 
-#. Translators: In the Branch E-mail page, the label for student confirmation
-#. e-mail
+#. Translators: In the Branch E-mail page, the label for student confirmation e-mail
 #: apps/tradeschool/models.py:290
 msgid "Student Confirmation"
 msgstr "Confirmación para el estudiante"
@@ -290,8 +310,7 @@ msgstr "Recordatorio para el/la maestra/o"
 msgid "Teacher Feedback"
 msgstr "Comentarios del maestro/a"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:332
 msgid "Default e-mail container"
 msgstr "contenedor básico de correos"
@@ -338,8 +357,7 @@ msgstr "Si está en E.E.U.U."
 msgid "country"
 msgstr "País"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #. Translators: Plural.
 #: apps/tradeschool/models.py:391 apps/tradeschool/models.py:394
 #, fuzzy
@@ -357,8 +375,7 @@ msgstr "Sucursal"
 msgid "name"
 msgstr "Nombre"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:422
 msgid "Branch"
 msgstr "Sucursal"
@@ -375,8 +392,7 @@ msgstr "Slug"
 
 #. Translators: Contextual Help.
 #: apps/tradeschool/models.py:436
-msgid ""
-"This is the part that comes after 'http://tradeschool.coop/' in the URL"
+msgid "This is the part that comes after 'http://tradeschool.coop/' in the URL"
 msgstr ""
 "Esta es la parte que viene después de 'http://tradeschool.coop/' en la "
 "dirección"
@@ -408,8 +424,7 @@ msgstr "Página"
 msgid "cluster"
 msgstr "Grupo"
 
-#. Translators: This is the part that says 'Barter for Knowledge' which is
-#. also editable.
+#. Translators: This is the part that says 'Barter for Knowledge' which is also editable.
 #: apps/tradeschool/models.py:451
 msgid "header"
 msgstr "Encabezado"
@@ -495,8 +510,7 @@ msgstr "Tu página web o blog"
 msgid "What tradeschool is this object related to?"
 msgstr ""
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:661
 msgid "Teacher"
 msgstr "Maestra/o"
@@ -506,8 +520,7 @@ msgstr "Maestra/o"
 msgid "Teachers"
 msgstr "Maestres"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:681
 msgid "Student"
 msgstr "Estudiante"
@@ -558,8 +571,7 @@ msgstr "Comienza"
 msgid "end time"
 msgstr "Termina"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:752
 msgid "Time Slot"
 msgstr "Hora"
@@ -578,8 +590,7 @@ msgstr "Lugar"
 msgid "Is this time slot associated with a specific venue?"
 msgstr "Esta hora esta asociada con un lugar especifico?"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:778
 msgid "Time Slot Range"
 msgstr "Gama del horario"
@@ -633,8 +644,7 @@ msgstr "Viernes"
 msgid "Saturday"
 msgstr "Sábado"
 
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
+#. Translators: This is used in the header navigation to let you know where you are.
 #: apps/tradeschool/models.py:804
 #, fuzzy
 msgid "Schedule Email"
@@ -645,12 +655,6 @@ msgstr "Horario de correos"
 #, fuzzy
 msgid "schedule"
 msgstr "Horario"
-
-#. Translators: This is used in the header navigation to let you know where
-#. you are.
-#: apps/tradeschool/models.py:891
-msgid "Class Schedule"
-msgstr "Horario de clases"
 
 #. Translators: Plural
 #: apps/tradeschool/models.py:894
@@ -781,10 +785,10 @@ msgid ""
 "items and services. Secure a spot in a TradeSchool class by meeting one of "
 "the teachers barter needs."
 msgstr ""
-"Inscribete a una clase con cualquier cantidad de maestros/as "
-"especializados/as, a cambio de objetos basicos o servicios. Puedes asegurar "
-"tu puesto en una clase con solo confirmar haras trueque por una de las "
-"necesidades del maestro/a."
+"Inscribete a una clase con cualquier cantidad de maestros/as especializados/"
+"as, a cambio de objetos basicos o servicios. Puedes asegurar tu puesto en "
+"una clase con solo confirmar haras trueque por una de las necesidades del "
+"maestro/a."
 
 #: apps/tradeschool/templates/branches_base/base.html:16
 msgctxt "Page Meta Keywords"
@@ -802,26 +806,11 @@ msgctxt "Text for the Tradeschool.coop link"
 msgid "TS HQ"
 msgstr "SEDE TS"
 
-#: apps/tradeschool/templates/branches_base/base.html:86
-msgctxt "header on front page"
-msgid "Barter for knowledge"
-msgstr "Conocimientos por trueque"
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
-#: apps/tradeschool/templates/branches_base/base.html:93
-msgctxt "intro on front page"
-msgid ""
-msgstr ""
-
-#: apps/tradeschool/templates/branches_base/base.html:101
+#: apps/tradeschool/templates/branches_base/base.html:97
 msgid "Join our list"
 msgstr "Uneté a nuestra lista"
 
-#: apps/tradeschool/templates/branches_base/base.html:104
+#: apps/tradeschool/templates/branches_base/base.html:100
 msgctxt "mailing list join button text"
 msgid "GO"
 msgstr "Dale!"
@@ -919,7 +908,8 @@ msgid ""
 "Thanks! Your class will be pending for now. It will be added to the site "
 "within 24 hours if it's approved. Here is what you submitted:"
 msgstr ""
-"Gracias! Tu clase esta pendiente ahora. Te avisaremos tan pronto como hagamos una decisiones.\n"
+"Gracias! Tu clase esta pendiente ahora. Te avisaremos tan pronto como "
+"hagamos una decisiones.\n"
 "Aquí esta la información que nos diste:"
 
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:14
@@ -964,13 +954,13 @@ msgstr "a non-traditional learning space where students barter with teac"
 msgid ""
 "After you submit your class idea, when you'd like to teach, and what you "
 "want in exchange for teaching, Trade School organizers will review your "
-"submission. If your submission is approved, it will be posted on the website"
-" for students to sign up. On the day of class, you will meet your students "
-"at Trade School, receive your barter items, and enjoy the class."
+"submission. If your submission is approved, it will be posted on the website "
+"for students to sign up. On the day of class, you will meet your students at "
+"Trade School, receive your barter items, and enjoy the class."
 msgstr ""
-"review your submission. If your submission is approved, it will be posted on"
-" the website for students to sign up. On the day of class, you will meet "
-"your students at "
+"review your submission. If your submission is approved, it will be posted on "
+"the website for students to sign up. On the day of class, you will meet your "
+"students at "
 
 #: apps/tradeschool/templates/branches_base/teacher-info.html:24
 msgid "Your class"
@@ -980,8 +970,8 @@ msgstr "Your class"
 msgid ""
 "Your class can be about anything and can be structured in any way you like. "
 "Just be sure that you feel comfortable setting the tone and sharing "
-"information. You are in charge during your class! Past topics and approaches"
-" to teaching have ranged from butter-making workshops to foraging walking "
+"information. You are in charge during your class! Past topics and approaches "
+"to teaching have ranged from butter-making workshops to foraging walking "
 "tours; from business lectures to group discussions. We find that students "
 "want to get to know each other, so classes work best with break-out groups, "
 "work in pairs, and lots of student participation."
@@ -1017,8 +1007,7 @@ msgid ""
 "tradeschool, trade, school, grand, opening, grandopening, ourgoods, art, "
 "artist, barter, trade, exchange, community, pop-up, storefront, new york "
 "city, lower east side "
-msgstr ""
-"ening, ourgoods, art, artist, barter, trade, exchange, community, pop-"
+msgstr "ening, ourgoods, art, artist, barter, trade, exchange, community, pop-"
 
 #: apps/tradeschool/templates/hub/branch_list.html:81
 msgctxt "Go to class button"
@@ -1065,11 +1054,11 @@ msgstr "Error en el servidor <em>(500)</em>"
 
 #: templates/admin/500.html:20
 msgid ""
-"There's been an error. It's been reported to the site administrators via "
-"e-mail and should be fixed shortly. Thanks for your patience."
+"There's been an error. It's been reported to the site administrators via e-"
+"mail and should be fixed shortly. Thanks for your patience."
 msgstr ""
-"Ha habido un error. Se reportara a la administración y sera arreglado lo más"
-" pronto posible."
+"Ha habido un error. Se reportara a la administración y sera arreglado lo más "
+"pronto posible."
 
 #: templates/admin/actions.html:10
 msgid "Click here to select the objects across all pages"
@@ -1191,8 +1180,8 @@ msgstr ""
 #: templates/admin/delete_confirmation.html:36
 #, python-format
 msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the"
-" following protected related objects:"
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
 msgstr ""
 
 #: templates/admin/delete_confirmation.html:46
@@ -1245,12 +1234,14 @@ msgstr ""
 
 #: templates/admin/invalid_setup.html:17
 msgid ""
-"Something's wrong with your database installation. Make sure the appropriate"
-" database tables have been created, and make sure the database is readable "
-"by the appropriate user."
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
 msgstr ""
 "blah blah blah\n"
-"Something's wrong with your database installation. Make sure the appropriate database tables have been created, and make sure the database is readable by the appropriate user."
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
 
 #: templates/admin/login.html:27
 msgid "Login"
@@ -1294,8 +1285,8 @@ msgstr "Objeto creado"
 
 #: templates/admin/object_history.html:47
 msgid ""
-"This object doesn't have a change history. It probably wasn't added via this"
-" admin site."
+"This object doesn't have a change history. It probably wasn't added via this "
+"admin site."
 msgstr "Este objeto no tiene historia de cambios. "
 
 #: templates/admin/pagination.html:8
@@ -1400,6 +1391,10 @@ msgstr "Añadir otro"
 #: templates/admin/includes_grappelli/header.html:34
 msgid "Tests"
 msgstr "Ensayos"
+
+#~ msgctxt "header on front page"
+#~ msgid "Barter for knowledge"
+#~ msgstr "Conocimientos por trueque"
 
 #~ msgid "registration"
 #~ msgstr "Registración"

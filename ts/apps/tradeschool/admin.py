@@ -266,7 +266,7 @@ class BranchAdmin(BaseAdmin):
         
         for branch in queryset:
             branch.populate_notifications()
-    populate_notifications.short_description = _("Populate Email Notifications")
+    populate_notifications.short_description = _("Generate Email Notifications")
 
     def queryset(self, request):
         """Filter the queryset in order to only display objects from the current branch."""
@@ -349,10 +349,12 @@ class VenueAdmin(BaseAdmin):
         (_('Basic Info'), {
             'fields': ('title', 'branch',)
         }),
-        ('Contact Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Contact Info'), {
             'fields': ('address_1', 'city', 'state', 'country', 'phone')
         }),
-        ('Additional Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Additional Info'), {
             'fields': ('capacity', 'resources',)
         }),        
     )       
@@ -441,7 +443,7 @@ class PersonAdmin(BaseAdmin):
     def courses_taught(self, obj):
         """ Return courses taught count from annotated queryset so it can be used in list_display."""        
         return obj.courses_taught_count
-    courses_taught.short_description = 'Courses Taught'
+    courses_taught.short_description = _('Courses Taught')
     courses_taught.admin_order_field = 'courses_taught_count'
 
 
@@ -615,7 +617,7 @@ class ScheduleAdmin(BaseAdmin):
         """ call the populate_notifications() method in order to reset email templates for the schedule."""        
         for schedule in queryset:
             schedule.populate_notifications()
-    populate_notifications.short_description = "Populate Email Notifications"
+    populate_notifications.short_description = _("Generate Email Notifications")
 
     def course_title(self, obj):
         """ Return related course title so it can be used in list_display."""
@@ -707,13 +709,16 @@ class ScheduleAdmin(BaseAdmin):
                         'populate_notifications'
                         )
     fieldsets = (
-        ('Class Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Class Info'), {
             'fields': ('course_title_link', 'course_description', 'course_max_students')
         }),
-        ('Teacher Info', {
+        # Translators: This is the a header in the branch admin form
+        (_('Teacher Info'), {
             'fields': ('teacher_fullname', 'teacher_email', 'teacher_phone', 'teacher_bio', 'teacher_website')
-        }),        
-        ('Class Schedule', {
+        }), 
+        # Translators: This is the a header in the branch admin form       
+        (_('Class Schedule'), {
             'fields': ('venue', 'start_time', 'end_time', 'course_status')
         }),     
     )
