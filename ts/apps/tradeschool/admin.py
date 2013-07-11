@@ -95,6 +95,8 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
         url = reverse('admin:tradeschool_registration_change', args=(obj.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, obj.student.fullname)
         return mark_safe(html)
+    
+    registration_link.short_description = _('Title')
         
     model           = Registration 
     readonly_fields = ('registration_link', 'items', 'registration_status')
@@ -130,6 +132,8 @@ class BarterItemInline(admin.TabularInline):
         url = reverse('admin:tradeschool_barteritem_change', args=(obj.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, obj.title)
         return mark_safe(html)
+    
+    title_link.short_description = _('Title')
          
     model           = BarterItem
     fields          = ('title_link',)

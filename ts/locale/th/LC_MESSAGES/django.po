@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-11 15:55-0400\n"
+"POT-Creation-Date: 2013-07-11 16:16-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Emails"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: dashboard.py:64 apps/tradeschool/admin.py:302
+#: dashboard.py:64 apps/tradeschool/admin.py:306
 msgid "Website Content"
 msgstr ""
 
@@ -35,87 +35,91 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: apps/tradeschool/admin.py:269 apps/tradeschool/admin.py:620
+#: apps/tradeschool/admin.py:99 apps/tradeschool/admin.py:136
+msgid "Title"
+msgstr ""
+
+#: apps/tradeschool/admin.py:273 apps/tradeschool/admin.py:624
 msgid "Generate Email Notifications"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:294 apps/tradeschool/admin.py:349
+#: apps/tradeschool/admin.py:298 apps/tradeschool/admin.py:353
 msgid "Basic Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:298 apps/tradeschool/admin.py:353
+#: apps/tradeschool/admin.py:302 apps/tradeschool/admin.py:357
 msgid "Contact Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:306
+#: apps/tradeschool/admin.py:310
 msgid "Organizers"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:357
+#: apps/tradeschool/admin.py:361
 msgid "Additional Info"
 msgstr ""
 
-#: apps/tradeschool/admin.py:446
+#: apps/tradeschool/admin.py:450
 msgid "Courses Taught"
 msgstr ""
 
-#: apps/tradeschool/admin.py:625
+#: apps/tradeschool/admin.py:629
 msgid "Courses Title"
 msgstr ""
 
-#: apps/tradeschool/admin.py:633
+#: apps/tradeschool/admin.py:637
 msgid "Course title link"
 msgstr ""
 
-#: apps/tradeschool/admin.py:638
+#: apps/tradeschool/admin.py:642
 msgid "Course description"
 msgstr ""
 
-#: apps/tradeschool/admin.py:643
+#: apps/tradeschool/admin.py:647
 msgid "Course Max Students"
 msgstr ""
 
-#: apps/tradeschool/admin.py:652
+#: apps/tradeschool/admin.py:656
 msgid "Teacher Fullname"
 msgstr ""
 
-#: apps/tradeschool/admin.py:658
+#: apps/tradeschool/admin.py:662
 msgid "Teacher Email"
 msgstr ""
 
-#: apps/tradeschool/admin.py:663
+#: apps/tradeschool/admin.py:667
 msgid "Teacher phone"
 msgstr ""
 
-#: apps/tradeschool/admin.py:668
+#: apps/tradeschool/admin.py:672
 msgid "Teacher bio"
 msgstr ""
 
-#: apps/tradeschool/admin.py:673
+#: apps/tradeschool/admin.py:677
 msgid "Teacher website"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:722
+#: apps/tradeschool/admin.py:726
 msgid "Class Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:726
+#: apps/tradeschool/admin.py:730
 msgid "Teacher Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/admin.py:730 apps/tradeschool/models.py:903
+#: apps/tradeschool/admin.py:734 apps/tradeschool/models.py:903
 msgid "Class Schedule"
 msgstr ""
 
-#: apps/tradeschool/admin.py:915
+#: apps/tradeschool/admin.py:919
 msgid "Advanced options"
 msgstr ""
 
