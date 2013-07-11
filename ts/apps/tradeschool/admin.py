@@ -3,8 +3,10 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib.flatpages.models import FlatPage
+from django.utils.safestring import mark_safe
 from flatpages_tinymce.admin import FlatPageAdmin
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
@@ -56,7 +58,7 @@ class ScheduleInline(admin.TabularInline):
         return qs
                     
     model   = Schedule
-    extra   = 1
+    extra   = 0
     fields  = ('start_time', 'end_time', 'venue')
 
 
@@ -86,9 +88,18 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
             kwargs["queryset"] = Student.objects.filter(branch__in=request.user.branch_set.all)
         return super(RegistrationInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
-    model   = Registration 
-    fields  = ('student', 'registration_status',)
-    extra   = 1
+    def registration_link(self, obj):
+        """
+        """
+        # link to item edit admin form 
+        url = reverse('admin:tradeschool_registration_change', args=(obj.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.student.fullname)
+        return mark_safe(html)
+        
+    model           = Registration 
+    readonly_fields = ('registration_link', 'items', 'registration_status')
+    fields          = ('registration_link', 'items', 'registration_status',)
+    extra           = 0
 
 
 class BarterItemInline(admin.TabularInline):
@@ -111,10 +122,19 @@ class BarterItemInline(admin.TabularInline):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
-                    
-    model   = BarterItem
-    exclude = ('is_active',)    
-    extra   = 2
+    
+    def title_link(self, obj):
+        """
+        """
+        # link to item edit admin form 
+        url = reverse('admin:tradeschool_barteritem_change', args=(obj.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.title)
+        return mark_safe(html)
+         
+    model           = BarterItem
+    fields          = ('title_link',)
+    readonly_fields = ('title_link',)
+    extra           = 0
 
 
 class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
@@ -368,7 +388,7 @@ class CourseAdmin(BaseAdmin):
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description', 'branch')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description')
     prepopulated_fields  = {'slug': ('title',)}
     
     
@@ -404,8 +424,8 @@ class PersonAdmin(BaseAdmin):
             
     list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'branches', 'created')
     search_fields       = ('fullname', 'email', 'phone')
-    fields              = ('fullname', 'email', 'phone', 'slug', 'website', 'bio', 'branch')
-    prepopulated_fields = {'slug': ('fullname',)}
+    fields              = ('fullname', 'email', 'phone', 'website', 'bio')
+    #prepopulated_fields = {'slug': ('fullname',)}
 
     def courses_taken(self, obj):
         """ Return registration count from annotated queryset so it can be used in list_display."""
@@ -596,29 +616,103 @@ class ScheduleAdmin(BaseAdmin):
         """ Return related course title so it can be used in list_display."""
         return obj.course.title
 
+    def course_title_link(self, obj):
+        """ Return related course title so it can be used in list_display."""
+        # link to course edit admin form 
+        url = reverse('admin:tradeschool_course_change', args=(obj.course.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.course.title)
+        return mark_safe(html)
+
+    def course_description(self, obj):
+        """ Return related course's description so it can be used in list_display."""
+        return obj.course.description
+
+    def course_max_students(self, obj):
+        """ Return related course's max students so it can be used in list_display."""
+        return obj.course.max_students
+            
     def teacher_fullname(self, obj):
         """ Return related course's teacher so it can be used in list_display."""        
-        return obj.course.teacher.fullname
+        teacher = obj.course.teacher
+        # link to teacher edit admin form 
+        url = reverse('admin:tradeschool_teacher_change', args=(teacher.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, teacher.fullname)
+        return mark_safe(html)
         
     def teacher_email(self, obj):
         """ Return related course's teacher's email so it can be used in list_display."""
-        return obj.course.teacher.email
+        html = '<a href="mailto:%s">%s</a>' % (obj.course.teacher.email, obj.course.teacher.email)
+        return mark_safe(html)
 
-    list_display    = ('course_title', 'teacher_fullname', 'teacher_email', 'start_time', 'end_time', 'venue', 'course_status', 'created')
-    list_editable   = ('start_time', 'end_time', 'venue', 'course_status', )
-    list_filter     = ('course_status', 'venue', 'start_time')
-    search_fields   = ('get_course_title', 'get_teacher_fullname')
-    inlines         = (BarterItemInline, RegistrationInline, ScheduleEmailContainerInline, FeedbackInline)
-    actions         = ('approve_courses', 'populate_notifications')
+    def teacher_phone(self, obj):
+        """ Return related course's teacher's phone so it can be used in list_display."""
+        return obj.course.teacher.phone
+
+    def teacher_bio(self, obj):
+        """ Return related course's teacher's bio so it can be used in list_display."""
+        return obj.course.teacher.bio
+
+    def teacher_website(self, obj):
+        """ Return related course's teacher's website so it can be used in list_display."""
+        return obj.course.teacher.website
+
+    list_display    = (
+                        'course_title', 
+                        'teacher_fullname', 
+                        'teacher_email', 
+                        'start_time', 
+                        'end_time', 
+                        'venue', 
+                        'course_status', 
+                        'created'
+                        )
+    list_editable   = (
+                        'start_time', 
+                        'end_time', 
+                        'venue', 
+                        'course_status',
+                        )
+    list_filter     = (
+                        'course_status', 
+                        'venue', 
+                        'start_time'
+                        )
+    readonly_fields = (
+                        'course_title_link',
+                        'course_description',
+                        'course_max_students',
+                        'teacher_fullname', 
+                        'teacher_email', 
+                        'teacher_bio', 
+                        'teacher_website', 
+                        'teacher_phone',
+                        )
+    search_fields   = (
+                        'get_course_title', 
+                        'get_teacher_fullname'
+                        )
+    inlines         = (
+                        BarterItemInline, 
+                        RegistrationInline, 
+                        #ScheduleEmailContainerInline, 
+                        FeedbackInline,
+                        )
+    actions         = (
+                        'approve_courses', 
+                        'populate_notifications'
+                        )
     fieldsets = (
-        ('Class Schedule Info', {
-            'fields': ('course', 'slug', 'venue', 'course_status')
+        ('Class Info', {
+            'fields': ('course_title_link', 'course_description', 'course_max_students')
         }),
-        ('Class Time', {
-            'fields': ('start_time', 'end_time',)
+        ('Teacher Info', {
+            'fields': ('teacher_fullname', 'teacher_email', 'teacher_phone', 'teacher_bio', 'teacher_website')
+        }),        
+        ('Class Schedule', {
+            'fields': ('venue', 'start_time', 'end_time', 'course_status')
         }),     
     )
-    prepopulated_fields  = {'slug': ('start_time',) }
+    #prepopulated_fields  = {'slug': ('start_time',) }
 
 
 class RegistrationAdmin(BaseAdmin):
@@ -649,11 +743,15 @@ class RegistrationAdmin(BaseAdmin):
         
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'items':
-            kwargs['queryset'] = BarterItem.objects.filter(schedule__course__branch__in=request.user.branch_set.all)
+            # parsing the object id from the URL. **This is very ugly! is there a way to get the obj from the request --Or
+            registration_pk = int(request.path.split('/')[4])
+            registration = Registration.objects.get(pk=registration_pk)
+            kwargs['queryset'] = BarterItem.objects.filter(schedule=registration.schedule)
         return super(RegistrationAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)        
             
-    fields = ()
-    list_display = ('student', 'schedule', 'registered_items', 'registration_status', 'branches')
+    fields          = ('student', 'schedule', 'items', 'registration_status')
+    readonly_fields = ('student', 'schedule',)
+    list_display    = ('student', 'schedule', 'registered_items', 'registration_status', 'branches')
 
 
 class BarterItemAdmin(BaseAdmin):
