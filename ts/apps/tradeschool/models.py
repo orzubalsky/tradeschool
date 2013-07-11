@@ -1017,6 +1017,12 @@ class Registration(Base):
         unique_together = ('schedule', 'student')
         ordering = ['schedule', 'registration_status', 'student']
         
+    # Translators: This is used in the header navigation to let you know where you are.
+    verbose_name = _('Registration')
+    
+    # Translators: Plural
+    verbose_name_plural = _('Registrations')
+        
     # Translators: Student registration buttons.     
     REGISTRATION_CHOICES = (('registered', _('Registered')),
                             ('unregistered', _('Unregistereed')))
@@ -1062,7 +1068,13 @@ class Photo(Base):
     """
     class Meta:
         ordering = ['position',]
-
+        
+    # Translators: This is used in the header navigation to let you know where you are.
+    verbose_name = _('Photo')
+    
+    # Translators: Plural
+    verbose_name_plural = _('Photos')
+        
     def upload_path(self, filename):
         return "uploads/%s/images/%s" % (self.branch.slug, filename)
     
@@ -1086,6 +1098,12 @@ class BranchPage(FlatPage, Base):
     """
     class Meta:
         ordering = ['branch', 'title']
+
+    # Translators: This is used in the header navigation to let you know where you are.
+    verbose_name = _('Branch Page')
+    
+    # Translators: Plural
+    verbose_name_plural = _('Branch Pages')
         
     # Translators: These one is for the dynamic custom pages.
     branch   = ForeignKey(Branch, verbose_name=_("branch"))

@@ -10,7 +10,6 @@ def branch(request):
     branch_slug = url.kwargs.get('branch_slug')
     
     
-    
     try:
         
         if branch_slug == None and (url.app_name == 'admin' or url.app_name == 'rosetta') and request.user.is_staff:
