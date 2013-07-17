@@ -442,7 +442,7 @@ class Branch(Location):
     organizers  = ManyToManyField(User, verbose_name=_("organizers"))
     
     # Translators: This is the Branches domain address.
-    site        = ForeignKey(Site, verbose_name=_("site"), default=Site.objects.get_current().pk)
+    site        = ForeignKey(Site, verbose_name=_("site"))
     
     # Translators: If this Trade School belogns to a set of Trade Schools.
     cluster     = ForeignKey(Cluster, verbose_name=_("cluster"), null=True)
