@@ -12,6 +12,8 @@ parts/
 # ignore settings files:
 ts/settings/*.py
 !ts/settings/__init__.py
+fab_config.py
+apache.conf
 
 # ignore static files (for now):
 ts/static/
