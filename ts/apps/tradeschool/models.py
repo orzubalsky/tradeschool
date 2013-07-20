@@ -425,7 +425,14 @@ class Branch(Location):
         verbose_name_plural = _('Branches')
         
         ordering = ['title']
-        
+    
+    STATUS_CHOICES = (
+        # Translators: The thing that shows what the status of the class is
+        ('pending', _('Pending')),
+        ('setting_up', _('Setting up')),
+        ('in_session', _('In Session'))
+    )        
+    
     COMMON_TIMEZONE_CHOICES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
     
     slug        = SlugField(
@@ -440,6 +447,15 @@ class Branch(Location):
     timezone    = CharField(verbose_name=_("timezone"), max_length=100, choices=COMMON_TIMEZONE_CHOICES)
     language    = CharField(verbose_name=_("language"), max_length=50, choices=settings.LANGUAGES, null=True)
     organizers  = ManyToManyField(User, verbose_name=_("organizers"))
+    
+    branch_status   = CharField(
+                            max_length=50, 
+                            verbose_name=_("branch status"),
+                            choices=STATUS_CHOICES, 
+                            default='pending', 
+                            # Translators: Contextual Help
+                            help_text=_("What is the current status of this branch?")
+                        )
     
     # Translators: This is the Branches domain address.
     site        = ForeignKey(Site, verbose_name=_("site"))

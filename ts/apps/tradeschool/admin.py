@@ -232,7 +232,7 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
     
     def render_image(self, obj):
         return mark_safe("""<img src="%s" class="branch_image"/>""" % obj.filename.url)    
-    render_image.short_description = "thumbnail"
+    render_image.short_description = _("Thumbnail")
 
 
 class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
@@ -289,8 +289,8 @@ class BranchAdmin(BaseAdmin):
         return qs
                    
     actions             = ['populate_notifications']            
-    list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'is_active')
-    list_editable       = ('is_active',)
+    list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
+    list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
     inlines             = (BranchEmailContainerInline, PhotoInline)
     fieldsets = (
