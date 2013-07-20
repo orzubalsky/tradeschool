@@ -1156,6 +1156,9 @@ class BranchPage(FlatPage, Base):
     
         # Translators: Plural
         verbose_name_plural = _('Branch Pages')
+    
+    # Translators: Used to determine whether a page is to be shown on the front page menu or not. set to yes.
+    is_visible   = BooleanField(verbose_name=_("is visible"), default=1)
         
     # Translators: These one is for the dynamic custom pages.
     branch   = ForeignKey(Branch, verbose_name=_("branch"))

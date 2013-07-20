@@ -916,7 +916,7 @@ class BranchPageAdmin(FlatPageAdmin):
     form = BranchPageForm
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content', 'branch')}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required', 'template_name')}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required', 'is_visible', 'template_name')}),
     )
     list_display = ('title', 'url', 'branch')
     list_filter = ('sites', 'branch', 'enable_comments', 'registration_required')
