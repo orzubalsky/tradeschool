@@ -304,7 +304,7 @@ class BranchAdmin(BaseAdmin):
         }),
         # Translators: This is the a header in the branch admin form
         (_('Website Content'), {
-            'fields': ('header_copy', 'intro_copy', 'footer_copy')
+            'fields': ('header_copy', 'intro_copy', 'footer_copy', 'site')
         }), 
         # Translators: This is the a header in the branch admin form       
         (_('Organizers'), {

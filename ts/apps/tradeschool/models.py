@@ -506,6 +506,16 @@ class Branch(Location):
             setattr(branch_email_container, fieldname, new_email)
         branch_email_container.save()
     
+    def copy_teacher_info_page(self):
+        "Creates a copy of the teacher info flatpage for each new branch that gets created."
+        
+        branch_page = BranchPage.objects.get(pk=7)
+        
+        branch_page_copy = copy_model_instance(branch_page)
+        
+        branch_page_copy.branch = self
+        
+        branch_page_copy.save()
 
     def generate_files(self):
         """ Create a directory in the templates directory for the branch.

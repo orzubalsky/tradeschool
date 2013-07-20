@@ -23,8 +23,14 @@ def branch_save_callback(sender, instance, **kwargs):
         emails = BranchEmailContainer.objects.get(branch=instance)
     except BranchEmailContainer.DoesNotExist:
         instance.populate_notifications()
-
-
+    
+    # Create Teacher Info Page
+    try:
+        copy_teacher_info_page = BranchPage.objects.get(title='I Want to Teach a Class', branch=instance)
+    except BranchPage.DoesNotExist:
+        instance.copy_teacher_info_page()
+    
+    
 @receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")
 def schedule_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new schedule"""
