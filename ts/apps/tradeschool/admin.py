@@ -11,6 +11,7 @@ from flatpages_tinymce.admin import FlatPageAdmin
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
 from tradeschool.models import *
+from tradeschool.forms import *
 
 
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
@@ -264,7 +265,9 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
 class BranchAdmin(BaseAdmin):
     """BranchAdmin lets you add and edit tradeschool branches,
         and reset the email templates for each branch."""
-        
+           
+    form = BranchForm
+               
     def populate_notifications(self, request, queryset):
         """call the populate_notifications() method in order to reset email templates for the branch."""
         
@@ -304,7 +307,7 @@ class BranchAdmin(BaseAdmin):
         }),
         # Translators: This is the a header in the branch admin form
         (_('Website Content'), {
-            'fields': ('header_copy', 'intro_copy', 'footer_copy', 'site')
+            'fields': ('header_copy', 'intro_copy', 'footer_copy')
         }), 
         # Translators: This is the a header in the branch admin form       
         (_('Organizers'), {

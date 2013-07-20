@@ -2,8 +2,17 @@ from django.forms import *
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext as _
+from django.contrib.sites.models import get_current_site
+from django.contrib.sites.models import Site
 from tradeschool.models import *
 
+class BranchForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BranchForm, self).__init__(*args, **kwargs)
+        self.initial['site'] = Site.objects.get_current()
+
+    class Meta:
+        model = Branch
 
 class TeacherForm (ModelForm):
     def __init__(self, *args, **kwargs):
