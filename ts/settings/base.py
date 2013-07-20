@@ -225,6 +225,12 @@ LANGUAGES = (
     ('en', 'English'), 
     ('es_es', 'Spanish (Spain)'),
     ('es_mx', 'Spanish (Mexico)'),
+    ('es_us', 'Spanish (US)'),
+    ('es_ar', 'Spanish (Argentina)'),
+    ('es_cl', 'Spanish (Chile)'),
+    ('es_ec', 'Spanish (Ecuador)'),
+    ('es_pr', 'Spanish (Puerto Rico)'),
+    ('es_ve', 'Spanish (Venezuela)'),
     ('de_de', 'German'),
     ('ms_sg', 'Malay'),
     ('zh_sg', 'Chinese (Singapore)'),
@@ -236,5 +242,7 @@ LANGUAGES = (
     ('pt_br', 'Portuguese'),
     ('el_gr', 'Greek'),
     ('ru_ru', 'Russian'),
-    ('zh_cn', 'Chinese (China)')
+    ('zh_cn', 'Chinese (China)'),
+    ('vi', 'Vietnamese'),
+    ('ta_sg', 'Tamil (Singapore)')
 )
