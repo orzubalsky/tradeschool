@@ -36,6 +36,8 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     
     schedules = Schedule.public.filter(course__branch=branch)
     
+    branch_pages = BranchPage.objects.filter(branch=branch, is_visible=1)
+    
     if schedule_slug != None:
         previewed_course = Schedule.objects.get(slug=schedule_slug)
     else:
@@ -46,7 +48,8 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     return render_to_response(view_templates.template.name ,{ 
             'schedules'         : schedules,
             'previewed_course'  : previewed_course,
-            'templates'         : view_templates                    
+            'templates'         : view_templates,
+            'branch_pages'      : branch_pages                    
         }, context_instance=RequestContext(request))
 
 

@@ -918,8 +918,9 @@ class BranchPageAdmin(FlatPageAdmin):
         (None, {'fields': ('url', 'title', 'content', 'branch')}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required', 'is_visible', 'template_name')}),
     )
-    list_display = ('title', 'url', 'branch')
+    list_display = ('title', 'url', 'branch', 'is_visible')
     list_filter = ('sites', 'branch', 'enable_comments', 'registration_required')
+    list_editable = ('is_visible',)
     search_fields = ('url', 'title') 
     
 
