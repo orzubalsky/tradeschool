@@ -226,6 +226,25 @@ class BranchTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
         
+        # change the page to not visible (not in navigation)
+        branch_page.is_active = True        
+        branch_page.is_visible = False
+        branch_page.save()
+
+        # verify the page is loading
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)        
+        
+        # verify the page is not on the navigation menu
+        response = self.client.get(reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, }))
+        self.assertNotContains(response, branch_page.url)
+        
+        # verify the page is on the navigation menu        
+        branch_page.is_visible = True
+        branch_page.save()
+        response = self.client.get(reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, }))
+        self.assertContains(response, branch_page.url)        
+        
         # delete the page
         branch_page.delete()
           

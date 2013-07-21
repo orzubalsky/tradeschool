@@ -56,6 +56,11 @@ def restart_wsgi():
         sudo('touch bin/django.wsgi')
 
 @task
+def test():
+    with cd('/opt/projects/tse'):
+        sudo('./bin/django test tradeschool', user=fab_username)
+
+@task
 def deploy():
     update_sourcecode()
 
@@ -72,6 +77,7 @@ def deploy():
     update_db()
     update_static_files()
     restart_wsgi()
+    test()
 
 
 #####
