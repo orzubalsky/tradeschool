@@ -377,7 +377,6 @@ class Location(Base):
 
 
 class BranchEmailContainerManager(Manager):
-    use_for_related_fields = True
     def get_query_set(self):
         return super(BranchEmailContainerManager, self).get_query_set().select_related()
 
@@ -601,9 +600,7 @@ class Venue(Location):
                     )
 
 
-class PersonManager(Manager):
-    use_for_related_fields = True
-    
+class PersonManager(Manager):    
     def get_query_set(self):
         return super(PersonManager, self).get_query_set().annotate(
             registration_count  =Count('registrations', distinct=True), 
@@ -685,7 +682,6 @@ class Person(Base):
             
 
 class TeacherManager(PersonManager):
-    use_for_related_fields = True    
     def get_query_set(self):
         return super(TeacherManager, self).get_query_set().filter(courses_taught_count__gt=0)
 
@@ -705,7 +701,6 @@ class Teacher(Person):
 
 
 class StudentManager(PersonManager):
-    use_for_related_fields = True    
     def get_query_set(self):
         return super(StudentManager, self).get_query_set().filter(registration_count__gt=0)
 
@@ -899,7 +894,6 @@ class BarterItem(Base):
 
 
 class ScheduleManager(Manager):
-    use_for_related_fields = True    
     def get_query_set(self):
         qs = super(ScheduleManager, self).get_query_set().annotate(
             registered_students=Count('students')
@@ -1054,7 +1048,6 @@ class Schedule(Durational):
 
 
 class RegistrationManager(Manager):
-    use_for_related_fields = True    
     def get_query_set(self):
         return super(RegistrationManager, self).get_query_set().select_related('schedule', 'student', 'student__fullname', 'items__title').prefetch_related('items')
 

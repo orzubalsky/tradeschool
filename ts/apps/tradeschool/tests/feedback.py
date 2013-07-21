@@ -14,7 +14,7 @@ from tradeschool.models import *
 class FeedbackTestCase(TestCase):
     """ Tests the process of submitting feedback for a schedule using the frontend form.
     """
-    fixtures = ['test_data.json', 'test_schedule.json']
+    fixtures = ['test_data.json', 'test_person.json', 'test_schedule.json']
     
     def setUp(self):
         """ Create a Site and branch for testing.

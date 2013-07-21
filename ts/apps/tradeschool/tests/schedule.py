@@ -17,7 +17,7 @@ from tradeschool.utils import daterange
 class ScheduleTestCase(TestCase):
     """ Tests the process of submitting a schedule using the frontend form.
     """
-    fixtures = ['test_data.json', 'test_timerange.json', 'test_admin.json']
+    fixtures = ['test_data.json', 'test_person.json', 'test_timerange.json', 'test_admin.json']
     
     def setUp(self):
         """ Create a Site and branch for testing.
