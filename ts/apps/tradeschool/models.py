@@ -480,6 +480,8 @@ class Branch(Location):
         """Check to see if the slug field's value has been changed. 
         If it has, rename the branch's template dir name."""
         
+        self.site = Site.objects.get_current()
+        
         template_directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
 
         if self.pk is not None and os.path.exists(template_directory):
@@ -509,13 +511,16 @@ class Branch(Location):
     def copy_teacher_info_page(self):
         "Creates a copy of the teacher info flatpage for each new branch that gets created."
         
-        branch_page = BranchPage.objects.get(pk=7)
+        try:
+            branch_page = BranchPage.objects.get(pk=7)
         
-        branch_page_copy = copy_model_instance(branch_page)
+            branch_page_copy = copy_model_instance(branch_page)
         
-        branch_page_copy.branch = self
+            branch_page_copy.branch = self
         
-        branch_page_copy.save()
+            branch_page_copy.save()
+        except BranchPage.DoesNotExist:
+            pass
 
     def generate_files(self):
         """ Create a directory in the templates directory for the branch.

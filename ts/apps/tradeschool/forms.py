@@ -4,7 +4,7 @@ from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext as _
 from django.contrib.sites.models import get_current_site
 from django.contrib.sites.models import Site
-from tradeschool.models import *
+from tradeschool.models import *    
 
 class BranchForm(ModelForm):
     def __init__(self, *args, **kwargs):

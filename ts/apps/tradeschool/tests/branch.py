@@ -103,7 +103,7 @@ class BranchTestCase(TestCase):
         self.assertTemplateUsed('admin/change_form.html')
         
         # an empty form should return 9 errors for the required fields
-        self.assertContains(response, 'This field is required', count=9)
+        self.assertContains(response, 'This field is required', count=8)
         
         # now submit valid form
         response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)
@@ -209,12 +209,12 @@ class BranchTestCase(TestCase):
         # go to the new page's url
         url = reverse('branch-page', kwargs={'branch_slug' : self.branch.slug, 'url' : branch_page.url })
         response = self.client.get(url)
-        
+
         # verify the page is loading 
         self.assertEqual(response.status_code, 200)        
         
         # verify that the BranchPage data is correct
-        self.assertContains(response, 'Test Page')
+        self.assertContains(response, 'test page')
         self.assertContains(response, 'test page content')
         
         # change the page's status to inactive
