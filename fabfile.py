@@ -58,7 +58,7 @@ def restart_wsgi():
 @task
 def test():
     with cd('/opt/projects/tse'):
-        sudo('./bin/django test tradeschool', user=fab_username)
+        sudo('./bin/django test tradeschool -v 2', user=fab_username)
 
 @task
 def deploy():
