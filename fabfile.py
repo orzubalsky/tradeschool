@@ -60,6 +60,15 @@ def test():
     with cd('/opt/projects/tse'):
         sudo('./bin/django test tradeschool -v 2', user=fab_username)
 
+@task 
+def load_data():
+    filename = prompt( 'Enter name of fixture file:',
+                       default='ts/apps/tradeschool/fixtures/migration.json' )
+    destination = '/opt/projects/tse/ts/apps/tradeschool/fixtures/migration.json'
+    put(filename,destination,use_sudo=True)    
+    with cd('/opt/projects/tse/'):
+        sudo('./bin/django loaddata migration.json', user=fab_username)    
+    
 @task
 def deploy():
     update_sourcecode()
