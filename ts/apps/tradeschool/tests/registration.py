@@ -210,17 +210,13 @@ class RegistrationTestCase(TestCase):
 
 
 
-
+"""
 class RegistrationSeleniumTestCase(LiveServerTestCase):
-    """
-    """
     fixtures = ['test_data.json', 'test_person.json', 'test_schedule.json']
 
 
     @classmethod
     def setUpClass(self):
-        """ Start Selenium.
-        """
         # start Firefox websdriver
         self.selenium = WebDriver()
 
@@ -243,9 +239,6 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
 
 
     def test_registration_toggle_button(self):
-        """ Tests that clicking the title of a scheduled class
-            on the website expands the div.
-        """
         # construct server url
         schedule_list_url = reverse('schedule-list', kwargs={ 'branch_slug' : self.branch.slug })
         live_url = "%s%s" % (self.live_server_url, schedule_list_url)
@@ -261,8 +254,6 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
         
         
     def test_registration_join_button(self):
-        """ Tests that clicking on the join button sends an ajax request.
-        """
         # construct server url
         schedule_register_url = reverse('schedule-register', kwargs={ 'branch_slug' : self.branch.slug, 'schedule_slug' : self.schedule.slug })
         live_url = "%s%s" % (self.live_server_url, schedule_register_url)
@@ -279,8 +270,6 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
 
 
     def tearDown(self):
-        """ Delete Branch files.
-        """
         # delete branches' files
         for branch in Branch.objects.all():
             branch.delete_files()        
@@ -292,3 +281,4 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
 
         # call super teardown method
         super(RegistrationSeleniumTestCase, self).tearDownClass()
+"""
