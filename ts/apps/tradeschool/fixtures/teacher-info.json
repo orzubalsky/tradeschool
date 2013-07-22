@@ -8,7 +8,7 @@
         "created": "2013-07-20T20:36:27Z", 
         "is_active": true, 
         "sites": [], 
-        "branch": 5, 
+        "branch": null, 
         "position": 0
     }
 },

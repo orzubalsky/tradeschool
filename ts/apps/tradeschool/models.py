@@ -1169,7 +1169,7 @@ class BranchPage(FlatPage, Base):
     is_visible   = BooleanField(verbose_name=_("is visible"), default=1)
         
     # Translators: These one is for the dynamic custom pages.
-    branch   = ForeignKey(Branch, verbose_name=_("branch"))
+    branch   = ForeignKey(Branch, verbose_name=_("branch"), null=True, blank=True)
     position = PositiveSmallIntegerField(_('Position'), default=0)    
 
 
