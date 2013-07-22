@@ -574,7 +574,7 @@ class Venue(Location):
 
     venue_type  = SmallIntegerField(max_length=1, choices=TYPE_CHOICES, default=0) 
     address_1   = CharField(max_length=200, verbose_name=_("Address 1"))
-    address_2   = CharField(max_length=100, blank=True, null=True, verbose_name=_("Address 2"))
+    address_2   = CharField(max_length=200, blank=True, null=True, verbose_name=_("Address 2"))
     capacity    = SmallIntegerField(
                         max_length=4, 
                         default=20, 

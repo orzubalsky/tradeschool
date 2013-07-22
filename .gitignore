@@ -31,6 +31,7 @@ ts/settings/tmp/
 
 # ignore sql data dump:
 sample_data.json
+migration.json
 
 # ignore branch template files (for now)
 ts/apps/branches/
