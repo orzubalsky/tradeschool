@@ -196,63 +196,6 @@ class BranchTestCase(TestCase):
         self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
 
 
-    def test_branch_page(self):
-        """ Tests that creating a BranchPage results in the page displaying on the website.
-        """
-        # save a new branch
-        self.branch.save()
-                
-        # save a new BranchPage
-        branch_page = BranchPage(branch=self.branch, url='/test-page/', title='test page', content='test page content')
-        branch_page.save()
-
-        # go to the new page's url
-        url = reverse('branch-page', kwargs={'branch_slug' : self.branch.slug, 'url' : branch_page.url })
-        response = self.client.get(url)
-
-        # verify the page is loading 
-        self.assertEqual(response.status_code, 200)        
-        
-        # verify that the BranchPage data is correct
-        self.assertContains(response, 'test page')
-        self.assertContains(response, 'test page content')
-        
-        # change the page's status to inactive
-        # inactive pages should stay in the db but not on the website
-        branch_page.is_active = False
-        branch_page.save()
-
-        # verify the page is not loading
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
-        
-        # change the page to not visible (not in navigation)
-        branch_page.is_active = True        
-        branch_page.is_visible = False
-        branch_page.save()
-
-        # verify the page is loading
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)        
-        
-        # verify the page is not on the navigation menu
-        response = self.client.get(reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, }))
-        self.assertNotContains(response, branch_page.url)
-        
-        # verify the page is on the navigation menu        
-        branch_page.is_visible = True
-        branch_page.save()
-        response = self.client.get(reverse('schedule-list', kwargs={'branch_slug' : self.branch.slug, }))
-        self.assertContains(response, branch_page.url)        
-        
-        # delete the page
-        branch_page.delete()
-          
-        # verify the page is gone
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
-    
-    
     def test_branch_language(self):
         """ Tests that the templates are rendered with the branch's language settings.
             Language is one of the fields in the Branch model.
