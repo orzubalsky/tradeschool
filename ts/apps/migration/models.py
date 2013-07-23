@@ -848,6 +848,8 @@ class VenuesManager(Manager):
         print "     saving: %s" % do_save        
         
         if do_save == True:
+            branch = Branch.objects.get(pk=data['branch_id'])
+            
             if venue.exists() == False:                        
                 venue = Venue(
                         pk          = data['id'], 

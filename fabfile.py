@@ -63,13 +63,21 @@ def test():
 
 @task 
 def load_data():
-    filename = prompt( 'Enter name of fixture file:',
-                       default='ts/apps/tradeschool/fixtures/migration.json' )
-    destination = '/opt/projects/tse/ts/apps/tradeschool/fixtures/migration.json'
-    put(filename,destination,use_sudo=True)    
-    with cd('/opt/projects/tse/'):
-        sudo('./bin/django loaddata migration.json', user=fab_username)    
-    
+    filename = prompt( 'Enter name of sql file:',
+                       default='data.sql' )
+
+    sudo('mkdir /opt/projects/tse/sql',user=fab_username)
+
+    destination = '/opt/projects/tse/sql/data.sql'
+
+    db_name = prompt( 'Enter name of database:',
+                       default='tradeschool' )
+                       
+    put(filename,destination,use_sudo=True)
+
+    with cd('/opt/projects/tse/sql'):
+        sudo('mysql -u root %s < data.sql' % (db_name), user=fab_username)
+
 @task
 def deploy():
     update_sourcecode()
