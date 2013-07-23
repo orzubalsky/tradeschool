@@ -37,6 +37,7 @@ def update_db():
     with cd('/opt/projects/tse/'):
         sudo('./bin/django syncdb', user=fab_username)
         sudo('./bin/django migrate tradeschool', user=fab_username)
+        sudo('./bin/django migrate migration', user=fab_username)        
     
 @task
 def update_static_files():
