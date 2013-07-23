@@ -18,9 +18,6 @@ apache.conf
 # ignore static files (for now):
 ts/static/
 
-# ignore the migration app
-ts/apps/migration/
-
 # ignore uploaded files
 ts/media/uploads
 
