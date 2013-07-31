@@ -129,6 +129,8 @@ LOGIN_URL = '/admin'
 INTERNAL_IPS = ('127.0.0.1',)
 #BRANCH_FILES = MEDIA_ROOT + '/branches_files'
 
+AUTH_USER_MODEL = 'tradeschool.Person'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

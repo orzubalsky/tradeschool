@@ -14,6 +14,7 @@ from tradeschool.models import *
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
+from django.utils.encoding import smart_text
 from tradeschool.utils import unique_slugify as slugify
 
 
@@ -312,11 +313,11 @@ class ClassesManager(Manager):
                     print "         in branch: [%s]" % branch
                 
                     # save branch to teacher
-                    course.teacher.branch.add(branch)
+                    course.teacher.branches.add(branch)
                     course.teacher.save()
                 
                     # save branch to course
-                    course.branch.add(branch)
+                    course.branches.add(branch)
                     course.save()
                 
                     # convert the old unix time values (a bigint) to a timezone-aware datetime object
@@ -558,15 +559,15 @@ class StudentsManager(Manager):
         
         if do_save == True:
             # auto generate slug field
-            slug = slugify(Student, data['fullname'])
+            slug = slugify(Person, data['fullname'])
 
             # we're not copyig the id, to not clash with migrated teachers, 
             # as both are represented with the Person model
             student = Person.objects.filter(email=data['email'])
             if student.exists() == False:
-                student = Person(
+                student = Person.objects.create_user(
                         fullname    = data['fullname'], 
-                        email       = data['email'], 
+                        email       = data['email'],
                         phone       = data['phone'], 
                         slug        = slug, 
                         created     = timezone.make_aware(data['timestamp'], timezone.utc),
@@ -602,10 +603,10 @@ class StudentsManager(Manager):
                             #print "         found Registration: [%s]" % registration
                     
                         # save branch id in student Person object
-                        branch = registration.schedule.course.branch.all()[0]
+                        branch = registration.schedule.course.branches.all()[0]
                         #print "             found Branch: [%s]" % branch
                 
-                        student.branch.add(branch)
+                        student.branches.add(branch)
                         student.save()                
                     except Schedule.DoesNotExist:
                         pass
@@ -657,11 +658,7 @@ class StudentsXItems(MigrationBase):
         db_table = u'students_x_items'
 
 class TeachersManager(Manager):
-    def migrate(self, data, branch_slug=None):
-        slug    = slugify(Teacher, data['fullname'])
-        
-        teacher = Person.objects.filter(email=data['email'])
-        
+    def migrate(self, data, branch_slug=None):        
         do_save = True
         if branch_slug is not None:
             do_save = False
@@ -684,30 +681,26 @@ class TeachersManager(Manager):
                     except Classes.DoesNotExist:
                         pass
 
-        print "     saving: %s" % do_save        
-
         if do_save == True:
-            if teacher.exists() == False:                    
-                teacher = Person(
-                        pk          = data['id'], 
+            slug = slugify(Person, data['fullname'])            
+
+            try:
+                teacher = Person.objects.get(email=data['email'])
+                print "     found Person: [%s]" % teacher
+            except Person.DoesNotExist:
+                teacher = Person.objects.create_user(
+                        pk          = int(data['id']),
                         fullname    = data['fullname'], 
                         email       = data['email'], 
-                        phone       = data['phone'], 
-                        bio         = data['bio'], 
-                        website     = data['website'], 
-                        slug        = slug, 
+                        phone       = data['phone'],
+                        bio         = data['bio'],
+                        website     = data['website'],
+                        slug        = slug,
                         created     = timezone.make_aware(data['timestamp'], timezone.utc),
-                        updated     = timezone.make_aware(data['timestamp'], timezone.utc),                
+                        updated     = timezone.make_aware(data['timestamp'], timezone.utc),
                     )
                 teacher.save()
-                print "     saved Person: [%s]" % teacher            
-            else:
-                teacher = Person.objects.get(email=data['email'])
-                print "     found Person: [%s]" % teacher        
-            
-                # if this is the second person found for this email, 
-                # update other tables with this id
-            
+                print "     saved Person: [%s]" % teacher
             
         
 class Teachers(MigrationBase):
@@ -752,29 +745,37 @@ class UsersManager(Manager):
         print "     saving: %s" % do_save        
 
         if do_save == True:
-            user = User.objects.filter(pk=data['id'])
-        
-            if user.exists() == False:                        
-                user = User(
-                        pk          = data['id'], 
-                        username    = data['username'], 
-                        email       = data['email'], 
-                        is_staff    = True,
-                        date_joined = timezone.make_aware(data['timestamp'], timezone.utc),
-                    )
+            pk = int(data['id']) + 10000            
+            
+            try:
+                user = Person.objects.get(username=data['username'])
+                user.is_staff = True
                 user.save()
-                print "     saved User: [%s]" % user            
-
-            else:
-                user = User.objects.get(pk=data['id'])
-                print "     found User: [%s]" % user            
+                print "     turned student or teacher into admin: [%s]" % user                            
+            except Person.DoesNotExist:
+                try:
+                    user = Person.objects.get(pk=pk)
+                    print "     found User: [%s]" % user                    
+                except Person.DoesNotExist:        
+                    user = Person.objects.create_user(
+                            pk          = pk, 
+                            fullname    = data['username'],
+                            username    = data['username'],
+                            email       = data['email'], 
+                            is_staff    = True, 
+                            created     = timezone.make_aware(data['timestamp'], timezone.utc),
+                            updated     = timezone.make_aware(data['timestamp'], timezone.utc),
+                        )
+                    print "     saved User: [%s]" % user            
 
             g = Group.objects.get(name='translators') 
-            g.user_set.add(user)
+            g.person_set.add(user)
         
             try:
                 branch = Branch.objects.get(pk=data['branch_id'])
                 branch.organizers.add(user)
+                user.branches.add(branch)
+                user.save()
                 branch.save()
             except Branch.DoesNotExist:
                 pass

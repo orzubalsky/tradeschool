@@ -15,7 +15,7 @@ from tradeschool.models import *
 class RegistrationTestCase(TestCase):
     """ Tests the process of registering and unregistering to a schedule using the frontend forms.
     """
-    fixtures = ['test_data.json', 'test_person', 'test_schedule.json']
+    fixtures = ['email_initial_data.json', 'teacher-info.json', 'test_data.json', 'test_course.json', 'test_person.json', 'test_schedule.json']
     
     def setUp(self):
         """ 
@@ -28,7 +28,7 @@ class RegistrationTestCase(TestCase):
         self.branch.language = 'en'
         self.branch.save()
 
-        self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
+        self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
         self.valid_data = {
                 'student-fullname' : 'test student',
                 'student-email'    : 'test123!@email.com',
@@ -44,7 +44,7 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(registration_obj.schedule, self.schedule)
         self.assertEqual(registration_obj.student.fullname, self.valid_data['student-fullname'])
         self.assertEqual(registration_obj.registration_status, 'registered')
-        self.assertTrue(self.branch in registration_obj.student.branch.all())
+        self.assertTrue(self.branch in registration_obj.student.branches.all())
         for registered_item in registration_obj.items.all():
             self.assertEqual(registered_item.pk, int(self.valid_data['item-items'][0]))
 
@@ -141,9 +141,9 @@ class RegistrationTestCase(TestCase):
             # first create a student to register to the scheduled class
             student_fullname = "student-%i" % i
             student_email    = "%i@email.com" % i
-            student = Person(fullname=student_fullname, email=student_email, slug=student_fullname)
+            student = Person.objects.create_user(fullname=student_fullname, email=student_email, slug=student_fullname)
             student.save()
-            student.branch.add(self.branch)
+            student.branches.add(self.branch)
             
             # then create the registration itself
             registration = Registration(schedule=self.schedule, student=student)

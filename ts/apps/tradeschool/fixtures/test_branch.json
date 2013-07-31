@@ -555,173 +555,80 @@
     }
 },
 {
-    "pk": 1, 
-    "model": "auth.user", 
-    "fields": {
-        "username": "admin", 
-        "first_name": "admin", 
-        "last_name": "istrator", 
-        "is_active": true, 
-        "is_superuser": true, 
-        "is_staff": true, 
-        "last_login": "2013-06-06T22:03:54Z", 
-        "groups": [], 
-        "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
-        "email": "admin@test.tradeschool.coop", 
-        "date_joined": "2013-01-29T23:51:07Z"
-    }
-},
-{
-    "pk": 3, 
-    "model": "auth.user", 
-    "fields": {
-        "username": "newyork_admin", 
-        "first_name": "", 
-        "last_name": "", 
-        "is_active": true, 
-        "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:57:03Z", 
-        "groups": [], 
-        "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$XaSuY4PxS7F8$sF/7D50uzxMgEOsC9B9sKqj4trDAIGBN/gV37qKpZF4=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:57:03Z"
-    }
-},
-{
-    "pk": 4, 
-    "model": "auth.user", 
-    "fields": {
-        "username": "quito_admin", 
-        "first_name": "", 
-        "last_name": "", 
-        "is_active": true, 
-        "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:57:46Z", 
-        "groups": [], 
-        "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$7BqfjamXuNwA$9adly/izX1e7yYXMtXpNcrNvcZrUnY1lHpqbbrg0mNE=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:57:46Z"
-    }
-},
-{
-    "pk": 5, 
-    "model": "auth.user", 
-    "fields": {
-        "username": "barcelona_admin", 
-        "first_name": "", 
-        "last_name": "", 
-        "is_active": true, 
-        "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:58:23Z", 
-        "groups": [], 
-        "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$2q6wB9PVhVgb$aMr0cx3mBf56R3TSXDfF1KfSvtftReysNq7WqbFjzl8=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:58:23Z"
-    }
-},
-{
-    "pk": 6, 
-    "model": "auth.user", 
-    "fields": {
-        "username": "newyork_quiito_admin", 
-        "first_name": "", 
-        "last_name": "", 
-        "is_active": true, 
-        "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:58:43Z", 
-        "groups": [], 
-        "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$SeOU1QL4ggGU$9I5M9PEhFOizjIvicXZ3MAeV8jgBt51TjA7qhAf3jmk=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:58:43Z"
-    }
-},
-{
     "pk": 13, 
     "model": "tradeschool.branch", 
     "fields": {
-        "organizers": [
-            3, 
-            6
-        ], 
-        "city": "New York", 
-        "updated": "2013-06-07T16:59:38Z", 
+        "branch_status": "pending", 
+        "city": "new york", 
+        "updated": "2013-07-28T16:54:38Z", 
         "language": "en", 
-        "title": "Test New York", 
-        "intro_copy": "<p>Trade School is a self-organized learning space that runs on barter. Rather than paying for classes with money, sign up for classes by meeting your teacher's barter requests. In May and June, classes run every Tuesday night at 75 East 4th St. between Bowery/3rd and 2nd Ave. Click on a class below for information.</p>", 
+        "title": "test new york", 
+        "intro_copy": "Information for the header of the page", 
         "country": "US", 
-        "header_copy": "<p>barter for knowledge</p>", 
-        "created": "2013-06-07T16:59:38Z", 
+        "header_copy": "Barter for knowledge", 
+        "created": "2013-07-28T16:54:38Z", 
         "is_active": true, 
         "site": 1, 
-        "email": "newyork@test.tradeschool.coop", 
+        "email": "newyork@test.com", 
         "cluster": null, 
-        "phone": "", 
+        "phone": null, 
         "state": "NY", 
-        "footer_copy": "", 
+        "footer_copy": "Information for the footer of the page", 
         "timezone": "America/New_York", 
-        "slug": "test-newyork"
+        "slug": "test-new-york", 
+        "organizers": []
     }
 },
 {
     "pk": 14, 
     "model": "tradeschool.branch", 
     "fields": {
-        "organizers": [
-            4, 
-            6
-        ], 
-        "city": "Quito", 
-        "updated": "2013-06-07T17:07:09Z", 
-        "language": "es-MX", 
-        "title": "Test Quito", 
-        "intro_copy": "<p><strong>LA TRUECA</strong>&nbsp;es un espacio de aprendizaje que funciona en base al trueque - compartiendo ideas, conocimientos, habilidades, pasiones, gustos y necesidades.</p>\r\n<p><a href=\"http://tradeschool.coop/quito/class/teacher-info\">COMPARTE TUS CONOCIMIENTOS</a></p>", 
-        "country": "EC", 
-        "header_copy": "<p>CONOCIMIENTOS POR TRUEQUE</p>", 
-        "created": "2013-06-07T17:07:09Z", 
+        "branch_status": "pending", 
+        "city": "london", 
+        "updated": "2013-07-28T16:56:29Z", 
+        "language": "es", 
+        "title": "test london", 
+        "intro_copy": "Information for the header of the page", 
+        "country": "GB", 
+        "header_copy": "Barter for knowledge", 
+        "created": "2013-07-28T16:56:29Z", 
         "is_active": true, 
         "site": 1, 
-        "email": "quito@test.tradeschool.coop", 
+        "email": "london@test.com", 
         "cluster": null, 
-        "phone": "", 
+        "phone": null, 
         "state": null, 
-        "footer_copy": "<p><span>La SEGUNDA TEMPORADA de la TRUECA funcionar&aacute; de ABRIL a AGOSTO 2013.&nbsp;</span><a href=\"http://www.facebook.com/latrueca.quito?fref=ts\">S&iacute;guenos en facebook</a><span>. Si quieres ser voluntari@ o tienes inquietudes, comentarios o sugerencias para&nbsp;</span><strong>LA TRUECA</strong><span>escr&iacute;benos a&nbsp;</span><strong>latrueca@gmail.com</strong></p>", 
-        "timezone": "Etc/GMT-5", 
-        "slug": "test-quito"
+        "footer_copy": "Information for the footer of the page", 
+        "timezone": "Europe/London", 
+        "slug": "test-london", 
+        "organizers": []
     }
 },
 {
     "pk": 15, 
     "model": "tradeschool.branch", 
     "fields": {
-        "organizers": [
-            5
-        ], 
-        "city": "Barcelona", 
-        "updated": "2013-06-07T17:10:09Z", 
-        "language": "es-ES", 
-        "title": "Test Barcelona", 
-        "intro_copy": "<p>Los Espacios de Aprendizaje Colectivo funcionan a trav&eacute;s del trueque de ideas, bienes y conocimientos</p>\r\n<p><a href=\"http://tradeschool.coop/barcelona/class/teacher-info\">Quiero ofrecer una actividad</a>.</p>", 
-        "country": "ES", 
-        "header_copy": "<h2>CONOCIMIENTOS POR TRUEQUE</h2>", 
-        "created": "2013-06-07T17:10:09Z", 
+        "branch_status": "pending", 
+        "city": "berlin", 
+        "updated": "2013-07-28T16:56:40Z", 
+        "language": "de", 
+        "title": "test berlin", 
+        "intro_copy": "Information for the header of the page", 
+        "country": "DE", 
+        "header_copy": "Barter for knowledge", 
+        "created": "2013-07-28T16:56:40Z", 
         "is_active": true, 
         "site": 1, 
-        "email": "barcelona@test.tradeschool.coop", 
+        "email": "berlin@test.com", 
         "cluster": null, 
-        "phone": "111-222-1234", 
+        "phone": null, 
         "state": null, 
-        "footer_copy": "<p><span>Trade School Barcelona funciona en&nbsp;</span><strong><a href=\"http://www.aureasocial.org/\">AureaSocial</a></strong><span>, calle Sarde&ntilde;a 261, 08013 Barcelona&nbsp;</span><strong><a href=\"mailto:barcelona@tradeschool.coop\">Contact</a></strong><span>&nbsp;&iquest;Quieres saber m&aacute;s? haz click aqu&iacute;&nbsp;</span><strong><a href=\"http://tradeschool.coop/\">Trade School</a></strong><span>.</span></p>", 
-        "timezone": "Etc/GMT+1", 
-        "slug": "test-barcelona"
+        "footer_copy": "Information for the footer of the page", 
+        "timezone": "Europe/London", 
+        "slug": "test-berlin", 
+        "organizers": [
+            3
+        ]
     }
 }
 ]

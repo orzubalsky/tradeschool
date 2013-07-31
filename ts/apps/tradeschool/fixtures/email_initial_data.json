@@ -121,20 +121,20 @@
 },
 {
     "pk": 1, 
-    "model": "auth.user", 
+    "model": "tradeschool.person", 
     "fields": {
-        "username": "admin", 
-        "first_name": "admin", 
-        "last_name": "istrator", 
+        "fullname": "admin",
+        "username": "admin",
         "is_active": true, 
         "is_superuser": true, 
         "is_staff": true, 
         "last_login": "2013-06-06T22:03:54Z", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "created": "2013-06-06T22:03:54Z",                 
         "groups": [], 
         "user_permissions": [], 
         "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
-        "email": "admin@test.tradeschool.coop", 
-        "date_joined": "2013-01-29T23:51:07Z"
+        "email": "admin@test.tradeschool.coop"
     }
 },
 {

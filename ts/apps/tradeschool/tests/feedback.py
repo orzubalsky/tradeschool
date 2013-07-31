@@ -14,7 +14,13 @@ from tradeschool.models import *
 class FeedbackTestCase(TestCase):
     """ Tests the process of submitting feedback for a schedule using the frontend form.
     """
-    fixtures = ['test_data.json', 'test_person.json', 'test_schedule.json']
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'test_data.json', 
+                'test_person.json', 
+                'test_course.json',
+                'test_schedule.json'
+                ]
     
     def setUp(self):
         """ Create a Site and branch for testing.
@@ -30,7 +36,7 @@ class FeedbackTestCase(TestCase):
         self.branch.save()
         
         # use this schedule for testing
-        self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
+        self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
         self.schedule.course_status = 3
         self.schedule.save()
         

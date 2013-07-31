@@ -10,10 +10,11 @@
         "slug": "newyork-person-01", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             13
         ], 
         "fullname": "newyork person 01", 
+        "username": "person-1",        
         "email": "person01@email.com"
     }
 },
@@ -28,10 +29,11 @@
         "slug": "newyork-person-02", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             13
         ], 
         "fullname": "newyork person 02", 
+        "username": "person-2",        
         "email": "person02@email.com"
     }
 },
@@ -46,12 +48,13 @@
         "slug": "everywhere-person", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             15, 
             13, 
             14
         ], 
         "fullname": "everywhere person", 
+        "username": "person-3",        
         "email": "e@a.com"
     }
 },
@@ -66,10 +69,11 @@
         "slug": "new-york-student", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             13
         ], 
         "fullname": "new york student", 
+        "username": "person-4",        
         "email": "aaa@asd.com"
     }
 },
@@ -84,10 +88,11 @@
         "slug": "quito-person", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             14
         ], 
         "fullname": "quito person", 
+        "username": "person-5",    
         "email": "g@as.com"
     }
 },
@@ -102,10 +107,11 @@
         "slug": "barcelona-person", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             15
         ], 
         "fullname": "barcelona person", 
+        "username": "person-6",        
         "email": "ss@asd.com"
     }
 },
@@ -120,10 +126,11 @@
         "slug": "barcelona-teacher", 
         "is_active": true, 
         "phone": "", 
-        "branch": [
+        "branches": [
             15
         ], 
         "fullname": "barcelona teacher", 
+        "username": "person-7",        
         "email": "b@t.com"
     }
 }

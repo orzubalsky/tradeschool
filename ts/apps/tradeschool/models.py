@@ -4,7 +4,7 @@ from django.contrib.localflavor.us.models import USStateField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.flatpages.models import FlatPage
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, UserManager
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +17,7 @@ from django_countries import CountryField
 from tinymce.models import HTMLField
 import pytz, uuid, random, time, shutil, errno, os
 from datetime import *
-from tradeschool.utils import copy_model_instance
+from tradeschool.utils import copy_model_instance, unique_slugify
 from tradeschool.widgets import *
 
 
@@ -88,7 +88,7 @@ class Email(Base):
 
     def send(self, schedule_obj, recipient, registration=None):
         body    = self.preview(schedule_obj)
-        branch  = schedule_obj.course.branch.all()[0]
+        branch  = schedule_obj.course.branches.all()[0]
         send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
         self.save()
@@ -98,7 +98,7 @@ class Email(Base):
         
         teacher = schedule_obj.course.teacher
         site    = Site.objects.get_current()
-        branch  = Branch.objects.get(pk=schedule_obj.course.branch.all()[0].pk)
+        branch  = Branch.objects.get(pk=schedule_obj.course.branches.all()[0].pk)
         venue   = schedule_obj.venue
         domain  = site.domain
 
@@ -445,7 +445,7 @@ class Branch(Location):
     email       = EmailField(verbose_name=_("e-mail"), max_length=100)
     timezone    = CharField(verbose_name=_("timezone"), max_length=100, choices=COMMON_TIMEZONE_CHOICES)
     language    = CharField(verbose_name=_("language"), max_length=50, choices=settings.LANGUAGES, null=True)
-    organizers  = ManyToManyField(User, verbose_name=_("organizers"))
+    organizers  = ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_("organizers"), related_name='organizers', db_column='person_id')
     
     branch_status   = CharField(
                             max_length=50, 
@@ -528,7 +528,7 @@ class Branch(Location):
         src = settings.DEFAULT_BRANCH_TEMPLATE_DIR
         dst = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
         
-        try:
+        try:            
             shutil.copytree(src, dst)
         except OSError as exc: # python >2.5
             if exc.errno == errno.ENOTDIR:
@@ -600,15 +600,53 @@ class Venue(Location):
                     )
 
 
-class PersonManager(Manager):    
+class PersonManager(BaseUserManager):    
+
+    def create_user(self, email, fullname=None, username=None, password=None, is_staff=False, **extra_fields):
+        """
+        Creates and saves a Person with the given username, email and password.
+        """
+        now = timezone.now()
+        if not email:
+            raise ValueError('An email must be set')
+        if fullname:
+            username = unique_slugify(Person, fullname)
+        if not password:
+            password = self.make_random_password()
+            
+        email = self.normalize_email(email)
+        
+        person = self.model(
+                email        = email, 
+                username     = username, 
+                fullname     = fullname,
+                is_staff     = is_staff, 
+                is_active    = True, 
+                is_superuser = False,
+                last_login   = now, 
+                **extra_fields
+            )
+
+        person.set_password(password)
+        person.save(using=self._db)
+        return person
+
+    def create_superuser(self, email, password, username=None, fullname=None, **extra_fields):
+        person = self.create_user(email, fullname, username, password, **extra_fields)
+        person.is_staff = True
+        person.is_active = True
+        person.is_superuser = True
+        person.save(using=self._db)
+        return person   
+            
     def get_query_set(self):
         return super(PersonManager, self).get_query_set().annotate(
             registration_count  =Count('registrations', distinct=True), 
             courses_taught_count=Count('courses_taught', distinct=True)
-        ).select_related().prefetch_related('branch')
+        ).select_related().prefetch_related('branches')
 
 
-class Person(Base):
+class Person(AbstractBaseUser, PermissionsMixin, Base):
     """
     Person in the tradeschool system is either a teacher or a student.
     A person submitting a class as a teacher will have to supply a bio as well.
@@ -630,6 +668,12 @@ class Person(Base):
                         # Translators: Contextual Help.
                         help_text=_("This will appear on the site.")
                     )
+                    
+    username    = CharField(
+                        max_length=200, 
+                        unique=True,                        
+                        verbose_name=_("username"),
+                    )                    
                     
     email       = EmailField(
                         max_length=100, 
@@ -664,19 +708,41 @@ class Person(Base):
                     )
                     
     slug        = SlugField(max_length=220, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-    branch      = ManyToManyField(
+    branches    = ManyToManyField(
                         Branch, 
                         verbose_name=_("branch"), 
                         # Translators: Contextual Help
                         help_text=_("What tradeschool is this object related to?")
                     )
+    is_staff    = BooleanField(
+                        _('staff status'), 
+                        default=False,
+                        help_text=_('Designates whether the user can log into this admin site.')
+                    )                    
     
     objects = PersonManager()
+    
+    USERNAME_FIELD = 'username'
 
-    def branches(self):
+    def branches_string(self):
         """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
-        return ','.join( str(branch) for branch in self.branch.all())
+        return ','.join( str(branch) for branch in self.branches.all())
         
+    def get_full_name(self):
+        return self.fullname
+    
+    def get_short_name(self):
+        return self.fullname    
+
+    def get_absolute_url(self):
+        return '/people/%s/' % urlquote(self.slug)
+
+    def email_user(self, subject, message, from_email=None):
+        """
+        Sends an email to this User.
+        """
+        send_mail(subject, message, from_email, [self.email])
+                
     def __unicode__ (self):
         return self.fullname
             
@@ -750,7 +816,7 @@ class Course(Base):
     title           = CharField(max_length=255, verbose_name=_("class title")) 
     slug            = SlugField(max_length=255,blank=False, null=True, verbose_name=_("URL Slug"))
     description     = TextField(blank=False, verbose_name=_("Class description"))
-    branch          = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
+    branches        = ManyToManyField(Branch, help_text="What tradeschool is this object related to?")
 
     objects = Manager()
     
@@ -867,8 +933,8 @@ class ScheduleEmailContainer(EmailContainer):
         """shortcut method to preview an email via the ScheduleEmailContainer object."""
         return email.preview(self.schedule)
     
-    def branches(self):
-        return ','.join( str(branch) for branch in self.schedule.course.branch.all())
+    def branches_string(self):
+        return ','.join( str(branch) for branch in self.schedule.course.branches.all())
         
     def __unicode__ (self):
         return u"for %s" % self.schedule.course.title
@@ -1011,7 +1077,7 @@ class Schedule(Durational):
             schedule_emails.delete()
             
         # copy course notification from the branch notification templates
-        branch_email_containers = BranchEmailContainer.objects.filter(branch__in=self.course.branch.all())
+        branch_email_containers = BranchEmailContainer.objects.filter(branch__in=self.course.branches.all())
         if branch_email_containers.exists():
             branch_email_container = branch_email_containers[0]
         
@@ -1080,9 +1146,9 @@ class Registration(Base):
 
     objects = RegistrationManager()
     
-    def branches(self):
+    def branches_string(self):
         """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
-        return ','.join( str(branch) for branch in self.schedule.course.branch.all())
+        return ','.join( str(branch) for branch in self.schedule.course.branches.all())
     
     def registered_items(self):
         """ Return the registered items as a string. Used in the admin."""

@@ -9,6 +9,7 @@ from django.forms.util import ErrorList
 from django.forms.forms import NON_FIELD_ERRORS
 from django.contrib.sites.models import get_current_site
 from django.contrib.flatpages.views import render_flatpage
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
 from tradeschool.utils import unique_slugify, branch_template, branch_templates
@@ -22,7 +23,7 @@ def branch_list(request):
     branches  = Branch.objects.all()
 
     for branch in branches:
-        branch.schedules = Schedule.public.filter(course__branch=branch)
+        branch.schedules = Schedule.public.filter(course__branches=branch)
         
     return render_to_response('hub/branch_list.html',{ 
             'branches': branches, 
@@ -34,7 +35,7 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = Schedule.public.filter(course__branch=branch)
+    schedules = Schedule.public.filter(course__branches=branch)
     
     branch_pages = BranchPage.objects.filter(branch=branch, is_visible=1)
     
@@ -79,7 +80,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
             student_data = student_form.cleaned_data
             student_data['slug'] = unique_slugify(Student, student.fullname)
             student, created = Person.objects.get_or_create(email=student.email, defaults=student_data)
-            student.branch.add(branch)
+            student.branches.add(branch)
             student.save()
            
             # save registration
@@ -203,7 +204,7 @@ def schedule_add(request, branch_slug=None):
             teacher_data['slug'] = unique_slugify(Teacher, teacher.fullname)                
 
             # add a teacher-branch relationship to the current branch
-            teacher.branch.add(branch)
+            teacher.branches.add(branch)
             
             # save teacher
             teacher.save()
@@ -229,7 +230,7 @@ def schedule_add(request, branch_slug=None):
                 course.max_students = course_form.cleaned_data['max_students']
             
             # add a course-branch relationship to the current branch
-            course.branch.add(branch)
+            course.branches.add(branch)
             
             # save course
             course.save()
@@ -279,7 +280,7 @@ def schedule_add(request, branch_slug=None):
         }, context_instance=RequestContext(request))
 
 
-
+@login_required
 def schedule_edit(request, schedule_slug=None, branch_slug=None):
     """ """
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
@@ -352,7 +353,7 @@ def schedule_submitted(request, schedule_slug=None, branch_slug=None):
             'templates'         : view_templates
         }, context_instance=RequestContext(request))
 
-
+@login_required
 def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_slug=None):
     """ """
     registration = get_object_or_404(Registration, student__slug=student_slug, schedule__slug=schedule_slug)

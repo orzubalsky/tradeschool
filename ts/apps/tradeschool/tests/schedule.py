@@ -17,7 +17,14 @@ from tradeschool.utils import daterange
 class ScheduleTestCase(TestCase):
     """ Tests the process of submitting a schedule using the frontend form.
     """
-    fixtures = ['test_data.json', 'test_person.json', 'test_timerange.json', 'test_admin.json']
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'test_data.json', 
+                'test_course.json', 
+                'test_person.json', 
+                'test_timerange.json', 
+                'test_admin.json'
+                ]
     
     def setUp(self):
         """ Create a Site and branch for testing.
@@ -34,8 +41,9 @@ class ScheduleTestCase(TestCase):
         
         # admin user for the branch
         self.password = 'testts123!'
-        self.admin = User.objects.create_superuser('test_admin', 'tester@tradeschool.coop', self.password)
-        self.admin.branch_set.add(self.branch)
+        self.admin = Person.objects.create_superuser(username='test_admin', email='tester@tradeschool.coop', fullname='test admin', password=self.password)
+        self.admin.branches.add(self.branch)
+        self.branch.organizers.add(self.admin)
         self.admin.save()
         
         self.url = reverse('schedule-add', kwargs={'branch_slug' : self.branch.slug })
@@ -254,7 +262,7 @@ class ScheduleTestCase(TestCase):
         """ Tests the submission of a schedule of a new class by an existing teacher.
         """
         # get a Person who teaches in the branch
-        existing_teacher = Teacher.objects.filter(branch=self.branch)[0]
+        existing_teacher = Teacher.objects.filter(branches=self.branch)[0]
 
         # use the existing teacher's email for the form submission
         # when the teacher-email matches an existing objects,
@@ -272,7 +280,7 @@ class ScheduleTestCase(TestCase):
         """ Tests the submission of a schedule of an existing class by an existing teacher.
         """
         # get a Person who teaches in the branch
-        existing_teacher = Teacher.objects.filter(branch=self.branch)[0]
+        existing_teacher = Teacher.objects.filter(branches=self.branch)[0]
 
         # use the existing teacher's email for the form submission
         # when the teacher-email matches an existing Person object,
@@ -280,7 +288,7 @@ class ScheduleTestCase(TestCase):
         self.valid_data['teacher-email'] = existing_teacher.email
 
         # get an existing course in the branch
-        existing_course = Course.objects.filter(branch=self.branch)[0]
+        existing_course = Course.objects.filter(branches=self.branch)[0]
 
         # use the existing course's title for the form submission
         # when the course-title matches an existing Course object,
@@ -357,7 +365,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(schedule.emails.emails.__len__(), 7)
         
         # store this object in a variable for convenience 
-        bec = BranchEmailContainer.objects.filter(branch__in=schedule.course.branch.all())[0]
+        bec = BranchEmailContainer.objects.filter(branch__in=schedule.course.branches.all())[0]
                 
         # iterate over the emails in the schedule's ScheduleEmailContainer
         for email_name, schedule_email_obj in schedule.emails.emails.items():
@@ -527,7 +535,7 @@ class ScheduleTestCase(TestCase):
         # submit a schedule
         response = self.is_successful_submission(self.valid_data)
         schedule = response.context['schedule']
-        branch   = schedule.course.branch.all()[0]
+        branch   = schedule.course.branches.all()[0]
         
         # there should be no past schedules at this point, 
         # so the link to past scheduled should not appear 

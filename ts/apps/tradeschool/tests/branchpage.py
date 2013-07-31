@@ -15,7 +15,11 @@ from tradeschool.models import *
 class BranchPageTestCase(TestCase):
     """ 
     """
-    fixtures = ['test_admin.json', 'test_branch.json']    
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'test_admin.json', 
+                'test_branch.json',
+                ]    
     
     def setUp(self):
         """ Create a Site and an admin User for testing.
@@ -27,7 +31,7 @@ class BranchPageTestCase(TestCase):
         self.site.save()
         
         self.password = 'testts123!'
-        self.admin = User.objects.create_superuser('test_admin', 'tester@tradeschool.coop', self.password)
+        self.admin = Person.objects.create_superuser(username='test_admin', fullname='test admin', email='tester@tradeschool.coop', password=self.password)
         
         self.branch = Branch.objects.all()[0]
         self.branch_page_data = {

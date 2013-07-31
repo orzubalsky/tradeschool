@@ -11,7 +11,7 @@
         "title": "newyork_class_01", 
         "is_active": true, 
         "teacher": 24, 
-        "branch": [
+        "branches": [
             13
         ], 
         "max_students": 20
@@ -29,7 +29,7 @@
         "title": "newyork_class_02", 
         "is_active": true, 
         "teacher": 24, 
-        "branch": [
+        "branches": [
             13
         ], 
         "max_students": 20
@@ -47,7 +47,7 @@
         "title": "newyork class 03", 
         "is_active": true, 
         "teacher": 27, 
-        "branch": [
+        "branches": [
             13
         ], 
         "max_students": 10
@@ -65,7 +65,7 @@
         "title": "everywhere class 01", 
         "is_active": true, 
         "teacher": 29, 
-        "branch": [
+        "branches": [
             15, 
             13, 
             14
@@ -85,7 +85,7 @@
         "title": "quito class 01", 
         "is_active": true, 
         "teacher": 29, 
-        "branch": [
+        "branches": [
             14
         ], 
         "max_students": 20
@@ -103,7 +103,7 @@
         "title": "barcelona class 01", 
         "is_active": true, 
         "teacher": 36, 
-        "branch": [
+        "branches": [
             15
         ], 
         "max_students": 20

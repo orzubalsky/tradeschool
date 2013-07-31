@@ -14,8 +14,8 @@ def branch(request):
     try:
         
         if branch_slug == None and (url.app_name == 'admin' or url.app_name == 'rosetta') and request.user.is_staff:
-            if request.user.branch_set.count() > 0:
-                branch = request.user.branch_set.all()[0]
+            if request.user.branches.count() > 0:
+                branch = Branch.objects.filter(organizers=request.user)[0]
                 translation.activate(branch.language)
             else:
                 branch = Branch(timezone=settings.TIME_ZONE)

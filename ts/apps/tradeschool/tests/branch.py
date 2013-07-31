@@ -15,7 +15,7 @@ from tradeschool.models import *
 class BranchTestCase(TestCase):
     """ Test the process of setting up a new branch.
     """
-    fixtures = ['test_admin.json', 'test_branch.json']    
+    fixtures = ['email_initial_data.json', 'teacher-info.json', 'test_admin.json', 'test_branch.json']    
     
     def setUp(self):
         """ Create a Site and an admin User for testing.
@@ -27,7 +27,7 @@ class BranchTestCase(TestCase):
         self.site.save()
         
         self.password = 'testts123!'
-        self.admin = User.objects.create_superuser('test_admin', 'tester@tradeschool.coop', self.password)
+        self.admin = Person.objects.create_superuser(username='test_admin', fullname="test admin", email='tester@tradeschool.coop', password=self.password)
         
         self.branch_add_url = '/admin/tradeschool/branch/add/'
         self.branch_data = {
@@ -82,10 +82,10 @@ class BranchTestCase(TestCase):
         self.assertTemplateUsed('admin/login.html')
         
         # login and try again, this time it should work
-        self.client.login(username=self.admin.username, password=self.password)        
-
+        self.client.login(username=self.admin.username, password=self.password)
+        
         response = self.client.get(self.branch_add_url)
-
+ 
         self.assertEqual(response.status_code, 200)        
         self.assertTemplateUsed('admin/change_form.html')
         
@@ -101,8 +101,8 @@ class BranchTestCase(TestCase):
 
         # check that the same template is displayed (form + errors)
         self.assertTemplateUsed('admin/change_form.html')
-        
-        # an empty form should return 9 errors for the required fields
+
+        # an empty form should return 8 errors for the required fields
         self.assertContains(response, 'This field is required', count=8)
         
         # now submit valid form
@@ -258,7 +258,7 @@ class BranchTestCase(TestCase):
 
         if os.path.exists(directory):
             shutil.rmtree(directory)
-            
+
         # delete branches' files
         for branch in Branch.objects.all():
             branch.delete_files()            

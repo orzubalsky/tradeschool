@@ -15,7 +15,13 @@ from tradeschool.models import *
 class EmailTestCase(TestCase):
     """ 
     """
-    fixtures = ['test_data.json', 'test_schedule.json', 'test_person.json']
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'test_data.json', 
+                'test_course.json',
+                'test_schedule.json', 
+                'test_person.json'
+                ]
     
     def setUp(self):
         """ Create a Site and branch for testing.
@@ -31,7 +37,7 @@ class EmailTestCase(TestCase):
         self.branch.save()
         
         # use this schedule for testing
-        self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
+        self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
         self.schedule.course_status = 3
         self.schedule.save()
 
@@ -43,9 +49,9 @@ class EmailTestCase(TestCase):
             # first create a student to register to the scheduled class
             student_fullname = "student-%i" % i
             student_email    = "%i@email.com" % i
-            student = Person(fullname=student_fullname, email=student_email, slug=student_fullname)
+            student = Person.objects.create_user(fullname=student_fullname, email=student_email, slug=student_fullname)
             student.save()
-            student.branch.add(self.branch)
+            student.branches.add(self.branch)
 
             # then create the registration itself
             registration = Registration(schedule=self.schedule, student=student)

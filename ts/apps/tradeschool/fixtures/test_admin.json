@@ -1,92 +1,92 @@
 [
 {
     "pk": 1, 
-    "model": "auth.user", 
+    "model": "tradeschool.person", 
     "fields": {
-        "username": "admin", 
-        "first_name": "admin", 
-        "last_name": "istrator", 
+        "fullname": "admin", 
+        "username": "admin-1",
         "is_active": true, 
         "is_superuser": true, 
         "is_staff": true, 
         "last_login": "2013-06-06T22:03:54Z", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "created": "2013-06-06T22:03:54Z",                 
         "groups": [], 
         "user_permissions": [], 
         "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
-        "email": "admin@test.tradeschool.coop", 
-        "date_joined": "2013-01-29T23:51:07Z"
+        "email": "admin@test.tradeschool.coop"
     }
 },
 {
     "pk": 3, 
-    "model": "auth.user", 
+    "model": "tradeschool.person", 
     "fields": {
-        "username": "newyork_admin", 
-        "first_name": "", 
-        "last_name": "", 
+        "fullname": "0_admin", 
+        "username": "admin-2",        
         "is_active": true, 
         "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:57:03Z", 
+        "is_staff": true, 
+        "last_login": "2013-06-06T22:03:54Z", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "created": "2013-06-06T22:03:54Z",                 
         "groups": [], 
         "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$XaSuY4PxS7F8$sF/7D50uzxMgEOsC9B9sKqj4trDAIGBN/gV37qKpZF4=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:57:03Z"
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin0@test.tradeschool.coop"
     }
 },
 {
     "pk": 4, 
-    "model": "auth.user", 
+    "model": "tradeschool.person", 
     "fields": {
-        "username": "quito_admin", 
-        "first_name": "", 
-        "last_name": "", 
+        "fullname": "1_admin", 
+        "username": "admin-3",        
         "is_active": true, 
         "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:57:46Z", 
+        "is_staff": true, 
+        "last_login": "2013-06-06T22:03:54Z", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "created": "2013-06-06T22:03:54Z",                 
         "groups": [], 
         "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$7BqfjamXuNwA$9adly/izX1e7yYXMtXpNcrNvcZrUnY1lHpqbbrg0mNE=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:57:46Z"
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin1@test.tradeschool.coop"
     }
 },
 {
     "pk": 5, 
-    "model": "auth.user", 
+    "model": "tradeschool.person", 
     "fields": {
-        "username": "barcelona_admin", 
-        "first_name": "", 
-        "last_name": "", 
+        "fullname": "2_admin", 
+        "username": "admin-4",        
         "is_active": true, 
         "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:58:23Z", 
+        "is_staff": true, 
+        "last_login": "2013-06-06T22:03:54Z", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "created": "2013-06-06T22:03:54Z",                 
         "groups": [], 
         "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$2q6wB9PVhVgb$aMr0cx3mBf56R3TSXDfF1KfSvtftReysNq7WqbFjzl8=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:58:23Z"
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin2@test.tradeschool.coop"
     }
 },
 {
     "pk": 6, 
-    "model": "auth.user", 
+    "model": "tradeschool.person", 
     "fields": {
-        "username": "newyork_quiito_admin", 
-        "first_name": "", 
-        "last_name": "", 
+        "fullname": "3_admin", 
+        "username": "admin-5",        
         "is_active": true, 
         "is_superuser": false, 
-        "is_staff": false, 
-        "last_login": "2013-06-07T16:58:43Z", 
+        "is_staff": true, 
+        "last_login": "2013-06-06T22:03:54Z", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "created": "2013-06-06T22:03:54Z",                 
         "groups": [], 
         "user_permissions": [], 
-        "password": "pbkdf2_sha256$10000$SeOU1QL4ggGU$9I5M9PEhFOizjIvicXZ3MAeV8jgBt51TjA7qhAf3jmk=", 
-        "email": "", 
-        "date_joined": "2013-06-07T16:58:43Z"
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin3@test.tradeschool.coop"
     }
 }
 ]
