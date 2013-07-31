@@ -280,7 +280,7 @@ def schedule_add(request, branch_slug=None):
         }, context_instance=RequestContext(request))
 
 
-@login_required
+#@login_required
 def schedule_edit(request, schedule_slug=None, branch_slug=None):
     """ """
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
@@ -353,7 +353,7 @@ def schedule_submitted(request, schedule_slug=None, branch_slug=None):
             'templates'         : view_templates
         }, context_instance=RequestContext(request))
 
-@login_required
+#@login_required
 def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_slug=None):
     """ """
     registration = get_object_or_404(Registration, student__slug=student_slug, schedule__slug=schedule_slug)
