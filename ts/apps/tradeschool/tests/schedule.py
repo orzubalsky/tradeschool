@@ -7,6 +7,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.conf import settings
+from django.utils import timezone
 from datetime import *
 import shutil, os, os.path
 from tradeschool.models import *
@@ -174,32 +175,39 @@ class ScheduleTestCase(TestCase):
         """ Tests that a TimeRange saved in the admin backend results in the correct
             number of Time objects with data as it was set in the TimeRange form.
         """
+        # timerange count
+        previous_timerange_count = TimeRange.objects.all().count()
+        
         # login to admin
         self.client.login(username=self.admin.username, password=self.password)     
 
         # admin time add view
         url = reverse('admin:tradeschool_timerange_add')
-        
+
         # these will become not-tz-aware strings, but they should be converted        
         # to the branch's timezone 
-        start_time = datetime(2030, 02, 02, 10, 0, 0)
-        end_time   = datetime(2030, 04, 02, 12, 30, 0)
+        start_time = timezone.make_aware(datetime(2030, 02, 02, 10, 0, 0), timezone.utc)
+        end_time   = timezone.make_aware(datetime(2030, 04, 02, 12, 30, 0), timezone.utc)
         
-        # save a new time object
+        # save a new timerange object
         data = {
                 'start_time' : start_time.strftime('%H:%M:%S'),
                 'start_date' : start_time.strftime('%Y-%m-%d'),
-                'end_time'   : end_time.strftime('%H:%M:%S'),
-                'end_date'   : end_time.strftime('%Y-%m-%d'),
-                'monday'     : 1,
+                'end_time'   : end_time.strftime('%H:%M:%S'), 
+                'end_date'   : end_time.strftime('%Y-%m-%d'), 
+                'monday'     : 'on',
                 'branch'     : self.branch.pk,
             }
-        
-        response = self.client.post(url, data=data, follow=True)
 
+        response = self.client.post(url, data=data, follow=True)
+        
         # verify the form was submitted successfully
         self.assertEqual(response.status_code, 200)        
         self.assertTemplateUsed('admin/change_form.html')        
+        
+        # verify a new timerange was saved
+        current_timerange_count = TimeRange.objects.all().count()
+        self.assertEqual((previous_timerange_count + 1), current_timerange_count)
         
         # saved timerange
         timerange = TimeRange.objects.latest('created')
@@ -208,10 +216,81 @@ class ScheduleTestCase(TestCase):
         start_time  = datetime.combine(timerange.start_date, timerange.start_time)
         end_time    = datetime.combine(timerange.end_date, timerange.end_time)
         times = Time.objects.filter(start_time__gte=start_time, end_time__lte=end_time)
-        
+
         # verify times were saved
         self.assertTrue(times.count > 4)
         
+        # verify venue not saved
+        for i, time in enumerate(times):
+            self.assertEqual(times[i].venue, None)
+        
+        # save a timerange with venue
+        data['venue'] = self.branch.venue_set.all()[0].pk
+        response = self.client.post(url, data=data, follow=True)
+
+        # saved timerange
+        timerange = TimeRange.objects.latest('created')
+
+        start_time  = datetime.combine(timerange.start_date, timerange.start_time)
+        end_time    = datetime.combine(timerange.end_date, timerange.end_time)
+        times = Time.objects.filter(start_time__gte=start_time, end_time__lte=end_time)
+
+        # verify venue was saved
+        for i, time in enumerate(times):
+            print time.venue
+            self.assertEqual(times[i].venue, self.branch.venue_set.all()[0])
+
+    def test_timerange_creation_with_venue(self):
+        """ Tests that a TimeRange saved in the admin backend results in the correct
+            number of Time objects with data as it was set in the TimeRange form, 
+            including the venue.
+        """
+        # timerange count
+        previous_timerange_count = TimeRange.objects.all().count()
+
+        # login to admin
+        self.client.login(username=self.admin.username, password=self.password)     
+
+        # admin time add view
+        url = reverse('admin:tradeschool_timerange_add')
+
+        # these will become not-tz-aware strings, but they should be converted        
+        # to the branch's timezone 
+        start_time = timezone.make_aware(datetime(2030, 02, 02, 10, 0, 0), timezone.utc)
+        end_time   = timezone.make_aware(datetime(2030, 04, 02, 12, 30, 0), timezone.utc)
+
+        # save a new timerange object
+        data = {
+                'start_time' : start_time.strftime('%H:%M:%S'),
+                'start_date' : start_time.strftime('%Y-%m-%d'),
+                'end_time'   : end_time.strftime('%H:%M:%S'), 
+                'end_date'   : end_time.strftime('%Y-%m-%d'), 
+                'monday'     : 'on',
+                'branch'     : self.branch.pk,
+                'venue'      : self.branch.venue_set.all()[0].pk
+            }
+
+        response = self.client.post(url, data=data, follow=True)
+
+        # verify a new timerange was saved
+        current_timerange_count = TimeRange.objects.all().count()
+        self.assertEqual((previous_timerange_count + 1), current_timerange_count)
+
+        # saved timerange
+        timerange = TimeRange.objects.latest('created')
+
+        # saved time slots
+        start_time  = datetime.combine(timerange.start_date, timerange.start_time)
+        end_time    = datetime.combine(timerange.end_date, timerange.end_time)
+        times = Time.objects.filter(start_time__gte=start_time, end_time__lte=end_time)
+
+        # verify times were saved
+        self.assertTrue(times.count > 4)
+
+        # verify venue not saved
+        for i, time in enumerate(times):
+            self.assertEqual(times[i].venue, self.branch.venue_set.all()[0])
+                    
 
     def test_view_loading(self):
         """ Tests that the schedule-add view loads properly.

@@ -890,13 +890,20 @@ class TimeRange(Base):
     thursday    = BooleanField(verbose_name=_("Thursday"), help_text=_("Check this day if you wish to create available times on Thursdays in the above date range."))
     friday      = BooleanField(verbose_name=_("Friday"), help_text=_("Check this day if you wish to create available times on Fridays in the above date range."))
     saturday    = BooleanField(verbose_name=_("Saturday"), help_text=_("Check this day if you wish to create available times on Saturdays in the above date range."))
-    
-    branch = ForeignKey(
-                Branch, 
-                verbose_name=_("branch"),
-                # Translators: Contextual Help
-                help_text=_("The available time slots will be created for this TS branch only.")
-            )
+    venue       = ForeignKey(
+                    Venue, 
+                    verbose_name=_("venue"), 
+                    null=True, 
+                    blank=True, 
+                    # Translators: Contextual Help
+                    help_text=_("All of the avaialble time slots that will be created can be related to a specifc venue. When a time slot that's related a venue is selected by a potential teacher, the proposed class will be booked in that venue. In the case a venue isn't selected, it's up to the organizers to select a venue for a proposed class.")
+                )    
+    branch      = ForeignKey(
+                    Branch, 
+                    verbose_name=_("branch"),
+                    # Translators: Contextual Help
+                    help_text=_("The available time slots will be created for this TS branch only.")
+                )
         
 
 class ScheduleEmailContainer(EmailContainer):

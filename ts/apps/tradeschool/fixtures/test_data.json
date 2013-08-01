@@ -207,7 +207,6 @@
         "updated": "2013-07-28T16:57:13Z", 
         "capacity": 20, 
         "branch": 13, 
-        "venue_type": 0, 
         "title": "venue newyork", 
         "color": "#5e299", 
         "country": "US", 
@@ -216,7 +215,6 @@
         "phone": null, 
         "state": "NY", 
         "address_1": "10 test st.", 
-        "address_2": null, 
         "resources": "For Example: Chairs, Tables"
     }
 },
@@ -228,7 +226,6 @@
         "updated": "2013-07-28T16:57:13Z", 
         "capacity": 20, 
         "branch": 14, 
-        "venue_type": 0, 
         "title": "venue barcelona", 
         "color": "#8f9db", 
         "country": "GB", 
@@ -237,7 +234,6 @@
         "phone": null, 
         "state": null, 
         "address_1": "10 test st.", 
-        "address_2": null, 
         "resources": "For Example: Chairs, Tables"
     }
 },
@@ -249,7 +245,6 @@
         "updated": "2013-07-28T16:57:13Z", 
         "capacity": 20, 
         "branch": 15, 
-        "venue_type": 0, 
         "title": "venue berlin", 
         "color": "#b635c3", 
         "country": "DE", 
@@ -258,7 +253,6 @@
         "phone": null, 
         "state": null, 
         "address_1": "10 test st.", 
-        "address_2": null, 
         "resources": "For Example: Chairs, Tables"
     }
 }

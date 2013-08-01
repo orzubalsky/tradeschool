@@ -575,10 +575,14 @@ class TimeRangeAdmin(BaseAdmin):
         if db_field.name == 'branch':
             kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches.all)
             kwargs['initial'] = request.user.branches.all()[0]
+        if db_field.name == 'venue':
+            qs = Venue.objects.filter(branch__in=request.user.branches.all)
+            kwargs['queryset'] = qs
+            kwargs['initial'] = qs[0]
         return super(TimeRangeAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
              
-    list_display = ('start_time', 'end_time', 'start_date', 'end_date',)
-    fields       = ('start_time', 'end_time', 'start_date', 'end_date', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'branch')
+    list_display = ('start_time', 'end_time', 'start_date', 'end_date', 'venue')
+    fields       = ('start_time', 'end_time', 'start_date', 'end_date', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'venue', 'branch')
 
 
 class ScheduleAdmin(BaseAdmin):

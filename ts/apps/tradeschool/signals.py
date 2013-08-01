@@ -43,7 +43,6 @@ def schedule_save_callback(sender, instance, **kwargs):
 @receiver(post_save, sender=TimeRange, dispatch_uid="ts.apps.tradeschool.signals")
 def timerange_save_callback(sender, instance, **kwargs):
     """ create single time slots based on the creation of a time range object."""
-
     # empty list for bulk_create
     timeList = []    
 
@@ -70,10 +69,13 @@ def timerange_save_callback(sender, instance, **kwargs):
             normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
             normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
             
+            aware_start_time = timezone.make_aware(start_time, timezone.utc)
+            aware_end_time   = timezone.make_aware(end_time, timezone.utc)
+            
             now = timezone.now()
             
             # append a time object to the list so all of them can be inserted in one query
-            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch, created=now, updated=now) )
+            timeList.append(Time(start_time=normalized_start_time, end_time=normalized_end_time, branch=instance.branch, venue=instance.venue, created=now, updated=now) )
 
     # save time slots
     Time.objects.bulk_create(timeList)

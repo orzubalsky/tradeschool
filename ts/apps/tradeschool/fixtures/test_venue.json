@@ -7,7 +7,6 @@
         "updated": "2013-06-07T17:12:06Z", 
         "capacity": 20, 
         "branch": 13, 
-        "venue_type": 0, 
         "title": "newyork_venue_01", 
         "color": "#202a35", 
         "country": "US", 
@@ -16,7 +15,6 @@
         "phone": "", 
         "state": "NY", 
         "address_1": "101 Test Street", 
-        "address_2": null, 
         "resources": "Chairs, Tables, Projector"
     }
 },
@@ -28,7 +26,6 @@
         "updated": "2013-06-07T17:12:57Z", 
         "capacity": 30, 
         "branch": 13, 
-        "venue_type": 0, 
         "title": "newyork_venue_02", 
         "color": "#21cfe1", 
         "country": "US", 
@@ -37,7 +34,6 @@
         "phone": "123-456-1234", 
         "state": "NY", 
         "address_1": "1000 Test Avenue", 
-        "address_2": null, 
         "resources": "30 chairs, 3 big tables"
     }
 },
@@ -49,7 +45,6 @@
         "updated": "2013-06-07T17:13:47Z", 
         "capacity": 35, 
         "branch": 14, 
-        "venue_type": 0, 
         "title": "quito_venue_01", 
         "color": "#32fafd", 
         "country": "EC", 
@@ -58,7 +53,6 @@
         "phone": "", 
         "state": null, 
         "address_1": "10 Test Street", 
-        "address_2": null, 
         "resources": "Chairs, Tables"
     }
 },
@@ -70,7 +64,6 @@
         "updated": "2013-06-07T17:14:08Z", 
         "capacity": 20, 
         "branch": 15, 
-        "venue_type": 0, 
         "title": "barcelona_venue_01", 
         "color": "#d876f2", 
         "country": "ES", 
@@ -79,7 +72,6 @@
         "phone": "", 
         "state": null, 
         "address_1": "50 Testing Lane", 
-        "address_2": null, 
         "resources": "Chairs, Tables"
     }
 },
@@ -91,7 +83,6 @@
         "updated": "2013-06-07T17:15:10Z", 
         "capacity": 20, 
         "branch": 13, 
-        "venue_type": 0, 
         "title": "newyork_venue_03", 
         "color": "#e4f054", 
         "country": "US", 
@@ -100,7 +91,6 @@
         "phone": "", 
         "state": "NY", 
         "address_1": "100 Inactive Dr.", 
-        "address_2": null, 
         "resources": "Chairs, Tables"
     }
 }
