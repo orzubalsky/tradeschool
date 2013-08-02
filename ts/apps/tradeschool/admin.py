@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -17,39 +18,15 @@ from tradeschool.forms import *
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """Base admin model. Filters objects querysite according to the current branch."""
 
-    # def queryset(self, request):
-    #     """Filter the queryset in order to only display objects from the current branch."""
-    # 
-    #     qs = super(BaseAdmin, self).queryset(request)        
-    # 
-    #     # superusers get to see all of the data
-    #     #if request.user.is_superuser:
-    #     #    return qs
-    # 
-    #     # other users see data filtered by the branch they're associated with
-    #     qs = qs.filter(branch__in=request.user.branches.all)
-    # 
-    #     # we need this from the superclass method
-    #     ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-    # 
-    #     if ordering:
-    #         qs = qs.order_by(*ordering)
-    #     return qs
-
-
-class ScheduleInline(admin.TabularInline):
-    """Schedule model inline object. 
-        Can be used in the Course Admin view in order 
-        to allow on the spot scheduling."""
-    
-    def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(ScheduleInline, self).queryset(request)        
+    def queryset(self, request, q = None):
+        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
+        qs = super(BaseAdmin, self).queryset(request)
 
         if not request.user.is_superuser:
             # other users see data filtered by the branch they're associated with
-            qs = qs.filter(course__branches__in=request.user.branches.all)
+            if q == None:
+                q = Q(branches__in=request.user.branches_organized.all)
+            qs = qs.filter(q)
 
         # we need this from the superclass method
         ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
@@ -57,6 +34,39 @@ class ScheduleInline(admin.TabularInline):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'branch':
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
+        return super(BaseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == 'branches':
+            qs = Branch.objects.filter(pk__in=request.user.branches_organized.all)            
+            kwargs['queryset'] = qs
+            kwargs['initial'] = [qs[0],]
+        return super(BaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+            
+    def filter_dbfield(self, request, model, q, **kwargs):
+        qs_cache = getattr(request, 'qs_cache', None)
+        if qs_cache is not None:
+            qs = qs_cache
+        else:
+            qs = model.objects.filter(q)
+            request.qs_cache = qs        
+        kwargs['queryset'] = qs
+        if qs.count() > 0:
+            kwargs['initial'] = qs[0]
+        return kwargs['queryset'], kwargs['initial']
+  
+
+class ScheduleInline(admin.TabularInline):
+    """Schedule model inline object. 
+        Can be used in the Course Admin view in order 
+        to allow on the spot scheduling."""
+    
+    def queryset(self, request):
+        return super(ScheduleInline, self).queryset(request, Q(course__branches__in=request.user.branches_organized.all))        
                     
     model   = Schedule
     extra   = 0
@@ -69,24 +79,11 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
         to give an overview of students registered."""
 
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(RegistrationInline, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(RegistrationInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'student':
-            kwargs["queryset"] = Student.objects.filter(branch__in=request.user.branches.all)
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Student, Q(branch__in=request.user.branches_organized.all))
         return super(RegistrationInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
     def registration_link(self, obj):
@@ -111,20 +108,7 @@ class BarterItemInline(admin.TabularInline):
         to give an overview of the items requested."""
 
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(BarterItemInline, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(BarterItemInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))        
     
     def title_link(self, obj):
         """
@@ -148,20 +132,7 @@ class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stacke
         an overview of the branch's emails."""
 
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(BranchEmailContainerInline, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(BranchEmailContainerInline, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
             
     model           = BranchEmailContainer
     fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
@@ -173,21 +144,9 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
     """BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
         an overview of the branch's emails."""
+   
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(ScheduleEmailContainerInline, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(ScheduleEmailContainerInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         formfield = super(ScheduleEmailContainerInline, self).formfield_for_dbfield(db_field, **kwargs)
@@ -210,20 +169,7 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
     """
 
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(PhotoInline, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(PhotoInline, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
             
     model               = Photo
     fields              = ('render_image', 'filename', 'position',)
@@ -241,20 +187,7 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
     """
 
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(FeedbackInline, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(FeedbackInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
     
     model   = Feedback
     fields = ('feedback_type', 'content',)
@@ -281,22 +214,6 @@ class BranchAdmin(BaseAdmin):
             kwargs['queryset'] = qs
         return super(BranchAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
         
-    def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(BranchAdmin, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(pk__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-                   
     actions             = ['populate_notifications']            
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
     list_editable       = ('is_active', 'branch_status',)
@@ -324,35 +241,15 @@ class BranchAdmin(BaseAdmin):
 
 class VenueAdmin(BaseAdmin):
     """VenueAdmin lets you add and edit venues."""
-    
+
     def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(VenueAdmin, self).queryset(request)        
-        
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(VenueAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
     
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'branch':
-            qs = Branch.objects.filter(pk__in=request.user.branches.all)
-            kwargs['queryset'] = qs
-            kwargs['initial'] = qs[0]
-        return super(VenueAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-        
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if db_field.name == 'country':
-            kwargs['initial'] = Branch.objects.filter(pk__in=request.user.branches.all)[0].country
+            kwargs['initial'] = Branch.objects.filter(pk__in=request.user.branches_organized.all)[0].country
         if db_field.name == 'state':
-            kwargs['initial'] = Branch.objects.filter(pk__in=request.user.branches.all)[0].state
+            kwargs['initial'] = Branch.objects.filter(pk__in=request.user.branches_organized.all)[0].state
         return super(VenueAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)
                 
     list_display    = ('title', 'branch', 'address_1', 'city', 'capacity', 'is_active')
@@ -377,34 +274,11 @@ class CourseAdmin(BaseAdmin):
     """CourseAdmin lets you add and edit courses
         and their corresponding schedules."""
 
-    def queryset(self, request):
-        """Filter the queryset in order to only display objects from the current branch."""
-
-        qs = super(CourseAdmin, self).queryset(request)        
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'teacher':
-            kwargs['queryset'] = Teacher.objects.filter(branches__in=request.user.branches.all)
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Teacher, Q(branches__in=request.user.branches_organized.all))
         return super(CourseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
  
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'branches':
-            qs = Branch.objects.filter(pk__in=request.user.branches.all)            
-            kwargs['queryset'] = qs
-            kwargs['initial'] = [qs[0],]
-        return super(CourseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-    
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
@@ -417,30 +291,12 @@ class PersonAdmin(BaseAdmin):
         and keep track of the classes they took and taught.
     """ 
 
-    def queryset(self, request):
+    def queryset(self, request, q=None):
         """ Annotate the queryset with counts of registrations and courses taught associated with the Person."""
-        qs =  super(PersonAdmin, self).queryset(request).annotate(
+        return super(PersonAdmin, self).queryset(request).annotate(
             registration_count   = Count('registrations', distinct=True), 
             courses_taught_count = Count('courses_taught', distinct=True)
         )
-        
-        if not request.user.is_superuser:        
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs        
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'branches':
-            qs = Branch.objects.filter(pk__in=request.user.branches.all)            
-            kwargs['queryset'] = qs
-            kwargs['initial'] = [qs[0],]
-        return super(PersonAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
             
     list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'branches_string', 'created')
     search_fields       = ('fullname', 'email', 'phone')
@@ -467,26 +323,8 @@ class TeacherAdmin(PersonAdmin):
     """
     def queryset(self, request):
         """ Filter queryset by the courses taught count, so only people who taught at least one class are returned."""
-        qs = super(TeacherAdmin, self).queryset(request).filter(courses_taught_count__gt=0)
-       
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branches__in=request.user.branches.all)
+        return super(TeacherAdmin, self).queryset(request, Q(courses_taught_count__gt=0, branches__in=request.user.branches_organized.all))
 
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs        
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'branches':
-            kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches.all)
-            kwargs['initial'] = [Branch.objects.filter(pk__in=request.user.branches.all)[0],]
-            
-        return super(TeacherAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-            
     list_display = ('fullname', 'email', 'phone', 'courses_taught', 'created')    
 
 
@@ -497,25 +335,8 @@ class StudentAdmin(PersonAdmin):
     """    
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(StudentAdmin, self).queryset(request).filter(registration_count__gt=0)
-      
-        if not request.user.is_superuser:      
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branches__in=request.user.branches.all)
+        return super(StudentAdmin, self).queryset(request, Q(registration_count__gt=0, branches__in=request.user.branches_organized.all))
 
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-        
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'branches':
-            kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches.all)
-            kwargs['initial'] = [Branch.objects.filter(pk__in=request.user.branches.all)[0],]
-
-        return super(StudentAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 class TimeAdmin(BaseAdmin):
     """ TimeAdmin lets you add and edit time slots in the Trade School system.
@@ -527,58 +348,30 @@ class TimeAdmin(BaseAdmin):
             form.base_fields['venue'].queryset = Venue.objects.filter(branch=obj.branch)
             form.base_fields['branch'].queryset = Branch.objects.filter(pk=obj.branch.pk)
         else:
-            form.base_fields['venue'].queryset = Venue.objects.filter(branch__in=request.user.branches.all)
-            form.base_fields['branch'].queryset = Branch.objects.filter(pk__in=request.user.branches.all)            
+            form.base_fields['venue'].queryset = Venue.objects.filter(branch__in=request.user.branches_organized.all)
+            form.base_fields['branch'].queryset = Branch.objects.filter(pk__in=request.user.branches_organized.all)            
             form.base_fields['branch'].initial = request.user.branches.all()[0]
             
         return form
 
     def queryset(self, request):
-        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(TimeAdmin, self).queryset(request)
-      
-        if not request.user.is_superuser:      
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(TimeAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
             
     list_display  = ('start_time', 'end_time', 'venue')
     fields        = ('start_time', 'end_time', 'venue', 'branch')
-    
 
 
 class TimeRangeAdmin(BaseAdmin):
     """ TimeRangeAdmin is a way to create batch time slots. A post save signal adds Time objects.
     """    
     def queryset(self, request):
-        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(TimeRangeAdmin, self).queryset(request)
+        return super(TimeRangeAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
 
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'branch':
-            kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches.all)
-            kwargs['initial'] = request.user.branches.all()[0]
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):  
+        if db_field.name == 'branch':          
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
         if db_field.name == 'venue':
-            qs = Venue.objects.filter(branch__in=request.user.branches.all)
-            kwargs['queryset'] = qs
-            kwargs['initial'] = qs[0]
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
         return super(TimeRangeAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
              
     list_display = ('start_time', 'end_time', 'start_date', 'end_date', 'venue')
@@ -590,19 +383,7 @@ class ScheduleAdmin(BaseAdmin):
         their barter items, registrations, and email templates.
     """ 
     def queryset(self, request):
-        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(ScheduleAdmin, self).queryset(request)
-      
-        if not request.user.is_superuser:      
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(ScheduleAdmin, self).queryset(request, Q(course__branches__in=request.user.branches_organized.all))
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
@@ -617,17 +398,9 @@ class ScheduleAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'venue':
-            qs_cache = getattr(request, 'qs_cache', None)
-            if qs_cache is not None:
-                qs = qs_cache
-            else:
-                qs = Venue.objects.filter(branch__in=request.user.branches.all)
-                request.qs_cache = qs
-            kwargs['queryset'] = qs
-            kwargs['initial'] = qs[0]
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
         if db_field.name == 'course':
-            qs = Course.objects.filter(branches__in=request.user.branches.all)
-            kwargs['queryset'] = qs
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Course, Q(branches__in=request.user.branches_organized.all))
         return super(ScheduleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
                          
     def populate_notifications(self, request, queryset):
@@ -757,24 +530,13 @@ class RegistrationAdmin(BaseAdmin):
     """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(RegistrationAdmin, self).queryset(request)
-      
-        if not request.user.is_superuser:      
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(RegistrationAdmin, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'student':
-            kwargs['queryset'] = Student.objects.filter(branches__in=request.user.branches.all)
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Student, Q(branches__in=request.user.branches_organized.all))
         if db_field.name == 'schedule':
-            kwargs['queryset'] = Schedule.objects.filter(course__branches__in=request.user.branches.all)
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(course__branches__in=request.user.branches_organized.all))
         return super(RegistrationAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
     def formfield_for_manytomany(self, db_field, request, **kwargs):
@@ -800,22 +562,11 @@ class BarterItemAdmin(BaseAdmin):
     
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(BarterItemAdmin, self).queryset(request)
-      
-        if not request.user.is_superuser:      
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(registration__schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(BarterItemAdmin, self).queryset(request, Q(registration__schedule__course__branches__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'schedule':
-            kwargs['queryset'] = Schedule.objects.filter(course__branches__in=request.user.branches.all, course_status=3)
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(course__branches__in=request.user.branches_organized.all, course_status=3))
         return super(BarterItemAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
             
     list_display    = ('title', 'schedule')    
@@ -825,29 +576,11 @@ class BarterItemAdmin(BaseAdmin):
 
 class PhotoAdmin(BaseAdmin):
     """ 
-    """
-    
+    """    
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(PhotoAdmin, self).queryset(request)
+        return super(PhotoAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
 
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'branch':
-            kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches.all)
-            kwargs['initial'] = request.user.branches.all()[0]
-        return super(PhotoAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-            
     list_display    = ('get_thumbnail', 'filename', 'position', 'branch')
     
     def get_thumbnail(self, obj):
@@ -861,20 +594,8 @@ class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.Mo
     """
     """
     def queryset(self, request):
-        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(BranchEmailContainerAdmin, self).queryset(request)
-      
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
+        return super(BranchEmailContainerAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
 
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-                
     list_display = ('branch',)
     fields       = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
 
@@ -883,19 +604,7 @@ class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.
     """
     """
     def queryset(self, request):
-        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(ScheduleEmailContainerAdmin, self).queryset(request)
-      
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+        return super(ScheduleEmailContainerAdmin, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
     
     list_display  = ('schedule', 'branches_string')
     fields        = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
@@ -910,24 +619,7 @@ class BranchPageAdmin(FlatPageAdmin):
     """ """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(BranchPageAdmin, self).queryset(request)
-
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(branch__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'branch':
-            kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches.all)
-            kwargs['initial'] = request.user.branches.all()[0]
-        return super(BranchPageAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(BranchPageAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
             
     form = BranchPageForm
     fieldsets = (
@@ -945,22 +637,11 @@ class FeedbackAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        qs = super(FeedbackAdmin, self).queryset(request)
+        return super(FeedbackAdmin, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
 
-        if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            qs = qs.filter(schedule__course__branches__in=request.user.branches.all)
-
-        # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
-
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-    
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'schedule':
-            kwargs['queryset'] = Schedule.objects.filter(course__branches__in=request.user.branches.all)
+            kwargs['queryset'] = Schedule.objects.filter(course__branches__in=request.user.branches_organized.all)
         return super(FeedbackAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
     list_display = ('schedule', 'feedback_type')

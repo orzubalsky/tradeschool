@@ -23,7 +23,13 @@ from tradeschool.widgets import *
 
 
 class Base(Model):
-    """Base model for all of the models in the tradeschool application."""
+    """
+    Abstract base model for all of the models in the tradeschool application. 
+    Base has datetime fields to keep a record of the times an object is created and updated.
+    The Base model also has an is_active boolean field. is_active is implemented in the following way:
+    only objects that are active on will appear on the website. Inactive (is_active=False) objects are 
+    still accessible through the admin backend, but would not appear on the site.
+    """
     
     class Meta:
         abstract = True
@@ -38,8 +44,7 @@ class Base(Model):
     is_active   = BooleanField(verbose_name=_("is active"), default=1, help_text=_("This field indicates whether the object is active on the front end of the site. Inactive objects will still be available through the admin backend."))
     
     def save(self, *args, **kwargs):
-        """ Save timezone-aware values for created and updated fields.
-        """
+        """Save timezone-aware values for created and updated fields."""
         if self.pk is None:
             self.created = timezone.now()
         self.updated = timezone.now()
@@ -53,9 +58,13 @@ class Base(Model):
 
 
 class Email(Base):
-    """Abstract model for all email notifications in the ts system.
-    TS-wide notification templates, individulal branch notification templates,
-    and schedule-specific notification templates extend this model."""
+    """
+    Abstract model for all emails in the TS system.
+    site-wide emails, TS branch emails, and schedule-specific emails all extend this model.
+    The email's body can include variables that will then be populated with relevant data
+    from the Schedule and/or Person that the email is refering to. These variables are populated
+    using Django's templates. The content field is used as a template that's created dynamically.
+    """
     
     class Meta:
         abstract = True
@@ -445,7 +454,7 @@ class Branch(Location):
     email       = EmailField(verbose_name=_("e-mail"), max_length=100)
     timezone    = CharField(verbose_name=_("timezone"), max_length=100, choices=COMMON_TIMEZONE_CHOICES, help_text=_("The local timezone in the area where this branch of TS is taking place. The timezone is used to calculate all the class and email times."))
     language    = CharField(verbose_name=_("language"), max_length=50, choices=settings.LANGUAGES, null=True, help_text=_("Setting this language will cause both the front end and the backend of the site to try to load text from the translation strings stored in the system. Text that wasn't translated will fallback on the English version of it."))
-    organizers  = ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_("organizers"), related_name='organizers', db_column='person_id', help_text=_("Select multiple users who help organize this branch of TS. People selected in this box will have access to the branch's data on the admin backend."))
+    organizers  = ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_("organizers"), related_name='branches_organized', db_column='person_id', help_text=_("Select multiple users who help organize this branch of TS. People selected in this box will have access to the branch's data on the admin backend."))
     
     branch_status   = CharField(
                             max_length=50, 
