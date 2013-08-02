@@ -100,8 +100,9 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])
         self.assertEqual(schedule_obj.course.teacher.phone, self.valid_data['teacher-phone'])
+        self.assertTrue(schedule_obj.course.teacher.slug.__len__() > 0)
         for item in schedule_obj.barteritem_set.all():
-            self.assertTrue(item.title in self.valid_data.values())            
+            self.assertTrue(item.title in self.valid_data.values())
 
     
     def verify_timezone(self, saved_datetime_obj, saved_time):

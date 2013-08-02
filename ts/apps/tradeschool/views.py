@@ -188,7 +188,10 @@ def schedule_add(request, branch_slug=None):
             # process teacher
             teacher = teacher_form.save(commit=False)
             teacher_data = teacher_form.cleaned_data
-            
+
+            # create a slug for the teacher object
+            teacher_data['slug'] = unique_slugify(Teacher, teacher.fullname)            
+
             # check if the submitting teacher already exists in the system
             # we determine an existing teacher by their email
             teacher, teacher_created = Person.objects.get_or_create(email=teacher.email, defaults=teacher_data)
@@ -199,9 +202,6 @@ def schedule_add(request, branch_slug=None):
                 teacher.bio      = teacher_form.cleaned_data['bio']
                 teacher.website  = teacher_form.cleaned_data['website']
                 teacher.phone    = teacher_form.cleaned_data['phone']                                                
-
-            # create a slug for the teacher object
-            teacher_data['slug'] = unique_slugify(Teacher, teacher.fullname)                
 
             # add a teacher-branch relationship to the current branch
             teacher.branches.add(branch)
