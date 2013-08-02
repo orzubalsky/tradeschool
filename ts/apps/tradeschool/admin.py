@@ -1,13 +1,10 @@
 from django.db.models import Q
 from django.utils.safestring import mark_safe
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-from django.utils.safestring import mark_safe
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib.flatpages.models import FlatPage
-from django.utils.safestring import mark_safe
 from flatpages_tinymce.admin import FlatPageAdmin
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
@@ -77,6 +74,13 @@ class BaseTabularInline(admin.TabularInline):
             qs = qs.order_by(*ordering)
         return qs    
 
+    def filter_dbfield(self, request, model, q, **kwargs):
+        qs = model.objects.filter(q)
+        kwargs['queryset'] = qs
+        if qs.count() > 0:
+            kwargs['initial'] = qs[0]
+        return kwargs['queryset'], kwargs['initial']
+        
 
 class BaseStackedInline(admin.StackedInline):
     def queryset(self, request, q):
@@ -105,7 +109,12 @@ class ScheduleInline(BaseTabularInline):
     
     def queryset(self, request):
         return super(ScheduleInline, self).queryset(request, Q(course__branches__in=request.user.branches_organized.all))        
-                    
+                
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'venue':
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
+        return super(ScheduleInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
     model   = Schedule
     extra   = 0
     fields  = ('start_time', 'end_time', 'venue')
@@ -223,7 +232,6 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
 class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
     """
-
     def queryset(self, request):
         return super(FeedbackInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
     
@@ -235,10 +243,13 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
 
 class BranchAdmin(BaseAdmin):
     """BranchAdmin lets you add and edit tradeschool branches,
-        and reset the email templates for each branch."""
+        and reset the email templates for each branch.
+        """
+    def queryset(self, request):
+        return super(BranchAdmin, self).queryset(request, Q(pk__in=request.user.branches_organized.all))
            
     form = BranchForm
-               
+             
     def populate_notifications(self, request, queryset):
         """call the populate_notifications() method in order to reset email templates for the branch."""
         
