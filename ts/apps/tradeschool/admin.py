@@ -18,8 +18,11 @@ from tradeschool.forms import *
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """Base admin model. Filters objects querysite according to the current branch."""
 
-    def queryset(self, request, q = None):
-        """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
+    def queryset(self, request, q=None):
+        """
+        queryset is filtered against the Branch objects that the logged in Person is organizing.
+        In the case the logged in Person is a superuser, they see all of the data without filtering.
+        """
         qs = super(BaseAdmin, self).queryset(request)
 
         if not request.user.is_superuser:
@@ -48,12 +51,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         return super(BaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
             
     def filter_dbfield(self, request, model, q, **kwargs):
-        qs_cache = getattr(request, 'qs_cache', None)
-        if qs_cache is not None:
-            qs = qs_cache
-        else:
-            qs = model.objects.filter(q)
-            request.qs_cache = qs        
+        qs = model.objects.filter(q)
         kwargs['queryset'] = qs
         if qs.count() > 0:
             kwargs['initial'] = qs[0]
@@ -368,10 +366,12 @@ class TimeRangeAdmin(BaseAdmin):
         return super(TimeRangeAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):  
-        if db_field.name == 'branch':          
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
         if db_field.name == 'venue':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
+        if db_field.name == 'branch':          
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
+            kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches_organized.all)
+
         return super(TimeRangeAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
              
     list_display = ('start_time', 'end_time', 'start_date', 'end_date', 'venue')
