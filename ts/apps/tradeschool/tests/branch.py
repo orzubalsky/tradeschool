@@ -72,23 +72,6 @@ class BranchTestCase(TestCase):
                 footer_copy = self.branch_data['footer_copy'],                                
             )
         
-    def test_admin_login(self):
-        """Test that logging in as an admin works."""
-        
-        # go to page without logging in, be redirected to the login page
-        response = self.client.get(self.branch_add_url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('admin/login.html')
-        
-        # login and try again, this time it should work
-        self.client.login(username=self.admin.username, password=self.password)
-        
-        response = self.client.get(self.branch_add_url)
- 
-        self.assertEqual(response.status_code, 200)        
-        self.assertTemplateUsed('admin/change_form.html')
-        
 
     def test_branch_creation(self):
         """ Test valid and invalid branch form submission from admin.

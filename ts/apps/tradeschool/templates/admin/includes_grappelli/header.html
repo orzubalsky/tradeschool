@@ -16,6 +16,9 @@
                         <li><a href="{{ root_path }}password_change/">
                     {% endif %}
                     {% trans 'Change password' %}</a></li>
+                    <!-- Change Profile -->
+                    {% url 'admin:tradeschool_organizer_change' user.pk as profile_change_url %}
+                        <li><a href="{{ profile_change_url }}">{% trans 'Edit Profile' %}</a></li>                    
                     <!-- Logout -->
                     {% url 'admin:logout' as logout_url %}
                     {% if logout_url %}

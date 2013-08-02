@@ -720,6 +720,8 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
                         # Translators: Contextual Help
                         help_text=_("People in the TS system can be related to many TS branches. This relationship is made when a person either teaches or registers to a class.")
                     )
+    language    = CharField(verbose_name=_("backend language"), default='en', max_length=50, choices=settings.LANGUAGES, null=True, help_text=_("Setting this language will cause the admin backend to try to load text from the translation strings stored in the system FOR THIS USER ONLY. Text that wasn't translated will fallback on the English version of it."))
+                    
     is_staff    = BooleanField(
                         _('staff status'), 
                         default=False,
@@ -731,8 +733,13 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
     USERNAME_FIELD = 'username'
 
     def branches_string(self):
-        """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
+        """ Return the branches that this person relates to. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.branches.all())
+        
+    def branches_organized_string(self):
+        """ Return the branches that this person organizes. This function is used in the admin list_display() method."""
+        return ','.join( str(branch) for branch in self.branches_organized.all())        
+    branches_organized_string.short_description = _('branches')
         
     def get_full_name(self):
         return self.fullname

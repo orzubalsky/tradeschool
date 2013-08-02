@@ -58,7 +58,47 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         return kwargs['queryset'], kwargs['initial']
   
 
-class ScheduleInline(admin.TabularInline):
+class BaseTabularInline(admin.TabularInline):
+    def queryset(self, request, q):
+        """
+        queryset is filtered against the Branch objects that the logged in Person is organizing.
+        In the case the logged in Person is a superuser, they see all of the data without filtering.
+        """
+        qs = super(BaseTabularInline, self).queryset(request)
+
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(q)
+
+        # we need this from the superclass method
+        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs    
+
+
+class BaseStackedInline(admin.StackedInline):
+    def queryset(self, request, q):
+        """
+        queryset is filtered against the Branch objects that the logged in Person is organizing.
+        In the case the logged in Person is a superuser, they see all of the data without filtering.
+        """
+        qs = super(BaseStackedInline, self).queryset(request)
+
+        if not request.user.is_superuser:
+            # other users see data filtered by the branch they're associated with
+            qs = qs.filter(q)
+
+        # we need this from the superclass method
+        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+                
+
+class ScheduleInline(BaseTabularInline):
     """Schedule model inline object. 
         Can be used in the Course Admin view in order 
         to allow on the spot scheduling."""
@@ -71,7 +111,7 @@ class ScheduleInline(admin.TabularInline):
     fields  = ('start_time', 'end_time', 'venue')
 
 
-class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularInline):
+class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInline):
     """Registration model inline object. 
         Used in the Schedule Admin view in order 
         to give an overview of students registered."""
@@ -100,7 +140,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, admin.TabularIn
     extra           = 0
 
 
-class BarterItemInline(admin.TabularInline):
+class BarterItemInline(BaseTabularInline):
     """BarterItem model inline object. 
         Used in the Schedule Admin view in order 
         to give an overview of the items requested."""
@@ -124,7 +164,7 @@ class BarterItemInline(admin.TabularInline):
     extra           = 0
 
 
-class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
+class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, BaseStackedInline):
     """BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
         an overview of the branch's emails."""
@@ -138,7 +178,7 @@ class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stacke
     max_num         = 1
     
     
-class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.StackedInline):
+class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, BaseStackedInline):
     """BranchEmailContainer model inline object. 
         Used in the Branch Admin view in order to give 
         an overview of the branch's emails."""
@@ -162,7 +202,7 @@ class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, admin.Stac
     max_num         = 1
 
 
-class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
+class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
     """
 
@@ -180,7 +220,7 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
     render_image.short_description = _("Thumbnail")
 
 
-class FeedbackInline(enhanced_admin.EnhancedAdminMixin, admin.TabularInline):
+class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
     """
 
@@ -317,7 +357,17 @@ class PersonAdmin(BaseAdmin):
 class OrganizerAdmin(PersonAdmin):
     """
     """
-    list_display = ('fullname', 'email', 'phone', 'courses_taught', 'created')
+    def change_password_link(self, obj):
+        """
+        """
+        # link to change password admin form 
+        url = reverse('admin:password_change', args=(obj.course.pk,))
+        html = '<a target="_blank" href="%s">change password</a>' % (url,)
+        return mark_safe(html)
+    change_password_link.short_description = _('change password')
+            
+    list_display = ('username', 'fullname', 'email', 'branches_organized_string')
+    fields       = ('username', 'fullname', 'email', 'language')
 
 
 class TeacherAdmin(PersonAdmin):
@@ -663,7 +713,7 @@ admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 
 admin.site.register(Person, PersonAdmin)
-admin.site.register(Organizer)
+admin.site.register(Organizer, OrganizerAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Student, StudentAdmin)
 
