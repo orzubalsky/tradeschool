@@ -35,13 +35,13 @@ class Command(BaseCommand):
         if kwargs.get('branch_slug'):
             branch_slug = kwargs.get('branch_slug') 
 
-        migrate(self, Branches, branch_slug)
-        migrate(self, Venues, branch_slug)
-        migrate(self, Teachers, branch_slug)
-        migrate(self, Classes, branch_slug)
-        migrate(self, Students, branch_slug)
-        migrate(self, BranchPages, branch_slug)
-        migrate(self, BranchPhotos, branch_slug)
-        migrate(self, Feedbacks, branch_slug)
+        # migrate(self, Branches, branch_slug)
+        # migrate(self, Venues, branch_slug)
+        # migrate(self, Teachers, branch_slug)
+        # migrate(self, Classes, branch_slug)
+        # migrate(self, Students, branch_slug)
+        # migrate(self, BranchPages, branch_slug)
+        # migrate(self, BranchPhotos, branch_slug)
+        # migrate(self, Feedbacks, branch_slug)
         migrate(self, Users, branch_slug)
 

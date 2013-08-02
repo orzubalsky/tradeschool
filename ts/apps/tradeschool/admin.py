@@ -314,6 +314,12 @@ class PersonAdmin(BaseAdmin):
     courses_taught.admin_order_field = 'courses_taught_count'
 
 
+class OrganizerAdmin(PersonAdmin):
+    """
+    """
+    list_display = ('fullname', 'email', 'phone', 'courses_taught', 'created')
+
+
 class TeacherAdmin(PersonAdmin):
     """ TeacherAdmin lets you add and edit teachers in the Trade School system,
         A Teacher is a proxy model of Person. The only distinction is that a teacher
@@ -651,19 +657,22 @@ class FeedbackAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(Person, PersonAdmin)
-admin.site.register(Teacher, TeacherAdmin)
-admin.site.register(Student, StudentAdmin)
-admin.site.register(Time, TimeAdmin)
-admin.site.register(TimeRange, TimeRangeAdmin)
+admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(BarterItem, BarterItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
-admin.site.register(Schedule, ScheduleAdmin)
-admin.site.register(Photo, PhotoAdmin)
+
+admin.site.register(Person, PersonAdmin)
+admin.site.register(Organizer)
+admin.site.register(Teacher, TeacherAdmin)
+admin.site.register(Student, StudentAdmin)
+
+admin.site.register(Time, TimeAdmin)
+admin.site.register(TimeRange, TimeRangeAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(BranchPage, BranchPageAdmin)
+admin.site.register(Photo, PhotoAdmin)
 
 admin.site.register(DefaultEmailContainer)
 admin.site.register(BranchEmailContainer, BranchEmailContainerAdmin)

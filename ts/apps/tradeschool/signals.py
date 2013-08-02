@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from time import strftime
 from datetime import datetime
-from tradeschool.utils import daterange
+from tradeschool.utils import daterange, unique_slugify
 
 # adding 'dispatch_uid' because this signal was getting reigstered twice. 'dispatch_uid' just needs to be some unique string.
 #

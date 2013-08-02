@@ -43,6 +43,7 @@ class CustomIndexDashboard(Dashboard):
                     models=('tradeschool.models.Schedule', 
                             'tradeschool.models.Time',
                             'tradeschool.models.TimeRange',
+                            'tradeschool.models.Organizer',                            
                             'tradeschool.models.Student',
                             'tradeschool.models.Teacher',
                             'tradeschool.models.Course',

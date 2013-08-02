@@ -615,7 +615,7 @@ class PersonManager(BaseUserManager):
         if not email:
             raise ValueError('An email must be set')
         if fullname:
-            username = unique_slugify(Person, fullname)
+            username = unique_slugify(Person, fullname, 'username')
         if not password:
             password = self.make_random_password()
             
@@ -748,10 +748,29 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         Sends an email to this User.
         """
         send_mail(subject, message, from_email, [self.email])
-                
+
     def __unicode__ (self):
         return self.fullname
             
+
+class OrganizerManager(PersonManager):
+    def get_query_set(self):
+        return super(OrganizerManager, self).get_query_set().filter(is_staff=True)
+
+
+class Organizer(Person):
+    class Meta:
+
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Organizer")
+
+        # Translators: Plural.
+        verbose_name_plural = _("Organizers")
+
+        proxy = True
+
+    objects = OrganizerManager()
+
 
 class TeacherManager(PersonManager):
     def get_query_set(self):

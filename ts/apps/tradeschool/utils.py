@@ -87,7 +87,6 @@ def unique_slugify(model, value, slugfield="slug"):
         while True:
                 if suffix:
                         potential = "-".join([base, str(suffix)])
-                
                 if not model.objects.filter(**{slugfield: potential}).count():
                         return potential
                 # we hit a conflicting slug, so bump the suffix & try again

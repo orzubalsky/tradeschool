@@ -746,7 +746,7 @@ class UsersManager(Manager):
 
         if do_save == True:
             pk = int(data['id']) + 10000            
-            
+            slug = unique_slugify(Person, data['username'], 'fullname')
             try:
                 user = Person.objects.get(username=data['username'])
                 user.is_staff = True
@@ -761,6 +761,7 @@ class UsersManager(Manager):
                             pk          = pk, 
                             fullname    = data['username'],
                             username    = data['username'],
+                            slug        = slug,
                             email       = data['email'], 
                             is_staff    = True, 
                             created     = timezone.make_aware(data['timestamp'], timezone.utc),
