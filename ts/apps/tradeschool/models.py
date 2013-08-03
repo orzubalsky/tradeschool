@@ -4,18 +4,18 @@ from django.contrib.localflavor.us.models import USStateField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.flatpages.models import FlatPage
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, UserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 #from django_mailer import send_mail
-from django.template import loader, Context
+from django.template import Context
 from django.template import Template
 from django_countries import CountryField
 from tinymce.models import HTMLField
-import pytz, uuid, random, time, shutil, errno, os
+import pytz, random, time, shutil, errno, os
 from datetime import *
 from tradeschool.utils import copy_model_instance, unique_slugify
 from tradeschool.widgets import *
@@ -24,7 +24,7 @@ from tradeschool.widgets import *
 
 class Base(Model):
     """
-    Abstract base model for all of the models in the tradeschool application. 
+    Abstract base model for all of the models in the tradeschool application.
     Base has datetime fields to keep a record of the times an object is created and updated.
     The Base model also has an is_active boolean field. is_active is implemented in the following way:
     only objects that are active on will appear on the website. Inactive (is_active=False) objects are 
@@ -503,7 +503,7 @@ class Branch(Location):
         "resets branch notification templates from the global branch notification templates"
                 
         # delete existing branch emails
-        branch_emails = BranchEmailContainer.objects.filter(branch=self).delete()
+        BranchEmailContainer.objects.filter(branch=self).delete()
             
         # copy branch notification from the branch notification templates
         default_email_container = DefaultEmailContainer.objects.all()[0]
@@ -859,7 +859,7 @@ class Durational(Base):
     In the tradeschool system, these would be the Time and Course models.
     """
     class Meta:
-		abstract = True
+        abstract = True
 		
     # Translators: Used to lable the beginning and endings of classes
     start_time  = DateTimeField(verbose_name=_("start time"), default=datetime.now())
