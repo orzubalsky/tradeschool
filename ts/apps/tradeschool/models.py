@@ -1178,17 +1178,20 @@ class Schedule(Durational):
         """
         Find a past Schedule of the same Course and copy its BarterItem objects.
         """
+        
         # find a scheduled course to this Schedule's course, which is not this one
-        past_schedule = Schedule.objects.filter(course=self.course).exclude(pk=self.pk)[0]
+        past_schedules = Schedule.objects.filter(course=self.course).exclude(pk=self.pk)
 
-        # create copies of the past schedule's BarterItem objects.
-        # reset the pk for each one so a new object is saved,
-        # and create a relationship to the current Schedule.
-        for item in past_schedule.barteritem_set.all():
-            new_item = copy_model_instance(item)
-            new_item.pk = None 
-            new_item.schedule = self
-            new_item.save()        
+        if past_schedules.exists():
+
+            # create copies of the past schedule's BarterItem objects.
+            # reset the pk for each one so a new object is saved,
+            # and create a relationship to the current Schedule.
+            for item in past_schedules[0].barteritem_set.all():
+                new_item = copy_model_instance(item)
+                new_item.pk = None 
+                new_item.schedule = self
+                new_item.save()        
 
     def save(self, *args, **kwargs):
         """ check if status was changed to approved and email teacher if it has.""" 
