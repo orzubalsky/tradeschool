@@ -300,30 +300,40 @@ body.global {
 
 #container #header #headerIntro {
 	position: absolute;
-	top: 0;
-	left: 500px;
-	width: 400px;
-	height: 400px;
+	top: 80px;
+	left: 100px;
+	width: 351px;
+	height: 350px;
 	text-align: left;
 	background: #ff3300;
 	color: #fff;
 	overflow: hidden;
+	padding: 20px 10px 30px 20px;
+	z-index: 2;
 }
 
 #container #header #headerIntro h2 {
-  font-family: 'TradeGothicLTStdBold';
-  text-transform: uppercase;
-  font-size: 1.8em;
-  line-height: 1.4em;
-	margin: 20px 10px 30px 20px;
+	font-family: 'TradeGothicLTStdBold';
+	text-transform: uppercase;
+	font-size: 3.6em;
+	line-height: 1.1em;
+	margin: 0 0 20px 0;
+}
+
+#container #header #headerIntro h2 p {
+  	font-family: 'TradeGothicLTStdBold';	
+	margin: 0;
+	padding: 0;
+	font-size: 1em;
+	line-height: 1.1;
 }
 
 #container #header #headerIntro p {
-	padding: 0 20px 45px 20px;
+	padding: 0;
 }
 
 #container #header #headerIntro p {
-	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+	font: 1.1em/ 1.4em Helvetica, Arial, sans-serif;
 }
 
 #container #header #headerIntro ul, #container #headerIntro address {
@@ -340,54 +350,7 @@ body.global {
 	width: 160px;
 	right: 20px;
 }
-/*
-#container #header #headerEmail {
-	color: #666;
-	padding: 10px 0;
-	border-bottom: 3px solid #ff3300;
-	width: 800px;
-	height: 28px;
-	position: absolute;
-	bottom: 0;
-	right: 65px;
-	text-align: left;
-}
 
-#container #header #headerEmail form#mailinglist {
-	display: inline;
-}
-
-#container #header #headerEmail input.emailField {
-	border: 0;
-	width: 300px;
-	padding: 5px;
-	font: 1em/ 1.5em Helvetica, Arial, sans-serif;
-	color: #ff3300;
-	margin: 0 15px;
-	border: 1px solid #ddd;
-}
-
-#container #header #headerEmail input.emailButton {
-	border: 0;
-	font: 1em/ 1.5em Helvetica, Arial, sans-serif;
-	font-weight: bold;
-	text-decoration: underline;
-	width: 27px;
-	height: 21px;
-	background: url(../images/buttons/emailjoin.png) no-repeat bottom left;
-	border: 0;
-	overflow: hidden;
-	text-indent: -9999px;
-	float: right;
-	margin: 3px 0 0 0;
-}
-
-#container #header #headerEmail input.emailButton:hover {
-	background: url(../images/buttons/emailjoin.png) no-repeat top left;
-	outline: 0;
-	cursor: pointer;
-}
-*/
 /* Class list ---------------------------------------------------------------------------- */
 .classes{
   float: left;
@@ -1002,34 +965,6 @@ iframe{
     position: absolute;
     top: 0;
     width: 440px;
-}
-
-#container #header #headerIntro {
-	position: absolute;
-	top: 80px;
-	left: 100px;
-	width: 380px;
-	height: 400px;
-	text-align: left;
-	background: #ff3300;
-	color: #fff;
-	overflow: hidden;
-}
-
-#container #header #headerIntro h2 {
-  font-family: 'TradeGothicLTStdBold';
-  text-transform: uppercase;
-  font-size: 3.6em;
-  line-height: 1.1em;
-	margin: 20px 10px 30px 20px;
-}
-
-#container #header #headerIntro p {
-	padding: 0 20px 45px 20px;
-}
-
-#container #header #headerIntro p {
-	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
 }
 
 #container #header #headerIntro ul, #container #headerIntro address {
