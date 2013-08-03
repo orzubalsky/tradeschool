@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core.urlresolvers import resolve
-from django.utils import translation
 from tradeschool.models import *
 
 def branch(request):
@@ -10,10 +9,6 @@ def branch(request):
     
     try:
         if branch_slug == None and (url.app_name == 'admin' or url.app_name == 'rosetta') and request.user.is_staff:
-            
-            # translate the admin & rosetta backends to the language set by the logged in user
-            translation.activate(request.user.language)            
-            
             # if the user is organizing at least one branch return the first one,
             # if not, create a branch with a timezone to pass to the template
             if request.user.branches_organized.count() > 0:
@@ -27,9 +22,6 @@ def branch(request):
         # we want to pass the branch to the template context
         # depending on the slug that was parsed from the URL
         branch = Branch.objects.get(slug=branch_slug)
-        
-        # translate the frontend to the language set in the branch 
-        translation.activate(branch.language)
         
         return { 'branch'       : branch, }
         

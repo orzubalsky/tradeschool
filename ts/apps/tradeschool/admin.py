@@ -576,7 +576,7 @@ class ScheduleAdmin(BaseAdmin):
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Class Info'), {
-            'fields': ('course_title_link', 'course_description', 'course_max_students')
+            'fields': ('course_title_link', 'course_description', 'course_max_students', 'slug')
         }),
         # Translators: This is the a header in the branch admin form
         (_('Teacher Info'), {

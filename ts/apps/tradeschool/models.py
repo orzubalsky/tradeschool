@@ -1088,7 +1088,7 @@ class Schedule(Durational):
                             help_text=_("The students who registered to this scheduled class, what are they bringing, and whether they cancelled their attendance.")
                         )
                                                         
-    slug            = SlugField(max_length=255,blank=False, null=True, unique=True, verbose_name=_("A unique URL for the scheduled class."))
+    slug            = SlugField(max_length=255,blank=True, null=True, unique=True, verbose_name=_("A unique URL for the scheduled class."))
 
     objects   = ScheduleManager()
     public    = SchedulePublicManager()
@@ -1141,12 +1141,39 @@ class Schedule(Durational):
             self.message_user(request, "%s successfully approved." % message_bit)        
     approve_courses.short_description = "Approve Classes"
 
+    def generate_barteritems_from_past_schedule(self):
+        """
+        Find a past Schedule of the same Course and copy its BarterItem objects.
+        """
+        # find a scheduled course to this Schedule's course, which is not this one
+        past_schedule = Schedule.objects.filter(course=self.course).exclude(pk=self.pk)[0]
+
+        # create copies of the past schedule's BarterItem objects.
+        # reset the pk for each one so a new object is saved,
+        # and create a relationship to the current Schedule.
+        for item in past_schedule.barteritem_set.all():
+            new_item = copy_model_instance(item)
+            new_item.pk = None 
+            new_item.schedule = self
+            new_item.save()        
+
     def save(self, *args, **kwargs):
         """ check if status was changed to approved and email teacher if it has.""" 
         if self.pk is not None:
             original = Schedule.objects.get(pk=self.pk)
             if original.course_status != self.course_status and self.course_status == 3:
                 self.emails.email_teacher(self.emails.teacher_class_approval)
+
+        # generate and save slug if there isn't one
+        if self.slug == None or self.slug.__len__() == 0:
+            self.slug = unique_slugify(Schedule, self.course.title)
+
+        # if there are no barter items, try to find another Schedule of the same Course,
+        # and copy the BarterItem objects from that one
+        if self.barteritem_set.count() == 0:
+            self.generate_barteritems_from_past_schedule()
+
+        # call the super class's save method   
         super(Schedule, self).save(*args, **kwargs)
 
     def __unicode__ (self):

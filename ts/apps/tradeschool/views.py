@@ -1,16 +1,14 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponse, HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
-from django.contrib.sites.models import get_current_site
 from django.contrib.flatpages.views import render_flatpage
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
 from tradeschool.utils import unique_slugify, branch_templates
 from tradeschool.models import *
 from tradeschool.forms import *
-from datetime import timedelta
 
 def branch_list(request):
     """display all branches in current site."""
@@ -232,6 +230,7 @@ def schedule_add(request, branch_slug=None):
             selected_time = time_form.cleaned_data['time']
             schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
             schedule.slug = unique_slugify(Schedule, course.title)
+            
             if selected_time.venue is not None:
                 schedule.venue = selected_time.venue
             schedule.save()
