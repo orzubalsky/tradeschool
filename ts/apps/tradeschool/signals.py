@@ -1,10 +1,9 @@
 from tradeschool.models import *
-from django.db.models.signals import post_save, post_delete, pre_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
-from time import strftime
 from datetime import datetime
-from tradeschool.utils import daterange, unique_slugify
+from tradeschool.utils import daterange
 
 # adding 'dispatch_uid' because this signal was getting reigstered twice. 'dispatch_uid' just needs to be some unique string.
 #
@@ -20,13 +19,13 @@ def branch_save_callback(sender, instance, **kwargs):
 
     # populate notifications
     try:
-        emails = BranchEmailContainer.objects.get(branch=instance)
+        BranchEmailContainer.objects.get(branch=instance)
     except BranchEmailContainer.DoesNotExist:
         instance.populate_notifications()
     
     # Create Teacher Info Page
     try:
-        copy_teacher_info_page = BranchPage.objects.get(title='I Want to Teach a Class', branch=instance)
+        BranchPage.objects.get(title='I Want to Teach a Class', branch=instance)
     except BranchPage.DoesNotExist:
         instance.copy_teacher_info_page()
     
@@ -35,7 +34,7 @@ def branch_save_callback(sender, instance, **kwargs):
 def schedule_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new schedule"""
     try:
-        emails = ScheduleEmailContainer.objects.get(schedule=instance)
+        ScheduleEmailContainer.objects.get(schedule=instance)
     except ScheduleEmailContainer.DoesNotExist:
         instance.populate_notifications()
 
@@ -69,8 +68,8 @@ def timerange_save_callback(sender, instance, **kwargs):
             normalized_start_time = utc.normalize(localized_start_time.astimezone(utc))
             normalized_end_time   = utc.normalize(localized_end_time.astimezone(utc))
             
-            aware_start_time = timezone.make_aware(start_time, timezone.utc)
-            aware_end_time   = timezone.make_aware(end_time, timezone.utc)
+            #aware_start_time = timezone.make_aware(start_time, timezone.utc)
+            #aware_end_time   = timezone.make_aware(end_time, timezone.utc)
             
             now = timezone.now()
             

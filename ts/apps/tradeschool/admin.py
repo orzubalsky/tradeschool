@@ -2,7 +2,6 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib.flatpages.models import FlatPage
 from flatpages_tinymce.admin import FlatPageAdmin
@@ -80,7 +79,7 @@ class BaseTabularInline(admin.TabularInline):
         if qs.count() > 0:
             kwargs['initial'] = qs[0]
         return kwargs['queryset'], kwargs['initial']
-        
+
 
 class BaseStackedInline(admin.StackedInline):
     def queryset(self, request, q):

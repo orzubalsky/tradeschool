@@ -1,12 +1,10 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.conf import settings
 from datetime import *
-import shutil, os, os.path
+import os.path
 from tradeschool.models import *
 
 

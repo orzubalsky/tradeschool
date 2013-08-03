@@ -1,5 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.utils.timezone import utc
+from django.core.management.base import BaseCommand
 from django.contrib.sites.models import Site
 from datetime import * 
 from tradeschool.models import *

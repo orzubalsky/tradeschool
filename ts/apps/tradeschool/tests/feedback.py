@@ -1,12 +1,10 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.conf import settings
 from datetime import *
-import shutil, os, os.path
+import os.path
 from tradeschool.models import *
 
 
@@ -58,8 +56,7 @@ class FeedbackTestCase(TestCase):
         
         
     def move_schedule_to_future(self):
-        """ Sets the schedule time fields to future times."""        
-        now = datetime.utcnow().replace(tzinfo=utc) 
+        """ Sets the schedule time fields to future times."""
         self.schedule.start_time = self.future_start_time
         self.schedule.end_time = self.future_end_time
         self.schedule.save()         

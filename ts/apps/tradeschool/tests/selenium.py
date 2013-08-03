@@ -1,14 +1,9 @@
-from django.test import TestCase, LiveServerTestCase
+from django.test import LiveServerTestCase
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.webdriver import WebDriver
 from django.core.urlresolvers import reverse
-from django.core import mail
-from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
-from django.conf import settings
 from datetime import *
-import shutil, os, os.path
+import os.path
 from tradeschool.models import *
 
 

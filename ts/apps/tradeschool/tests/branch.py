@@ -1,13 +1,9 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.conf import settings
-from django.utils import translation
 from datetime import *
 import shutil, os, os.path
-from tradeschool.utils import Bunch
 from tradeschool.models import *
 
 
@@ -91,9 +87,6 @@ class BranchTestCase(TestCase):
         # now submit valid form
         response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)
         
-        # store branch in a variable
-        branch = Branch.objects.get(slug=self.branch_data['slug'])
-                
         # check that the branch was created successfully, following a redirect
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed('admin/change_list.html')

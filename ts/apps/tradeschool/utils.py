@@ -2,7 +2,7 @@ import os
 from django.template.defaultfilters import slugify
 from django.db.models import AutoField
 from django.template.loader import select_template
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 class Bunch:

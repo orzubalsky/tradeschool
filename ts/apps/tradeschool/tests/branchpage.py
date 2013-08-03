@@ -1,13 +1,9 @@
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.conf import settings
-from django.utils import translation
 from datetime import *
 import shutil, os, os.path
-from tradeschool.utils import Bunch
 from tradeschool.models import *
 
 

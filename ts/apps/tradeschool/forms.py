@@ -1,8 +1,6 @@
 from django.forms import *
-from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import ugettext as _
-from django.contrib.sites.models import get_current_site
 from django.contrib.sites.models import Site
 from tradeschool.models import *    
 
@@ -74,7 +72,7 @@ class BaseBarterItemFormSet(BaseFormSet):
 class TimeModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         from django.utils import timezone
-        import pytz        
+        
         current_tz = timezone.get_current_timezone()
         date = obj.start_time.astimezone(current_tz).strftime('%A, %b %d')
         time = obj.start_time.astimezone(current_tz).strftime('%I:%M%p').lstrip('0').lower()
