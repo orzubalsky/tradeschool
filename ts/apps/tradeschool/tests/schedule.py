@@ -225,21 +225,6 @@ class ScheduleTestCase(TestCase):
         for i, time in enumerate(times):
             self.assertEqual(times[i].venue, None)
         
-        # save a timerange with venue
-        data['venue'] = self.branch.venue_set.all()[0].pk
-        response = self.client.post(url, data=data, follow=True)
-
-        # saved timerange
-        timerange = TimeRange.objects.latest('created')
-
-        start_time  = datetime.combine(timerange.start_date, timerange.start_time)
-        end_time    = datetime.combine(timerange.end_date, timerange.end_time)
-        times = Time.objects.filter(start_time__gte=start_time, end_time__lte=end_time)
-
-        # verify venue was saved
-        for i, time in enumerate(times):
-            print time.venue
-            self.assertEqual(times[i].venue, self.branch.venue_set.all()[0])
 
     def test_timerange_creation_with_venue(self):
         """ Tests that a TimeRange saved in the admin backend results in the correct
