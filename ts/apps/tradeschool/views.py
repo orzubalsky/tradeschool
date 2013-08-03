@@ -1,21 +1,16 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
-from django.utils import simplejson as json
-from django.forms.util import ErrorList
-from django.forms.forms import NON_FIELD_ERRORS
 from django.contrib.sites.models import get_current_site
 from django.contrib.flatpages.views import render_flatpage
-from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
-from tradeschool.utils import unique_slugify, branch_template, branch_templates
+from tradeschool.utils import unique_slugify, branch_templates
 from tradeschool.models import *
 from tradeschool.forms import *
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 def branch_list(request):
     """display all branches in current site."""
@@ -183,8 +178,6 @@ def schedule_add(request, branch_slug=None):
         time_form           = TimeSelectionForm(request.POST, prefix="time")
                 
         if barter_item_formset.is_valid() and course_form.is_valid() and teacher_form.is_valid() and time_form.is_valid():
-            current_site = Site.objects.get_current()
-            
             # process teacher
             teacher = teacher_form.save(commit=False)
             teacher_data = teacher_form.cleaned_data
@@ -293,8 +286,6 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
         teacher_form        = TeacherForm(request.POST, prefix="teacher", instance=schedule.course.teacher)
 
         if barter_item_formset.is_valid() and course_form.is_valid() and teacher_form.is_valid():
-            current_site = Site.objects.get_current()
-
             # save teacher
             teacher = teacher_form.save(commit=False)
             teacher.slug = unique_slugify(Teacher, teacher.fullname)
