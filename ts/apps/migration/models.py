@@ -187,7 +187,7 @@ class BranchesManager(Manager):
                         email       = data['email'],  
                         created     = timezone.make_aware(data['timestamp'], timezone.utc),
                         updated     = timezone.make_aware(data['timestamp'], timezone.utc),
-                        header_copy = data['header'],
+                        intro_copy  = data['header'],
                         footer_copy = data['footer'],
                         timezone    = data['timezone'],
                         language    = 'en',                

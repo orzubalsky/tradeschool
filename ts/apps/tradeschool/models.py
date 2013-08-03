@@ -1141,6 +1141,39 @@ class Schedule(Durational):
             self.message_user(request, "%s successfully approved." % message_bit)        
     approve_courses.short_description = "Approve Classes"
 
+    def send_timed_emails_in_range(self, start_date, end_date):
+        """
+        """
+        email_count = 0
+
+        try:
+            for fieldname, email_obj in self.emails.emails.iteritems():
+                if isinstance(email_obj, TimedEmail):
+
+                    # check if email send on is within range and was not sent yet                  
+                    if start_date < email_obj.send_on < end_date and email_obj.email_status == 'not_sent':
+                        
+                        # treat emails to students separately, since there are many students per schedule
+                        if isinstance(email_obj, StudentReminder) or isinstance(email_obj, StudentFeedback):
+                            
+                            # iterate over Schedule's registrations and email each registered student
+                            for registration in self.registration_set.all():
+                            
+                                if registration.registration_status == 'registered':                            
+                                    email_obj.send(self, (registration.student.email,), registration)
+                                    email_count += 1
+
+                        # email teacher
+                        if isinstance(email_obj, TeacherReminder) or isinstance(email_obj, TeacherFeedback):                                                                                                
+                            email_obj.send(self, (self.course.teacher.email,))
+                            email_count += 1
+
+        # if there is no ScheduleEmailContainer, populate new emails for the Schedule
+        except ScheduleEmailContainer.DoesNotExist:
+            self.populate_notifications()
+
+        return email_count
+
     def generate_barteritems_from_past_schedule(self):
         """
         Find a past Schedule of the same Course and copy its BarterItem objects.

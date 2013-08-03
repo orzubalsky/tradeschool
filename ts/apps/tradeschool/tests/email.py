@@ -1,10 +1,12 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.core.management import call_command
 from django.contrib.sites.models import Site
 from django.forms.models import model_to_dict
 from django.conf import settings
 from django.core import mail
-from datetime import *
+from django.utils import timezone
+from datetime import datetime, timedelta
 import os.path
 from tradeschool.models import *
 
@@ -60,6 +62,28 @@ class EmailTestCase(TestCase):
             registration.save()
 
 
+    def set_time_for_automatic_email_sending(self, email_obj):
+        """ 
+        Sets the datetime fields on both the Schedule and the email_obj
+        to be within the range that the send_timed_emails management command
+        filters by.
+        """
+        # edit the Schedule time to be within the range
+        # that the mangagement command is filtering by
+        # at the moment it is set to 14 days before and after
+        self.schedule.start_time = timezone.now() + timedelta(days=1)
+        self.schedule.end_time = timezone.now() + timedelta(days=1, minutes=60)
+        self.schedule.save()
+
+        # edit the Email object to be set to be sent in the last hour
+        email_obj.send_on = timezone.now() - timedelta(minutes=15)
+        email_obj.save()
+
+        # verify the Email hasn't been sent and that it will be
+        # processed by the management command
+        self.assertEqual(email_obj.email_status, 'not_sent')
+
+
     def verify_email_data(self, message_obj, email_obj):
         """ Compares the data from the email message in the mail outbox
             and the Email object.
@@ -73,12 +97,6 @@ class EmailTestCase(TestCase):
         """ Tests that the an Email is sent to a teacher 
             with the correct data.
         """
-        # send email via the ScheduleEmailContainer object
-        sec = self.schedule.emails
-        
-        # send email
-        sec.email_teacher(email_obj)
-        
         # verify the email is in the outbox
         self.assertEqual(len(mail.outbox), 1)
         
@@ -92,15 +110,6 @@ class EmailTestCase(TestCase):
         """ Tests that an Email is sent to students with 
             the correct data to all registered students.
         """        
-        # register multiple times to the schedule
-        self.do_registration(registration_count)
-        
-        # send email via the ScheduleEmailContainer object
-        sec = self.schedule.emails
-
-        # send emails
-        sec.email_students(email_obj)
-
         # verify the email is in the outbox
         self.assertEqual(len(mail.outbox), registration_count)
 
@@ -113,22 +122,61 @@ class EmailTestCase(TestCase):
 
     def test_teacher_reminder(self):
         """ Tests the TeacherReminder Email."""
-        self.verify_email_teacher(self.schedule.emails.teacher_reminder)
+        automatic_email = self.schedule.emails.teacher_reminder
+
+        self.set_time_for_automatic_email_sending(automatic_email)
+
+        # call the management command
+        call_command('send_timed_emails')
+
+        # verify the email data
+        self.verify_email_teacher(automatic_email)
 
 
     def test_teacher_feedback(self):
         """ Tests the TeacherFeedback Email."""        
-        self.verify_email_teacher(self.schedule.emails.teacher_feedback)
+        automatic_email = self.schedule.emails.teacher_feedback
+
+        self.set_time_for_automatic_email_sending(automatic_email)
+
+        # call the management command
+        call_command('send_timed_emails')
+
+        # verify the email data
+        self.verify_email_teacher(automatic_email)   
 
 
     def test_student_reminder(self):
         """ Tests the StudentReminder Email."""        
-        self.verify_email_students(self.schedule.emails.student_reminder)
+        automatic_email = self.schedule.emails.student_reminder
+
+        # register multiple times to the schedule
+        self.do_registration(5)
+
+        self.set_time_for_automatic_email_sending(automatic_email)
+
+        # call the management command
+        call_command('send_timed_emails')
+
+        # verify the email is in the outbox
+        self.verify_email_students(automatic_email, self.schedule.registration_set.count())
 
 
     def test_student_feedback(self):
         """ Tests the StudentFeedback Email."""        
-        self.verify_email_students(self.schedule.emails.student_feedback)
+        
+        automatic_email = self.schedule.emails.student_feedback
+
+        # register multiple times to the schedule
+        self.do_registration(5)
+
+        self.set_time_for_automatic_email_sending(automatic_email)
+
+        # call the management command
+        call_command('send_timed_emails')
+
+        # verify the email is in the outbox
+        self.verify_email_students(automatic_email, self.schedule.registration_set.count())
 
 
     def tearDown(self):
