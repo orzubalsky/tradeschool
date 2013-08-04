@@ -72,9 +72,16 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
             student = student_form.save(commit=False)
             student_data = student_form.cleaned_data
             student_data['slug'] = unique_slugify(Student, student.fullname)
-            student, created = Person.objects.get_or_create(email=student.email, defaults=student_data)
-            student.branches.add(branch)
+
+            student = Person.objects.filter(email=student.email)
+
+            if student.exists():
+                student = student[0]
+            else:
+                student = Person.objects.create_user(**student_data)
+
             student.save()
+            student.branches.add(branch)
            
             # save registration
             registration = registration_form.save(commit=False)
@@ -185,20 +192,23 @@ def schedule_add(request, branch_slug=None):
 
             # check if the submitting teacher already exists in the system
             # we determine an existing teacher by their email
-            teacher, teacher_created = Person.objects.get_or_create(email=teacher.email, defaults=teacher_data)
+            teacher = Teacher.objects.filter(email=teacher.email)
             
             # if this is an existing teacher, update the field with the data from the form
-            if not teacher_created:
+            if teacher.exists():
+                teacher = teacher[0]
                 teacher.fullname = teacher_form.cleaned_data['fullname']
                 teacher.bio      = teacher_form.cleaned_data['bio']
                 teacher.website  = teacher_form.cleaned_data['website']
                 teacher.phone    = teacher_form.cleaned_data['phone']                                                
+            else:
+                teacher = Person.objects.create_user(**teacher_data)
+
+            # save teacher
+            teacher.save()
 
             # add a teacher-branch relationship to the current branch
             teacher.branches.add(branch)
-            
-            # save teacher
-            teacher.save()
 
             # process course
             course  = course_form.save(commit=False)
@@ -212,19 +222,22 @@ def schedule_add(request, branch_slug=None):
 
             # check if the submited course already exists in the system
             # we determine an existing course by its title
-            course, course_created = Course.objects.get_or_create(title=course.title, defaults=course_data)
+            course = Course.objects.filter(title=course.title)
             
-            # if this is an existing course, update the field with the data from the form
-            if not course_created:
+            if course.exists():
+                course = course[0]
+
                 course.title        = course_form.cleaned_data['title']
                 course.description  = course_form.cleaned_data['description']
                 course.max_students = course_form.cleaned_data['max_students']
-            
-            # add a course-branch relationship to the current branch
-            course.branches.add(branch)
+            else:
+                course = Course(**course_data)
             
             # save course
             course.save()
+            
+            # add a course-branch relationship to the current branch
+            course.branches.add(branch)
 
             # save schedule
             selected_time = time_form.cleaned_data['time']

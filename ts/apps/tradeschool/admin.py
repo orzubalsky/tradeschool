@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -433,7 +434,7 @@ class TimeRangeAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):  
         if db_field.name == 'venue':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(is_active=True, branch__in=request.user.branches_organized.all))
         if db_field.name == 'branch':          
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
             kwargs['queryset'] = Branch.objects.filter(pk__in=request.user.branches_organized.all)
@@ -593,11 +594,41 @@ class ScheduleAdmin(BaseAdmin):
 
 
 class PendingScheduleAdmin(ScheduleAdmin):
-    pass
+    """
+    """
+    def response_change(self, request, obj):
+        """
+        If the schedule_status was changed to 'approved', redirect to the ApprovedSchedule change-view
+        """
+        response = super(PendingScheduleAdmin, self).response_change(request, obj)
+
+        # only redirect if the schedule was saved by clicking on "save and continue editing"
+        if (isinstance(response, HttpResponseRedirect) and request.POST.has_key('_continue')):
+            
+            if obj.schedule_status == 'approved':
+                url = reverse('admin:tradeschool_approvedschedule_change', args=(obj.pk,))
+
+                response['location'] = url
+
+        return response
 
 
 class ApprovedScheduleAdmin(ScheduleAdmin):
-    pass
+    def response_change(self, request, obj):
+        """
+        If the schedule_status was changed from 'approved', redirect to the PendingSchedule change-view
+        """
+        response = super(ApprovedScheduleAdmin, self).response_change(request, obj)
+
+        # only redirect if the schedule was saved by clicking on "save and continue editing"
+        if (isinstance(response, HttpResponseRedirect) and request.POST.has_key('_continue')):
+            
+            if obj.schedule_status is not 'approved':
+                url = reverse('admin:tradeschool_pendingschedule_change', args=(obj.pk,))
+
+                response['location'] = url
+
+        return response
 
 
 class PastScheduleAdmin(ScheduleAdmin):

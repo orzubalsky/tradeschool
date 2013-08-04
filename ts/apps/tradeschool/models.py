@@ -885,10 +885,10 @@ class Time(Durational):
     class Meta:
         
         # Translators: This is used in the header navigation to let you know where you are.
-        verbose_name        = _("Time Slot")
+        verbose_name        = _("Calendar Open Time Slot")
        
        # Translators: Plural
-        verbose_name_plural = _("Time Slots")
+        verbose_name_plural = _("Calendar Open Time Slots")
     
     venue = ForeignKey(
                 Venue, 
@@ -916,10 +916,10 @@ class TimeRange(Base):
     class Meta:
         
         # Translators: This is used in the header navigation to let you know where you are.
-        verbose_name        = _("Time Slot Range")
+        verbose_name        = _("Calendar Open Time Slot Range")
         
         # Translators: Plural.
-        verbose_name_plural = _("Time Slot Ranges")
+        verbose_name_plural = _("Calendar Open Time Slot Ranges")
 
     start_date  = DateField(verbose_name=_("Start date"), default=datetime.now(), help_text=_("Pick the start date for the date range. The system will go over all days between this date and the end date and then create available time slots for each day of the week that you choose."))
     end_date    = DateField(verbose_name=_("End date"), default=datetime.now(), help_text=_("Pick the end date for the date range. The system will go over all days between the start date and this date and then create available time slots for each day of the week that you choose."))
