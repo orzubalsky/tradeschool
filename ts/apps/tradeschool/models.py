@@ -417,6 +417,11 @@ class Cluster(Base):
     name = CharField(verbose_name=_("name"), max_length=100) 
 
 
+class BranchPublicManager(Manager):
+    def get_query_set(self):
+        return super(BranchPublicManager, self).get_query_set().exclude(branch_status='pending').filter(is_active=True)
+
+
 class Branch(Location):
     """
     A branch is a ts organization in a specific location (usually city/region).
@@ -481,6 +486,7 @@ class Branch(Location):
     footer_copy = HTMLField(verbose_name=_("footer"), null=True, blank=True, default="Information for the footer of the page", help_text=_("This text appears on the footer of the page. It's optional."))
 
     objects   = Manager()
+    public    = BranchPublicManager()
     on_site   = CurrentSiteManager()
 
     
@@ -736,7 +742,7 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         """ Return the branches that this person relates to. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.branches.all())
     branches_string.short_description = _('branches')
-    
+
     def branches_organized_string(self):
         """ Return the branches that this person organizes. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.branches_organized.all())        

@@ -13,7 +13,7 @@ from tradeschool.forms import *
 def branch_list(request):
     """display all branches in current site."""
     
-    branches  = Branch.objects.all()
+    branches  = Branch.public.all()
 
     for branch in branches:
         branch.schedules = ApprovedSchedule.public.filter(course__branches=branch)
