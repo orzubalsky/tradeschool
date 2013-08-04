@@ -735,7 +735,8 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
     def branches_string(self):
         """ Return the branches that this person relates to. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.branches.all())
-        
+    branches_string.short_description = _('branches')
+    
     def branches_organized_string(self):
         """ Return the branches that this person organizes. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.branches_organized.all())        

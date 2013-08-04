@@ -670,7 +670,7 @@ class PhotoAdmin(BaseAdmin):
     get_thumbnail.allow_tags = True        
 
 
-class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
+class BranchEmailContainerAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
     """
     """
     def queryset(self, request):
@@ -680,7 +680,7 @@ class BranchEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.Mo
     fields       = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
 
 
-class ScheduleEmailContainerAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
+class ScheduleEmailContainerAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
     """
     """
     def queryset(self, request):
@@ -695,7 +695,7 @@ class BranchPageForm(FlatpageForm):
         model = BranchPage
   
 
-class BranchPageAdmin(FlatPageAdmin):
+class BranchPageAdmin(BaseAdmin, FlatPageAdmin):
     """ """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
@@ -712,7 +712,7 @@ class BranchPageAdmin(FlatPageAdmin):
     search_fields = ('url', 'title') 
     
 
-class FeedbackAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
+class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
     """
     """
     def queryset(self, request):
