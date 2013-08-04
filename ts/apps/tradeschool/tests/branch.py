@@ -155,9 +155,20 @@ class BranchTestCase(TestCase):
         # render the homepage again
         response = self.client.get(reverse('branch-list'))        
         
-        # check that the branch is now there
-        self.assertContains(response, self.branch_data['slug'])
+        # check that the branch is nor there unless its branch_status
+        # is set explicitly to not 'pending'
+        self.assertNotContains(response, self.branch_data['slug'])
+
+        # update the branch_status field
+        self.branch.branch_status = 'in session'
+        self.branch.save()
         
+        # render the homepage again
+        response = self.client.get(reverse('branch-list'))        
+        
+        # check that the branch is there now
+        self.assertContains(response, self.branch_data['slug'])        
+
 
     def test_branch_templates_loading(self):
         """ Tests whether the branch-specific template files
