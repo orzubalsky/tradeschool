@@ -4,20 +4,27 @@
 
 {% block content %}
 
-<div id="headerBoard">Barter for knowledge</div>
+{% block header %}
+<div id="headerBoard">
+    Barter for knowledge
+</div>    
+{% endblock header %}
 
+{% block intro %}
 <div id="intro">
     <h2><strong>Trade School</strong> celebrates practical wisdom, mutual respect, and the social nature of exchange. <a href="">Read More.</a></h2>
 
     <div id="headerEmail">
-        <p>Join our mailing list:</p>		
+        <p>Join our mailing list:</p>       
         <form id="mailinglist" action="http://carolinewoolard.createsend.com/t/r/s/qukiuh/" method="post" id="subForm">
             <input type="text" name="cm-qukiuh-qukiuh" id="qukiuh-qukiuh" class="emailField">
             <input type="submit" value="GO" class="emailButton">
         </form>
     </div>
-</div>
+</div>    
+{% endblock intro %}
 
+{% block branch-list %}
 <div id="branches">
     <h2>Trade School Locations</h2>
     {% for branch in branches %}
@@ -32,11 +39,15 @@
     </div>        
     {% endfor %}
 </div>
+{% endblock branch-list %}
 
+{% block start-a-tradeschool %}
 <div id="start">
     <p>Want to <a href="">start a Trade School in your city?</a></p>
-</div>
+</div>    
+{% endblock start-a-tradeschool %}
 
+{% block schedule-list %}
 <div id="classes">
     <h3>Classes Happening Around the World</h3>	
 
@@ -87,4 +98,6 @@
     {% endfor %}
     </div>
 </div>
+{% endblock schedule-list %}
+
 {% endblock content %}

@@ -237,6 +237,39 @@ class BranchTestCase(TestCase):
         self.assertEqual(response.context['TIME_ZONE'], branch.timezone)        
 
 
+    def test_branch_cluster(self):
+        """
+        """
+        # save a cluster
+        cluster = Cluster(name='test cluster', slug='test-cluster')
+        cluster.save()
+
+        # url for cluster-list view
+        url = reverse('cluster-list', kwargs={'slug':cluster.slug,})
+
+        # load the page
+        response = self.client.get(url)
+
+        # verify the template loads
+        self.assertEqual(response.status_code, 200)        
+        self.assertTemplateUsed('hub/cluster_list.html')
+
+        # verify the branch is not listed
+        self.assertNotContains(response, self.branch.slug)
+
+        # make sure the branch is not pending
+        self.branch.branch_status = 'in session'
+
+        # add the branch to the cluster
+        cluster.branch_set.add(self.branch)
+
+        # reload the page
+        response = self.client.get(url)
+        
+        # verify the branch is in the view
+        self.assertContains(response, self.branch.slug)        
+
+
     def tearDown(self):
         """ Delete branch files in case something went wrong 
             and the files weren't deleted.

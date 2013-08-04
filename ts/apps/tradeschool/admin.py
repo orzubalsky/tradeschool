@@ -268,10 +268,11 @@ class BranchAdmin(BaseAdmin):
     list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
     inlines             = (BranchEmailContainerInline, PhotoInline)
+    filter_horizontal   = ('organizers',)
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Basic Info'), {
-            'fields': ('title', 'slug', 'timezone', 'language')
+            'fields': ('title', 'slug', 'timezone', 'language', 'branch_status')
         }),
         # Translators: This is the a header in the branch admin form
         (_('Contact Info'), {
@@ -283,7 +284,7 @@ class BranchAdmin(BaseAdmin):
         }), 
         # Translators: This is the a header in the branch admin form       
         (_('Organizers'), {
-            'fields': ('organizers',)
+            'fields': ('organizers', 'cluster')
         }),        
     )
 
@@ -758,10 +759,23 @@ class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
     list_display = ('schedule', 'feedback_type')
     fields       = ('schedule', 'feedback_type', 'content',)
     
+
+class ClusterAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
+    """
+    """
+    def queryset(self, request):
+        return super(ClusterAdmin, self).queryset(request, Q())
+        
+    list_display = ('name', 'slug', 'branches_string')
+    fields       = ('name', 'slug',)
+
+
+
 # register admin models
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Course, CourseAdmin)
+admin.site.register(Cluster, ClusterAdmin)
 
 admin.site.register(PendingSchedule, PendingScheduleAdmin)
 admin.site.register(ApprovedSchedule, ApprovedScheduleAdmin)

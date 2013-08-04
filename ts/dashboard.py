@@ -72,6 +72,7 @@ class CustomIndexDashboard(Dashboard):
                     collapsible=False,
                     models=(
                             'tradeschool.models.Branch',
+                            'tradeschool.models.Cluster',                            
                             ),
                 ),
                 modules.ModelList(

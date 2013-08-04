@@ -410,11 +410,43 @@ class BranchEmailContainer(EmailContainer):
 
 
 class Cluster(Base):
-    """Branches can be grouped together for possibly displaying them together on the website.
-        For example: multiple branches in one city can belong to the same group."""
-    
+    """
+    Branches can be grouped together for possibly displaying them together on the website.
+    For example: multiple branches in one city can belong to the same group.
+    """
+    class Meta:
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _('Branch Cluster')
+        
+        # Translators: Plural.
+        verbose_name_plural = _('Branch Clusters')
+        
+        ordering = ['name']
+
     # Translators: The name of a cluster if there is one.    
-    name = CharField(verbose_name=_("name"), max_length=100) 
+    name = CharField(verbose_name=_("name"), max_length=100)
+    slug = SlugField(   unique=True,
+                        # Translators: This is the part that comes after tradeschool.coop/ en el URL.
+                        verbose_name=_("slug"),
+                        max_length=120, 
+                        # Translators: Contextual Help.
+                        help_text=_("This is the part that comes after 'http://tradeschool.coop/cluster/' in the URL")
+                    )
+    def branches_string(self):
+        """ Return the branches that this cluster relates to. This function is used in the admin list_display() method."""
+        return ','.join( str(branch) for branch in self.branch_set.all())
+    branches_string.short_description = _('branches')
+
+    def save(self, *args, **kwargs):
+        """ check if there is slug and create one if there isn't.""" 
+        if self.slug == None or self.slug.__len__() == 0:
+            self.slug = unique_slugify(Cluster, self.name)
+
+        # call the super class's save method   
+        super(Cluster, self).save(*args, **kwargs)
+
+    def __unicode__ (self):
+        return u"%s" % self.name
 
 
 class BranchPublicManager(Manager):
