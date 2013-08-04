@@ -38,7 +38,10 @@ class CustomIndexDashboard(Dashboard):
                     title=_('Scheduling'),
                     column=1,
                     collapsible=False,
-                    models=('tradeschool.models.Schedule', 
+                    models=(
+                            'tradeschool.models.PendingSchedule',
+                            'tradeschool.models.ApprovedSchedule',
+                            'tradeschool.models.PastSchedule',
                             'tradeschool.models.Time',
                             'tradeschool.models.TimeRange',
                             'tradeschool.models.Organizer',                            

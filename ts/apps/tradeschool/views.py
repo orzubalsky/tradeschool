@@ -16,7 +16,7 @@ def branch_list(request):
     branches  = Branch.objects.all()
 
     for branch in branches:
-        branch.schedules = Schedule.public.filter(course__branches=branch)
+        branch.schedules = ApprovedSchedule.public.filter(course__branches=branch)
         
     return render_to_response('hub/branch_list.html',{ 
             'branches': branches, 
@@ -28,7 +28,7 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = Schedule.public.filter(course__branches=branch)
+    schedules = ApprovedSchedule.public.filter(course__branches=branch)
     
     branch_pages = BranchPage.objects.filter(branch=branch, is_visible=1)
     
@@ -152,7 +152,7 @@ def schedule_list_past(request, branch_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = Schedule.past.all()
+    schedules = PastSchedule.public.all()
     
     view_templates = branch_templates(branch, 'schedule_list_past.html', 'subpage.html')    
     

@@ -1023,17 +1023,6 @@ class ScheduleManager(Manager):
 
         return qs
 
-class SchedulePublicManager(ScheduleManager):
-    def get_query_set(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        return super(SchedulePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, schedule_status='approved')
-
-
-class SchedulePublicPastManager(ScheduleManager):
-    def get_query_set(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        return super(SchedulePublicPastManager, self).get_query_set().filter(end_time__lte=now, course__is_active=1, schedule_status='approved')
-
 
 class Schedule(Durational):
     """
@@ -1091,8 +1080,6 @@ class Schedule(Durational):
     slug            = SlugField(max_length=255,blank=True, null=True, unique=True, verbose_name=_("A unique URL for the scheduled class."))
 
     objects   = ScheduleManager()
-    public    = SchedulePublicManager()
-    past      = SchedulePublicPastManager()
 
     @property
     def is_within_a_day(self):
@@ -1218,23 +1205,72 @@ class Schedule(Durational):
 
 class PendingScheduleManager(ScheduleManager):
     def get_query_set(self):
-        return super(PendingScheduleManager, self).get_query_set().filter(schedule_status='pending')
+        return super(PendingScheduleManager, self).get_query_set().filter(end_time__gte=timezone.now()).exclude(schedule_status='approved').exclude(schedule_status='rejected')
 
 
 class PendingSchedule(Schedule):
     class Meta:
 
         # Translators: This is used in the header navigation to let you know where you are.
-        verbose_name = _("Pending Schedule")
+        verbose_name = _("Pending Scheduled Classes")
 
         # Translators: Plural.
-        verbose_name_plural = _("Pending Schedules")
+        verbose_name_plural = _("Pending Scheduled Classes")
 
         proxy = True
 
     objects = PendingScheduleManager()
 
 
+
+class ApprovedScheduleManager(ScheduleManager):
+    def get_query_set(self):
+        return super(ApprovedScheduleManager, self).get_query_set().filter(schedule_status='approved', end_time__gte=timezone.now())
+
+
+class ApprovedSchedulePublicManager(ApprovedScheduleManager):
+    def get_query_set(self):
+        return super(ApprovedSchedulePublicManager, self).get_query_set().filter(is_active=True)
+
+
+class ApprovedSchedule(Schedule):
+    class Meta:
+
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Approved Scheduled Classes")
+
+        # Translators: Plural.
+        verbose_name_plural = _("Approved Scheduled Classes")
+
+        proxy = True
+
+    objects = ApprovedScheduleManager()
+    public  = ApprovedSchedulePublicManager()
+
+
+class PastScheduleManager(ScheduleManager):
+    def get_query_set(self):
+        return super(PastScheduleManager, self).get_query_set().filter(end_time__lte=timezone.now())
+
+
+class PastSchedulePublicManager(PastScheduleManager):
+    def get_query_set(self):
+        return super(PastSchedulePublicManager, self).get_query_set().filter(is_active=True, schedule_status='approved')
+
+
+class PastSchedule(Schedule):
+    class Meta:
+
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Past Scheduled Classes")
+
+        # Translators: Plural.
+        verbose_name_plural = _("Past Scheduled Classes")
+
+        proxy = True
+
+    objects = PastScheduleManager()    
+    public  = PastSchedulePublicManager()
 
 
 

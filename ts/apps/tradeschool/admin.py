@@ -464,9 +464,11 @@ class ScheduleAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'venue':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
+            pass
+            #kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
         if db_field.name == 'course':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Course, Q(branches__in=request.user.branches_organized.all))
+            pass
+            #kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Course, Q(branches__in=request.user.branches_organized.all))
         return super(ScheduleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
                          
     def populate_notifications(self, request, queryset):
@@ -588,6 +590,18 @@ class ScheduleAdmin(BaseAdmin):
         }),     
     )
     #prepopulated_fields  = {'slug': ('start_time',) }
+
+
+class PendingScheduleAdmin(ScheduleAdmin):
+    pass
+
+
+class ApprovedScheduleAdmin(ScheduleAdmin):
+    pass
+
+
+class PastScheduleAdmin(ScheduleAdmin):
+    pass
 
 
 class RegistrationAdmin(BaseAdmin):
@@ -717,7 +731,11 @@ class FeedbackAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(Schedule, ScheduleAdmin)
+
+admin.site.register(PendingSchedule, PendingScheduleAdmin)
+admin.site.register(ApprovedSchedule, ApprovedScheduleAdmin)
+admin.site.register(PastSchedule, PastScheduleAdmin)
+
 admin.site.register(BarterItem, BarterItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
