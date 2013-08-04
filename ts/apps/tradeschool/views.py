@@ -171,7 +171,7 @@ def schedule_list_past(request, branch_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = PastSchedule.public.all()
+    schedules = PastSchedule.public.filter(course__branches__in=[branch.pk,])
     
     view_templates = branch_templates(branch, 'schedule_list_past.html', 'subpage.html')    
     
