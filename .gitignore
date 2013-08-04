@@ -8,6 +8,7 @@ bin/
 develop-eggs/
 eggs/
 parts/
+sql/
 
 # ignore settings files:
 ts/settings/*.py
