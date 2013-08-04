@@ -228,7 +228,7 @@ def schedule_add(request, branch_slug=None):
 
             # save schedule
             selected_time = time_form.cleaned_data['time']
-            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, course_status=0)
+            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, schedule_status='pending')
             schedule.slug = unique_slugify(Schedule, course.title)
             
             if selected_time.venue is not None:
@@ -365,7 +365,7 @@ def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_s
 def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_type='student'):
     """ """
     # don't display form unless schedule is approved
-    schedule = get_object_or_404(Schedule, slug=schedule_slug, course_status=3)
+    schedule = get_object_or_404(Schedule, slug=schedule_slug, schedule_status='approved')
     branch   = get_object_or_404(Branch, slug=branch_slug)
 
     # don't display form unless the scheduled class took place

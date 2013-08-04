@@ -38,7 +38,7 @@ class EmailTestCase(TestCase):
         
         # use this schedule for testing
         self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
-        self.schedule.course_status = 3
+        self.schedule.schedule_status = 'approved'
         self.schedule.save()
 
 

@@ -35,7 +35,7 @@ class FeedbackTestCase(TestCase):
         
         # use this schedule for testing
         self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
-        self.schedule.course_status = 3
+        self.schedule.schedule_status = 'approved'
         self.schedule.save()
         
         self.future_start_time = self.schedule.start_time
@@ -67,12 +67,12 @@ class FeedbackTestCase(TestCase):
             If there's a branch-specific template file, make sure it's loaded as well.
         """
         # approve schedule and save
-        self.schedule.course_status = 0
+        self.schedule.schedule_status = 'pending'
         self.schedule.save()
                 
         # make sure schedule is 'pending' and that 
         # the scheduled class did not happen yet
-        self.assertEqual(self.schedule.course_status, 0)
+        self.assertEqual(self.schedule.schedule_status, 'pending')
         self.move_schedule_to_future()
         
         # load url
@@ -82,7 +82,7 @@ class FeedbackTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
         
         # approve schedule and save
-        self.schedule.course_status = 3
+        self.schedule.schedule_status = 'approved'
         self.schedule.save()
         
         # loading the url again

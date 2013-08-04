@@ -8,7 +8,7 @@
         "is_active": true, 
         "start_time": "2020-06-16T04:00:00Z", 
         "venue": 6, 
-        "course_status": 3, 
+        "schedule_status": "approved", 
         "course": 10, 
         "end_time": "2020-06-16T05:30:00Z", 
         "slug": "quito-class-01"
@@ -23,7 +23,7 @@
         "is_active": true, 
         "start_time": "2020-06-16T01:00:00Z", 
         "venue": 7, 
-        "course_status": 3, 
+        "schedule_status": "approved", 
         "course": 11, 
         "end_time": "2020-06-16T02:30:00Z", 
         "slug": "barcelona-schedule-01"
@@ -38,7 +38,7 @@
         "is_active": true, 
         "start_time": "2020-06-09T01:00:00Z", 
         "venue": 4, 
-        "course_status": 3, 
+        "schedule_status": "approved", 
         "course": 6, 
         "end_time": "2020-06-09T02:30:00Z", 
         "slug": "newyork_class_01"

@@ -535,17 +535,17 @@ class ScheduleAdmin(BaseAdmin):
                         'start_time', 
                         'end_time', 
                         'venue', 
-                        'course_status', 
+                        'schedule_status', 
                         'created'
                         )
     list_editable   = (
                         'start_time', 
                         'end_time', 
                         'venue', 
-                        'course_status',
+                        'schedule_status',
                         )
     list_filter     = (
-                        'course_status', 
+                        'schedule_status', 
                         'venue', 
                         'start_time'
                         )
@@ -584,7 +584,7 @@ class ScheduleAdmin(BaseAdmin):
         }), 
         # Translators: This is the a header in the branch admin form       
         (_('Class Schedule'), {
-            'fields': ('venue', 'start_time', 'end_time', 'course_status')
+            'fields': ('venue', 'start_time', 'end_time', 'schedule_status')
         }),     
     )
     #prepopulated_fields  = {'slug': ('start_time',) }
@@ -632,7 +632,7 @@ class BarterItemAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'schedule':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(course__branches__in=request.user.branches_organized.all, course_status=3))
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(course__branches__in=request.user.branches_organized.all, schedule_status='approved'))
         return super(BarterItemAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
             
     list_display    = ('title', 'schedule')    

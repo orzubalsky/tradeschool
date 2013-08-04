@@ -478,7 +478,7 @@ class ScheduleTestCase(TestCase):
         mail.outbox = []
                 
         # approve the schedule
-        schedule.course_status = 3 
+        schedule.schedule_status = 'approved'
         schedule.save()
         
         # test that one message was sent.
@@ -585,7 +585,7 @@ class ScheduleTestCase(TestCase):
         self.assertNotContains(response, schedule.course.title)
 
         # approve the schedule
-        schedule.course_status = 3 
+        schedule.schedule_status = 'approved'
         schedule.save()
 
         # reload the page
@@ -626,7 +626,7 @@ class ScheduleTestCase(TestCase):
         now = datetime.utcnow().replace(tzinfo=utc) 
         schedule.start_time = now - timedelta(hours=47)
         schedule.end_time   = now - timedelta(hours=48)
-        schedule.course_status = 0
+        schedule.schedule_status = 'pending'
         schedule.save()
         
         # schedule should still not appear, since it's approved
@@ -634,7 +634,7 @@ class ScheduleTestCase(TestCase):
         self.assertNotContains(response, schedule.course.title)
         
         # change the scheduled class's status to approved
-        schedule.course_status = 3
+        schedule.schedule_status = 'approved'
         schedule.save()
 
         # verify that the scheduled class now appears 

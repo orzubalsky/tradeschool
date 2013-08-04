@@ -1026,13 +1026,13 @@ class ScheduleManager(Manager):
 class SchedulePublicManager(ScheduleManager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
-        return super(SchedulePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, course_status=3)
+        return super(SchedulePublicManager, self).get_query_set().filter(end_time__gte=now, course__is_active=1, schedule_status='approved')
 
 
 class SchedulePublicPastManager(ScheduleManager):
     def get_query_set(self):
         now = datetime.utcnow().replace(tzinfo=utc)
-        return super(SchedulePublicPastManager, self).get_query_set().filter(end_time__lte=now, course__is_active=1, course_status=3)
+        return super(SchedulePublicPastManager, self).get_query_set().filter(end_time__lte=now, course__is_active=1, schedule_status='approved')
 
 
 class Schedule(Durational):
@@ -1045,15 +1045,15 @@ class Schedule(Durational):
         # Translators: Plural
         verbose_name_plural = _('Class Schedules')
         
-        ordering            = ['course_status', 'start_time', '-venue']
+        ordering            = ['schedule_status', 'start_time', '-venue']
 		
     STATUS_CHOICES = (
         # Translators: The thing that shows what the status of the class is
-        (0, _('Pending')),
-        (1, _('Contacted')),
-        (2, _('Updated')),
-        (3, _('Approved')),
-        (4, _('Rejected'))
+        ('pending', _('Pending')),
+        ('contacted', _('Contacted')),
+        ('updated', _('Updated')),
+        ('approved', _('Approved')),
+        ('rejected', _('Rejected'))
     )
 
     venue           = ForeignKey(
@@ -1072,11 +1072,11 @@ class Schedule(Durational):
                             help_text=_("What class are you scheduling?")
                         )
                         
-    course_status   = SmallIntegerField(
-                            max_length=1, 
+    schedule_status = CharField(
+                            max_length=20, 
                             verbose_name=_("course status"),
                             choices=STATUS_CHOICES, 
-                            default=0, 
+                            default='pending', 
                             # Translators: Contextual Help
                             help_text=_("What is the current status of the class? Only approved classes appear on the website.")
                         )
@@ -1133,7 +1133,7 @@ class Schedule(Durational):
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"
-        rows_updated = queryset.update(course_status=3)
+        rows_updated = queryset.update(schedule_status='approved')
         if rows_updated == 1:
             message_bit = "1 class was"
         else:
@@ -1197,7 +1197,7 @@ class Schedule(Durational):
         """ check if status was changed to approved and email teacher if it has.""" 
         if self.pk is not None:
             original = Schedule.objects.get(pk=self.pk)
-            if original.course_status != self.course_status and self.course_status == 3:
+            if original.schedule_status != self.schedule_status and self.schedule_status == 'approved':
                 self.emails.email_teacher(self.emails.teacher_class_approval)
 
         # generate and save slug if there isn't one
@@ -1214,6 +1214,28 @@ class Schedule(Durational):
 
     def __unicode__ (self):
         return "%s" % (self.course.title)
+
+
+class PendingScheduleManager(ScheduleManager):
+    def get_query_set(self):
+        return super(PendingScheduleManager, self).get_query_set().filter(schedule_status='pending')
+
+
+class PendingSchedule(Schedule):
+    class Meta:
+
+        # Translators: This is used in the header navigation to let you know where you are.
+        verbose_name = _("Pending Schedule")
+
+        # Translators: Plural.
+        verbose_name_plural = _("Pending Schedules")
+
+        proxy = True
+
+    objects = PendingScheduleManager()
+
+
+
 
 
 class RegistrationManager(Manager):

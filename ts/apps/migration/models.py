@@ -346,13 +346,26 @@ class ClassesManager(Manager):
             
                     # use django slugify to generate a slug
                     slug = slugify(Schedule, course.title)
-                            
+                    
+                    if data['status'] == 0:
+                        schedule_status = 'pending'
+                    elif data['status'] == 1:
+                        schedule_status = 'contacted'
+                    elif data['status'] == 2:
+                        schedule_status = 'updated'
+                    elif data['status'] == 3:
+                        schedule_status = 'approved'
+                    elif data['status'] == 4:
+                        schedule_status = 'rejected'
+                    else:
+                        schedule_status = 'pending'
+
                     if schedule.exists() == False:
                         schedule = Schedule(
                                 venue           = venue, 
                                 course          = course, 
                                 slug            = slug,
-                                course_status   = data['status'], 
+                                schedule_status = schedule_status,
                                 start_time      = aware_start_time, 
                                 end_time        = aware_end_time, 
                                 created         = timezone.make_aware(data['timestamp'], timezone.utc),
