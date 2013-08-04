@@ -49,7 +49,7 @@ def update_static_files():
 def load_fixtures():
     # load fixtures
     with cd('/opt/projects/tse/'):
-        sudo('./bin/django loaddata email_initial_data.json', user=fab_username)
+        sudo('./bin/django loaddata email_initial_data.json teacher-info.json', user=fab_username)
 
 @task
 def restart_wsgi():
@@ -66,12 +66,12 @@ def load_data():
     filename = prompt( 'Enter name of sql file:',
                        default='data.sql' )
 
-    sudo('mkdir /opt/projects/tse/sql',user=fab_username)
+    #sudo('mkdir /opt/projects/tse/sql',user=fab_username)
 
     destination = '/opt/projects/tse/sql/data.sql'
 
     db_name = prompt( 'Enter name of database:',
-                       default='tradeschool' )
+                       default='tradeschool_test' )
                        
     put(filename,destination,use_sudo=True)
 
@@ -93,6 +93,7 @@ def deploy():
         run_buildout()
 
     update_db()
+    load_fixtures()
     update_static_files()
     restart_wsgi()
     test()
@@ -149,7 +150,8 @@ def init_mysql_db():
     
     sudo('mysql_install_db', user=fab_username)
     sudo('/usr/bin/mysql_secure_installation', user=fab_username)
-        
+
+    sudo('mysql -u root CREATE DATABASE %s;' % db_name)                              
     sudo('mysql -u root CREATE USER %s@localhost IDENTIFIED BY %s;' % (db_user, db_password))                      
     sudo('mysql -u root GRANT ALL PRIVILEGES ON %s.* TO %s@localhost;' % (db_name, db_user))
 
