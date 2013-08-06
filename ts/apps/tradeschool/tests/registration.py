@@ -11,8 +11,11 @@ from tradeschool.models import *
 class RegistrationTestCase(TestCase):
     """ Tests the process of registering and unregistering to a schedule using the frontend forms.
     """
-    fixtures = ['email_initial_data.json', 'teacher-info.json', 'test_data.json', 'test_course.json', 'test_person.json', 'test_schedule.json']
-    
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'sample_data.json'
+                ]
+                    
     def setUp(self):
         """ 
         """

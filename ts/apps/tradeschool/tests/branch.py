@@ -11,8 +11,11 @@ from tradeschool.models import *
 class BranchTestCase(TestCase):
     """ Test the process of setting up a new branch.
     """
-    fixtures = ['email_initial_data.json', 'teacher-info.json', 'test_admin.json', 'test_branch.json']    
-    
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'sample_data.json'
+                ]
+
     def setUp(self):
         """ Create a Site and an admin User for testing.
         """
@@ -39,17 +42,11 @@ class BranchTestCase(TestCase):
                 'intro_copy'              : 'intro text',
                 'footer_copy'             : 'footer text',
                 'organizers'              : self.admin.pk,
-                'emails-TOTAL_FORMS'      : 0,
-                'emails-INITIAL_FORMS'    : 0,
-                'emails-MAX_NUM_FORMS'    : 1,
                 'photo_set-TOTAL_FORMS'   : 0,
                 'photo_set-INITIAL_FORMS' : 0,
                 'photo_set-MAX_NUM_FORMS' : 1000,
             }
         self.empty_form = {
-                'emails-TOTAL_FORMS'      : 0,
-                'emails-INITIAL_FORMS'    : 0,
-                'emails-MAX_NUM_FORMS'    : 1,
                 'photo_set-TOTAL_FORMS'   : 0,
                 'photo_set-INITIAL_FORMS' : 0,
                 'photo_set-MAX_NUM_FORMS' : 1000,
@@ -82,11 +79,11 @@ class BranchTestCase(TestCase):
         self.assertTemplateUsed('admin/change_form.html')
 
         # an empty form should return 8 errors for the required fields
-        self.assertContains(response, 'This field is required', count=8)
+        self.assertContains(response, 'This field is required', count=9)
         
         # now submit valid form
         response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)
-        
+        print response
         # check that the branch was created successfully, following a redirect
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed('admin/change_list.html')
@@ -100,9 +97,6 @@ class BranchTestCase(TestCase):
         # save branch
         self.branch.save()
         
-        # verify that one BranchEmailContainer was created for branch
-        self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
-
         # verify that the BranchEmailContainer has all 7 Email objects
         self.assertEqual(self.branch.emails.__len__(), 7)
 

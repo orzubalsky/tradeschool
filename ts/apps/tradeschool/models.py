@@ -1177,8 +1177,7 @@ class Schedule(Durational):
         """
         email_count = 0
 
-        try:
-            StudentFeedback = StudentFeedback.objects.get(schedule=self)
+        if self.emails is not None:
             for fieldname, email_obj in self.emails.iteritems():
                 if isinstance(email_obj, TimedEmail):
 
@@ -1201,7 +1200,7 @@ class Schedule(Durational):
                             email_count += 1
 
         # if there is no ScheduleEmailContainer, populate new emails for the Schedule
-        except StudentFeedback.DoesNotExist:
+        else:
             self.populate_notifications()
 
         return email_count
@@ -1244,7 +1243,7 @@ class Schedule(Durational):
         if self.pk is not None:
             original = Schedule.objects.get(pk=self.pk)
             if original.schedule_status != self.schedule_status and self.schedule_status == 'approved':
-                self.email_teacher(self.teacher_class_approval)
+                self.email_teacher(self.teacherclassapproval)
 
         # generate and save slug if there isn't one
         if self.slug == None or self.slug.__len__() == 0:
@@ -1253,7 +1252,8 @@ class Schedule(Durational):
         # if there are no barter items, try to find another Schedule of the same Course,
         # and copy the BarterItem objects from that one
         if self.barteritem_set.count() == 0:
-            self.generate_barteritems_from_past_schedule()
+            pass
+            #self.generate_barteritems_from_past_schedule()
 
         # call the super class's save method   
         super(Schedule, self).save(*args, **kwargs)

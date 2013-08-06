@@ -11,8 +11,10 @@ from tradeschool.models import *
 class RegistrationSeleniumTestCase(LiveServerTestCase):
     """
     """
-    fixtures = ['email_initial_data.json', 'teacher-info.json', 'test_data.json', 'test_person.json', 'test_schedule.json']
-
+    fixtures = ['email_initial_data.json', 
+                'teacher-info.json', 
+                'sample_data.json'
+                ]
 
     @classmethod
     def setUpClass(self):

@@ -17,10 +17,7 @@ class EmailTestCase(TestCase):
     """
     fixtures = ['email_initial_data.json', 
                 'teacher-info.json', 
-                'test_data.json', 
-                'test_course.json',
-                'test_schedule.json', 
-                'test_person.json'
+                'sample_data.json'
                 ]
     
     def setUp(self):
@@ -117,12 +114,13 @@ class EmailTestCase(TestCase):
         for i in range(registration_count):
             sent_email = mail.outbox[i]
             self.verify_email_data(sent_email, email_obj)
-            self.assertTrue(self.schedule.students.all()[i].email in sent_email.to)
+            if self.schedule.registration_set.all()[i].registration_status == 'registered':
+                self.assertTrue(self.schedule.registration_set.all()[i].student.email in sent_email.to)
 
 
     def test_teacher_reminder(self):
         """ Tests the TeacherReminder Email."""
-        automatic_email = self.schedule.teacher_reminder
+        automatic_email = self.schedule.teacherreminder
 
         self.set_time_for_automatic_email_sending(automatic_email)
 
@@ -135,7 +133,7 @@ class EmailTestCase(TestCase):
 
     def test_teacher_feedback(self):
         """ Tests the TeacherFeedback Email."""        
-        automatic_email = self.schedule.teacher_feedback
+        automatic_email = self.schedule.teacherfeedback
 
         self.set_time_for_automatic_email_sending(automatic_email)
 
@@ -148,7 +146,7 @@ class EmailTestCase(TestCase):
 
     def test_student_reminder(self):
         """ Tests the StudentReminder Email."""        
-        automatic_email = self.schedule.student_reminder
+        automatic_email = self.schedule.studentreminder
 
         # register multiple times to the schedule
         self.do_registration(5)
@@ -159,13 +157,14 @@ class EmailTestCase(TestCase):
         call_command('send_timed_emails')
 
         # verify the email is in the outbox
-        self.verify_email_students(automatic_email, self.schedule.registration_set.count())
+        registration_count = Registration.objects.filter(schedule=self.schedule, registration_status='registered').count()
+        self.verify_email_students(automatic_email, registration_count)
 
 
     def test_student_feedback(self):
         """ Tests the StudentFeedback Email."""        
         
-        automatic_email = self.schedule.student_feedback
+        automatic_email = self.schedule.studentfeedback
 
         # register multiple times to the schedule
         self.do_registration(5)
@@ -176,7 +175,8 @@ class EmailTestCase(TestCase):
         call_command('send_timed_emails')
 
         # verify the email is in the outbox
-        self.verify_email_students(automatic_email, self.schedule.registration_set.count())
+        registration_count = Registration.objects.filter(schedule=self.schedule, registration_status='registered').count()
+        self.verify_email_students(automatic_email, registration_count)
 
 
     def tearDown(self):

@@ -13,9 +13,8 @@ class BranchPageTestCase(TestCase):
     """
     fixtures = ['email_initial_data.json', 
                 'teacher-info.json', 
-                'test_admin.json', 
-                'test_branch.json',
-                ]    
+                'sample_data.json'
+                ]
     
     def setUp(self):
         """ Create a Site and an admin User for testing.

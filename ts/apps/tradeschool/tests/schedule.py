@@ -20,11 +20,7 @@ class ScheduleTestCase(TestCase):
     """
     fixtures = ['email_initial_data.json', 
                 'teacher-info.json', 
-                'test_data.json', 
-                'test_course.json', 
-                'test_person.json', 
-                'test_timerange.json', 
-                'test_admin.json'
+                'sample_data.json'
                 ]
     
     def setUp(self):
@@ -425,20 +421,17 @@ class ScheduleTestCase(TestCase):
 
         schedule = response.context['schedule']        
         
-        # check that one ScheduleEmailContainer was created for the schedule
-        self.assertEqual(ScheduleEmailContainer.objects.filter(schedule=schedule).count(), 1)
-
         # check that the ScheduleEmailContainer has all 7 Email objects
         self.assertEqual(schedule.emails.__len__(), 7)
         
         # store this object in a variable for convenience 
-        bec = BranchEmailContainer.objects.filter(branch__in=schedule.course.branches.all())[0]
+        branch = Branch.objects.filter(pk__in=schedule.course.branches.all())[0]
                 
         # iterate over the emails in the schedule's ScheduleEmailContainer
         for email_name, schedule_email_obj in schedule.emails.items():
             # find the same email type in the BranchEmailContainer, 
             # where the schedule emails were copied from
-            default_email = getattr(bec, email_name)
+            default_email = getattr(branch, email_name)
 
             # verify that the email was copied correctly
             self.assertEqual(schedule_email_obj.subject, default_email.subject)
@@ -458,7 +451,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)        
 
         # verify the email status was updated
-        email = schedule.teacher_confirmation        
+        email = schedule.teacherconfirmation        
         self.assertEqual(email.email_status, 'sent')
         
         # verify that the subject of the message is correct.
@@ -485,7 +478,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)        
 
         # verify the email status was updated
-        email = schedule.teacher_class_approval
+        email = schedule.teacherclassapproval
         self.assertEqual(email.email_status, 'sent')            
         
         # verify that the subject of the message is correct.

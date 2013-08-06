@@ -113,7 +113,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
                 registration.save()
                 
                 # email confirmation to student
-                schedule.email_student(schedule.student_confirmation, registration)
+                schedule.email_student(schedule.studentconfirmation, registration)
 
                 # render thank you template
                 view_templates = branch_templates(branch, 'schedule_registered.html', 'base.html')           
@@ -270,7 +270,7 @@ def schedule_add(request, branch_slug=None):
                 barter_item.save()
 
             # send confirmation email to teacher
-            schedule.email_teacher(schedule.teacher_confirmation)
+            schedule.email_teacher(schedule.teacherconfirmation)
 
             # delete the selected time slot
             Time.objects.get(pk=selected_time.pk).delete()
