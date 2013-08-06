@@ -57,7 +57,7 @@ class Base(Model):
             return "%s" % (type(self))
 
 
-class Email(Base):
+class Email(Model):
     """
     Abstract model for all emails in the TS system.
     site-wide emails, TS branch emails, and schedule-specific emails all extend this model.
@@ -289,32 +289,32 @@ class TeacherFeedback(TimedEmail):
         super(TeacherFeedback, self).save(*args, **kwargs)
 
 
-class EmailContainer(Base):
+class EmailContainer(Model):
     """
     """
     class Meta:
         abstract = True
     
     # Translators: In the Branch E-mail page, the label for student confirmation e-mail
-    student_confirmation   = ForeignKey(StudentConfirmation, verbose_name=_("Student Confirmation"), help_text=_("This email is sent to a student's email after they registered to a class successfully."))
+    student_confirmation   = OneToOneField(StudentConfirmation, verbose_name=_("Student Confirmation"), help_text=_("This email is sent to a student's email after they registered to a class successfully."))
     
     # Translators: ... The lable for Student Reminder e-mail
-    student_reminder       = ForeignKey(StudentReminder, verbose_name=_("Student Reminder"), help_text=_("This email is sent to all students registered to a class before the class is scheduled to take place."))
+    student_reminder       = OneToOneField(StudentReminder, verbose_name=_("Student Reminder"), help_text=_("This email is sent to all students registered to a class before the class is scheduled to take place."))
     
     # Translators: ... The lable for Student Feedback e-mail
-    student_feedback       = ForeignKey(StudentFeedback, verbose_name=_("Student Feedback"), help_text=_("This email is sent to all students who were registered to a class after the class has taken place. It includes a link for students to submit feedback on the class."))
+    student_feedback       = OneToOneField(StudentFeedback, verbose_name=_("Student Feedback"), help_text=_("This email is sent to all students who were registered to a class after the class has taken place. It includes a link for students to submit feedback on the class."))
     
     # Translators: ... The lable for Teacher confirmation e-mail
-    teacher_confirmation   = ForeignKey(TeacherConfirmation, verbose_name=_("Teacher Confirmation"), help_text=_("This email is sent to a teacher after they proposed a class using the form on the front end."))
+    teacher_confirmation   = OneToOneField(TeacherConfirmation, verbose_name=_("Teacher Confirmation"), help_text=_("This email is sent to a teacher after they proposed a class using the form on the front end."))
     
     # Translators: ... The lable for Teacher Class Approval e-mail
-    teacher_class_approval = ForeignKey(TeacherClassApproval, verbose_name=_("Teacher Class Approval"), help_text=_("This email is sent to a teacher once their class has been approved by an organizer using the admin backend."))
+    teacher_class_approval = OneToOneField(TeacherClassApproval, verbose_name=_("Teacher Class Approval"), help_text=_("This email is sent to a teacher once their class has been approved by an organizer using the admin backend."))
     
     # Translators: ... The lable for Teacher Reminder e-mail
-    teacher_reminder       = ForeignKey(TeacherReminder, verbose_name=_("Teacher Reminder"), help_text=_("This email is sent to a teacher before the class they're teaching is scheduled to take place."))
+    teacher_reminder       = OneToOneField(TeacherReminder, verbose_name=_("Teacher Reminder"), help_text=_("This email is sent to a teacher before the class they're teaching is scheduled to take place."))
     
     # Translators: ... The lable for Teacher Feedback e-mail
-    teacher_feedback       = ForeignKey(TeacherFeedback, verbose_name=_("Teacher Feedback"), help_text=_("This email is sent to a teacher who taught a class after it has taken place. It includes a link for the teacher to submit feedback about their experience."))
+    teacher_feedback       = OneToOneField(TeacherFeedback, verbose_name=_("Teacher Feedback"), help_text=_("This email is sent to a teacher who taught a class after it has taken place. It includes a link for the teacher to submit feedback about their experience."))
 
     def emails():
         def fget(self):
@@ -330,8 +330,13 @@ class EmailContainer(Base):
 
     emails = property(**emails())
 
+    def delete_emails(self):
+        # delete existing  emails
+        for fieldname, email_obj in self.emails.iteritems():
+            email_obj.delete()        
 
-class DefaultEmailContainer(EmailContainer):
+
+class DefaultEmailContainer(Base, EmailContainer):
     """
     """
     
@@ -390,25 +395,6 @@ class BranchEmailContainerManager(Manager):
         return super(BranchEmailContainerManager, self).get_query_set().select_related()
 
 
-class BranchEmailContainer(EmailContainer):
-    """
-    """        
-    class Meta:
-        
-        # Translators: This is used in the header navigation to let you know where you are.
-        verbose_name = _("Branch Emails")
-        
-        # Translators: Plural.
-        verbose_name_plural = _("Branch Emails")
-    
-    branch = OneToOneField("Branch", verbose_name=_("branch"), related_name="emails", help_text=_("The branch of TS that this email container is related to. There is only one email container per branch."))
-
-    objects = BranchEmailContainerManager()
-    
-    def __unicode__ (self):
-        return u"for %s" % self.branch.title
-
-
 class Cluster(Base):
     """
     Branches can be grouped together for possibly displaying them together on the website.
@@ -454,7 +440,7 @@ class BranchPublicManager(Manager):
         return super(BranchPublicManager, self).get_query_set().exclude(branch_status='pending').filter(is_active=True)
 
 
-class Branch(Location):
+class Branch(Location, EmailContainer):
     """
     A branch is a ts organization in a specific location (usually city/region).
     The branch slug should be used to point to the individual branch app functionality.
@@ -536,23 +522,19 @@ class Branch(Location):
                 self.update_template_dir(original.slug, self.slug)
         super(Branch, self).save(*args, **kwargs)        
         
-
     def populate_notifications(self):
         "resets branch notification templates from the global branch notification templates"
-                
-        # delete existing branch emails
-        BranchEmailContainer.objects.filter(branch=self).delete()
-            
+        
+        # delete existing emails
+        self.delete_emails()
+
         # copy branch notification from the branch notification templates
         default_email_container = DefaultEmailContainer.objects.all()[0]
         
-        branch_email_container = BranchEmailContainer(branch=self)
-        
         for fieldname, email_obj in default_email_container.emails.iteritems():
             new_email = copy_model_instance(email_obj)
+            new_email.branch = self
             new_email.save()
-            setattr(branch_email_container, fieldname, new_email)
-        branch_email_container.save()
     
     def copy_teacher_info_page(self):
         "Creates a copy of the teacher info flatpage for each new branch that gets created."
@@ -978,44 +960,6 @@ class TimeRange(Base):
                     # Translators: Contextual Help
                     help_text=_("The available time slots will be created for this TS branch only.")
                 )
-        
-
-class ScheduleEmailContainer(EmailContainer):
-    """
-    """
-    class Meta:
-        
-        # Translators: This is used in the header navigation to let you know where you are.
-        verbose_name = _("Schedule Email")
-        
-        # Translators: Plural
-        verbose_name_plural = _("Schedule Emails")
-        
-    schedule = OneToOneField("Schedule", related_name="emails", help_text=_("The scheduled class that this email container is related to. There is only one email container per scheduled class."))
-
-    def email_teacher(self, email):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
-        return email.send(self.schedule, (self.schedule.course.teacher.email,))
-
-    def email_student(self, email, registration):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
-        return email.send(self.schedule, (registration.student.email,), registration)
-
-    def email_students(self, email):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
-        for registration in self.schedule.registration_set.all():
-            if registration.registration_status == 'registered':
-                self.email_student(email, registration)
-
-    def preview(self, email):
-        """shortcut method to preview an email via the ScheduleEmailContainer object."""
-        return email.preview(self.schedule)
-    
-    def branches_string(self):
-        return ','.join( str(branch) for branch in self.schedule.course.branches.all())
-        
-    def __unicode__ (self):
-        return u"for %s" % self.schedule.course.title
 
 
 class BarterItem(Base):
@@ -1051,19 +995,19 @@ class ScheduleManager(Manager):
             'course__teacher__phone',            
             'course__teacher__website',            
             'course__teacher__bio',
-            'emails__student_confirmation__subject',
-            'emails__student_reminder__subject',
-            'emails__student_feedback__subject',
-            'emails__teacher_confirmation__subject',
-            'emails__teacher_class_approval__subject',
-            'emails__teacher_reminder__subject',
-            'emails__teacher_feedback__subject',   
+            'student_confirmation__subject',
+            'student_reminder__subject',
+            'student_feedback__subject',
+            'teacher_confirmation__subject',
+            'teacher_class_approval__subject',
+            'teacher_reminder__subject',
+            'teacher_feedback__subject',   
         )
 
         return qs
 
 
-class Schedule(Durational):
+class Schedule(Durational, EmailContainer):
     """
     """
     class Meta:
@@ -1138,24 +1082,19 @@ class Schedule(Durational):
         "resets course notification templates from the branch notification templates"
                 
         # delete existing branch emails
-        schedule_emails = ScheduleEmailContainer.objects.filter(schedule=self)
-        if schedule_emails.exists():
-            schedule_emails.delete()
+        self.delete_emails()
             
         # copy course notification from the branch notification templates
-        branch_email_containers = BranchEmailContainer.objects.filter(branch__in=self.course.branches.all())
+        branches = Branch.objects.filter(pk__in=self.course.branches.all())
         if branch_email_containers.exists():
-            branch_email_container = branch_email_containers[0]
+            branch = branches[0]
         
-            schedule_email_container = ScheduleEmailContainer(schedule=self)
-        
-            for fieldname, email_obj in branch_email_container.emails.iteritems():
+            for fieldname, email_obj in branch.emails.iteritems():
                 new_email = copy_model_instance(email_obj)
                 if isinstance(new_email, TimedEmail):
                     new_email.set_send_on(self.start_time)
+                new_email.schedule = self
                 new_email.save()
-                setattr(schedule_email_container, fieldname, new_email)
-            schedule_email_container.save()
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"
@@ -1173,7 +1112,8 @@ class Schedule(Durational):
         email_count = 0
 
         try:
-            for fieldname, email_obj in self.emails.emails.iteritems():
+            StudentFeedback = StudentFeedback.objects.get(schedule=self)
+            for fieldname, email_obj in self.emails.iteritems():
                 if isinstance(email_obj, TimedEmail):
 
                     # check if email send on is within range and was not sent yet                  
@@ -1195,7 +1135,7 @@ class Schedule(Durational):
                             email_count += 1
 
         # if there is no ScheduleEmailContainer, populate new emails for the Schedule
-        except ScheduleEmailContainer.DoesNotExist:
+        except StudentFeedback.DoesNotExist:
             self.populate_notifications()
 
         return email_count
@@ -1219,12 +1159,26 @@ class Schedule(Durational):
                 new_item.schedule = self
                 new_item.save()        
 
+    def email_teacher(self, email):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        return email.send(self, (self.course.teacher.email,))
+
+    def email_student(self, email, registration):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        return email.send(self, (registration.student.email,), registration)
+
+    def email_students(self, email):
+        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        for registration in self.registration_set.all():
+            if registration.registration_status == 'registered':
+                self.email_student(email, registration)
+
     def save(self, *args, **kwargs):
         """ check if status was changed to approved and email teacher if it has.""" 
         if self.pk is not None:
             original = Schedule.objects.get(pk=self.pk)
             if original.schedule_status != self.schedule_status and self.schedule_status == 'approved':
-                self.emails.email_teacher(self.emails.teacher_class_approval)
+                self.email_teacher(self.teacher_class_approval)
 
         # generate and save slug if there isn't one
         if self.slug == None or self.slug.__len__() == 0:

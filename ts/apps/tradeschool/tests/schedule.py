@@ -429,13 +429,13 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(ScheduleEmailContainer.objects.filter(schedule=schedule).count(), 1)
 
         # check that the ScheduleEmailContainer has all 7 Email objects
-        self.assertEqual(schedule.emails.emails.__len__(), 7)
+        self.assertEqual(schedule.emails.__len__(), 7)
         
         # store this object in a variable for convenience 
         bec = BranchEmailContainer.objects.filter(branch__in=schedule.course.branches.all())[0]
                 
         # iterate over the emails in the schedule's ScheduleEmailContainer
-        for email_name, schedule_email_obj in schedule.emails.emails.items():
+        for email_name, schedule_email_obj in schedule.emails.items():
             # find the same email type in the BranchEmailContainer, 
             # where the schedule emails were copied from
             default_email = getattr(bec, email_name)
@@ -458,7 +458,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)        
 
         # verify the email status was updated
-        email = schedule.emails.teacher_confirmation        
+        email = schedule.teacher_confirmation        
         self.assertEqual(email.email_status, 'sent')
         
         # verify that the subject of the message is correct.
@@ -485,7 +485,7 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)        
 
         # verify the email status was updated
-        email = schedule.emails.teacher_class_approval
+        email = schedule.teacher_class_approval
         self.assertEqual(email.email_status, 'sent')            
         
         # verify that the subject of the message is correct.

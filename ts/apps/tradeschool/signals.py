@@ -19,8 +19,8 @@ def branch_save_callback(sender, instance, **kwargs):
 
     # populate notifications
     try:
-        BranchEmailContainer.objects.get(branch=instance)
-    except BranchEmailContainer.DoesNotExist:
+        StudentFeedback.objects.get(branch=instance)
+    except StudentFeedback.DoesNotExist:
         instance.populate_notifications()
     
     # Create Teacher Info Page
@@ -34,8 +34,8 @@ def branch_save_callback(sender, instance, **kwargs):
 def schedule_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new schedule"""
     try:
-        ScheduleEmailContainer.objects.get(schedule=instance)
-    except ScheduleEmailContainer.DoesNotExist:
+        StudentFeedback.objects.get(schedule=instance)
+    except StudentFeedback.DoesNotExist:
         instance.populate_notifications()
 
 

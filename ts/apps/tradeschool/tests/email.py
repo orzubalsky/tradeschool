@@ -122,7 +122,7 @@ class EmailTestCase(TestCase):
 
     def test_teacher_reminder(self):
         """ Tests the TeacherReminder Email."""
-        automatic_email = self.schedule.emails.teacher_reminder
+        automatic_email = self.schedule.teacher_reminder
 
         self.set_time_for_automatic_email_sending(automatic_email)
 
@@ -135,7 +135,7 @@ class EmailTestCase(TestCase):
 
     def test_teacher_feedback(self):
         """ Tests the TeacherFeedback Email."""        
-        automatic_email = self.schedule.emails.teacher_feedback
+        automatic_email = self.schedule.teacher_feedback
 
         self.set_time_for_automatic_email_sending(automatic_email)
 
@@ -148,7 +148,7 @@ class EmailTestCase(TestCase):
 
     def test_student_reminder(self):
         """ Tests the StudentReminder Email."""        
-        automatic_email = self.schedule.emails.student_reminder
+        automatic_email = self.schedule.student_reminder
 
         # register multiple times to the schedule
         self.do_registration(5)
@@ -165,7 +165,7 @@ class EmailTestCase(TestCase):
     def test_student_feedback(self):
         """ Tests the StudentFeedback Email."""        
         
-        automatic_email = self.schedule.emails.student_feedback
+        automatic_email = self.schedule.student_feedback
 
         # register multiple times to the schedule
         self.do_registration(5)

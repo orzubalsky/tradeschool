@@ -176,22 +176,56 @@ class BranchesManager(Manager):
 
         if do_save == True:          
             if branch.exists() == False:                  
+
+                default_email_container = DefaultEmailContainer.objects.all()[0]
+                
+                student_confirmation    = default_email_container.student_confirmation
+                student_reminder        = default_email_container.student_reminder
+                student_feedback        = default_email_container.student_feedback
+                teacher_confirmation    = default_email_container.teacher_confirmation
+                teacher_class_approval  = default_email_container.teacher_class_approval
+                teacher_reminder        = default_email_container.teacher_reminder
+                teacher_feedback        = default_email_container.teacher_feedback
+
+                student_confirmation.pk   = None
+                student_reminder.pk       = None
+                student_feedback.pk       = None
+                teacher_confirmation.pk   = None
+                teacher_class_approval.pk = None
+                teacher_reminder.pk       = None
+                teacher_feedback.pk       = None         
+
+                student_confirmation.save()
+                student_reminder.save()
+                student_feedback.save()   
+                teacher_confirmation.save()   
+                teacher_class_approval.save()
+                teacher_reminder.save()
+                teacher_feedback.save()   
+
                 branch = Branch(
-                        pk          = int(data['id']), 
-                        title       = data['title'], 
-                        phone       = data['phone'], 
-                        city        = data['city'], 
-                        state       = data['state'], 
-                        country     = data['country'], 
-                        slug        = data['url'], 
-                        email       = data['email'],  
-                        created     = timezone.make_aware(data['timestamp'], timezone.utc),
-                        updated     = timezone.make_aware(data['timestamp'], timezone.utc),
-                        intro_copy  = data['header'],
-                        footer_copy = data['footer'],
-                        timezone    = data['timezone'],
-                        language    = 'en',                
-                        site        = site,                
+                        pk                     = int(data['id']), 
+                        title                  = data['title'], 
+                        phone                  = data['phone'], 
+                        city                   = data['city'], 
+                        state                  = data['state'], 
+                        country                = data['country'], 
+                        slug                   = data['url'], 
+                        email                  = data['email'],  
+                        created                = timezone.make_aware(data['timestamp'], timezone.utc),
+                        updated                = timezone.make_aware(data['timestamp'], timezone.utc),
+                        intro_copy             = data['header'],
+                        footer_copy            = data['footer'],
+                        timezone               = data['timezone'],
+                        language               = 'en',                
+                        site                   = site,     
+                        student_confirmation   = student_confirmation,   
+                        student_reminder       = student_reminder,
+                        student_feedback       = student_feedback,
+                        teacher_confirmation   = teacher_confirmation,
+                        teacher_class_approval = teacher_class_approval,
+                        teacher_reminder       = teacher_reminder,
+                        teacher_feedback       = teacher_feedback,
                     )
                 branch.save()
                 print "     saved Branch: [%s]" % branch            
@@ -361,14 +395,46 @@ class ClassesManager(Manager):
                         schedule_status = 'pending'
 
                     if schedule.exists() == False:
+
+                        student_confirmation    = branch.student_confirmation
+                        student_reminder        = branch.student_reminder
+                        student_feedback        = branch.student_feedback
+                        teacher_confirmation    = branch.teacher_confirmation
+                        teacher_class_approval  = branch.teacher_class_approval
+                        teacher_reminder        = branch.teacher_reminder
+                        teacher_feedback        = branch.teacher_feedback      
+
+                        student_confirmation.pk   = None
+                        student_reminder.pk       = None
+                        student_feedback.pk       = None
+                        teacher_confirmation.pk   = None
+                        teacher_class_approval.pk = None
+                        teacher_reminder.pk       = None
+                        teacher_feedback.pk       = None         
+
+                        student_confirmation.save()
+                        student_reminder.save()
+                        student_feedback.save()   
+                        teacher_confirmation.save()   
+                        teacher_class_approval.save()
+                        teacher_reminder.save()
+                        teacher_feedback.save() 
+
                         schedule = Schedule(
-                                venue           = venue, 
-                                course          = course, 
-                                slug            = slug,
-                                schedule_status = schedule_status,
-                                start_time      = aware_start_time, 
-                                end_time        = aware_end_time, 
-                                created         = timezone.make_aware(data['timestamp'], timezone.utc),
+                                venue                  = venue, 
+                                course                 = course, 
+                                slug                   = slug,
+                                schedule_status        = schedule_status,
+                                start_time             = aware_start_time, 
+                                end_time               = aware_end_time, 
+                                created                = timezone.make_aware(data['timestamp'], timezone.utc),
+                                student_confirmation   = student_confirmation,   
+                                student_reminder       = student_reminder,
+                                student_feedback       = student_feedback,
+                                teacher_confirmation   = teacher_confirmation,
+                                teacher_class_approval = teacher_class_approval,
+                                teacher_reminder       = teacher_reminder,
+                                teacher_feedback       = teacher_feedback,                                
                             )
                         schedule.save()
                         #print "         saved Schedule: [%s]" % schedule.course.title

@@ -104,13 +104,13 @@ class BranchTestCase(TestCase):
         self.assertEqual(BranchEmailContainer.objects.filter(branch=self.branch).count(), 1)
 
         # verify that the BranchEmailContainer has all 7 Email objects
-        self.assertEqual(self.branch.emails.emails.__len__(), 7)
+        self.assertEqual(self.branch.emails.__len__(), 7)
 
         # store this object in a variable for convenience 
         dec = DefaultEmailContainer.objects.all()[0]
 
         # iterate over the emails in the branch's BranchEmailContainer
-        for email_name, branch_email_obj in self.branch.emails.emails.items():
+        for email_name, branch_email_obj in self.branch.emails.items():
             # find the same email type in the DefaultEmailContainer, 
             # where the branch emails were copied from
             default_email = getattr(dec, email_name)
