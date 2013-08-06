@@ -314,7 +314,24 @@ class BranchAdmin(BaseAdmin):
         return super(BranchAdmin, self).queryset(request, Q(pk__in=request.user.branches_organized.all))
            
     form = BranchForm
-             
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        self.inlines = ( 
+                        StudentConfirmationBranchInline,
+                        TeacherConfirmationBranchInline,
+                        TeacherClassApprovalBranchInline,
+                        TeacherReminderBranchInline,
+                        TeacherFeedbackBranchInline,
+                        StudentReminderBranchInline,
+                        StudentFeedbackBranchInline,                            
+                        PhotoInline,
+                    )       
+        return super(BranchAdmin, self).change_view(request, object_id)
+
+    def add_view(self, request, form_url='', extra_context=None):
+        self.inlines = (PhotoInline, )
+        return super(BranchAdmin, self).add_view(request)
+
     def populate_notifications(self, request, queryset):
         """call the populate_notifications() method in order to reset email templates for the branch."""
         
@@ -328,21 +345,11 @@ class BranchAdmin(BaseAdmin):
             kwargs['queryset'] = qs
         return super(BranchAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
         
-    actions             = ['populate_notifications']            
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
     list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
-    inlines             = ( 
-                            StudentConfirmationBranchInline,
-                            TeacherConfirmationBranchInline,
-                            TeacherClassApprovalBranchInline,
-                            TeacherReminderBranchInline,
-                            TeacherFeedbackBranchInline,
-                            StudentReminderBranchInline,
-                            StudentFeedbackBranchInline,                            
-                            PhotoInline,
-                        )
     filter_horizontal   = ('organizers',)
+    inlines             = ()       
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Basic Info'), {
@@ -547,7 +554,26 @@ class ScheduleAdmin(BaseAdmin):
             pass
             #kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Course, Q(branches__in=request.user.branches_organized.all))
         return super(ScheduleAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-                         
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        self.inlines = ( 
+                        BarterItemInline, 
+                        RegistrationInline,
+                        StudentConfirmationScheduleInline,
+                        TeacherConfirmationScheduleInline,
+                        TeacherClassApprovalScheduleInline,
+                        TeacherReminderScheduleInline,
+                        TeacherFeedbackScheduleInline,
+                        StudentReminderScheduleInline,
+                        StudentFeedbackScheduleInline,                           
+                        FeedbackInline,
+                    )       
+        return super(ScheduleAdmin, self).change_view(request, object_id)
+
+    def add_view(self, request, form_url='', extra_context=None):
+        self.inlines = (BarterItemInline, )
+        return super(ScheduleAdmin, self).add_view(request)
+
     def populate_notifications(self, request, queryset):
         """ call the populate_notifications() method in order to reset email templates for the schedule."""        
         for schedule in queryset:
@@ -642,18 +668,7 @@ class ScheduleAdmin(BaseAdmin):
                         'get_course_title', 
                         'get_teacher_fullname'
                         )
-    inlines         = (
-                        BarterItemInline, 
-                        RegistrationInline,
-                        StudentConfirmationScheduleInline,
-                        TeacherConfirmationScheduleInline,
-                        TeacherClassApprovalScheduleInline,
-                        TeacherReminderScheduleInline,
-                        TeacherFeedbackScheduleInline,
-                        StudentReminderScheduleInline,
-                        StudentFeedbackScheduleInline,                           
-                        FeedbackInline,
-                        )
+    inlines         = ()
     actions         = (
                         'approve_courses', 
                         'populate_notifications'

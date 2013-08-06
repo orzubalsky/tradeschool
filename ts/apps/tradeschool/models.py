@@ -438,8 +438,20 @@ class Cluster(Base):
     def __unicode__ (self):
         return u"%s" % self.name
 
+class BranchManager(Manager):
+    def get_query_set(self):
+        return super(BranchManager, self).get_query_set().select_related(
+            'studentconfirmation',
+            'studentreminder',
+            'studentfeedback',
+            'teacherconfirmation',
+            'teacherclassapproval',
+            'teacherreminder',
+            'teacherfeedback',   
+        )
 
-class BranchPublicManager(Manager):
+
+class BranchPublicManager(BranchManager):
     def get_query_set(self):
         return super(BranchPublicManager, self).get_query_set().exclude(branch_status='pending').filter(is_active=True)
 
@@ -524,7 +536,7 @@ class Branch(Location):
 
     emails = property(**emails()) 
 
-    objects   = Manager()
+    objects   = BranchManager()
     public    = BranchPublicManager()
     on_site   = CurrentSiteManager()
 
@@ -1023,13 +1035,13 @@ class ScheduleManager(Manager):
             'course__teacher__phone',            
             'course__teacher__website',            
             'course__teacher__bio',
-            'student_confirmation__subject',
-            'student_reminder__subject',
-            'student_feedback__subject',
-            'teacher_confirmation__subject',
-            'teacher_class_approval__subject',
-            'teacher_reminder__subject',
-            'teacher_feedback__subject',   
+            'studentconfirmation',
+            'studentreminder',
+            'studentfeedback',
+            'teacherconfirmation',
+            'teacherclassapproval',
+            'teacherreminder',
+            'teacherfeedback',   
         )
 
         return qs
