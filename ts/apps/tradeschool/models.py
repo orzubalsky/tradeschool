@@ -1092,14 +1092,17 @@ class Schedule(Durational):
 
     def emails():
         def fget(self):
-            return {"studentconfirmation"   : self.studentconfirmation, 
-                    "studentreminder"       : self.studentreminder, 
-                    "studentfeedback"       : self.studentfeedback,
-                    "teacherconfirmation"   : self.teacherconfirmation, 
-                    "teacherclassapproval"  : self.teacherclassapproval, 
-                    "teacherreminder"       : self.teacherreminder, 
-                    "teacherfeedback"       : self.teacherfeedback
-                    }
+            try:
+                return {"studentconfirmation"   : self.studentconfirmation, 
+                        "studentreminder"       : self.studentreminder, 
+                        "studentfeedback"       : self.studentfeedback,
+                        "teacherconfirmation"   : self.teacherconfirmation, 
+                        "teacherclassapproval"  : self.teacherclassapproval, 
+                        "teacherreminder"       : self.teacherreminder, 
+                        "teacherfeedback"       : self.teacherfeedback
+                        }
+            except:
+                pass
         return locals()
 
     emails = property(**emails())
@@ -1135,11 +1138,13 @@ class Schedule(Durational):
             
         # copy course notification from the branch notification templates
         branches = Branch.objects.filter(pk__in=self.course.branches.all())
-        if branch_email_containers.exists():
+        if branches.exists():
             branch = branches[0]
         
             for fieldname, email_obj in branch.emails.iteritems():
                 new_email = copy_model_instance(email_obj)
+                new_email.pk = None
+                new_email.branch = None
                 if isinstance(new_email, TimedEmail):
                     new_email.set_send_on(self.start_time)
                 new_email.schedule = self

@@ -196,6 +196,15 @@ class TeacherFeedbackScheduleInline(TimedEmailScheduleInline):
     model   = TeacherFeedback
 
 
+class OrganizedBranchInline(BaseTabularInline):
+    """
+    """    
+    def queryset(self, request):
+        return super(OrganizedBranchInline, self).queryset(request, Q())        
+
+    model = Branch.organizers.through
+    extra = 0
+
 class ScheduleInline(BaseTabularInline):
     """Schedule model inline object. 
         Can be used in the Course Admin view in order 
@@ -444,7 +453,8 @@ class OrganizerAdmin(PersonAdmin):
     change_password_link.short_description = _('change password')
             
     list_display = ('username', 'fullname', 'email', 'branches_organized_string')
-    fields       = ('username', 'fullname', 'email', 'language')
+    fields       = ('username', 'fullname', 'email', 'language',)
+    inlines      = (OrganizedBranchInline,)
 
 
 class TeacherAdmin(PersonAdmin):
@@ -634,7 +644,14 @@ class ScheduleAdmin(BaseAdmin):
                         )
     inlines         = (
                         BarterItemInline, 
-                        RegistrationInline,                       
+                        RegistrationInline,
+                        StudentConfirmationScheduleInline,
+                        TeacherConfirmationScheduleInline,
+                        TeacherClassApprovalScheduleInline,
+                        TeacherReminderScheduleInline,
+                        TeacherFeedbackScheduleInline,
+                        StudentReminderScheduleInline,
+                        StudentFeedbackScheduleInline,                           
                         FeedbackInline,
                         )
     actions         = (

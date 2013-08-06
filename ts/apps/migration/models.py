@@ -185,7 +185,7 @@ class BranchesManager(Manager):
                         state                  = data['state'], 
                         country                = data['country'], 
                         slug                   = data['url'], 
-                        email                  = data['email'],  
+                        email                  = data['email'].lower(),  
                         created                = timezone.make_aware(data['timestamp'], timezone.utc),
                         updated                = timezone.make_aware(data['timestamp'], timezone.utc),
                         intro_copy             = data['header'],
@@ -270,7 +270,7 @@ class ClassesManager(Manager):
             if do_save == True:            
                 old_teacher_row = Teachers.objects.get(pk=old_join_row.teacher_id)
 
-                teacher = Person.objects.get(email=old_teacher_row.email)
+                teacher = Person.objects.get(email=old_teacher_row.email.lower())
             
                 # use django slugify to generate a slug
                 slug = slugify(Course, data['title'])
@@ -578,11 +578,11 @@ class StudentsManager(Manager):
 
             # we're not copyig the id, to not clash with migrated teachers, 
             # as both are represented with the Person model
-            student = Person.objects.filter(email=data['email'])
+            student = Person.objects.filter(email=data['email'].lower())
             if student.exists() == False:
                 student = Person.objects.create_user(
                         fullname    = data['fullname'], 
-                        email       = data['email'],
+                        email       = data['email'].lower(),
                         phone       = data['phone'], 
                         slug        = slug, 
                         created     = timezone.make_aware(data['timestamp'], timezone.utc),
@@ -591,7 +591,7 @@ class StudentsManager(Manager):
                 student.save()
                 print "     saved Person: [%s]" % student
             else:
-                student = Person.objects.get(email=data['email'])
+                student = Person.objects.get(email=data['email'].lower())
                 print "     found Person: [%s]" % student
             
             # create student registrations
@@ -700,13 +700,13 @@ class TeachersManager(Manager):
             slug = slugify(Person, data['fullname'])            
 
             try:
-                teacher = Person.objects.get(email=data['email'])
+                teacher = Person.objects.get(email=data['email'].lower())
                 print "     found Person: [%s]" % teacher
             except Person.DoesNotExist:
                 teacher = Person.objects.create_user(
                         pk          = int(data['id']),
                         fullname    = data['fullname'], 
-                        email       = data['email'], 
+                        email       = data['email'].lower(), 
                         phone       = data['phone'],
                         bio         = data['bio'],
                         website     = data['website'],
@@ -777,7 +777,7 @@ class UsersManager(Manager):
                             fullname    = data['username'],
                             username    = data['username'],
                             slug        = slug,
-                            email       = data['email'], 
+                            email       = data['email'].lower(), 
                             is_staff    = True, 
                             created     = timezone.make_aware(data['timestamp'], timezone.utc),
                             updated     = timezone.make_aware(data['timestamp'], timezone.utc),
