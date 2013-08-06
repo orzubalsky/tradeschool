@@ -203,7 +203,7 @@ class OrganizedBranchInline(BaseTabularInline):
         return super(OrganizedBranchInline, self).queryset(request, Q())        
 
     model = Branch.organizers.through
-    extra = 0
+    extra = 1
 
 class ScheduleInline(BaseTabularInline):
     """Schedule model inline object. 
