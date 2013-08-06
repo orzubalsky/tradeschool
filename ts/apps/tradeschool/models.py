@@ -89,6 +89,9 @@ class Email(Model):
     # Translators: The status of an e-mail. See the Toople list above. 
     email_status = CharField(verbose_name=_("email status"), max_length=30, choices=EMAIL_CHOICES, default='not_sent', help_text=_("Indicates the current status of the email message. A disabled email won't get sent, a not sent email was not sent yet, and a sent email was sent by the system."))
 
+    branch       = OneToOneField('Branch', null=True, blank=True)
+    schedule     = OneToOneField('Schedule', null=True, blank=True)
+
     def preview(self, schedule_obj, registration=None):
         template = Template(self.content)
         context  = self.template_context(schedule_obj)
@@ -296,35 +299,35 @@ class EmailContainer(Model):
         abstract = True
     
     # Translators: In the Branch E-mail page, the label for student confirmation e-mail
-    student_confirmation   = OneToOneField(StudentConfirmation, verbose_name=_("Student Confirmation"), help_text=_("This email is sent to a student's email after they registered to a class successfully."))
+    studentconfirmation   = OneToOneField(StudentConfirmation, verbose_name=_("Student Confirmation"), help_text=_("This email is sent to a student's email after they registered to a class successfully."))
     
     # Translators: ... The lable for Student Reminder e-mail
-    student_reminder       = OneToOneField(StudentReminder, verbose_name=_("Student Reminder"), help_text=_("This email is sent to all students registered to a class before the class is scheduled to take place."))
+    studentreminder       = OneToOneField(StudentReminder, verbose_name=_("Student Reminder"), help_text=_("This email is sent to all students registered to a class before the class is scheduled to take place."))
     
     # Translators: ... The lable for Student Feedback e-mail
-    student_feedback       = OneToOneField(StudentFeedback, verbose_name=_("Student Feedback"), help_text=_("This email is sent to all students who were registered to a class after the class has taken place. It includes a link for students to submit feedback on the class."))
+    studentfeedback       = OneToOneField(StudentFeedback, verbose_name=_("Student Feedback"), help_text=_("This email is sent to all students who were registered to a class after the class has taken place. It includes a link for students to submit feedback on the class."))
     
     # Translators: ... The lable for Teacher confirmation e-mail
-    teacher_confirmation   = OneToOneField(TeacherConfirmation, verbose_name=_("Teacher Confirmation"), help_text=_("This email is sent to a teacher after they proposed a class using the form on the front end."))
+    teacherconfirmation   = OneToOneField(TeacherConfirmation, verbose_name=_("Teacher Confirmation"), help_text=_("This email is sent to a teacher after they proposed a class using the form on the front end."))
     
     # Translators: ... The lable for Teacher Class Approval e-mail
-    teacher_class_approval = OneToOneField(TeacherClassApproval, verbose_name=_("Teacher Class Approval"), help_text=_("This email is sent to a teacher once their class has been approved by an organizer using the admin backend."))
+    teacherclassapproval  = OneToOneField(TeacherClassApproval, verbose_name=_("Teacher Class Approval"), help_text=_("This email is sent to a teacher once their class has been approved by an organizer using the admin backend."))
     
     # Translators: ... The lable for Teacher Reminder e-mail
-    teacher_reminder       = OneToOneField(TeacherReminder, verbose_name=_("Teacher Reminder"), help_text=_("This email is sent to a teacher before the class they're teaching is scheduled to take place."))
+    teacherreminder       = OneToOneField(TeacherReminder, verbose_name=_("Teacher Reminder"), help_text=_("This email is sent to a teacher before the class they're teaching is scheduled to take place."))
     
     # Translators: ... The lable for Teacher Feedback e-mail
-    teacher_feedback       = OneToOneField(TeacherFeedback, verbose_name=_("Teacher Feedback"), help_text=_("This email is sent to a teacher who taught a class after it has taken place. It includes a link for the teacher to submit feedback about their experience."))
+    teacherfeedback       = OneToOneField(TeacherFeedback, verbose_name=_("Teacher Feedback"), help_text=_("This email is sent to a teacher who taught a class after it has taken place. It includes a link for the teacher to submit feedback about their experience."))
 
     def emails():
         def fget(self):
-            return {"student_confirmation"   : self.student_confirmation, 
-                    "student_reminder"       : self.student_reminder, 
-                    "student_feedback"       : self.student_feedback,
-                    "teacher_confirmation"   : self.teacher_confirmation, 
-                    "teacher_class_approval" : self.teacher_class_approval, 
-                    "teacher_reminder"       : self.teacher_reminder, 
-                    "teacher_feedback"       : self.teacher_feedback
+            return {"studentconfirmation"   : self.studentconfirmation, 
+                    "studentreminder"       : self.studentreminder, 
+                    "studentfeedback"       : self.studentfeedback,
+                    "teacherconfirmation"   : self.teacherconfirmation, 
+                    "teacherclassapproval"  : self.teacherclassapproval, 
+                    "teacherreminder"       : self.teacherreminder, 
+                    "teacherfeedback"       : self.teacherfeedback
                     }
         return locals()
 
@@ -347,6 +350,7 @@ class DefaultEmailContainer(Base, EmailContainer):
         
         # Translators: Plural.
         verbose_name_plural = _("Default e-mail containers")
+
 
 class Location(Base):
     """
@@ -440,7 +444,7 @@ class BranchPublicManager(Manager):
         return super(BranchPublicManager, self).get_query_set().exclude(branch_status='pending').filter(is_active=True)
 
 
-class Branch(Location, EmailContainer):
+class Branch(Location):
     """
     A branch is a ts organization in a specific location (usually city/region).
     The branch slug should be used to point to the individual branch app functionality.
@@ -503,6 +507,23 @@ class Branch(Location, EmailContainer):
     # Translators: This is the part at the end of the page. 
     footer_copy = HTMLField(verbose_name=_("footer"), null=True, blank=True, default="Information for the footer of the page", help_text=_("This text appears on the footer of the page. It's optional."))
 
+    def emails():
+        def fget(self):
+            try:
+                return {"studentconfirmation"   : self.studentconfirmation, 
+                        "studentreminder"       : self.studentreminder, 
+                        "studentfeedback"       : self.studentfeedback,
+                        "teacherconfirmation"   : self.teacherconfirmation, 
+                        "teacherclassapproval"  : self.teacherclassapproval, 
+                        "teacherreminder"       : self.teacherreminder, 
+                        "teacherfeedback"       : self.teacherfeedback
+                        }
+            except:
+                pass
+        return locals()
+
+    emails = property(**emails()) 
+
     objects   = Manager()
     public    = BranchPublicManager()
     on_site   = CurrentSiteManager()
@@ -521,7 +542,14 @@ class Branch(Location, EmailContainer):
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
         super(Branch, self).save(*args, **kwargs)        
-        
+    
+    def delete_emails(self):
+        # delete existing  emails
+        if self.emails is not None:
+            for fieldname, email_obj in self.emails.iteritems():
+                email_obj
+                email_obj.delete()  
+
     def populate_notifications(self):
         "resets branch notification templates from the global branch notification templates"
         
@@ -1007,7 +1035,7 @@ class ScheduleManager(Manager):
         return qs
 
 
-class Schedule(Durational, EmailContainer):
+class Schedule(Durational):
     """
     """
     class Meta:
@@ -1062,7 +1090,19 @@ class Schedule(Durational, EmailContainer):
                                                         
     slug            = SlugField(max_length=255,blank=True, null=True, unique=True, verbose_name=_("A unique URL for the scheduled class."))
 
-    objects   = ScheduleManager()
+    def emails():
+        def fget(self):
+            return {"studentconfirmation"   : self.studentconfirmation, 
+                    "studentreminder"       : self.studentreminder, 
+                    "studentfeedback"       : self.studentfeedback,
+                    "teacherconfirmation"   : self.teacherconfirmation, 
+                    "teacherclassapproval"  : self.teacherclassapproval, 
+                    "teacherreminder"       : self.teacherreminder, 
+                    "teacherfeedback"       : self.teacherfeedback
+                    }
+        return locals()
+
+    emails = property(**emails())
 
     @property
     def is_within_a_day(self):
@@ -1077,6 +1117,15 @@ class Schedule(Durational, EmailContainer):
         if self.end_time < now:
             return True
         return False
+
+    objects   = ScheduleManager()
+
+    def delete_emails(self):
+        # delete existing  emails
+        if self.emails is not None:
+            for fieldname, email_obj in self.emails.iteritems():
+                email_obj
+                email_obj.delete()   
 
     def populate_notifications(self):
         "resets course notification templates from the branch notification templates"

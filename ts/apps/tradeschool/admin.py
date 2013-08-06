@@ -102,46 +102,98 @@ class BaseStackedInline(admin.StackedInline):
         return qs
                 
 
-class StudentConfirmationInline(BaseTabularInline):
+class TimedEmailBranchInline(BaseTabularInline):
+    """TimedEmailBranchInline"""
+    def queryset(self, request):
+        return super(TimedEmailBranchInline, self).queryset(request, Q())        
+    extra   = 0
+    max_num = 0    
+    fields  = ('subject', 'content', 'days_delta', 'send_time')
+
+
+class TimedEmailScheduleInline(BaseTabularInline):
+    """TimedEmailScheduleInline"""
+    def queryset(self, request):
+        return super(TimedEmailScheduleInline, self).queryset(request, Q())        
+    extra   = 0
+    max_num = 0    
+    fields  = ('subject', 'content', 'email_status', 'send_on')
+
+
+class EmailBranchInline(BaseTabularInline):
+    """
+    """
+    def queryset(self, request):
+        return super(EmailBranchInline, self).queryset(request, Q())
+    extra   = 0
+    max_num = 0
+    fields  = ('subject', 'content')
+        
+
+class EmailScheduleInline(BaseTabularInline):
+    """
+    """
+    def queryset(self, request):
+        return super(EmailScheduleInline, self).queryset(request, Q())
+    extra   = 0
+    max_num = 0
+    fields  = ('subject', 'content', 'email_status')
+
+
+class StudentConfirmationBranchInline(EmailBranchInline):
     model   = StudentConfirmation
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status')
 
 
-class StudentReminderInline(BaseTabularInline):
+class StudentConfirmationScheduleInline(EmailScheduleInline):
+    model   = StudentConfirmation
+
+
+class StudentReminderBranchInline(TimedEmailBranchInline):
     model   = StudentReminder
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
 
 
-class StudentFeedbackInline(BaseTabularInline):
+class StudentReminderScheduleInline(TimedEmailScheduleInline):
+    model   = StudentReminder
+
+
+class StudentFeedbackBranchInline(TimedEmailBranchInline):
     model   = StudentFeedback
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
 
 
-class TeacherConfirmationInline(BaseTabularInline):
+class StudentFeedbackScheduleInline(TimedEmailScheduleInline):
+    model   = StudentFeedback
+
+
+class TeacherConfirmationBranchInline(EmailBranchInline):
     model   = TeacherConfirmation
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status')
 
 
-class TeacherClassApprovalInline(BaseTabularInline):
+class TeacherConfirmationScheduleInline(EmailScheduleInline):
+    model   = TeacherConfirmation
+
+
+class TeacherClassApprovalBranchInline(EmailBranchInline):
     model   = TeacherClassApproval
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status')
 
 
-class TeacherReminderInline(BaseTabularInline):
+class TeacherClassApprovalScheduleInline(EmailScheduleInline):
+    model   = TeacherClassApproval
+
+
+class TeacherReminderBranchInline(TimedEmailBranchInline):
     model   = TeacherReminder
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
 
 
-class TeacherFeedbackInline(BaseTabularInline):
+class TeacherReminderScheduleInline(TimedEmailScheduleInline):
+    model   = TeacherReminder
+
+
+class TeacherFeedbackBranchInline(TimedEmailBranchInline):
     model   = TeacherFeedback
-    extra   = 0
-    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
+
+
+class TeacherFeedbackScheduleInline(TimedEmailScheduleInline):
+    model   = TeacherFeedback
 
 
 class ScheduleInline(BaseTabularInline):
@@ -271,7 +323,16 @@ class BranchAdmin(BaseAdmin):
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
     list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
-    inlines             = ( PhotoInline,)
+    inlines             = ( 
+                            StudentConfirmationBranchInline,
+                            TeacherConfirmationBranchInline,
+                            TeacherClassApprovalBranchInline,
+                            TeacherReminderBranchInline,
+                            TeacherFeedbackBranchInline,
+                            StudentReminderBranchInline,
+                            StudentFeedbackBranchInline,                            
+                            PhotoInline,
+                        )
     filter_horizontal   = ('organizers',)
     fieldsets = (
         # Translators: This is the a header in the branch admin form
@@ -573,14 +634,7 @@ class ScheduleAdmin(BaseAdmin):
                         )
     inlines         = (
                         BarterItemInline, 
-                        RegistrationInline, 
-                        StudentConfirmationInline,
-                        StudentReminderInline,
-                        StudentFeedbackInline,
-                        TeacherConfirmationInline,
-                        TeacherClassApprovalInline,
-                        TeacherReminderInline,
-                        TeacherFeedbackInline,                        
+                        RegistrationInline,                       
                         FeedbackInline,
                         )
     actions         = (

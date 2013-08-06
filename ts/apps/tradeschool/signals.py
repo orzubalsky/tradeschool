@@ -17,10 +17,7 @@ def branch_save_callback(sender, instance, **kwargs):
     if kwargs.get('created'):
         instance.generate_files()    
 
-    # populate notifications
-    try:
-        StudentFeedback.objects.get(branch=instance)
-    except StudentFeedback.DoesNotExist:
+    if instance.emails == None:
         instance.populate_notifications()
     
     # Create Teacher Info Page
@@ -33,9 +30,7 @@ def branch_save_callback(sender, instance, **kwargs):
 @receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")
 def schedule_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new schedule"""
-    try:
-        StudentFeedback.objects.get(schedule=instance)
-    except StudentFeedback.DoesNotExist:
+    if instance.emails == None:
         instance.populate_notifications()
 
 

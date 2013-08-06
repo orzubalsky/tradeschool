@@ -78,16 +78,16 @@
     "pk": 1, 
     "model": "tradeschool.defaultemailcontainer", 
     "fields": {
-        "teacher_class_approval": 1, 
+        "teacherclassapproval": 1, 
         "updated": "2013-01-15T03:36:48Z", 
-        "student_reminder": 1, 
-        "student_confirmation": 1, 
-        "teacher_feedback": 1, 
+        "studentreminder": 1, 
+        "studentconfirmation": 1, 
+        "teacherfeedback": 1, 
         "created": "2013-01-15T03:36:48Z", 
         "is_active": true, 
-        "teacher_confirmation": 1, 
-        "student_feedback": 1, 
-        "teacher_reminder": 1
+        "teacherconfirmation": 1, 
+        "studentfeedback": 1, 
+        "teacherreminder": 1
     }
 },
 {

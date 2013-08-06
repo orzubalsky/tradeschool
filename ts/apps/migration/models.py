@@ -177,32 +177,6 @@ class BranchesManager(Manager):
         if do_save == True:          
             if branch.exists() == False:                  
 
-                default_email_container = DefaultEmailContainer.objects.all()[0]
-                
-                student_confirmation    = default_email_container.student_confirmation
-                student_reminder        = default_email_container.student_reminder
-                student_feedback        = default_email_container.student_feedback
-                teacher_confirmation    = default_email_container.teacher_confirmation
-                teacher_class_approval  = default_email_container.teacher_class_approval
-                teacher_reminder        = default_email_container.teacher_reminder
-                teacher_feedback        = default_email_container.teacher_feedback
-
-                student_confirmation.pk   = None
-                student_reminder.pk       = None
-                student_feedback.pk       = None
-                teacher_confirmation.pk   = None
-                teacher_class_approval.pk = None
-                teacher_reminder.pk       = None
-                teacher_feedback.pk       = None         
-
-                student_confirmation.save()
-                student_reminder.save()
-                student_feedback.save()   
-                teacher_confirmation.save()   
-                teacher_class_approval.save()
-                teacher_reminder.save()
-                teacher_feedback.save()   
-
                 branch = Branch(
                         pk                     = int(data['id']), 
                         title                  = data['title'], 
@@ -219,15 +193,9 @@ class BranchesManager(Manager):
                         timezone               = data['timezone'],
                         language               = 'en',                
                         site                   = site,     
-                        student_confirmation   = student_confirmation,   
-                        student_reminder       = student_reminder,
-                        student_feedback       = student_feedback,
-                        teacher_confirmation   = teacher_confirmation,
-                        teacher_class_approval = teacher_class_approval,
-                        teacher_reminder       = teacher_reminder,
-                        teacher_feedback       = teacher_feedback,
                     )
                 branch.save()
+
                 print "     saved Branch: [%s]" % branch            
             else:
                 branch = Branch.objects.get(pk=int(data['id']))
@@ -396,30 +364,6 @@ class ClassesManager(Manager):
 
                     if schedule.exists() == False:
 
-                        student_confirmation    = branch.student_confirmation
-                        student_reminder        = branch.student_reminder
-                        student_feedback        = branch.student_feedback
-                        teacher_confirmation    = branch.teacher_confirmation
-                        teacher_class_approval  = branch.teacher_class_approval
-                        teacher_reminder        = branch.teacher_reminder
-                        teacher_feedback        = branch.teacher_feedback      
-
-                        student_confirmation.pk   = None
-                        student_reminder.pk       = None
-                        student_feedback.pk       = None
-                        teacher_confirmation.pk   = None
-                        teacher_class_approval.pk = None
-                        teacher_reminder.pk       = None
-                        teacher_feedback.pk       = None         
-
-                        student_confirmation.save()
-                        student_reminder.save()
-                        student_feedback.save()   
-                        teacher_confirmation.save()   
-                        teacher_class_approval.save()
-                        teacher_reminder.save()
-                        teacher_feedback.save() 
-
                         schedule = Schedule(
                                 venue                  = venue, 
                                 course                 = course, 
@@ -427,25 +371,17 @@ class ClassesManager(Manager):
                                 schedule_status        = schedule_status,
                                 start_time             = aware_start_time, 
                                 end_time               = aware_end_time, 
-                                created                = timezone.make_aware(data['timestamp'], timezone.utc),
-                                student_confirmation   = student_confirmation,   
-                                student_reminder       = student_reminder,
-                                student_feedback       = student_feedback,
-                                teacher_confirmation   = teacher_confirmation,
-                                teacher_class_approval = teacher_class_approval,
-                                teacher_reminder       = teacher_reminder,
-                                teacher_feedback       = teacher_feedback,                                
+                                created                = timezone.make_aware(data['timestamp'], timezone.utc),                             
                             )
                         schedule.save()
-                        #print "         saved Schedule: [%s]" % schedule.course.title
-                    
+
+
                     else:
                         schedule = Schedule.objects.get(course=course)  
                         schedule.slug = slug
                         schedule.save()
                         #print "             found Schedule: [%s]" % schedule.course.title
-                                
-
+                   
                     # create the related barter items, and add them to the schedule item
                     if ClassesXItems.objects.filter(class_id=int(data['id'])).exists():
                         item_old_join_rows = ClassesXItems.objects.filter(class_id=int(data['id']))
