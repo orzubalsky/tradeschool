@@ -102,6 +102,48 @@ class BaseStackedInline(admin.StackedInline):
         return qs
                 
 
+class StudentConfirmationInline(BaseTabularInline):
+    model   = StudentConfirmation
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status')
+
+
+class StudentReminderInline(BaseTabularInline):
+    model   = StudentReminder
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
+
+
+class StudentFeedbackInline(BaseTabularInline):
+    model   = StudentFeedback
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
+
+
+class TeacherConfirmationInline(BaseTabularInline):
+    model   = TeacherConfirmation
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status')
+
+
+class TeacherClassApprovalInline(BaseTabularInline):
+    model   = TeacherClassApproval
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status')
+
+
+class TeacherReminderInline(BaseTabularInline):
+    model   = TeacherReminder
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
+
+
+class TeacherFeedbackInline(BaseTabularInline):
+    model   = TeacherFeedback
+    extra   = 0
+    fields  = ('subject', 'content', 'email_status', 'send_on', 'days_delta', 'send_time')
+
+
 class ScheduleInline(BaseTabularInline):
     """Schedule model inline object. 
         Can be used in the Course Admin view in order 
@@ -173,44 +215,6 @@ class BarterItemInline(BaseTabularInline):
     extra           = 0
 
 
-class BranchEmailContainerInline(enhanced_admin.EnhancedAdminMixin, BaseStackedInline):
-    """BranchEmailContainer model inline object. 
-        Used in the Branch Admin view in order to give 
-        an overview of the branch's emails."""
-
-    def queryset(self, request):
-        return super(BranchEmailContainerInline, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
-            
-    model           = BranchEmailContainer
-    fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
-    extra           = 0
-    max_num         = 1
-    
-    
-class ScheduleEmailContainerInline(enhanced_admin.EnhancedAdminMixin, BaseStackedInline):
-    """BranchEmailContainer model inline object. 
-        Used in the Branch Admin view in order to give 
-        an overview of the branch's emails."""
-   
-    def queryset(self, request):
-        return super(ScheduleEmailContainerInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        formfield = super(ScheduleEmailContainerInline, self).formfield_for_dbfield(db_field, **kwargs)
-        if (
-            db_field.name == 'student_confirmation' or 'student_reminder' or 'student_feedback' or 
-            'teacher_confirmation' or 'teacher_class_approval' or 'teacher_reminder' or 'teacher_feedback'
-            ):
-                # dirty trick so queryset is evaluated and cached in .choices
-                formfield.choices = formfield.choices
-        return formfield            
-
-    model           = ScheduleEmailContainer
-    fields          = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
-    extra           = 0
-    max_num         = 1
-
-
 class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
     """
@@ -267,7 +271,7 @@ class BranchAdmin(BaseAdmin):
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
     list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
-    inlines             = (BranchEmailContainerInline, PhotoInline)
+    inlines             = ( PhotoInline,)
     filter_horizontal   = ('organizers',)
     fieldsets = (
         # Translators: This is the a header in the branch admin form
@@ -570,7 +574,13 @@ class ScheduleAdmin(BaseAdmin):
     inlines         = (
                         BarterItemInline, 
                         RegistrationInline, 
-                        #ScheduleEmailContainerInline, 
+                        StudentConfirmationInline,
+                        StudentReminderInline,
+                        StudentFeedbackInline,
+                        TeacherConfirmationInline,
+                        TeacherClassApprovalInline,
+                        TeacherReminderInline,
+                        TeacherFeedbackInline,                        
                         FeedbackInline,
                         )
     actions         = (
@@ -798,8 +808,6 @@ admin.site.register(BranchPage, BranchPageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 
 admin.site.register(DefaultEmailContainer)
-admin.site.register(BranchEmailContainer, BranchEmailContainerAdmin)
-admin.site.register(ScheduleEmailContainer, ScheduleEmailContainerAdmin)
 
 admin.site.register(StudentConfirmation)
 admin.site.register(StudentReminder)

@@ -80,8 +80,6 @@ class CustomIndexDashboard(Dashboard):
                     collapsible=False,                    
                     column=1,
                     models=('tradeschool.models.DefaultEmailContainer', 
-                            'tradeschool.models.BranchEmailContainer',
-                            'tradeschool.models.ScheduleEmailContainer',
                             ),                    
                 ),
                 modules.ModelList(
