@@ -498,7 +498,7 @@ class TimeAdmin(BaseAdmin):
         else:
             form.base_fields['venue'].queryset = Venue.objects.filter(branch__in=request.user.branches_organized.all)
             form.base_fields['branch'].queryset = Branch.objects.filter(pk__in=request.user.branches_organized.all)            
-            form.base_fields['branch'].initial = request.user.branches.all()[0]
+            form.base_fields['branch'].initial = request.user.branches_organized.all()[0]
             
         return form
 
