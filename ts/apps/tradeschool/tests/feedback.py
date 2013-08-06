@@ -14,10 +14,7 @@ class FeedbackTestCase(TestCase):
     """
     fixtures = ['email_initial_data.json', 
                 'teacher-info.json', 
-                'test_data.json', 
-                'test_person.json', 
-                'test_course.json',
-                'test_schedule.json'
+                'sample_data.json'
                 ]
     
     def setUp(self):
