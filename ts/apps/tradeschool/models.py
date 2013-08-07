@@ -1080,14 +1080,14 @@ class Schedule(Durational):
                         
     course          = ForeignKey(
                             Course, 
-                            verbose_name=_("course"),
+                            verbose_name=_("class"),
                             # Translators: Contextual Help
                             help_text=_("What class are you scheduling?")
                         )
                         
     schedule_status = CharField(
                             max_length=20, 
-                            verbose_name=_("course status"),
+                            verbose_name=_("scheduled class status"),
                             choices=STATUS_CHOICES, 
                             default='pending', 
                             # Translators: Contextual Help

@@ -633,6 +633,42 @@ class ScheduleAdmin(BaseAdmin):
         return obj.course.teacher.website
     teacher_website.short_description = _('Teacher website')
     
+    def get_form(self, request, obj=None, **kwargs):
+        # Proper kwargs are form, fields, exclude, formfield_callback
+        if obj: # obj is not None, so this is a change page
+            fieldsets = (
+                # Translators: This is the a header in the branch admin form
+                (_('Class Info'), {
+                    'fields': ('course_title_link', 'course_description', 'course_max_students', 'slug')
+                }),
+                # Translators: This is the a header in the branch admin form
+                (_('Teacher Info'), {
+                    'fields': ('teacher_fullname', 'teacher_email', 'teacher_phone', 'teacher_bio', 'teacher_website')
+                }), 
+                # Translators: This is the a header in the branch admin form       
+                (_('Class Schedule'), {
+                    'fields': ('venue', 'start_time', 'end_time', 'schedule_status')
+                }),     
+            )
+            kwargs['fields'] = ()
+        else: # obj is None, so this is an add page
+            pass
+
+        return super(ScheduleAdmin, self).get_form(request, obj, **kwargs)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # editing an existing object
+            return self.readonly_fields + (
+                        'course_description',
+                        'course_max_students',
+                        'teacher_fullname', 
+                        'teacher_email', 
+                        'teacher_bio', 
+                        'teacher_website', 
+                        'teacher_phone',
+                    )
+        return self.readonly_fields
+
     list_display    = (
                         'course_title', 
                         'teacher_fullname', 
@@ -654,16 +690,7 @@ class ScheduleAdmin(BaseAdmin):
                         'venue', 
                         'start_time'
                         )
-    readonly_fields = (
-                        'course_title_link',
-                        'course_description',
-                        'course_max_students',
-                        'teacher_fullname', 
-                        'teacher_email', 
-                        'teacher_bio', 
-                        'teacher_website', 
-                        'teacher_phone',
-                        )
+    readonly_fields = ()
     search_fields   = (
                         'get_course_title', 
                         'get_teacher_fullname'
@@ -673,20 +700,7 @@ class ScheduleAdmin(BaseAdmin):
                         'approve_courses', 
                         'populate_notifications'
                         )
-    fieldsets = (
-        # Translators: This is the a header in the branch admin form
-        (_('Class Info'), {
-            'fields': ('course_title_link', 'course_description', 'course_max_students', 'slug')
-        }),
-        # Translators: This is the a header in the branch admin form
-        (_('Teacher Info'), {
-            'fields': ('teacher_fullname', 'teacher_email', 'teacher_phone', 'teacher_bio', 'teacher_website')
-        }), 
-        # Translators: This is the a header in the branch admin form       
-        (_('Class Schedule'), {
-            'fields': ('venue', 'start_time', 'end_time', 'schedule_status')
-        }),     
-    )
+
     #prepopulated_fields  = {'slug': ('start_time',) }
 
 
