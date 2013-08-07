@@ -47,7 +47,6 @@ class EmailTestCase(TestCase):
             student_fullname = "student-%i" % i
             student_email    = "%i@email.com" % i
             student = Person.objects.create_user(fullname=student_fullname, email=student_email, slug=student_fullname)
-            student.save()
             student.branches.add(self.branch)
 
             # then create the registration itself
@@ -56,7 +55,6 @@ class EmailTestCase(TestCase):
             
             # add an item to the registration
             registration.items.add(self.schedule.barteritem_set.all()[0])
-            registration.save()
 
 
     def set_time_for_automatic_email_sending(self, email_obj):
@@ -81,13 +79,13 @@ class EmailTestCase(TestCase):
         self.assertEqual(email_obj.email_status, 'not_sent')
 
 
-    def verify_email_data(self, message_obj, email_obj):
+    def verify_email_data(self, message_obj, email_obj, registration=None):
         """ Compares the data from the email message in the mail outbox
             and the Email object.
         """
         self.assertEqual(message_obj.from_email, self.branch.email)
         self.assertEqual(message_obj.subject, email_obj.subject)
-        self.assertEqual(message_obj.body, email_obj.preview(self.schedule))        
+        self.assertEqual(message_obj.body, email_obj.preview(self.schedule, registration))        
 
 
     def verify_email_teacher(self, email_obj):
@@ -113,9 +111,13 @@ class EmailTestCase(TestCase):
         # verify the email data is correct
         for i in range(registration_count):
             sent_email = mail.outbox[i]
-            self.verify_email_data(sent_email, email_obj)
-            if self.schedule.registration_set.all()[i].registration_status == 'registered':
-                self.assertTrue(self.schedule.registration_set.all()[i].student.email in sent_email.to)
+            
+            registration  = self.schedule.registration_set.all()[i]
+
+            self.verify_email_data(sent_email, email_obj, registration)
+            
+            if registration.registration_status == 'registered':
+                self.assertTrue(registration.student.email in sent_email.to)
 
 
     def test_teacher_reminder(self):

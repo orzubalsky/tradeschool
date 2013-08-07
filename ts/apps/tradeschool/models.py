@@ -127,7 +127,7 @@ class Email(Model):
                 for item in registration_obj.items.all():
                     student_items.append(item.title)
             student_list += ", ".join(map(str, student_items))
-        
+
         c = Context({
             'schedule'              : schedule_obj,
             'branch'                : branch,
@@ -141,6 +141,7 @@ class Email(Model):
         })
         if registration is not None:
             unregister_url = "%s%s" % (domain, reverse('schedule-unregister', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
+            
             item_list = ""
             for item in registration.items.all():
                 item_list += "%s\n" % item.title
@@ -1184,20 +1185,21 @@ class Schedule(Durational):
                     # check if email send on is within range and was not sent yet                  
                     if start_date < email_obj.send_on < end_date and email_obj.email_status == 'not_sent':
                         
-                        # treat emails to students separately, since there are many students per schedule
-                        if isinstance(email_obj, StudentReminder) or isinstance(email_obj, StudentFeedback):
-                            
-                            # iterate over Schedule's registrations and email each registered student
-                            for registration in self.registration_set.all():
-                            
-                                if registration.registration_status == 'registered':                            
-                                    email_obj.send(self, (registration.student.email,), registration)
-                                    email_count += 1
+                        # email students
+                        if isinstance(email_obj, StudentReminder):
+                            email_count += self.email_students(self.studentreminder)
+
+                        if isinstance(email_obj, StudentFeedback):
+                            email_count += self.email_students(self.studentfeedback)
 
                         # email teacher
-                        if isinstance(email_obj, TeacherReminder) or isinstance(email_obj, TeacherFeedback):                                                                                                
-                            email_obj.send(self, (self.course.teacher.email,))
+                        if isinstance(email_obj, TeacherReminder):
+                            self.email_teacher(self.teacherreminder)
                             email_count += 1
+
+                        if isinstance(email_obj, TeacherFeedback):
+                            self.email_teacher(self.teacherfeedback)
+                            email_count += 1                            
 
         # if there is no ScheduleEmailContainer, populate new emails for the Schedule
         else:
@@ -1234,9 +1236,12 @@ class Schedule(Durational):
 
     def email_students(self, email):
         """shortcut method to send an email via the Schedule object."""
+        email_count = 0
         for registration in self.registration_set.all():
             if registration.registration_status == 'registered':
                 self.email_student(email, registration)
+                email_count += 1
+        return email_count
 
     def save(self, *args, **kwargs):
         """ check if status was changed to approved and email teacher if it has.""" 
