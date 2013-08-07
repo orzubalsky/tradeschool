@@ -26,9 +26,9 @@
 {% block main_content %}
 
 <div class="classes" id="future">
-{% for schedule in schedules %}
+{% for schedule in branch.schedule_set.public.approved %}
    
-   {% ifchanged schedules.start_time.day %}
+   {% ifchanged branch.schedule_set.start_time.day %}
    {% block schedule_date_divider %}
    {{ block.super }}
    {% endblock schedule_date_divider %}    

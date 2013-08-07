@@ -9,7 +9,7 @@
 {% endblock page_title %}<
 
 <div class="classes" id="past">
-{% for schedule in schedules %}
+{% for schedule in branch.schedule_set.past.public %}
 
     {% with templates.prefix|add:'schedule_item_past.html' as schedule_item_template %}
     {% include schedule_item_template %}

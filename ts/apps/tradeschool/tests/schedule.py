@@ -351,7 +351,7 @@ class ScheduleTestCase(TestCase):
         self.valid_data['teacher-email'] = existing_teacher.email
 
         # get an existing course in the branch
-        existing_course = Course.objects.filter(branches=self.branch)[0]
+        existing_course = Course.objects.filter(schedule__branch=self.branch)[0]
 
         # use the existing course's title for the form submission
         # when the course-title matches an existing Course object,
@@ -424,14 +424,11 @@ class ScheduleTestCase(TestCase):
         # check that the ScheduleEmailContainer has all 7 Email objects
         self.assertEqual(schedule.emails.__len__(), 7)
         
-        # store this object in a variable for convenience 
-        branch = Branch.objects.filter(pk__in=schedule.course.branches.all())[0]
-                
         # iterate over the emails in the schedule's ScheduleEmailContainer
         for email_name, schedule_email_obj in schedule.emails.items():
             # find the same email type in the BranchEmailContainer, 
             # where the schedule emails were copied from
-            default_email = getattr(branch, email_name)
+            default_email = getattr(schedule.branch, email_name)
 
             # verify that the email was copied correctly
             self.assertEqual(schedule_email_obj.subject, default_email.subject)
@@ -595,7 +592,7 @@ class ScheduleTestCase(TestCase):
         # submit a schedule
         response = self.is_successful_submission(self.valid_data)
         schedule = response.context['schedule']
-        branch   = schedule.course.branches.all()[0]
+        branch   = schedule.branch
         
         # there should be no past schedules at this point, 
         # so the link to past scheduled should not appear 

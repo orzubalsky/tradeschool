@@ -54,12 +54,12 @@
     <div class="classes" id="upcomingClasses">
 
     {% for branch in branches %}
-    {% if branch.schedules %}
+    {% if branch.schedule_set.approved.public %}
         <div class="branchDivider">
     	    <h4 class="branchTitle">{{ branch.title|title }}</h4>
         </div>    
     
-        {% for schedule in branch.schedules %}
+        {% for schedule in branch.schedule_set.approved.public %}
 
         <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
             <div class="classInfo">

@@ -1,14 +1,6 @@
 [
 {
     "pk": 1, 
-    "model": "sites.site", 
-    "fields": {
-        "domain": "http://test.tradeschool.coop", 
-        "name": "Test Site"
-    }
-},
-{
-    "pk": 1, 
     "model": "tradeschool.person", 
     "fields": {
         "username": "admin", 
@@ -61,7 +53,7 @@
     "fields": {
         "branch_status": "in_session", 
         "city": "Sample Town", 
-        "updated": "2013-08-06T22:45:41Z", 
+        "updated": "2013-08-07T10:24:27Z", 
         "language": "en", 
         "title": "Sample Trade School Branch", 
         "intro_copy": "<p>Information for the header of the page</p>", 
@@ -71,15 +63,21 @@
         "is_active": true, 
         "site": 1, 
         "email": "sample@tstest.net", 
-        "clusters": [], 
         "phone": "", 
         "state": "NY", 
+        "clusters": [
+            1
+        ], 
         "footer_copy": "<p>Information for the footer of the page</p>", 
         "timezone": "US/Eastern", 
         "slug": "sample-trade-school-branch", 
         "organizers": [
-            1, 
-            2
+            [
+                "admin"
+            ], 
+            [
+                "SampleOrganizer"
+            ]
         ]
     }
 },
@@ -364,6 +362,28 @@
         "teacherclassapproval": 1, 
         "studentfeedback": 1, 
         "teacherfeedback": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.cluster", 
+    "fields": {
+        "updated": "2013-08-07T10:07:42Z", 
+        "is_active": true, 
+        "name": "a", 
+        "slug": "a", 
+        "created": "2013-08-07T10:07:42Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.cluster", 
+    "fields": {
+        "updated": "2013-08-07T10:16:08Z", 
+        "is_active": true, 
+        "name": "aa", 
+        "slug": "aaa", 
+        "created": "2013-08-07T10:16:08Z"
     }
 },
 {
@@ -1245,12 +1265,36 @@
     }
 },
 {
+    "pk": 12, 
+    "model": "tradeschool.branchpage", 
+    "fields": {
+        "is_visible": true, 
+        "updated": "2013-08-07T10:24:27Z", 
+        "created": "2013-08-07T10:24:27Z", 
+        "is_active": true, 
+        "sites": [], 
+        "branch": 1, 
+        "position": 0
+    }
+},
+{
+    "pk": 1, 
+    "model": "sites.site", 
+    "fields": {
+        "domain": "http://test.tradeschool.coop", 
+        "name": "Test Site"
+    }
+},
+{
     "pk": 1, 
     "model": "auth.permission", 
     "fields": {
         "codename": "add_permission", 
         "name": "Can add permission", 
-        "content_type": 1
+        "content_type": [
+            "auth", 
+            "permission"
+        ]
     }
 },
 {
@@ -1259,7 +1303,10 @@
     "fields": {
         "codename": "change_permission", 
         "name": "Can change permission", 
-        "content_type": 1
+        "content_type": [
+            "auth", 
+            "permission"
+        ]
     }
 },
 {
@@ -1268,7 +1315,10 @@
     "fields": {
         "codename": "delete_permission", 
         "name": "Can delete permission", 
-        "content_type": 1
+        "content_type": [
+            "auth", 
+            "permission"
+        ]
     }
 },
 {
@@ -1277,7 +1327,10 @@
     "fields": {
         "codename": "add_group", 
         "name": "Can add group", 
-        "content_type": 2
+        "content_type": [
+            "auth", 
+            "group"
+        ]
     }
 },
 {
@@ -1286,7 +1339,10 @@
     "fields": {
         "codename": "change_group", 
         "name": "Can change group", 
-        "content_type": 2
+        "content_type": [
+            "auth", 
+            "group"
+        ]
     }
 },
 {
@@ -1295,7 +1351,10 @@
     "fields": {
         "codename": "delete_group", 
         "name": "Can delete group", 
-        "content_type": 2
+        "content_type": [
+            "auth", 
+            "group"
+        ]
     }
 },
 {
@@ -1304,7 +1363,10 @@
     "fields": {
         "codename": "add_contenttype", 
         "name": "Can add content type", 
-        "content_type": 3
+        "content_type": [
+            "contenttypes", 
+            "contenttype"
+        ]
     }
 },
 {
@@ -1313,7 +1375,10 @@
     "fields": {
         "codename": "change_contenttype", 
         "name": "Can change content type", 
-        "content_type": 3
+        "content_type": [
+            "contenttypes", 
+            "contenttype"
+        ]
     }
 },
 {
@@ -1322,7 +1387,10 @@
     "fields": {
         "codename": "delete_contenttype", 
         "name": "Can delete content type", 
-        "content_type": 3
+        "content_type": [
+            "contenttypes", 
+            "contenttype"
+        ]
     }
 },
 {
@@ -1331,7 +1399,10 @@
     "fields": {
         "codename": "add_session", 
         "name": "Can add session", 
-        "content_type": 4
+        "content_type": [
+            "sessions", 
+            "session"
+        ]
     }
 },
 {
@@ -1340,7 +1411,10 @@
     "fields": {
         "codename": "change_session", 
         "name": "Can change session", 
-        "content_type": 4
+        "content_type": [
+            "sessions", 
+            "session"
+        ]
     }
 },
 {
@@ -1349,7 +1423,10 @@
     "fields": {
         "codename": "delete_session", 
         "name": "Can delete session", 
-        "content_type": 4
+        "content_type": [
+            "sessions", 
+            "session"
+        ]
     }
 },
 {
@@ -1358,7 +1435,10 @@
     "fields": {
         "codename": "add_site", 
         "name": "Can add site", 
-        "content_type": 5
+        "content_type": [
+            "sites", 
+            "site"
+        ]
     }
 },
 {
@@ -1367,7 +1447,10 @@
     "fields": {
         "codename": "change_site", 
         "name": "Can change site", 
-        "content_type": 5
+        "content_type": [
+            "sites", 
+            "site"
+        ]
     }
 },
 {
@@ -1376,7 +1459,10 @@
     "fields": {
         "codename": "delete_site", 
         "name": "Can delete site", 
-        "content_type": 5
+        "content_type": [
+            "sites", 
+            "site"
+        ]
     }
 },
 {
@@ -1385,7 +1471,10 @@
     "fields": {
         "codename": "add_logentry", 
         "name": "Can add log entry", 
-        "content_type": 6
+        "content_type": [
+            "admin", 
+            "logentry"
+        ]
     }
 },
 {
@@ -1394,7 +1483,10 @@
     "fields": {
         "codename": "change_logentry", 
         "name": "Can change log entry", 
-        "content_type": 6
+        "content_type": [
+            "admin", 
+            "logentry"
+        ]
     }
 },
 {
@@ -1403,7 +1495,10 @@
     "fields": {
         "codename": "delete_logentry", 
         "name": "Can delete log entry", 
-        "content_type": 6
+        "content_type": [
+            "admin", 
+            "logentry"
+        ]
     }
 },
 {
@@ -1412,7 +1507,10 @@
     "fields": {
         "codename": "add_redirect", 
         "name": "Can add redirect", 
-        "content_type": 7
+        "content_type": [
+            "redirects", 
+            "redirect"
+        ]
     }
 },
 {
@@ -1421,7 +1519,10 @@
     "fields": {
         "codename": "change_redirect", 
         "name": "Can change redirect", 
-        "content_type": 7
+        "content_type": [
+            "redirects", 
+            "redirect"
+        ]
     }
 },
 {
@@ -1430,7 +1531,10 @@
     "fields": {
         "codename": "delete_redirect", 
         "name": "Can delete redirect", 
-        "content_type": 7
+        "content_type": [
+            "redirects", 
+            "redirect"
+        ]
     }
 },
 {
@@ -1439,7 +1543,10 @@
     "fields": {
         "codename": "add_flatpage", 
         "name": "Can add flat page", 
-        "content_type": 8
+        "content_type": [
+            "flatpages", 
+            "flatpage"
+        ]
     }
 },
 {
@@ -1448,7 +1555,10 @@
     "fields": {
         "codename": "change_flatpage", 
         "name": "Can change flat page", 
-        "content_type": 8
+        "content_type": [
+            "flatpages", 
+            "flatpage"
+        ]
     }
 },
 {
@@ -1457,7 +1567,10 @@
     "fields": {
         "codename": "delete_flatpage", 
         "name": "Can delete flat page", 
-        "content_type": 8
+        "content_type": [
+            "flatpages", 
+            "flatpage"
+        ]
     }
 },
 {
@@ -1466,7 +1579,10 @@
     "fields": {
         "codename": "add_migrationhistory", 
         "name": "Can add migration history", 
-        "content_type": 9
+        "content_type": [
+            "south", 
+            "migrationhistory"
+        ]
     }
 },
 {
@@ -1475,7 +1591,10 @@
     "fields": {
         "codename": "change_migrationhistory", 
         "name": "Can change migration history", 
-        "content_type": 9
+        "content_type": [
+            "south", 
+            "migrationhistory"
+        ]
     }
 },
 {
@@ -1484,7 +1603,10 @@
     "fields": {
         "codename": "delete_migrationhistory", 
         "name": "Can delete migration history", 
-        "content_type": 9
+        "content_type": [
+            "south", 
+            "migrationhistory"
+        ]
     }
 },
 {
@@ -1493,7 +1615,10 @@
     "fields": {
         "codename": "add_studentconfirmation", 
         "name": "Can add Student confirmation", 
-        "content_type": 10
+        "content_type": [
+            "tradeschool", 
+            "studentconfirmation"
+        ]
     }
 },
 {
@@ -1502,7 +1627,10 @@
     "fields": {
         "codename": "change_studentconfirmation", 
         "name": "Can change Student confirmation", 
-        "content_type": 10
+        "content_type": [
+            "tradeschool", 
+            "studentconfirmation"
+        ]
     }
 },
 {
@@ -1511,7 +1639,10 @@
     "fields": {
         "codename": "delete_studentconfirmation", 
         "name": "Can delete Student confirmation", 
-        "content_type": 10
+        "content_type": [
+            "tradeschool", 
+            "studentconfirmation"
+        ]
     }
 },
 {
@@ -1520,7 +1651,10 @@
     "fields": {
         "codename": "add_studentreminder", 
         "name": "Can add Student reminder", 
-        "content_type": 11
+        "content_type": [
+            "tradeschool", 
+            "studentreminder"
+        ]
     }
 },
 {
@@ -1529,7 +1663,10 @@
     "fields": {
         "codename": "change_studentreminder", 
         "name": "Can change Student reminder", 
-        "content_type": 11
+        "content_type": [
+            "tradeschool", 
+            "studentreminder"
+        ]
     }
 },
 {
@@ -1538,7 +1675,10 @@
     "fields": {
         "codename": "delete_studentreminder", 
         "name": "Can delete Student reminder", 
-        "content_type": 11
+        "content_type": [
+            "tradeschool", 
+            "studentreminder"
+        ]
     }
 },
 {
@@ -1547,7 +1687,10 @@
     "fields": {
         "codename": "add_studentfeedback", 
         "name": "Can add Student feedback e-mail", 
-        "content_type": 12
+        "content_type": [
+            "tradeschool", 
+            "studentfeedback"
+        ]
     }
 },
 {
@@ -1556,7 +1699,10 @@
     "fields": {
         "codename": "change_studentfeedback", 
         "name": "Can change Student feedback e-mail", 
-        "content_type": 12
+        "content_type": [
+            "tradeschool", 
+            "studentfeedback"
+        ]
     }
 },
 {
@@ -1565,7 +1711,10 @@
     "fields": {
         "codename": "delete_studentfeedback", 
         "name": "Can delete Student feedback e-mail", 
-        "content_type": 12
+        "content_type": [
+            "tradeschool", 
+            "studentfeedback"
+        ]
     }
 },
 {
@@ -1574,7 +1723,10 @@
     "fields": {
         "codename": "add_teacherconfirmation", 
         "name": "Can add Teacher confirmation", 
-        "content_type": 13
+        "content_type": [
+            "tradeschool", 
+            "teacherconfirmation"
+        ]
     }
 },
 {
@@ -1583,7 +1735,10 @@
     "fields": {
         "codename": "change_teacherconfirmation", 
         "name": "Can change Teacher confirmation", 
-        "content_type": 13
+        "content_type": [
+            "tradeschool", 
+            "teacherconfirmation"
+        ]
     }
 },
 {
@@ -1592,7 +1747,10 @@
     "fields": {
         "codename": "delete_teacherconfirmation", 
         "name": "Can delete Teacher confirmation", 
-        "content_type": 13
+        "content_type": [
+            "tradeschool", 
+            "teacherconfirmation"
+        ]
     }
 },
 {
@@ -1601,7 +1759,10 @@
     "fields": {
         "codename": "add_teacherclassapproval", 
         "name": "Can add teacher class approval", 
-        "content_type": 14
+        "content_type": [
+            "tradeschool", 
+            "teacherclassapproval"
+        ]
     }
 },
 {
@@ -1610,7 +1771,10 @@
     "fields": {
         "codename": "change_teacherclassapproval", 
         "name": "Can change teacher class approval", 
-        "content_type": 14
+        "content_type": [
+            "tradeschool", 
+            "teacherclassapproval"
+        ]
     }
 },
 {
@@ -1619,7 +1783,10 @@
     "fields": {
         "codename": "delete_teacherclassapproval", 
         "name": "Can delete teacher class approval", 
-        "content_type": 14
+        "content_type": [
+            "tradeschool", 
+            "teacherclassapproval"
+        ]
     }
 },
 {
@@ -1628,7 +1795,10 @@
     "fields": {
         "codename": "add_teacherreminder", 
         "name": "Can add Teacher reminder", 
-        "content_type": 15
+        "content_type": [
+            "tradeschool", 
+            "teacherreminder"
+        ]
     }
 },
 {
@@ -1637,7 +1807,10 @@
     "fields": {
         "codename": "change_teacherreminder", 
         "name": "Can change Teacher reminder", 
-        "content_type": 15
+        "content_type": [
+            "tradeschool", 
+            "teacherreminder"
+        ]
     }
 },
 {
@@ -1646,7 +1819,10 @@
     "fields": {
         "codename": "delete_teacherreminder", 
         "name": "Can delete Teacher reminder", 
-        "content_type": 15
+        "content_type": [
+            "tradeschool", 
+            "teacherreminder"
+        ]
     }
 },
 {
@@ -1655,7 +1831,10 @@
     "fields": {
         "codename": "add_teacherfeedback", 
         "name": "Can add Teacher feedback e-mail", 
-        "content_type": 16
+        "content_type": [
+            "tradeschool", 
+            "teacherfeedback"
+        ]
     }
 },
 {
@@ -1664,7 +1843,10 @@
     "fields": {
         "codename": "change_teacherfeedback", 
         "name": "Can change Teacher feedback e-mail", 
-        "content_type": 16
+        "content_type": [
+            "tradeschool", 
+            "teacherfeedback"
+        ]
     }
 },
 {
@@ -1673,7 +1855,10 @@
     "fields": {
         "codename": "delete_teacherfeedback", 
         "name": "Can delete Teacher feedback e-mail", 
-        "content_type": 16
+        "content_type": [
+            "tradeschool", 
+            "teacherfeedback"
+        ]
     }
 },
 {
@@ -1682,7 +1867,10 @@
     "fields": {
         "codename": "add_defaultemailcontainer", 
         "name": "Can add Default e-mail container", 
-        "content_type": 17
+        "content_type": [
+            "tradeschool", 
+            "defaultemailcontainer"
+        ]
     }
 },
 {
@@ -1691,7 +1879,10 @@
     "fields": {
         "codename": "change_defaultemailcontainer", 
         "name": "Can change Default e-mail container", 
-        "content_type": 17
+        "content_type": [
+            "tradeschool", 
+            "defaultemailcontainer"
+        ]
     }
 },
 {
@@ -1700,7 +1891,10 @@
     "fields": {
         "codename": "delete_defaultemailcontainer", 
         "name": "Can delete Default e-mail container", 
-        "content_type": 17
+        "content_type": [
+            "tradeschool", 
+            "defaultemailcontainer"
+        ]
     }
 },
 {
@@ -1709,7 +1903,10 @@
     "fields": {
         "codename": "add_cluster", 
         "name": "Can add Branch Cluster", 
-        "content_type": 18
+        "content_type": [
+            "tradeschool", 
+            "cluster"
+        ]
     }
 },
 {
@@ -1718,7 +1915,10 @@
     "fields": {
         "codename": "change_cluster", 
         "name": "Can change Branch Cluster", 
-        "content_type": 18
+        "content_type": [
+            "tradeschool", 
+            "cluster"
+        ]
     }
 },
 {
@@ -1727,7 +1927,10 @@
     "fields": {
         "codename": "delete_cluster", 
         "name": "Can delete Branch Cluster", 
-        "content_type": 18
+        "content_type": [
+            "tradeschool", 
+            "cluster"
+        ]
     }
 },
 {
@@ -1736,7 +1939,10 @@
     "fields": {
         "codename": "add_branch", 
         "name": "Can add Branch", 
-        "content_type": 19
+        "content_type": [
+            "tradeschool", 
+            "branch"
+        ]
     }
 },
 {
@@ -1745,7 +1951,10 @@
     "fields": {
         "codename": "change_branch", 
         "name": "Can change Branch", 
-        "content_type": 19
+        "content_type": [
+            "tradeschool", 
+            "branch"
+        ]
     }
 },
 {
@@ -1754,7 +1963,10 @@
     "fields": {
         "codename": "delete_branch", 
         "name": "Can delete Branch", 
-        "content_type": 19
+        "content_type": [
+            "tradeschool", 
+            "branch"
+        ]
     }
 },
 {
@@ -1763,7 +1975,10 @@
     "fields": {
         "codename": "add_venue", 
         "name": "Can add Venue", 
-        "content_type": 20
+        "content_type": [
+            "tradeschool", 
+            "venue"
+        ]
     }
 },
 {
@@ -1772,7 +1987,10 @@
     "fields": {
         "codename": "change_venue", 
         "name": "Can change Venue", 
-        "content_type": 20
+        "content_type": [
+            "tradeschool", 
+            "venue"
+        ]
     }
 },
 {
@@ -1781,7 +1999,10 @@
     "fields": {
         "codename": "delete_venue", 
         "name": "Can delete Venue", 
-        "content_type": 20
+        "content_type": [
+            "tradeschool", 
+            "venue"
+        ]
     }
 },
 {
@@ -1790,7 +2011,10 @@
     "fields": {
         "codename": "add_person", 
         "name": "Can add Person", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1799,7 +2023,10 @@
     "fields": {
         "codename": "change_person", 
         "name": "Can change Person", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1808,7 +2035,10 @@
     "fields": {
         "codename": "delete_person", 
         "name": "Can delete Person", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1817,7 +2047,10 @@
     "fields": {
         "codename": "add_organizer", 
         "name": "Can add Organizer", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1826,7 +2059,10 @@
     "fields": {
         "codename": "change_organizer", 
         "name": "Can change Organizer", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1835,7 +2071,10 @@
     "fields": {
         "codename": "delete_organizer", 
         "name": "Can delete Organizer", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1844,7 +2083,10 @@
     "fields": {
         "codename": "add_teacher", 
         "name": "Can add Teacher", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1853,7 +2095,10 @@
     "fields": {
         "codename": "change_teacher", 
         "name": "Can change Teacher", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1862,7 +2107,10 @@
     "fields": {
         "codename": "delete_teacher", 
         "name": "Can delete Teacher", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1871,7 +2119,10 @@
     "fields": {
         "codename": "add_student", 
         "name": "Can add Student", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1880,7 +2131,10 @@
     "fields": {
         "codename": "change_student", 
         "name": "Can change Student", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1889,7 +2143,10 @@
     "fields": {
         "codename": "delete_student", 
         "name": "Can delete Student", 
-        "content_type": 21
+        "content_type": [
+            "tradeschool", 
+            "person"
+        ]
     }
 },
 {
@@ -1898,7 +2155,10 @@
     "fields": {
         "codename": "add_course", 
         "name": "Can add Class", 
-        "content_type": 22
+        "content_type": [
+            "tradeschool", 
+            "course"
+        ]
     }
 },
 {
@@ -1907,7 +2167,10 @@
     "fields": {
         "codename": "change_course", 
         "name": "Can change Class", 
-        "content_type": 22
+        "content_type": [
+            "tradeschool", 
+            "course"
+        ]
     }
 },
 {
@@ -1916,7 +2179,10 @@
     "fields": {
         "codename": "delete_course", 
         "name": "Can delete Class", 
-        "content_type": 22
+        "content_type": [
+            "tradeschool", 
+            "course"
+        ]
     }
 },
 {
@@ -1925,7 +2191,10 @@
     "fields": {
         "codename": "add_time", 
         "name": "Can add Calendar Open Time Slot", 
-        "content_type": 23
+        "content_type": [
+            "tradeschool", 
+            "time"
+        ]
     }
 },
 {
@@ -1934,7 +2203,10 @@
     "fields": {
         "codename": "change_time", 
         "name": "Can change Calendar Open Time Slot", 
-        "content_type": 23
+        "content_type": [
+            "tradeschool", 
+            "time"
+        ]
     }
 },
 {
@@ -1943,7 +2215,10 @@
     "fields": {
         "codename": "delete_time", 
         "name": "Can delete Calendar Open Time Slot", 
-        "content_type": 23
+        "content_type": [
+            "tradeschool", 
+            "time"
+        ]
     }
 },
 {
@@ -1952,7 +2227,10 @@
     "fields": {
         "codename": "add_timerange", 
         "name": "Can add Calendar Open Time Slot Range", 
-        "content_type": 24
+        "content_type": [
+            "tradeschool", 
+            "timerange"
+        ]
     }
 },
 {
@@ -1961,7 +2239,10 @@
     "fields": {
         "codename": "change_timerange", 
         "name": "Can change Calendar Open Time Slot Range", 
-        "content_type": 24
+        "content_type": [
+            "tradeschool", 
+            "timerange"
+        ]
     }
 },
 {
@@ -1970,7 +2251,10 @@
     "fields": {
         "codename": "delete_timerange", 
         "name": "Can delete Calendar Open Time Slot Range", 
-        "content_type": 24
+        "content_type": [
+            "tradeschool", 
+            "timerange"
+        ]
     }
 },
 {
@@ -1979,7 +2263,10 @@
     "fields": {
         "codename": "add_barteritem", 
         "name": "Can add Barter item", 
-        "content_type": 25
+        "content_type": [
+            "tradeschool", 
+            "barteritem"
+        ]
     }
 },
 {
@@ -1988,7 +2275,10 @@
     "fields": {
         "codename": "change_barteritem", 
         "name": "Can change Barter item", 
-        "content_type": 25
+        "content_type": [
+            "tradeschool", 
+            "barteritem"
+        ]
     }
 },
 {
@@ -1997,7 +2287,10 @@
     "fields": {
         "codename": "delete_barteritem", 
         "name": "Can delete Barter item", 
-        "content_type": 25
+        "content_type": [
+            "tradeschool", 
+            "barteritem"
+        ]
     }
 },
 {
@@ -2006,7 +2299,10 @@
     "fields": {
         "codename": "add_schedule", 
         "name": "Can add Class Schedule", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2015,7 +2311,10 @@
     "fields": {
         "codename": "change_schedule", 
         "name": "Can change Class Schedule", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2024,7 +2323,10 @@
     "fields": {
         "codename": "delete_schedule", 
         "name": "Can delete Class Schedule", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2033,7 +2335,10 @@
     "fields": {
         "codename": "add_pendingschedule", 
         "name": "Can add Pending Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2042,7 +2347,10 @@
     "fields": {
         "codename": "change_pendingschedule", 
         "name": "Can change Pending Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2051,7 +2359,10 @@
     "fields": {
         "codename": "delete_pendingschedule", 
         "name": "Can delete Pending Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2060,7 +2371,10 @@
     "fields": {
         "codename": "add_approvedschedule", 
         "name": "Can add Approved Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2069,7 +2383,10 @@
     "fields": {
         "codename": "change_approvedschedule", 
         "name": "Can change Approved Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2078,7 +2395,10 @@
     "fields": {
         "codename": "delete_approvedschedule", 
         "name": "Can delete Approved Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2087,7 +2407,10 @@
     "fields": {
         "codename": "add_pastschedule", 
         "name": "Can add Past Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2096,7 +2419,10 @@
     "fields": {
         "codename": "change_pastschedule", 
         "name": "Can change Past Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2105,7 +2431,10 @@
     "fields": {
         "codename": "delete_pastschedule", 
         "name": "Can delete Past Scheduled Classes", 
-        "content_type": 26
+        "content_type": [
+            "tradeschool", 
+            "schedule"
+        ]
     }
 },
 {
@@ -2114,7 +2443,10 @@
     "fields": {
         "codename": "add_registration", 
         "name": "Can add Registration", 
-        "content_type": 27
+        "content_type": [
+            "tradeschool", 
+            "registration"
+        ]
     }
 },
 {
@@ -2123,7 +2455,10 @@
     "fields": {
         "codename": "change_registration", 
         "name": "Can change Registration", 
-        "content_type": 27
+        "content_type": [
+            "tradeschool", 
+            "registration"
+        ]
     }
 },
 {
@@ -2132,7 +2467,10 @@
     "fields": {
         "codename": "delete_registration", 
         "name": "Can delete Registration", 
-        "content_type": 27
+        "content_type": [
+            "tradeschool", 
+            "registration"
+        ]
     }
 },
 {
@@ -2141,7 +2479,10 @@
     "fields": {
         "codename": "add_feedback", 
         "name": "Can add Feedback", 
-        "content_type": 28
+        "content_type": [
+            "tradeschool", 
+            "feedback"
+        ]
     }
 },
 {
@@ -2150,7 +2491,10 @@
     "fields": {
         "codename": "change_feedback", 
         "name": "Can change Feedback", 
-        "content_type": 28
+        "content_type": [
+            "tradeschool", 
+            "feedback"
+        ]
     }
 },
 {
@@ -2159,7 +2503,10 @@
     "fields": {
         "codename": "delete_feedback", 
         "name": "Can delete Feedback", 
-        "content_type": 28
+        "content_type": [
+            "tradeschool", 
+            "feedback"
+        ]
     }
 },
 {
@@ -2168,7 +2515,10 @@
     "fields": {
         "codename": "add_photo", 
         "name": "Can add Photo", 
-        "content_type": 29
+        "content_type": [
+            "tradeschool", 
+            "photo"
+        ]
     }
 },
 {
@@ -2177,7 +2527,10 @@
     "fields": {
         "codename": "change_photo", 
         "name": "Can change Photo", 
-        "content_type": 29
+        "content_type": [
+            "tradeschool", 
+            "photo"
+        ]
     }
 },
 {
@@ -2186,7 +2539,10 @@
     "fields": {
         "codename": "delete_photo", 
         "name": "Can delete Photo", 
-        "content_type": 29
+        "content_type": [
+            "tradeschool", 
+            "photo"
+        ]
     }
 },
 {
@@ -2195,7 +2551,10 @@
     "fields": {
         "codename": "add_branchpage", 
         "name": "Can add Branch Page", 
-        "content_type": 30
+        "content_type": [
+            "tradeschool", 
+            "branchpage"
+        ]
     }
 },
 {
@@ -2204,7 +2563,10 @@
     "fields": {
         "codename": "change_branchpage", 
         "name": "Can change Branch Page", 
-        "content_type": 30
+        "content_type": [
+            "tradeschool", 
+            "branchpage"
+        ]
     }
 },
 {
@@ -2213,7 +2575,10 @@
     "fields": {
         "codename": "delete_branchpage", 
         "name": "Can delete Branch Page", 
-        "content_type": 30
+        "content_type": [
+            "tradeschool", 
+            "branchpage"
+        ]
     }
 },
 {
@@ -2222,7 +2587,10 @@
     "fields": {
         "codename": "add_branchpages", 
         "name": "Can add branch pages", 
-        "content_type": 37
+        "content_type": [
+            "migration", 
+            "branchpages"
+        ]
     }
 },
 {
@@ -2231,7 +2599,10 @@
     "fields": {
         "codename": "change_branchpages", 
         "name": "Can change branch pages", 
-        "content_type": 37
+        "content_type": [
+            "migration", 
+            "branchpages"
+        ]
     }
 },
 {
@@ -2240,7 +2611,10 @@
     "fields": {
         "codename": "delete_branchpages", 
         "name": "Can delete branch pages", 
-        "content_type": 37
+        "content_type": [
+            "migration", 
+            "branchpages"
+        ]
     }
 },
 {
@@ -2249,7 +2623,10 @@
     "fields": {
         "codename": "add_branchphotos", 
         "name": "Can add branch photos", 
-        "content_type": 38
+        "content_type": [
+            "migration", 
+            "branchphotos"
+        ]
     }
 },
 {
@@ -2258,7 +2635,10 @@
     "fields": {
         "codename": "change_branchphotos", 
         "name": "Can change branch photos", 
-        "content_type": 38
+        "content_type": [
+            "migration", 
+            "branchphotos"
+        ]
     }
 },
 {
@@ -2267,7 +2647,10 @@
     "fields": {
         "codename": "delete_branchphotos", 
         "name": "Can delete branch photos", 
-        "content_type": 38
+        "content_type": [
+            "migration", 
+            "branchphotos"
+        ]
     }
 },
 {
@@ -2276,7 +2659,10 @@
     "fields": {
         "codename": "add_branchseasons", 
         "name": "Can add branch seasons", 
-        "content_type": 39
+        "content_type": [
+            "migration", 
+            "branchseasons"
+        ]
     }
 },
 {
@@ -2285,7 +2671,10 @@
     "fields": {
         "codename": "change_branchseasons", 
         "name": "Can change branch seasons", 
-        "content_type": 39
+        "content_type": [
+            "migration", 
+            "branchseasons"
+        ]
     }
 },
 {
@@ -2294,7 +2683,10 @@
     "fields": {
         "codename": "delete_branchseasons", 
         "name": "Can delete branch seasons", 
-        "content_type": 39
+        "content_type": [
+            "migration", 
+            "branchseasons"
+        ]
     }
 },
 {
@@ -2303,7 +2695,10 @@
     "fields": {
         "codename": "add_branches", 
         "name": "Can add branches", 
-        "content_type": 40
+        "content_type": [
+            "migration", 
+            "branches"
+        ]
     }
 },
 {
@@ -2312,7 +2707,10 @@
     "fields": {
         "codename": "change_branches", 
         "name": "Can change branches", 
-        "content_type": 40
+        "content_type": [
+            "migration", 
+            "branches"
+        ]
     }
 },
 {
@@ -2321,7 +2719,10 @@
     "fields": {
         "codename": "delete_branches", 
         "name": "Can delete branches", 
-        "content_type": 40
+        "content_type": [
+            "migration", 
+            "branches"
+        ]
     }
 },
 {
@@ -2330,7 +2731,10 @@
     "fields": {
         "codename": "add_classcategories", 
         "name": "Can add class categories", 
-        "content_type": 41
+        "content_type": [
+            "migration", 
+            "classcategories"
+        ]
     }
 },
 {
@@ -2339,7 +2743,10 @@
     "fields": {
         "codename": "change_classcategories", 
         "name": "Can change class categories", 
-        "content_type": 41
+        "content_type": [
+            "migration", 
+            "classcategories"
+        ]
     }
 },
 {
@@ -2348,7 +2755,10 @@
     "fields": {
         "codename": "delete_classcategories", 
         "name": "Can delete class categories", 
-        "content_type": 41
+        "content_type": [
+            "migration", 
+            "classcategories"
+        ]
     }
 },
 {
@@ -2357,7 +2767,10 @@
     "fields": {
         "codename": "add_classnotifications", 
         "name": "Can add class notifications", 
-        "content_type": 42
+        "content_type": [
+            "migration", 
+            "classnotifications"
+        ]
     }
 },
 {
@@ -2366,7 +2779,10 @@
     "fields": {
         "codename": "change_classnotifications", 
         "name": "Can change class notifications", 
-        "content_type": 42
+        "content_type": [
+            "migration", 
+            "classnotifications"
+        ]
     }
 },
 {
@@ -2375,7 +2791,10 @@
     "fields": {
         "codename": "delete_classnotifications", 
         "name": "Can delete class notifications", 
-        "content_type": 42
+        "content_type": [
+            "migration", 
+            "classnotifications"
+        ]
     }
 },
 {
@@ -2384,7 +2803,10 @@
     "fields": {
         "codename": "add_classes", 
         "name": "Can add classes", 
-        "content_type": 43
+        "content_type": [
+            "migration", 
+            "classes"
+        ]
     }
 },
 {
@@ -2393,7 +2815,10 @@
     "fields": {
         "codename": "change_classes", 
         "name": "Can change classes", 
-        "content_type": 43
+        "content_type": [
+            "migration", 
+            "classes"
+        ]
     }
 },
 {
@@ -2402,7 +2827,10 @@
     "fields": {
         "codename": "delete_classes", 
         "name": "Can delete classes", 
-        "content_type": 43
+        "content_type": [
+            "migration", 
+            "classes"
+        ]
     }
 },
 {
@@ -2411,7 +2839,10 @@
     "fields": {
         "codename": "add_classesxitems", 
         "name": "Can add classes x items", 
-        "content_type": 44
+        "content_type": [
+            "migration", 
+            "classesxitems"
+        ]
     }
 },
 {
@@ -2420,7 +2851,10 @@
     "fields": {
         "codename": "change_classesxitems", 
         "name": "Can change classes x items", 
-        "content_type": 44
+        "content_type": [
+            "migration", 
+            "classesxitems"
+        ]
     }
 },
 {
@@ -2429,7 +2863,10 @@
     "fields": {
         "codename": "delete_classesxitems", 
         "name": "Can delete classes x items", 
-        "content_type": 44
+        "content_type": [
+            "migration", 
+            "classesxitems"
+        ]
     }
 },
 {
@@ -2438,7 +2875,10 @@
     "fields": {
         "codename": "add_feedbacks", 
         "name": "Can add feedbacks", 
-        "content_type": 45
+        "content_type": [
+            "migration", 
+            "feedbacks"
+        ]
     }
 },
 {
@@ -2447,7 +2887,10 @@
     "fields": {
         "codename": "change_feedbacks", 
         "name": "Can change feedbacks", 
-        "content_type": 45
+        "content_type": [
+            "migration", 
+            "feedbacks"
+        ]
     }
 },
 {
@@ -2456,7 +2899,10 @@
     "fields": {
         "codename": "delete_feedbacks", 
         "name": "Can delete feedbacks", 
-        "content_type": 45
+        "content_type": [
+            "migration", 
+            "feedbacks"
+        ]
     }
 },
 {
@@ -2465,7 +2911,10 @@
     "fields": {
         "codename": "add_items", 
         "name": "Can add items", 
-        "content_type": 46
+        "content_type": [
+            "migration", 
+            "items"
+        ]
     }
 },
 {
@@ -2474,7 +2923,10 @@
     "fields": {
         "codename": "change_items", 
         "name": "Can change items", 
-        "content_type": 46
+        "content_type": [
+            "migration", 
+            "items"
+        ]
     }
 },
 {
@@ -2483,7 +2935,10 @@
     "fields": {
         "codename": "delete_items", 
         "name": "Can delete items", 
-        "content_type": 46
+        "content_type": [
+            "migration", 
+            "items"
+        ]
     }
 },
 {
@@ -2492,7 +2947,10 @@
     "fields": {
         "codename": "add_mailinglist", 
         "name": "Can add mailinglist", 
-        "content_type": 47
+        "content_type": [
+            "migration", 
+            "mailinglist"
+        ]
     }
 },
 {
@@ -2501,7 +2959,10 @@
     "fields": {
         "codename": "change_mailinglist", 
         "name": "Can change mailinglist", 
-        "content_type": 47
+        "content_type": [
+            "migration", 
+            "mailinglist"
+        ]
     }
 },
 {
@@ -2510,7 +2971,10 @@
     "fields": {
         "codename": "delete_mailinglist", 
         "name": "Can delete mailinglist", 
-        "content_type": 47
+        "content_type": [
+            "migration", 
+            "mailinglist"
+        ]
     }
 },
 {
@@ -2519,7 +2983,10 @@
     "fields": {
         "codename": "add_notifications", 
         "name": "Can add notifications", 
-        "content_type": 48
+        "content_type": [
+            "migration", 
+            "notifications"
+        ]
     }
 },
 {
@@ -2528,7 +2995,10 @@
     "fields": {
         "codename": "change_notifications", 
         "name": "Can change notifications", 
-        "content_type": 48
+        "content_type": [
+            "migration", 
+            "notifications"
+        ]
     }
 },
 {
@@ -2537,7 +3007,10 @@
     "fields": {
         "codename": "delete_notifications", 
         "name": "Can delete notifications", 
-        "content_type": 48
+        "content_type": [
+            "migration", 
+            "notifications"
+        ]
     }
 },
 {
@@ -2546,7 +3019,10 @@
     "fields": {
         "codename": "add_notificationsdefaults", 
         "name": "Can add notifications defaults", 
-        "content_type": 49
+        "content_type": [
+            "migration", 
+            "notificationsdefaults"
+        ]
     }
 },
 {
@@ -2555,7 +3031,10 @@
     "fields": {
         "codename": "change_notificationsdefaults", 
         "name": "Can change notifications defaults", 
-        "content_type": 49
+        "content_type": [
+            "migration", 
+            "notificationsdefaults"
+        ]
     }
 },
 {
@@ -2564,7 +3043,10 @@
     "fields": {
         "codename": "delete_notificationsdefaults", 
         "name": "Can delete notifications defaults", 
-        "content_type": 49
+        "content_type": [
+            "migration", 
+            "notificationsdefaults"
+        ]
     }
 },
 {
@@ -2573,7 +3055,10 @@
     "fields": {
         "codename": "add_students", 
         "name": "Can add students", 
-        "content_type": 50
+        "content_type": [
+            "migration", 
+            "students"
+        ]
     }
 },
 {
@@ -2582,7 +3067,10 @@
     "fields": {
         "codename": "change_students", 
         "name": "Can change students", 
-        "content_type": 50
+        "content_type": [
+            "migration", 
+            "students"
+        ]
     }
 },
 {
@@ -2591,7 +3079,10 @@
     "fields": {
         "codename": "delete_students", 
         "name": "Can delete students", 
-        "content_type": 50
+        "content_type": [
+            "migration", 
+            "students"
+        ]
     }
 },
 {
@@ -2600,7 +3091,10 @@
     "fields": {
         "codename": "add_studentsxclasses", 
         "name": "Can add students x classes", 
-        "content_type": 51
+        "content_type": [
+            "migration", 
+            "studentsxclasses"
+        ]
     }
 },
 {
@@ -2609,7 +3103,10 @@
     "fields": {
         "codename": "change_studentsxclasses", 
         "name": "Can change students x classes", 
-        "content_type": 51
+        "content_type": [
+            "migration", 
+            "studentsxclasses"
+        ]
     }
 },
 {
@@ -2618,7 +3115,10 @@
     "fields": {
         "codename": "delete_studentsxclasses", 
         "name": "Can delete students x classes", 
-        "content_type": 51
+        "content_type": [
+            "migration", 
+            "studentsxclasses"
+        ]
     }
 },
 {
@@ -2627,7 +3127,10 @@
     "fields": {
         "codename": "add_studentsxitems", 
         "name": "Can add students x items", 
-        "content_type": 52
+        "content_type": [
+            "migration", 
+            "studentsxitems"
+        ]
     }
 },
 {
@@ -2636,7 +3139,10 @@
     "fields": {
         "codename": "change_studentsxitems", 
         "name": "Can change students x items", 
-        "content_type": 52
+        "content_type": [
+            "migration", 
+            "studentsxitems"
+        ]
     }
 },
 {
@@ -2645,7 +3151,10 @@
     "fields": {
         "codename": "delete_studentsxitems", 
         "name": "Can delete students x items", 
-        "content_type": 52
+        "content_type": [
+            "migration", 
+            "studentsxitems"
+        ]
     }
 },
 {
@@ -2654,7 +3163,10 @@
     "fields": {
         "codename": "add_teachers", 
         "name": "Can add teachers", 
-        "content_type": 53
+        "content_type": [
+            "migration", 
+            "teachers"
+        ]
     }
 },
 {
@@ -2663,7 +3175,10 @@
     "fields": {
         "codename": "change_teachers", 
         "name": "Can change teachers", 
-        "content_type": 53
+        "content_type": [
+            "migration", 
+            "teachers"
+        ]
     }
 },
 {
@@ -2672,7 +3187,10 @@
     "fields": {
         "codename": "delete_teachers", 
         "name": "Can delete teachers", 
-        "content_type": 53
+        "content_type": [
+            "migration", 
+            "teachers"
+        ]
     }
 },
 {
@@ -2681,7 +3199,10 @@
     "fields": {
         "codename": "add_teachersxclasses", 
         "name": "Can add teachers x classes", 
-        "content_type": 54
+        "content_type": [
+            "migration", 
+            "teachersxclasses"
+        ]
     }
 },
 {
@@ -2690,7 +3211,10 @@
     "fields": {
         "codename": "change_teachersxclasses", 
         "name": "Can change teachers x classes", 
-        "content_type": 54
+        "content_type": [
+            "migration", 
+            "teachersxclasses"
+        ]
     }
 },
 {
@@ -2699,7 +3223,10 @@
     "fields": {
         "codename": "delete_teachersxclasses", 
         "name": "Can delete teachers x classes", 
-        "content_type": 54
+        "content_type": [
+            "migration", 
+            "teachersxclasses"
+        ]
     }
 },
 {
@@ -2708,7 +3235,10 @@
     "fields": {
         "codename": "add_users", 
         "name": "Can add users", 
-        "content_type": 55
+        "content_type": [
+            "migration", 
+            "users"
+        ]
     }
 },
 {
@@ -2717,7 +3247,10 @@
     "fields": {
         "codename": "change_users", 
         "name": "Can change users", 
-        "content_type": 55
+        "content_type": [
+            "migration", 
+            "users"
+        ]
     }
 },
 {
@@ -2726,7 +3259,10 @@
     "fields": {
         "codename": "delete_users", 
         "name": "Can delete users", 
-        "content_type": 55
+        "content_type": [
+            "migration", 
+            "users"
+        ]
     }
 },
 {
@@ -2735,7 +3271,10 @@
     "fields": {
         "codename": "add_venuerules", 
         "name": "Can add venue rules", 
-        "content_type": 56
+        "content_type": [
+            "migration", 
+            "venuerules"
+        ]
     }
 },
 {
@@ -2744,7 +3283,10 @@
     "fields": {
         "codename": "change_venuerules", 
         "name": "Can change venue rules", 
-        "content_type": 56
+        "content_type": [
+            "migration", 
+            "venuerules"
+        ]
     }
 },
 {
@@ -2753,7 +3295,10 @@
     "fields": {
         "codename": "delete_venuerules", 
         "name": "Can delete venue rules", 
-        "content_type": 56
+        "content_type": [
+            "migration", 
+            "venuerules"
+        ]
     }
 },
 {
@@ -2762,7 +3307,10 @@
     "fields": {
         "codename": "add_venuerulesexceptions", 
         "name": "Can add venue rules exceptions", 
-        "content_type": 57
+        "content_type": [
+            "migration", 
+            "venuerulesexceptions"
+        ]
     }
 },
 {
@@ -2771,7 +3319,10 @@
     "fields": {
         "codename": "change_venuerulesexceptions", 
         "name": "Can change venue rules exceptions", 
-        "content_type": 57
+        "content_type": [
+            "migration", 
+            "venuerulesexceptions"
+        ]
     }
 },
 {
@@ -2780,7 +3331,10 @@
     "fields": {
         "codename": "delete_venuerulesexceptions", 
         "name": "Can delete venue rules exceptions", 
-        "content_type": 57
+        "content_type": [
+            "migration", 
+            "venuerulesexceptions"
+        ]
     }
 },
 {
@@ -2789,7 +3343,10 @@
     "fields": {
         "codename": "add_venuetimes", 
         "name": "Can add venue times", 
-        "content_type": 58
+        "content_type": [
+            "migration", 
+            "venuetimes"
+        ]
     }
 },
 {
@@ -2798,7 +3355,10 @@
     "fields": {
         "codename": "change_venuetimes", 
         "name": "Can change venue times", 
-        "content_type": 58
+        "content_type": [
+            "migration", 
+            "venuetimes"
+        ]
     }
 },
 {
@@ -2807,7 +3367,10 @@
     "fields": {
         "codename": "delete_venuetimes", 
         "name": "Can delete venue times", 
-        "content_type": 58
+        "content_type": [
+            "migration", 
+            "venuetimes"
+        ]
     }
 },
 {
@@ -2816,7 +3379,10 @@
     "fields": {
         "codename": "add_venues", 
         "name": "Can add venues", 
-        "content_type": 59
+        "content_type": [
+            "migration", 
+            "venues"
+        ]
     }
 },
 {
@@ -2825,7 +3391,10 @@
     "fields": {
         "codename": "change_venues", 
         "name": "Can change venues", 
-        "content_type": 59
+        "content_type": [
+            "migration", 
+            "venues"
+        ]
     }
 },
 {
@@ -2834,7 +3403,10 @@
     "fields": {
         "codename": "delete_venues", 
         "name": "Can delete venues", 
-        "content_type": 59
+        "content_type": [
+            "migration", 
+            "venues"
+        ]
     }
 },
 {
@@ -2843,146 +3415,377 @@
     "fields": {
         "name": "translators", 
         "permissions": [
-            7, 
-            8, 
-            22, 
-            23, 
-            24, 
-            109, 
-            110, 
-            111, 
-            112, 
-            113, 
-            114, 
-            25, 
-            26, 
-            27, 
-            82, 
-            83, 
-            84, 
-            55, 
-            56, 
-            57, 
-            106, 
-            107, 
-            108, 
-            53, 
-            73, 
-            74, 
-            75, 
-            100, 
-            101, 
-            102, 
-            64, 
-            61, 
-            70, 
-            67, 
-            65, 
-            62, 
-            71, 
-            68, 
-            66, 
-            63, 
-            72, 
-            69, 
-            103, 
-            104, 
-            105, 
-            97, 
-            98, 
-            99, 
-            91, 
-            94, 
-            88, 
-            92, 
-            95, 
-            89, 
-            86, 
-            93, 
-            96, 
-            90, 
-            29, 
-            35, 
-            32, 
-            41, 
-            38, 
-            47, 
-            44, 
-            76, 
-            77, 
-            78, 
-            79, 
-            80, 
-            81, 
-            58, 
-            59, 
-            60
+            [
+                "add_contenttype", 
+                "contenttypes", 
+                "contenttype"
+            ], 
+            [
+                "change_contenttype", 
+                "contenttypes", 
+                "contenttype"
+            ], 
+            [
+                "add_flatpage", 
+                "flatpages", 
+                "flatpage"
+            ], 
+            [
+                "change_flatpage", 
+                "flatpages", 
+                "flatpage"
+            ], 
+            [
+                "delete_flatpage", 
+                "flatpages", 
+                "flatpage"
+            ], 
+            [
+                "add_branchpages", 
+                "migration", 
+                "branchpages"
+            ], 
+            [
+                "change_branchpages", 
+                "migration", 
+                "branchpages"
+            ], 
+            [
+                "delete_branchpages", 
+                "migration", 
+                "branchpages"
+            ], 
+            [
+                "add_branchphotos", 
+                "migration", 
+                "branchphotos"
+            ], 
+            [
+                "change_branchphotos", 
+                "migration", 
+                "branchphotos"
+            ], 
+            [
+                "delete_branchphotos", 
+                "migration", 
+                "branchphotos"
+            ], 
+            [
+                "add_migrationhistory", 
+                "south", 
+                "migrationhistory"
+            ], 
+            [
+                "change_migrationhistory", 
+                "south", 
+                "migrationhistory"
+            ], 
+            [
+                "delete_migrationhistory", 
+                "south", 
+                "migrationhistory"
+            ], 
+            [
+                "add_barteritem", 
+                "tradeschool", 
+                "barteritem"
+            ], 
+            [
+                "change_barteritem", 
+                "tradeschool", 
+                "barteritem"
+            ], 
+            [
+                "delete_barteritem", 
+                "tradeschool", 
+                "barteritem"
+            ], 
+            [
+                "add_branch", 
+                "tradeschool", 
+                "branch"
+            ], 
+            [
+                "change_branch", 
+                "tradeschool", 
+                "branch"
+            ], 
+            [
+                "delete_branch", 
+                "tradeschool", 
+                "branch"
+            ], 
+            [
+                "add_branchpage", 
+                "tradeschool", 
+                "branchpage"
+            ], 
+            [
+                "change_branchpage", 
+                "tradeschool", 
+                "branchpage"
+            ], 
+            [
+                "delete_branchpage", 
+                "tradeschool", 
+                "branchpage"
+            ], 
+            [
+                "change_cluster", 
+                "tradeschool", 
+                "cluster"
+            ], 
+            [
+                "add_course", 
+                "tradeschool", 
+                "course"
+            ], 
+            [
+                "change_course", 
+                "tradeschool", 
+                "course"
+            ], 
+            [
+                "delete_course", 
+                "tradeschool", 
+                "course"
+            ], 
+            [
+                "add_feedback", 
+                "tradeschool", 
+                "feedback"
+            ], 
+            [
+                "change_feedback", 
+                "tradeschool", 
+                "feedback"
+            ], 
+            [
+                "delete_feedback", 
+                "tradeschool", 
+                "feedback"
+            ], 
+            [
+                "add_organizer", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "add_person", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "add_student", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "add_teacher", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "change_organizer", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "change_person", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "change_student", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "change_teacher", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "delete_organizer", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "delete_person", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "delete_student", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "delete_teacher", 
+                "tradeschool", 
+                "person"
+            ], 
+            [
+                "add_photo", 
+                "tradeschool", 
+                "photo"
+            ], 
+            [
+                "change_photo", 
+                "tradeschool", 
+                "photo"
+            ], 
+            [
+                "delete_photo", 
+                "tradeschool", 
+                "photo"
+            ], 
+            [
+                "add_registration", 
+                "tradeschool", 
+                "registration"
+            ], 
+            [
+                "change_registration", 
+                "tradeschool", 
+                "registration"
+            ], 
+            [
+                "delete_registration", 
+                "tradeschool", 
+                "registration"
+            ], 
+            [
+                "add_approvedschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "add_pastschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "add_pendingschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "change_approvedschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "change_pastschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "change_pendingschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "change_schedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "delete_approvedschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "delete_pastschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "delete_pendingschedule", 
+                "tradeschool", 
+                "schedule"
+            ], 
+            [
+                "change_studentconfirmation", 
+                "tradeschool", 
+                "studentconfirmation"
+            ], 
+            [
+                "change_studentfeedback", 
+                "tradeschool", 
+                "studentfeedback"
+            ], 
+            [
+                "change_studentreminder", 
+                "tradeschool", 
+                "studentreminder"
+            ], 
+            [
+                "change_teacherclassapproval", 
+                "tradeschool", 
+                "teacherclassapproval"
+            ], 
+            [
+                "change_teacherconfirmation", 
+                "tradeschool", 
+                "teacherconfirmation"
+            ], 
+            [
+                "change_teacherfeedback", 
+                "tradeschool", 
+                "teacherfeedback"
+            ], 
+            [
+                "change_teacherreminder", 
+                "tradeschool", 
+                "teacherreminder"
+            ], 
+            [
+                "add_time", 
+                "tradeschool", 
+                "time"
+            ], 
+            [
+                "change_time", 
+                "tradeschool", 
+                "time"
+            ], 
+            [
+                "delete_time", 
+                "tradeschool", 
+                "time"
+            ], 
+            [
+                "add_timerange", 
+                "tradeschool", 
+                "timerange"
+            ], 
+            [
+                "change_timerange", 
+                "tradeschool", 
+                "timerange"
+            ], 
+            [
+                "delete_timerange", 
+                "tradeschool", 
+                "timerange"
+            ], 
+            [
+                "add_venue", 
+                "tradeschool", 
+                "venue"
+            ], 
+            [
+                "change_venue", 
+                "tradeschool", 
+                "venue"
+            ], 
+            [
+                "delete_venue", 
+                "tradeschool", 
+                "venue"
+            ]
         ]
-    }
-},
-{
-    "pk": 7, 
-    "model": "flatpages.flatpage", 
-    "fields": {
-        "registration_required": false, 
-        "title": "I Want to Teach Class", 
-        "url": "/teacher-info/", 
-        "template_name": "", 
-        "sites": [], 
-        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
-        "enable_comments": false
-    }
-},
-{
-    "pk": 8, 
-    "model": "flatpages.flatpage", 
-    "fields": {
-        "registration_required": false, 
-        "title": "I Want to Teach Class", 
-        "url": "/teacher-info/", 
-        "template_name": "", 
-        "sites": [], 
-        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
-        "enable_comments": false
-    }
-},
-{
-    "pk": 9, 
-    "model": "flatpages.flatpage", 
-    "fields": {
-        "registration_required": false, 
-        "title": "About", 
-        "url": "/about/", 
-        "template_name": "", 
-        "sites": [], 
-        "content": "<p>This is a sample about page.</p>", 
-        "enable_comments": false
-    }
-},
-{
-    "pk": 10, 
-    "model": "flatpages.flatpage", 
-    "fields": {
-        "registration_required": false, 
-        "title": "I Want to Teach Class", 
-        "url": "/teacher-info/", 
-        "template_name": "", 
-        "sites": [], 
-        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
-        "enable_comments": false
-    }
-},
-{
-    "pk": 11, 
-    "model": "flatpages.flatpage", 
-    "fields": {
-        "registration_required": false, 
-        "title": "I Want to Teach Class", 
-        "url": "/teacher-info/", 
-        "template_name": "", 
-        "sites": [], 
-        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
-        "enable_comments": false
     }
 },
 {
@@ -3090,20 +3893,43 @@
     }
 },
 {
+    "pk": 7, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "aaaa", 
+        "bio": "", 
+        "updated": "2013-08-07T10:04:17Z", 
+        "branches": [], 
+        "language": "en", 
+        "created": "2013-08-07T10:04:17Z", 
+        "is_active": true, 
+        "phone": "", 
+        "slug": "", 
+        "website": "", 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-07T10:04:17Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "a d", 
+        "password": "", 
+        "email": "a@asd.com"
+    }
+},
+{
     "pk": 1, 
     "model": "tradeschool.course", 
     "fields": {
         "category": 0, 
         "updated": "2013-08-06T22:56:17Z", 
-        "branches": [
-            1
-        ], 
         "description": "This is a sample class", 
         "created": "2013-08-06T22:54:52Z", 
         "slug": "sample-class", 
         "title": "Sample Class", 
         "is_active": true, 
-        "teacher": 3, 
+        "teacher": [
+            "sample-teacher"
+        ], 
         "max_students": 10
     }
 },
@@ -3118,6 +3944,7 @@
         "venue": 1, 
         "course": 1, 
         "end_time": "2050-09-06T00:30:00Z", 
+        "branch": 1, 
         "schedule_status": "approved", 
         "slug": "sample-class"
     }
@@ -3126,14 +3953,16 @@
     "pk": 1, 
     "model": "tradeschool.registration", 
     "fields": {
-        "updated": "2013-08-06T22:58:39Z", 
+        "updated": "2013-08-07T09:52:46Z", 
         "schedule": 2, 
         "items": [
             10
         ], 
         "created": "2013-08-06T22:58:39Z", 
         "is_active": true, 
-        "student": 4, 
+        "student": [
+            "sample-student-number-1"
+        ], 
         "registration_status": "registered"
     }
 },
@@ -3149,7 +3978,9 @@
         ], 
         "created": "2013-08-06T22:59:28Z", 
         "is_active": true, 
-        "student": 5, 
+        "student": [
+            "sample-student-number-2"
+        ], 
         "registration_status": "registered"
     }
 },
@@ -3164,7 +3995,9 @@
         ], 
         "created": "2013-08-06T22:59:51Z", 
         "is_active": true, 
-        "student": 6, 
+        "student": [
+            "sample-student-number-3"
+        ], 
         "registration_status": "unregistered"
     }
 }

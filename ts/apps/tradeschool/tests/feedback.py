@@ -31,7 +31,7 @@ class FeedbackTestCase(TestCase):
         self.branch.save()
         
         # use this schedule for testing
-        self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
+        self.schedule = Schedule.objects.filter(branch=self.branch)[0]
         self.schedule.schedule_status = 'approved'
         self.schedule.save()
         

@@ -3,11 +3,10 @@
 {% load humanize smartdate i18n l10n %}
 
 {% block main_content %}
-
 <div class="classes" id="future">
-{% for schedule in schedules %}
+{% for schedule in branch.schedule_set.public.approved %}
    
-   {% ifchanged schedules.start_time.day %}
+   {% ifchanged branch.schedule_set.start_time.day %}
    {% block schedule_date_divider %}
     <div class="dateDivider">
         <strong class="date1">{{ schedule.start_time|date:"M j, Y"|localize }}</strong>

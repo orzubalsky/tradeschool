@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db.models import *
+from django.db.models.query import QuerySet
 from django.contrib.localflavor.us.models import USStateField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
@@ -101,7 +102,7 @@ class Email(Model):
 
     def send(self, schedule_obj, recipient, registration=None):
         body    = self.preview(schedule_obj, registration)
-        branch  = schedule_obj.course.branches.all()[0]
+        branch  = schedule_obj.branch
         send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
         self.save()
@@ -110,7 +111,7 @@ class Email(Model):
         """ """
         teacher = schedule_obj.course.teacher
         site    = Site.objects.get_current()
-        branch  = Branch.objects.get(pk=schedule_obj.course.branches.all()[0].pk)
+        branch  = schedule_obj.branch
         venue   = schedule_obj.venue
         domain  = site.domain
         
@@ -541,7 +542,6 @@ class Branch(Location):
     public    = BranchPublicManager()
     on_site   = CurrentSiteManager()
 
-    
     def save(self, *args, **kwargs):
         """Check to see if the slug field's value has been changed. 
         If it has, rename the branch's template dir name."""
@@ -910,7 +910,6 @@ class Course(Base):
     title           = CharField(max_length=255, verbose_name=_("class title"), help_text=_("The name of the class. This will appear on the website.")) 
     slug            = SlugField(max_length=255,blank=False, null=True, verbose_name=_("URL Slug"), help_text=_("A unique URL for the class."))
     description     = TextField(blank=False, verbose_name=_("Class description"), help_text=_("The class's description. This will apear on the website."))
-    branches        = ManyToManyField(Branch, help_text="A class can be related to many TS brances. The relationship is made when a class is being taught as part of a TS branch.")
 
     objects = Manager()
     
@@ -1022,9 +1021,23 @@ class BarterItem(Base):
     schedule = ForeignKey('Schedule', verbose_name=_('schedule'), help_text=_("The scheduled class that this barter item is listed for."))
 
 
+class ScheduleQuerySet(QuerySet):
+    def pending(self):
+        return self.filter.filter(end_time__gte=timezone.now()).exclude(schedule_status='approved').exclude(schedule_status='rejected')
+
+    def approved(self):
+        return self.filter(schedule_status='approved', end_time__gte=timezone.now())        
+
+    def past(self):
+        return self.filter(end_time__lte=timezone.now())
+
+    def public(self):
+        return self.filter(is_active=True, schedule_status='approved')
+
+
 class ScheduleManager(Manager):
     def get_query_set(self):
-        qs = super(ScheduleManager, self).get_query_set().annotate(
+       return ScheduleQuerySet(self.model, using=self._db).annotate(
             registered_students=Count('students')
         ).select_related(
             'venue__title',
@@ -1045,7 +1058,17 @@ class ScheduleManager(Manager):
             'teacherfeedback',   
         )
 
-        return qs
+    def pending(self):
+        return self.get_query_set().pending()
+
+    def approved(self):
+        return self.get_query_set().approved()
+
+    def past(self):
+        return self.get_query_set().past()
+
+    def public(self):
+        return self.get_query_set().public()
 
 
 class Schedule(Durational):
@@ -1085,6 +1108,8 @@ class Schedule(Durational):
                             help_text=_("What class are you scheduling?")
                         )
                         
+    branch          = ForeignKey(Branch, help_text="A scheduled class is related to a TS brances. The relationship is made when a class is submitted through a specific TS branch form.")
+
     schedule_status = CharField(
                             max_length=20, 
                             verbose_name=_("scheduled class status"),
@@ -1150,18 +1175,14 @@ class Schedule(Durational):
         self.delete_emails()
             
         # copy course notification from the branch notification templates
-        branches = Branch.objects.filter(pk__in=self.course.branches.all())
-        if branches.exists():
-            branch = branches[0]
-        
-            for fieldname, email_obj in branch.emails.iteritems():
-                new_email = copy_model_instance(email_obj)
-                new_email.pk = None
-                new_email.branch = None
-                if isinstance(new_email, TimedEmail):
-                    new_email.set_send_on(self.start_time)
-                new_email.schedule = self
-                new_email.save()
+        for fieldname, email_obj in self.branch.emails.iteritems():
+            new_email = copy_model_instance(email_obj)
+            new_email.pk = None
+            new_email.branch = None
+            if isinstance(new_email, TimedEmail):
+                new_email.set_send_on(self.start_time)
+            new_email.schedule = self
+            new_email.save()
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"
@@ -1269,7 +1290,7 @@ class Schedule(Durational):
 
 class PendingScheduleManager(ScheduleManager):
     def get_query_set(self):
-        return super(PendingScheduleManager, self).get_query_set().filter(end_time__gte=timezone.now()).exclude(schedule_status='approved').exclude(schedule_status='rejected')
+        return super(PendingScheduleManager, self).get_query_set().pending()
 
 
 class PendingSchedule(Schedule):
@@ -1289,12 +1310,12 @@ class PendingSchedule(Schedule):
 
 class ApprovedScheduleManager(ScheduleManager):
     def get_query_set(self):
-        return super(ApprovedScheduleManager, self).get_query_set().filter(schedule_status='approved', end_time__gte=timezone.now())
+        return super(ApprovedScheduleManager, self).get_query_set().approved()
 
 
 class ApprovedSchedulePublicManager(ApprovedScheduleManager):
     def get_query_set(self):
-        return super(ApprovedSchedulePublicManager, self).get_query_set().filter(is_active=True)
+        return super(ApprovedSchedulePublicManager, self).get_query_set().approved().public()
 
 
 class ApprovedSchedule(Schedule):
@@ -1314,12 +1335,12 @@ class ApprovedSchedule(Schedule):
 
 class PastScheduleManager(ScheduleManager):
     def get_query_set(self):
-        return super(PastScheduleManager, self).get_query_set().filter(end_time__lte=timezone.now())
+        return super(PastScheduleManager, self).get_query_set().past()
 
 
 class PastSchedulePublicManager(PastScheduleManager):
     def get_query_set(self):
-        return super(PastSchedulePublicManager, self).get_query_set().filter(is_active=True, schedule_status='approved')
+        return super(PastSchedulePublicManager, self).get_query_set().past().public()
 
 
 class PastSchedule(Schedule):
@@ -1370,10 +1391,6 @@ class Registration(Base):
     items               = ManyToManyField(BarterItem, verbose_name=_("items"), blank=False, help_text=_("The barter items that the student said they were bringing to the class."))
 
     objects = RegistrationManager()
-    
-    def branches_string(self):
-        """ Return the branches that this registration relates to. This function is used in the admin list_display() method."""
-        return ','.join( str(branch) for branch in self.schedule.course.branches.all())
     
     def registered_items(self):
         """ Return the registered items as a string. Used in the admin."""

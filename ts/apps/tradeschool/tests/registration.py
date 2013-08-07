@@ -27,7 +27,7 @@ class RegistrationTestCase(TestCase):
         self.branch.language = 'en'
         self.branch.save()
 
-        self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
+        self.schedule = Schedule.objects.filter(branch=self.branch)[0]
 
         self.valid_data = {
                 'student-fullname' : 'test student',

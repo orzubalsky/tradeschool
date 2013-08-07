@@ -222,7 +222,7 @@ class ScheduleInline(BaseTabularInline):
         to allow on the spot scheduling."""
     
     def queryset(self, request):
-        return super(ScheduleInline, self).queryset(request, Q(course__branches__in=request.user.branches_organized.all))        
+        return super(ScheduleInline, self).queryset(request, Q(branch__in=request.user.branches_organized.all))        
                 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'venue':
@@ -240,7 +240,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         to give an overview of students registered."""
 
     def queryset(self, request):
-        return super(RegistrationInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
+        return super(RegistrationInline, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'student':
@@ -269,7 +269,7 @@ class BarterItemInline(BaseTabularInline):
         to give an overview of the items requested."""
 
     def queryset(self, request):
-        return super(BarterItemInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))        
+        return super(BarterItemInline, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))        
     
     def title_link(self, obj):
         """
@@ -309,7 +309,7 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
     """
     def queryset(self, request):
-        return super(FeedbackInline, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
+        return super(FeedbackInline, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))
     
     model   = Feedback
     fields = ('feedback_type', 'content',)
@@ -544,7 +544,7 @@ class ScheduleAdmin(BaseAdmin):
         their barter items, registrations, and email templates.
     """ 
     def queryset(self, request):
-        return super(ScheduleAdmin, self).queryset(request, Q(course__branches__in=request.user.branches_organized.all))
+        return super(ScheduleAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
@@ -661,9 +661,12 @@ class ScheduleAdmin(BaseAdmin):
                     'fields': ('venue', 'start_time', 'end_time', 'schedule_status')
                 }),     
             )
-            kwargs['fields'] = ()
-        else: # obj is None, so this is an add page
-            pass
+            kwargs['fields'] = (
+                                'venue',
+                                'start_time',
+                                'end_time',
+                                'schedule_status'
+                                )
 
         return super(ScheduleAdmin, self).get_form(request, obj, **kwargs)
 
@@ -677,6 +680,7 @@ class ScheduleAdmin(BaseAdmin):
                         'teacher_bio', 
                         'teacher_website', 
                         'teacher_phone',
+                        'branch'
                     )
         return self.readonly_fields
 
@@ -763,13 +767,13 @@ class RegistrationAdmin(BaseAdmin):
     """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        return super(RegistrationAdmin, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
+        return super(RegistrationAdmin, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'student':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Student, Q(branches__in=request.user.branches_organized.all))
         if db_field.name == 'schedule':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(course__branches__in=request.user.branches_organized.all))
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(branch_in=request.user.branches_organized.all))
         return super(RegistrationAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
     def formfield_for_manytomany(self, db_field, request, **kwargs):
@@ -793,7 +797,7 @@ class RegistrationAdmin(BaseAdmin):
 
     fields              = ('student', 'schedule', 'items', 'registration_status')
     readonly_fields     = ()
-    list_display        = ('student', 'schedule', 'registered_items', 'registration_status', 'branches_string')
+    list_display        = ('student', 'schedule', 'registered_items', 'registration_status')
     filter_horizontal   = ('items',)
 
 
@@ -804,11 +808,11 @@ class BarterItemAdmin(BaseAdmin):
     
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        return super(BarterItemAdmin, self).queryset(request, Q(registration__schedule__course__branches__in=request.user.branches_organized.all))
+        return super(BarterItemAdmin, self).queryset(request, Q(registration__schedule__branch__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'schedule':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(course__branches__in=request.user.branches_organized.all, schedule_status='approved'))
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(branch__in=request.user.branches_organized.all, schedule_status='approved'))
         return super(BarterItemAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
             
     list_display    = ('title', 'schedule')    
@@ -831,26 +835,6 @@ class PhotoAdmin(BaseAdmin):
         return obj.thumbnail() 
     get_thumbnail.short_description = _('Thumbnail')
     get_thumbnail.allow_tags = True        
-
-
-class BranchEmailContainerAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
-    """
-    """
-    def queryset(self, request):
-        return super(BranchEmailContainerAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
-
-    list_display = ('branch',)
-    fields       = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
-
-
-class ScheduleEmailContainerAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
-    """
-    """
-    def queryset(self, request):
-        return super(ScheduleEmailContainerAdmin, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
-    
-    list_display  = ('schedule', 'branches_string')
-    fields        = ("student_confirmation", "student_reminder", "student_feedback", "teacher_confirmation","teacher_class_approval", "teacher_reminder", "teacher_feedback",)
 
 
 class BranchPageForm(FlatpageForm):
@@ -880,11 +864,11 @@ class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
     """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        return super(FeedbackAdmin, self).queryset(request, Q(schedule__course__branches__in=request.user.branches_organized.all))
+        return super(FeedbackAdmin, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'schedule':
-            kwargs['queryset'] = Schedule.objects.filter(course__branches__in=request.user.branches_organized.all)
+            kwargs['queryset'] = Schedule.objects.filter(branch__in=request.user.branches_organized.all)
         return super(FeedbackAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
     list_display = ('schedule', 'feedback_type')

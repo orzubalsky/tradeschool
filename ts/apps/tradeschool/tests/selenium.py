@@ -34,7 +34,7 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
         self.branch.save()  
 
         # approve a scheduled class so it appears on the website
-        self.schedule = Schedule.objects.filter(course__branch=self.branch)[0]
+        self.schedule = Schedule.objects.filter(branch=self.branch)[0]
         self.schedule.schedule_status = 'approved'
         self.schedule.save()
         

@@ -319,7 +319,6 @@ class ClassesManager(Manager):
                     course.teacher.save()
                 
                     # save branch to course
-                    course.branches.add(branch)
                     course.save()
                 
                     # convert the old unix time values (a bigint) to a timezone-aware datetime object
@@ -367,6 +366,7 @@ class ClassesManager(Manager):
                         schedule = Schedule(
                                 venue                  = venue, 
                                 course                 = course, 
+                                branch                 = branch,
                                 slug                   = slug,
                                 schedule_status        = schedule_status,
                                 start_time             = aware_start_time, 

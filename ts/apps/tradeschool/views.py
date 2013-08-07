@@ -14,10 +14,7 @@ def branch_list(request):
     """display all branches in current site."""
     
     branches  = Branch.public.all()
-
-    for branch in branches:
-        branch.schedules = ApprovedSchedule.public.filter(course__branches=branch)
-        
+    
     return render_to_response('hub/branch_list.html',{ 
             'branches': branches, 
         }, context_instance=RequestContext(request))
@@ -40,8 +37,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = ApprovedSchedule.public.filter(course__branches=branch)
-    
     branch_pages = BranchPage.objects.filter(branch=branch, is_visible=1)
     
     if schedule_slug != None:
@@ -52,7 +47,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     view_templates = branch_templates(branch, 'schedule_list.html', 'base.html')
     
     return render_to_response(view_templates.template.name ,{ 
-            'schedules'         : schedules,
             'previewed_course'  : previewed_course,
             'templates'         : view_templates,
             'branch_pages'      : branch_pages                    
@@ -171,13 +165,10 @@ def schedule_list_past(request, branch_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    schedules = PastSchedule.public.filter(course__branches__in=[branch.pk,])
-    
     view_templates = branch_templates(branch, 'schedule_list_past.html', 'subpage.html')    
     
     return render_to_response(view_templates.template.name,{ 
             'branch'    : branch,
-            'schedules' : schedules,
             'templates' : view_templates
         }, context_instance=RequestContext(request))    
 
@@ -248,12 +239,9 @@ def schedule_add(request, branch_slug=None):
             # save course
             course.save()
             
-            # add a course-branch relationship to the current branch
-            course.branches.add(branch)
-
             # save schedule
             selected_time = time_form.cleaned_data['time']
-            schedule = Schedule(course=course, start_time=selected_time.start_time, end_time=selected_time.end_time, schedule_status='pending')
+            schedule = Schedule(course=course, branch=branch, start_time=selected_time.start_time, end_time=selected_time.end_time, schedule_status='pending')
             schedule.slug = unique_slugify(Schedule, course.title)
             
             if selected_time.venue is not None:
