@@ -728,62 +728,63 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         
         ordering = ['fullname', ]
         
-    fullname    = CharField(
-                        max_length=200, 
-                        verbose_name=_("your name"), 
-                        # Translators: Contextual Help.
-                        help_text=_("This will appear on the site.")
-                    )
+    fullname         = CharField(
+                             max_length=200, 
+                             verbose_name=_("your name"), 
+                             # Translators: Contextual Help.
+                             help_text=_("This will appear on the site.")
+                         )
+                         
+    username         = CharField(
+                             max_length=200, 
+                             unique=True,                        
+                             verbose_name=_("username"),
+                             help_text=_("This is used to login to the site.")
+                         )                    
+                         
+    email            = EmailField(
+                             max_length=100, 
+                             verbose_name=_("Email address"),
+                             # Translators: Contextual Help. 
+                             help_text=_("Used only for us to contact you.")
+                         )
+                         
+    phone            = CharField(
+                             max_length=20, 
+                             blank=True, 
+                             null=True, 
+                             verbose_name=_("Phone number"), 
+                             # Translators: Contextual Help
+                             help_text=_("Optional. Used only for us to contact you.")
+                         )
+                             
+    bio              = TextField(
+                             blank=True, 
+                             verbose_name=_("A few sentences about you"), 
+                             # Translators: Contextual Help
+                             help_text=_("For prospective students to see on the website")
+                         )
+                         
+    website          = URLField(
+                             max_length=200, 
+                             blank=True, 
+                             null=True, 
+                             verbose_name=_("Your website / blog URL"), 
+                             # Translators: Contextual Help
+                             help_text=_("Optional.")
+                         )
+                         
+    slug             = SlugField(max_length=220, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
+    branches         = ManyToManyField(
+                             Branch, 
+                             verbose_name=_("branches"), 
+                             # Translators: Contextual Help
+                             help_text=_("People in the TS system can be related to many TS branches. This relationship is made when a person either teaches or registers to a class.")
+                         )
+    default_branch  = ForeignKey(Branch, verbose_name=_('default branch'), related_name='default_branch', null=True, blank=True, help_text=_('This is the branch that will be selected automatically for actions this user makes. Usually the default branch is the one in which the organizer does the most work in.')) 
+    language        = CharField(verbose_name=_("backend language"), default='en', max_length=50, choices=settings.LANGUAGES, null=True, help_text=_("Setting this language will cause the admin backend to try to load text from the translation strings stored in the system FOR THIS USER ONLY. Text that wasn't translated will fallback on the English version of it."))
                     
-    username    = CharField(
-                        max_length=200, 
-                        unique=True,                        
-                        verbose_name=_("username"),
-                        help_text=_("This is used to login to the site.")
-                    )                    
-                    
-    email       = EmailField(
-                        max_length=100, 
-                        verbose_name=_("Email address"),
-                        # Translators: Contextual Help. 
-                        help_text=_("Used only for us to contact you.")
-                    )
-                    
-    phone       = CharField(
-                        max_length=20, 
-                        blank=True, 
-                        null=True, 
-                        verbose_name=_("Phone number"), 
-                        # Translators: Contextual Help
-                        help_text=_("Optional. Used only for us to contact you.")
-                    )
-                        
-    bio         = TextField(
-                        blank=True, 
-                        verbose_name=_("A few sentences about you"), 
-                        # Translators: Contextual Help
-                        help_text=_("For prospective students to see on the website")
-                    )
-                    
-    website     = URLField(
-                        max_length=200, 
-                        blank=True, 
-                        null=True, 
-                        verbose_name=_("Your website / blog URL"), 
-                        # Translators: Contextual Help
-                        help_text=_("Optional.")
-                    )
-                    
-    slug        = SlugField(max_length=220, verbose_name="URL Slug", help_text="This will be used to create a unique URL for each person in TS.")
-    branches    = ManyToManyField(
-                        Branch, 
-                        verbose_name=_("branch"), 
-                        # Translators: Contextual Help
-                        help_text=_("People in the TS system can be related to many TS branches. This relationship is made when a person either teaches or registers to a class.")
-                    )
-    language    = CharField(verbose_name=_("backend language"), default='en', max_length=50, choices=settings.LANGUAGES, null=True, help_text=_("Setting this language will cause the admin backend to try to load text from the translation strings stored in the system FOR THIS USER ONLY. Text that wasn't translated will fallback on the English version of it."))
-                    
-    is_staff    = BooleanField(
+    is_staff        = BooleanField(
                         _('staff status'), 
                         default=False,
                         help_text=_('Designates whether the user can log into this admin site.')
@@ -817,6 +818,16 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         Sends an email to this User.
         """
         send_mail(subject, message, from_email, [self.email])
+
+    def save(self, *args, **kwargs):
+        """
+        Set a default branch for the user if there they're organizing at least one Branch
+        and their default_branch was not set explicitly.
+        """
+        if self.default_branch is None and self.branches_organized.count() > 0:
+            self.default_branch = self.branches_organized.all()[0]    
+        super(Person, self).save(*args, **kwargs)        
+    
 
     def __unicode__ (self):
         return self.fullname
@@ -1023,7 +1034,7 @@ class BarterItem(Base):
 
 class ScheduleQuerySet(QuerySet):
     def pending(self):
-        return self.filter.filter(end_time__gte=timezone.now()).exclude(schedule_status='approved').exclude(schedule_status='rejected')
+        return self.filter(end_time__gte=timezone.now()).exclude(schedule_status='approved').exclude(schedule_status='rejected')
 
     def approved(self):
         return self.filter(schedule_status='approved', end_time__gte=timezone.now())        

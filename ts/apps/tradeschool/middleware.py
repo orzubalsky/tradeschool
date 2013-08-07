@@ -29,7 +29,10 @@ class BranchMiddleware(object):
                 translation.activate(request.user.language)               
 
                 if request.user.branches.count() > 0:
-                    branch = Branch.objects.filter(organizers=request.user)[0]
+                    if request.user.default_branch is not None:
+                        branch = request.user.default_branch
+                    else:
+                        branch = Branch.objects.filter(organizers=request.user)[0]
                     timezone.activate(branch.timezone)
                 else:
                     pass

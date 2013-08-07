@@ -12,7 +12,10 @@ def branch(request):
             # if the user is organizing at least one branch return the first one,
             # if not, create a branch with a timezone to pass to the template
             if request.user.branches_organized.count() > 0:
-                branch = Branch.objects.filter(organizers=request.user)[0]
+                if request.user.default_branch is not None:
+                    branch = request.user.default_branch
+                else:
+                    branch = Branch.objects.filter(organizers=request.user)[0]
             else:
                 branch = Branch(timezone=settings.TIME_ZONE)
 

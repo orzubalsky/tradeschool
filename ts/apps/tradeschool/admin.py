@@ -44,14 +44,17 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         if db_field.name == 'branches':
             qs = Branch.objects.filter(pk__in=request.user.branches_organized.all)            
             kwargs['queryset'] = qs
-            kwargs['initial'] = [qs[0],]
+            kwargs['initial'] = [request.user.default_branch,]
         return super(BaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
             
     def filter_dbfield(self, request, model, q, **kwargs):
         qs = model.objects.filter(q)
         kwargs['queryset'] = qs
-        if qs.count() > 0:
-            kwargs['initial'] = qs[0]
+        if model == Branch:
+            kwargs['initial'] = request.user.default_branch
+        else:
+            if qs.count() > 0:
+                kwargs['initial'] = qs[0]
         return kwargs['queryset'], kwargs['initial']
   
 
@@ -77,8 +80,11 @@ class BaseTabularInline(admin.TabularInline):
     def filter_dbfield(self, request, model, q, **kwargs):
         qs = model.objects.filter(q)
         kwargs['queryset'] = qs
-        if qs.count() > 0:
-            kwargs['initial'] = qs[0]
+        if model == Branch:
+            kwargs['initial'] = request.user.default_branch
+        else:        
+            if qs.count() > 0:
+                kwargs['initial'] = qs[0]
         return kwargs['queryset'], kwargs['initial']
 
 
@@ -439,6 +445,13 @@ class PersonAdmin(BaseAdmin):
             registration_count   = Count('registrations', distinct=True), 
             courses_taught_count = Count('courses_taught', distinct=True)
         )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):  
+        if db_field.name == 'default_branch':          
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
+
+        return super(PersonAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
             
     list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'branches_string', 'created')
     search_fields       = ('fullname', 'email', 'phone')
@@ -471,7 +484,7 @@ class OrganizerAdmin(PersonAdmin):
     change_password_link.short_description = _('change password')
             
     list_display = ('username', 'fullname', 'email', 'branches_organized_string')
-    fields       = ('username', 'fullname', 'email', 'language',)
+    fields       = ('username', 'fullname', 'email', 'language', 'default_branch')
     inlines      = (OrganizedBranchInline,)
 
 
@@ -509,7 +522,7 @@ class TimeAdmin(BaseAdmin):
         else:
             form.base_fields['venue'].queryset = Venue.objects.filter(branch__in=request.user.branches_organized.all)
             form.base_fields['branch'].queryset = Branch.objects.filter(pk__in=request.user.branches_organized.all)            
-            form.base_fields['branch'].initial = request.user.branches_organized.all()[0]
+            form.base_fields['branch'].initial = request.user.default_branch
             
         return form
 
@@ -773,7 +786,7 @@ class RegistrationAdmin(BaseAdmin):
         if db_field.name == 'student':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Student, Q(branches__in=request.user.branches_organized.all))
         if db_field.name == 'schedule':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(branch_in=request.user.branches_organized.all))
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Schedule, Q(branch__in=request.user.branches_organized.all))
         return super(RegistrationAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
     def formfield_for_manytomany(self, db_field, request, **kwargs):
