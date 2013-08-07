@@ -27,7 +27,7 @@ def cluster_list(request, slug=None):
     """display all branches related to a cluster."""
     
     cluster  = get_object_or_404(Cluster, slug=slug) 
-    branches = Branch.public.filter(cluster=cluster)
+    branches = Branch.public.filter(clusters=cluster)
         
     return render_to_response('hub/cluster_list.html',{ 
             'cluster' : cluster,

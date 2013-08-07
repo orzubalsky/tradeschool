@@ -254,8 +254,10 @@ class BranchTestCase(TestCase):
         # make sure the branch is not pending
         self.branch.branch_status = 'in session'
 
+        self.branch.save()
+        
         # add the branch to the cluster
-        cluster.branch_set.add(self.branch)
+        self.branch.clusters.add(cluster)
 
         # reload the page
         response = self.client.get(url)
