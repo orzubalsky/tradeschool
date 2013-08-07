@@ -205,6 +205,17 @@ class OrganizedBranchInline(BaseTabularInline):
     model = Branch.organizers.through
     extra = 1
 
+
+class ClusteredBranchInline(BaseTabularInline):
+    """
+    """    
+    def queryset(self, request):
+        return super(ClusteredBranchInline, self).queryset(request, Q())        
+
+    model = Branch.clusters.through
+    extra = 1
+
+
 class ScheduleInline(BaseTabularInline):
     """Schedule model inline object. 
         Can be used in the Course Admin view in order 
@@ -348,7 +359,7 @@ class BranchAdmin(BaseAdmin):
     list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
     list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
-    filter_horizontal   = ('organizers',)
+    filter_horizontal   = ('organizers', 'clusters')
     inlines             = ()       
     fieldsets = (
         # Translators: This is the a header in the branch admin form
@@ -365,7 +376,7 @@ class BranchAdmin(BaseAdmin):
         }), 
         # Translators: This is the a header in the branch admin form       
         (_('Organizers'), {
-            'fields': ('organizers', 'cluster')
+            'fields': ('organizers', 'clusters')
         }),        
     )
 
@@ -888,6 +899,7 @@ class ClusterAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
         
     list_display = ('name', 'slug', 'branches_string')
     fields       = ('name', 'slug',)
+    inlines      = (ClusteredBranchInline,)
 
 
 

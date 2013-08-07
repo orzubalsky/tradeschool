@@ -71,7 +71,7 @@
         "is_active": true, 
         "site": 1, 
         "email": "sample@tstest.net", 
-        "cluster": null, 
+        "clusters": [], 
         "phone": "", 
         "state": "NY", 
         "footer_copy": "<p>Information for the footer of the page</p>", 

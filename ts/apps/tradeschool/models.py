@@ -509,7 +509,7 @@ class Branch(Location):
     site        = ForeignKey(Site, verbose_name=_("site"), help_text=_("The TS system can be installed on several different domains, and still be managed using the same admin backend. This field indicates what installation of the software the branch is related to, meaning, what website do you go to in order to access it."))
     
     # Translators: If this Trade School belogns to a set of Trade Schools.
-    cluster     = ForeignKey(Cluster, verbose_name=_("cluster"), null=True, blank=True, help_text=_("TS branches can be grouped together in clusters. This is used mostly to be able to present them together on the same page. For example, all branches in East Coast can belong to the East Coast cluster, and accessed via a separate web page."))
+    clusters    = ManyToManyField(Cluster, verbose_name=_("clusters"), null=True, blank=True, help_text=_("TS branches can be grouped together in clusters. This is used mostly to be able to present them together on the same page. For example, all branches in East Coast can belong to the East Coast cluster, and accessed via a separate web page."))
     
     # Translators: This is the part that says 'Barter for Knowledge' which is also editable.
     header_copy = HTMLField(verbose_name=_("header"), null=True, blank=True, default="Barter for knowledge", help_text=_("This text appears in the header of the website."))
