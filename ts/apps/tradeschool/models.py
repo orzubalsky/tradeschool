@@ -824,9 +824,10 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         Set a default branch for the user if there they're organizing at least one Branch
         and their default_branch was not set explicitly.
         """
+        super(Person, self).save(*args, **kwargs)                
         if self.default_branch is None and self.branches_organized.count() > 0:
-            self.default_branch = self.branches_organized.all()[0]    
-        super(Person, self).save(*args, **kwargs)        
+            self.default_branch = self.branches_organized.all()[0]
+        
     
 
     def __unicode__ (self):
@@ -1282,6 +1283,9 @@ class Schedule(Durational):
             if original.schedule_status != self.schedule_status and self.schedule_status == 'approved':
                 self.email_teacher(self.teacherclassapproval)
 
+        # call the super class's save method   
+        super(Schedule, self).save(*args, **kwargs)
+
         # generate and save slug if there isn't one
         if self.slug == None or self.slug.__len__() == 0:
             self.slug = unique_slugify(Schedule, self.course.title)
@@ -1290,10 +1294,7 @@ class Schedule(Durational):
         # and copy the BarterItem objects from that one
         if self.barteritem_set.count() == 0:
             pass
-            #self.generate_barteritems_from_past_schedule()
-
-        # call the super class's save method   
-        super(Schedule, self).save(*args, **kwargs)
+            self.generate_barteritems_from_past_schedule()
 
     def __unicode__ (self):
         return "%s" % (self.course.title)
