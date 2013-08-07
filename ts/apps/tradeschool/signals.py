@@ -25,10 +25,13 @@ def branch_save_callback(sender, instance, **kwargs):
             instance.populate_notifications()
     
     # Create Teacher Info Page
-    try:
-        BranchPage.objects.get(title='I Want to Teach a Class', branch=instance)
-    except BranchPage.DoesNotExist:
-        instance.copy_teacher_info_page()
+    # but don't create it if this branch is created when running
+    # loaddata command. saving from a fixture has the 'raw' key argument
+    if kwargs.get('created') and not kwargs.get('raw', False):         
+        try:
+            Page.objects.get(url='/teacher-info/', branch=instance)
+        except Page.DoesNotExist:
+            instance.copy_teacher_info_page()
     
     
 @receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")

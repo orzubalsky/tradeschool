@@ -850,24 +850,23 @@ class PhotoAdmin(BaseAdmin):
     get_thumbnail.allow_tags = True        
 
 
-class BranchPageForm(FlatpageForm):
+class PageForm(FlatpageForm):
     class Meta:
-        model = BranchPage
+        model = Page
   
 
-class BranchPageAdmin(BaseAdmin, FlatPageAdmin):
+class PageAdmin(BaseAdmin):
     """ """
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        return super(BranchPageAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
+        return super(PageAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
             
-    form = BranchPageForm
+    form = PageForm
     fieldsets = (
-        (None, {'fields': ('url', 'title', 'content', 'branch')}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required', 'is_visible', 'template_name')}),
+        (None, {'fields': ('url', 'title', 'content', 'branch', 'is_visible', 'is_active')}),
     )
     list_display = ('title', 'url', 'branch', 'is_visible')
-    list_filter = ('sites', 'branch', 'enable_comments', 'registration_required')
+    list_filter = ('branch',)
     list_editable = ('is_visible',)
     search_fields = ('url', 'title') 
     
@@ -923,7 +922,7 @@ admin.site.register(Time, TimeAdmin)
 admin.site.register(TimeRange, TimeRangeAdmin)
 
 admin.site.unregister(FlatPage)
-admin.site.register(BranchPage, BranchPageAdmin)
+admin.site.register(Page, PageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 
 admin.site.register(DefaultEmailContainer)

@@ -581,14 +581,14 @@ class Branch(Location):
         "Creates a copy of the teacher info flatpage for each new branch that gets created."
         
         try:
-            branch_page = BranchPage.objects.get(pk=7)
+            page = Page.objects.get(url='/teacher-info/', branch=None)
         
-            branch_page_copy = copy_model_instance(branch_page)
+            page_copy = copy_model_instance(page)
         
-            branch_page_copy.branch = self
+            page_copy.branch = self
         
-            branch_page_copy.save()
-        except BranchPage.DoesNotExist:
+            page_copy.save()
+        except Page.DoesNotExist:
             pass
 
     def generate_files(self):
@@ -1283,9 +1283,6 @@ class Schedule(Durational):
             if original.schedule_status != self.schedule_status and self.schedule_status == 'approved':
                 self.email_teacher(self.teacherclassapproval)
 
-        # call the super class's save method   
-        super(Schedule, self).save(*args, **kwargs)
-
         # generate and save slug if there isn't one
         if self.slug == None or self.slug.__len__() == 0:
             self.slug = unique_slugify(Schedule, self.course.title)
@@ -1294,7 +1291,10 @@ class Schedule(Durational):
         # and copy the BarterItem objects from that one
         if self.barteritem_set.count() == 0:
             pass
-            self.generate_barteritems_from_past_schedule()
+            #self.generate_barteritems_from_past_schedule()
+
+      # call the super class's save method   
+        super(Schedule, self).save(*args, **kwargs)
 
     def __unicode__ (self):
         return "%s" % (self.course.title)
@@ -1471,9 +1471,28 @@ class Photo(Base):
         
     def __unicode__ (self):
         return "%s: %s" % (self.branch.title, self.filename)
+
+
+class PageQuerySet(QuerySet):
+    def public(self):
+        return self.filter(is_active=True)
+
+    def visible(self):
+        return self.filter(is_visible=True)
+
+
+class PageManager(Manager):
+    def get_query_set(self):
+       return PageQuerySet(self.model, using=self._db)
+
+    def public(self):
+        return self.get_query_set().public()
+
+    def visible(self):
+        return self.get_query_set().visible()
         
 
-class BranchPage(FlatPage, Base):
+class Page(Base):
     """Extending the FlatPage model to provide branch-specific content pages.
     """
     class Meta:
@@ -1484,14 +1503,22 @@ class BranchPage(FlatPage, Base):
     
         # Translators: Plural
         verbose_name_plural = _('Branch Pages')
-    
+
+        unique_together = ('branch', 'url')
+
+    url         = CharField(verbose_name=_('URL'), max_length=100, db_index=True)
+    title       = CharField(verbose_name=_('title'), max_length=200)
+    content     = HTMLField(verbose_name=_('content'), blank=True)
+
     # Translators: Used to determine whether a page is to be shown on the front page menu or not. set to yes.
-    is_visible   = BooleanField(verbose_name=_("is visible"), default=1, help_text=_("This indicates whether a page is listed in the menu or not. Visible pages appear on the menu. Other pages do not, but are still accessible via their URL."))
+    is_visible  = BooleanField(verbose_name=_("is visible"), default=1, help_text=_("This indicates whether a page is listed in the menu or not. Visible pages appear on the menu. Other pages do not, but are still accessible via their URL."))
         
     # Translators: These one is for the dynamic custom pages.
-    branch   = ForeignKey(Branch, verbose_name=_("branch"), null=True, blank=True)
-    position = PositiveSmallIntegerField(_('Position'), default=0, help_text=_("This indicates the order in which the pages are listed in the menu."))    
+    branch      = ForeignKey(Branch, verbose_name=_("branch"), null=True, blank=True)
+    
+    position    = PositiveSmallIntegerField(_('Position'), default=0, help_text=_("This indicates the order in which the pages are listed in the menu."))    
 
+    objects = PageManager()
 
 # signals are separated to signals.py 
 # just for the sake of organization

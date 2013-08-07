@@ -1,28 +1,17 @@
 [
 {
-    "pk": 7, 
-    "model": "tradeschool.branchpage", 
+    "pk": 1, 
+    "model": "tradeschool.page", 
     "fields": {
-        "is_visible": true, 
-        "updated": "2013-07-20T20:38:33Z", 
-        "created": "2013-07-20T20:36:27Z", 
+        "is_visible": false, 
+        "updated": "2013-08-07T23:35:08Z", 
+        "title": "Teacher Info", 
+        "url": "/teacher-info/", 
+        "created": "2013-08-07T23:35:08Z", 
         "is_active": true, 
-        "sites": [], 
+        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
         "branch": null, 
         "position": 0
-    }
-},
-{
-    "pk": 7, 
-    "model": "flatpages.flatpage", 
-    "fields": {
-        "registration_required": false, 
-        "title": "I Want to Teach Class", 
-        "url": "/teacher-info/", 
-        "template_name": "", 
-        "sites": [], 
-        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
-        "enable_comments": false
     }
 }
 ]

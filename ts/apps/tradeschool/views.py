@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponsePermanentRedi
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
 from django.contrib.flatpages.views import render_flatpage
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
 from tradeschool.utils import unique_slugify, branch_templates
@@ -37,8 +38,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 
     branch = get_object_or_404(Branch, slug=branch_slug)
     
-    branch_pages = BranchPage.objects.filter(branch=branch, is_visible=1)
-    
     if schedule_slug != None:
         previewed_course = Schedule.objects.get(slug=schedule_slug)
     else:
@@ -49,7 +48,6 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     return render_to_response(view_templates.template.name ,{ 
             'previewed_course'  : previewed_course,
             'templates'         : view_templates,
-            'branch_pages'      : branch_pages                    
         }, context_instance=RequestContext(request))
 
 
@@ -413,18 +411,31 @@ def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_ty
 def branch_page(request, url, branch_slug=None):
     """this is copied from django.contrib.flatpages.views only in order to 
        query the BranchPage table instead of FlatPage."""
-        
+    
+    branch = get_object_or_404(Branch, slug=branch_slug)
+
     if not url.startswith('/'):
         url = '/' + url
     
     try:
-        branch_page = get_object_or_404(BranchPage, url__exact=url, is_active=True)
+        page = get_object_or_404(Page, url__exact=url, branch=branch, is_active=True)
     except Http404:
         if not url.endswith('/') and settings.APPEND_SLASH:
             url += '/'
-            branch_page = get_object_or_404(BranchPage, url__exact=url, is_active=True)
+            page = get_object_or_404(Page, url__exact=url, is_active=True)
             return HttpResponsePermanentRedirect('%s/' % request.path)
         else:
             raise
             
-    return render_flatpage(request, branch_page)
+    # To avoid having to always use the "|safe" filter in flatpage templates,
+    # mark the title and content as already safe (since they are raw HTML
+    # content in the first place).
+    page.title = mark_safe(page.title)
+    page.content = mark_safe(page.content)
+
+    view_templates = branch_templates(branch, 'page_detail.html', 'subpage.html')    
+
+    return render_to_response(view_templates.template.name, {
+            'page'              : page,
+            'templates'         : view_templates
+        },context_instance=RequestContext(request))    

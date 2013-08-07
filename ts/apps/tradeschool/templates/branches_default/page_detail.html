@@ -1,0 +1,12 @@
+{% extends 'branches_base/page_detail.html' %}
+
+{% load i18n %}
+
+{% block main_content %}
+<div id="subPage">
+	<h2 class="subTitle">{{ page.title }}</h2>
+	<div class="subMain subWide">
+        {{ page.content }}
+	</div>
+</div>
+{% endblock main_content %}

@@ -87,7 +87,7 @@ class CustomIndexDashboard(Dashboard):
                     collapsible=False,                    
                     column=1,
                     models=('tradeschool.models.Photo',
-                            'tradeschool.models.BranchPage',                    
+                            'tradeschool.models.Page',                    
                             'django.contrib.flatpages.models.FlatPage',
                             ),
                 ),   
