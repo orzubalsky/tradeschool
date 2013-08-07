@@ -431,8 +431,8 @@ class PersonAdmin(BaseAdmin):
             
     list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'branches_string', 'created')
     search_fields       = ('fullname', 'email', 'phone')
-    fields              = ('fullname', 'email', 'phone', 'website', 'bio')
-    #prepopulated_fields = {'slug': ('fullname',)}
+    fields              = ('fullname', 'username', 'email', 'phone', 'website', 'bio')
+    #prepopulated_fields = {'slug': ('username',)}
 
     def courses_taken(self, obj):
         """ Return registration count from annotated queryset so it can be used in list_display."""
