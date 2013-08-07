@@ -39,8 +39,8 @@ def schedule_save_callback(sender, instance, **kwargs):
     # loaddata command. apparently saving from a fixture has the
     # 'raw' key argument
     if created and not kwargs.get('raw', False):     
-    if instance.emails == None:
-        instance.populate_notifications()
+        if instance.emails == None:
+            instance.populate_notifications()
 
 
 @receiver(post_save, sender=TimeRange, dispatch_uid="ts.apps.tradeschool.signals")
