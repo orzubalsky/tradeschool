@@ -48,7 +48,7 @@ class CustomIndexDashboard(Dashboard):
                             ),
                 ),
                 modules.ModelList(
-                    title=_('Scheduling'),
+                    title=_('Manage Times for Class Submissions'),
                     column=1,
                     collapsible=False,
                     models=(
