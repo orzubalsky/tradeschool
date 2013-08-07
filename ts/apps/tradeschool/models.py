@@ -94,12 +94,13 @@ class Email(Model):
 
     def preview(self, schedule_obj, registration=None):
         template = Template(self.content)
-        context  = self.template_context(schedule_obj)
+        context  = self.template_context(schedule_obj, registration)
         body     = template.render(context)
+        
         return body
 
     def send(self, schedule_obj, recipient, registration=None):
-        body    = self.preview(schedule_obj)
+        body    = self.preview(schedule_obj, registration)
         branch  = schedule_obj.course.branches.all()[0]
         send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
@@ -107,26 +108,26 @@ class Email(Model):
 
     def template_context(self, schedule_obj, registration=None):
         """ """
-        
         teacher = schedule_obj.course.teacher
         site    = Site.objects.get_current()
         branch  = Branch.objects.get(pk=schedule_obj.course.branches.all()[0].pk)
         venue   = schedule_obj.venue
         domain  = site.domain
-
+        
         student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'feedback_type': 'student'}))
         teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'feedback_type': 'teacher'}))
         class_edit_url       = "%s%s" % (domain, reverse('schedule-edit', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug,}))
         homepage_url         = "%s%s" % (domain, reverse('schedule-list', kwargs={'branch_slug': branch.slug}))
 
         student_list = ""
-        for registration in schedule_obj.registration_set.all():
-            student_list += "\n%s: " % registration.student.fullname
-            student_items = []
-            for item in registration.items.all():
-                student_items.append(item.title)
+        for registration_obj in schedule_obj.registration_set.all():
+            if registration_obj.registration_status == 'registered':
+                student_list += "\n%s: " % registration_obj.student.fullname
+                student_items = []
+                for item in registration_obj.items.all():
+                    student_items.append(item.title)
             student_list += ", ".join(map(str, student_items))
-
+        
         c = Context({
             'schedule'              : schedule_obj,
             'branch'                : branch,
@@ -138,8 +139,7 @@ class Email(Model):
             'homepage_url'          : homepage_url,
             'student_list'          : student_list
         })
-
-        if registration != None:
+        if registration is not None:
             unregister_url = "%s%s" % (domain, reverse('schedule-unregister', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
             item_list = ""
             for item in registration.items.all():
@@ -1225,15 +1225,15 @@ class Schedule(Durational):
                 new_item.save()        
 
     def email_teacher(self, email):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        """shortcut method to send an email via the Schedule object."""
         return email.send(self, (self.course.teacher.email,))
 
     def email_student(self, email, registration):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        """shortcut method to send an email via the Schedule object."""
         return email.send(self, (registration.student.email,), registration)
 
     def email_students(self, email):
-        """shortcut method to send an email via the ScheduleEmailContainer object."""
+        """shortcut method to send an email via the Schedule object."""
         for registration in self.registration_set.all():
             if registration.registration_status == 'registered':
                 self.email_student(email, registration)

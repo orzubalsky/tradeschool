@@ -28,6 +28,7 @@ class RegistrationTestCase(TestCase):
         self.branch.save()
 
         self.schedule = Schedule.objects.filter(course__branches=self.branch)[0]
+
         self.valid_data = {
                 'student-fullname' : 'test student',
                 'student-email'    : 'test123!@email.com',
@@ -87,7 +88,7 @@ class RegistrationTestCase(TestCase):
         response = self.do_register()
         
         self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')
-
+        #print response.context
         # check that the registration got saved correctly
         self.compare_registration_to_data(response.context['registration'])
         
@@ -101,7 +102,7 @@ class RegistrationTestCase(TestCase):
         # test that one message was sent.
         self.assertEqual(len(mail.outbox), 1)        
 
-        email = self.schedule.emails.student_confirmation        
+        email = self.schedule.studentconfirmation        
         #self.assertEqual(email.email_status, 'sent')
         
         # verify that the subject of the message is correct.

@@ -111,7 +111,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
                     registration.items.add(barter_item)
 
                 registration.save()
-                
+                                
                 # email confirmation to student
                 schedule.email_student(schedule.studentconfirmation, registration)
 
