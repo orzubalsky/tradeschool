@@ -28,7 +28,6 @@ ts/tmp/
 ts/settings/tmp/
 
 # ignore sql data dump:
-sample_data.json
 ts/apps/tradeschool/fixtures/migration.json
 
 # ignore branch template files (for now)

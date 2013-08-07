@@ -1,0 +1,2638 @@
+[
+{
+    "pk": 1, 
+    "model": "tradeschool.branch", 
+    "fields": {
+        "branch_status": "in_session", 
+        "city": "Sample Town", 
+        "updated": "2013-08-06T22:45:41Z", 
+        "language": "en", 
+        "title": "Sample Trade School Branch", 
+        "intro_copy": "<p>Information for the header of the page</p>", 
+        "country": "US", 
+        "header_copy": "<p>Barter for knowledge</p>", 
+        "created": "2013-08-06T22:45:41Z", 
+        "is_active": true, 
+        "site": 1, 
+        "email": "sample@tstest.net", 
+        "cluster": null, 
+        "phone": "", 
+        "state": "NY", 
+        "footer_copy": "<p>Information for the footer of the page</p>", 
+        "timezone": "US/Eastern", 
+        "slug": "sample-trade-school-branch", 
+        "organizers": [
+            1, 
+            2
+        ]
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.studentconfirmation", 
+    "fields": {
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ schedule.course.title }}\" on: {{ schedule.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "email_status": "not_sent", 
+        "schedule": null, 
+        "branch": null, 
+        "subject": "Welcome to Trade School!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.studentconfirmation", 
+    "fields": {
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ schedule.course.title }}\" on: {{ schedule.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "email_status": "not_sent", 
+        "schedule": null, 
+        "branch": 1, 
+        "subject": "Welcome to Trade School!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.studentconfirmation", 
+    "fields": {
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ schedule.course.title }}\" on: {{ schedule.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "email_status": "sent", 
+        "schedule": 2, 
+        "branch": null, 
+        "subject": "Welcome to Trade School!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.studentreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ schedule.course.title }}\" with {{ teacher.fullname }} from {{ schedule.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "a reminder about your class tomorrow"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.studentreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ schedule.course.title }}\" with {{ teacher.fullname }} from {{ schedule.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "branch": 1, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "a reminder about your class tomorrow"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.studentreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": 2, 
+        "send_on": "2050-09-04T15:00:00Z", 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ schedule.course.title }}\" with {{ teacher.fullname }} from {{ schedule.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "a reminder about your class tomorrow"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.studentfeedback", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ schedule.course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how was your class?"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.studentfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ schedule.course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "branch": 1, 
+        "send_time": "16:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how was your class?"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.studentfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "schedule": 2, 
+        "send_on": "2050-09-06T21:00:00Z", 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ schedule.course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "branch": null, 
+        "send_time": "16:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how was your class?"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherconfirmation", 
+    "fields": {
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ schedule.course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the schedule.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "email_status": "not_sent", 
+        "schedule": null, 
+        "branch": null, 
+        "subject": "thanks for submitting a class!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherconfirmation", 
+    "fields": {
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ schedule.course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the schedule.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "email_status": "not_sent", 
+        "schedule": null, 
+        "branch": 1, 
+        "subject": "thanks for submitting a class!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherconfirmation", 
+    "fields": {
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ schedule.course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the schedule.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "email_status": "sent", 
+        "schedule": 2, 
+        "branch": null, 
+        "subject": "thanks for submitting a class!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherclassapproval", 
+    "fields": {
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ schedule.course.title }}\" has been approved and is scheduled for {{ schedule.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "email_status": "not_sent", 
+        "schedule": null, 
+        "branch": null, 
+        "subject": "your class has been approved!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherclassapproval", 
+    "fields": {
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ schedule.course.title }}\" has been approved and is scheduled for {{ schedule.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "email_status": "not_sent", 
+        "schedule": null, 
+        "branch": 1, 
+        "subject": "your class has been approved!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherclassapproval", 
+    "fields": {
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ schedule.course.title }}\" has been approved and is scheduled for {{ schedule.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "email_status": "sent", 
+        "schedule": 2, 
+        "branch": null, 
+        "subject": "your class has been approved!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ schedule.course.title }}\" is scheduled for {{ schedule.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "We're excited to see you tomorrow!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ schedule.course.title }}\" is scheduled for {{ schedule.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "branch": 1, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "We're excited to see you tomorrow!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": 2, 
+        "send_on": "2050-09-04T23:00:00Z", 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ schedule.course.title }}\" is scheduled for {{ schedule.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "branch": null, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "We're excited to see you tomorrow!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherfeedback", 
+    "fields": {
+        "days_delta": -1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ schedule.course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how did it go?"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "schedule": null, 
+        "send_on": null, 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ schedule.course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "branch": 1, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how did it go?"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "schedule": 2, 
+        "send_on": "2050-09-06T23:00:00Z", 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ schedule.course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "branch": null, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how did it go?"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.defaultemailcontainer", 
+    "fields": {
+        "updated": "2013-01-15T03:36:48Z", 
+        "studentreminder": 1, 
+        "teacherconfirmation": 1, 
+        "created": "2013-01-15T03:36:48Z", 
+        "studentconfirmation": 1, 
+        "is_active": true, 
+        "teacherreminder": 1, 
+        "teacherclassapproval": 1, 
+        "studentfeedback": 1, 
+        "teacherfeedback": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.venue", 
+    "fields": {
+        "city": "Sampletown", 
+        "updated": "2013-08-06T22:46:34Z", 
+        "capacity": 20, 
+        "title": "Sample Venue no 1", 
+        "color": "#3a490c", 
+        "country": "US", 
+        "created": "2013-08-06T22:46:34Z", 
+        "is_active": true, 
+        "phone": "", 
+        "state": "NY", 
+        "address_1": "100 Sample St.", 
+        "branch": 1, 
+        "resources": "Chairs, Tables"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.venue", 
+    "fields": {
+        "city": "Sampletown", 
+        "updated": "2013-08-06T22:47:02Z", 
+        "capacity": 15, 
+        "title": "Sample Venue no. 2", 
+        "color": "#c05c35", 
+        "country": "US", 
+        "created": "2013-08-06T22:47:02Z", 
+        "is_active": true, 
+        "phone": "", 
+        "state": "NY", 
+        "address_1": "200 Sample Ave.", 
+        "branch": 1, 
+        "resources": "Chairs, Tables, Kitchen"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-08T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-09T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-09T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-10T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-15T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-16T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-16T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-17T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 5, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-22T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-23T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-23T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-24T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-29T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-30T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 8, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-30T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-31T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 10, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-11T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-12T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 11, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-12T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-13T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 12, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-18T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-19T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 13, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-19T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-20T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 14, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-25T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-26T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 15, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-26T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-27T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 16, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-10-02T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-03T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 17, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-10-03T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-04T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 18, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:49:37Z", 
+        "created": "2013-08-06T22:49:32Z", 
+        "is_active": true, 
+        "start_time": "2050-10-06T22:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-06T23:00:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 19, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:49:48Z", 
+        "created": "2013-08-06T22:49:48Z", 
+        "is_active": true, 
+        "start_time": "2050-10-06T23:00:00Z", 
+        "venue": 2, 
+        "end_time": "2050-10-07T00:00:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "monday": true, 
+        "end_date": "2050-09-06", 
+        "created": "2013-08-06T22:47:37Z", 
+        "venue": 1, 
+        "start_time": "18:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": false, 
+        "thursday": false, 
+        "saturday": false, 
+        "sunday": false, 
+        "end_time": "19:30:00", 
+        "branch": 1, 
+        "tuesday": true, 
+        "start_date": "2050-08-06"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "monday": true, 
+        "end_date": "2050-10-06", 
+        "created": "2013-08-06T22:47:54Z", 
+        "venue": null, 
+        "start_time": "18:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": false, 
+        "thursday": false, 
+        "saturday": false, 
+        "sunday": true, 
+        "end_time": "19:30:00", 
+        "branch": 1, 
+        "tuesday": false, 
+        "start_date": "2050-09-06"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Drawing paper", 
+        "is_active": true, 
+        "schedule": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Tea leaves", 
+        "is_active": true, 
+        "schedule": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 8, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Bike parts", 
+        "is_active": true, 
+        "schedule": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 9, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Job-search help", 
+        "is_active": true, 
+        "schedule": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 10, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Feedback on a project", 
+        "is_active": true, 
+        "schedule": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 9, 
+    "model": "tradeschool.branchpage", 
+    "fields": {
+        "is_visible": true, 
+        "updated": "2013-08-06T22:52:08Z", 
+        "created": "2013-08-06T22:52:08Z", 
+        "is_active": true, 
+        "sites": [], 
+        "branch": 1, 
+        "position": 0
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.branchpage", 
+    "fields": {
+        "is_visible": true, 
+        "updated": "2013-07-20T20:38:33Z", 
+        "created": "2013-07-20T20:36:27Z", 
+        "is_active": true, 
+        "sites": [], 
+        "branch": null, 
+        "position": 0
+    }
+},
+{
+    "pk": 8, 
+    "model": "tradeschool.branchpage", 
+    "fields": {
+        "is_visible": true, 
+        "updated": "2013-08-06T22:45:41Z", 
+        "created": "2013-08-06T22:45:41Z", 
+        "is_active": true, 
+        "sites": [], 
+        "branch": 1, 
+        "position": 0
+    }
+},
+{
+    "pk": 1, 
+    "model": "sites.site", 
+    "fields": {
+        "domain": "http://test.tradeschool.coop", 
+        "name": "Test Site"
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_permission", 
+        "name": "Can add permission", 
+        "content_type": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_permission", 
+        "name": "Can change permission", 
+        "content_type": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_permission", 
+        "name": "Can delete permission", 
+        "content_type": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_group", 
+        "name": "Can add group", 
+        "content_type": 2
+    }
+},
+{
+    "pk": 5, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_group", 
+        "name": "Can change group", 
+        "content_type": 2
+    }
+},
+{
+    "pk": 6, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_group", 
+        "name": "Can delete group", 
+        "content_type": 2
+    }
+},
+{
+    "pk": 7, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_contenttype", 
+        "name": "Can add content type", 
+        "content_type": 3
+    }
+},
+{
+    "pk": 8, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_contenttype", 
+        "name": "Can change content type", 
+        "content_type": 3
+    }
+},
+{
+    "pk": 9, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_contenttype", 
+        "name": "Can delete content type", 
+        "content_type": 3
+    }
+},
+{
+    "pk": 10, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_session", 
+        "name": "Can add session", 
+        "content_type": 4
+    }
+},
+{
+    "pk": 11, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_session", 
+        "name": "Can change session", 
+        "content_type": 4
+    }
+},
+{
+    "pk": 12, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_session", 
+        "name": "Can delete session", 
+        "content_type": 4
+    }
+},
+{
+    "pk": 13, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_site", 
+        "name": "Can add site", 
+        "content_type": 5
+    }
+},
+{
+    "pk": 14, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_site", 
+        "name": "Can change site", 
+        "content_type": 5
+    }
+},
+{
+    "pk": 15, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_site", 
+        "name": "Can delete site", 
+        "content_type": 5
+    }
+},
+{
+    "pk": 16, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_logentry", 
+        "name": "Can add log entry", 
+        "content_type": 6
+    }
+},
+{
+    "pk": 17, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_logentry", 
+        "name": "Can change log entry", 
+        "content_type": 6
+    }
+},
+{
+    "pk": 18, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_logentry", 
+        "name": "Can delete log entry", 
+        "content_type": 6
+    }
+},
+{
+    "pk": 19, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_redirect", 
+        "name": "Can add redirect", 
+        "content_type": 7
+    }
+},
+{
+    "pk": 20, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_redirect", 
+        "name": "Can change redirect", 
+        "content_type": 7
+    }
+},
+{
+    "pk": 21, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_redirect", 
+        "name": "Can delete redirect", 
+        "content_type": 7
+    }
+},
+{
+    "pk": 22, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_flatpage", 
+        "name": "Can add flat page", 
+        "content_type": 8
+    }
+},
+{
+    "pk": 23, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_flatpage", 
+        "name": "Can change flat page", 
+        "content_type": 8
+    }
+},
+{
+    "pk": 24, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_flatpage", 
+        "name": "Can delete flat page", 
+        "content_type": 8
+    }
+},
+{
+    "pk": 25, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_migrationhistory", 
+        "name": "Can add migration history", 
+        "content_type": 9
+    }
+},
+{
+    "pk": 26, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_migrationhistory", 
+        "name": "Can change migration history", 
+        "content_type": 9
+    }
+},
+{
+    "pk": 27, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_migrationhistory", 
+        "name": "Can delete migration history", 
+        "content_type": 9
+    }
+},
+{
+    "pk": 28, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_studentconfirmation", 
+        "name": "Can add Student confirmation", 
+        "content_type": 10
+    }
+},
+{
+    "pk": 29, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_studentconfirmation", 
+        "name": "Can change Student confirmation", 
+        "content_type": 10
+    }
+},
+{
+    "pk": 30, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_studentconfirmation", 
+        "name": "Can delete Student confirmation", 
+        "content_type": 10
+    }
+},
+{
+    "pk": 31, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_studentreminder", 
+        "name": "Can add Student reminder", 
+        "content_type": 11
+    }
+},
+{
+    "pk": 32, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_studentreminder", 
+        "name": "Can change Student reminder", 
+        "content_type": 11
+    }
+},
+{
+    "pk": 33, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_studentreminder", 
+        "name": "Can delete Student reminder", 
+        "content_type": 11
+    }
+},
+{
+    "pk": 34, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_studentfeedback", 
+        "name": "Can add Student feedback e-mail", 
+        "content_type": 12
+    }
+},
+{
+    "pk": 35, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_studentfeedback", 
+        "name": "Can change Student feedback e-mail", 
+        "content_type": 12
+    }
+},
+{
+    "pk": 36, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_studentfeedback", 
+        "name": "Can delete Student feedback e-mail", 
+        "content_type": 12
+    }
+},
+{
+    "pk": 37, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teacherconfirmation", 
+        "name": "Can add Teacher confirmation", 
+        "content_type": 13
+    }
+},
+{
+    "pk": 38, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teacherconfirmation", 
+        "name": "Can change Teacher confirmation", 
+        "content_type": 13
+    }
+},
+{
+    "pk": 39, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teacherconfirmation", 
+        "name": "Can delete Teacher confirmation", 
+        "content_type": 13
+    }
+},
+{
+    "pk": 40, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teacherclassapproval", 
+        "name": "Can add teacher class approval", 
+        "content_type": 14
+    }
+},
+{
+    "pk": 41, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teacherclassapproval", 
+        "name": "Can change teacher class approval", 
+        "content_type": 14
+    }
+},
+{
+    "pk": 42, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teacherclassapproval", 
+        "name": "Can delete teacher class approval", 
+        "content_type": 14
+    }
+},
+{
+    "pk": 43, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teacherreminder", 
+        "name": "Can add Teacher reminder", 
+        "content_type": 15
+    }
+},
+{
+    "pk": 44, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teacherreminder", 
+        "name": "Can change Teacher reminder", 
+        "content_type": 15
+    }
+},
+{
+    "pk": 45, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teacherreminder", 
+        "name": "Can delete Teacher reminder", 
+        "content_type": 15
+    }
+},
+{
+    "pk": 46, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teacherfeedback", 
+        "name": "Can add Teacher feedback e-mail", 
+        "content_type": 16
+    }
+},
+{
+    "pk": 47, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teacherfeedback", 
+        "name": "Can change Teacher feedback e-mail", 
+        "content_type": 16
+    }
+},
+{
+    "pk": 48, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teacherfeedback", 
+        "name": "Can delete Teacher feedback e-mail", 
+        "content_type": 16
+    }
+},
+{
+    "pk": 49, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_defaultemailcontainer", 
+        "name": "Can add Default e-mail container", 
+        "content_type": 17
+    }
+},
+{
+    "pk": 50, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_defaultemailcontainer", 
+        "name": "Can change Default e-mail container", 
+        "content_type": 17
+    }
+},
+{
+    "pk": 51, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_defaultemailcontainer", 
+        "name": "Can delete Default e-mail container", 
+        "content_type": 17
+    }
+},
+{
+    "pk": 52, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_cluster", 
+        "name": "Can add Branch Cluster", 
+        "content_type": 18
+    }
+},
+{
+    "pk": 53, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_cluster", 
+        "name": "Can change Branch Cluster", 
+        "content_type": 18
+    }
+},
+{
+    "pk": 54, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_cluster", 
+        "name": "Can delete Branch Cluster", 
+        "content_type": 18
+    }
+},
+{
+    "pk": 55, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_branch", 
+        "name": "Can add Branch", 
+        "content_type": 19
+    }
+},
+{
+    "pk": 56, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_branch", 
+        "name": "Can change Branch", 
+        "content_type": 19
+    }
+},
+{
+    "pk": 57, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_branch", 
+        "name": "Can delete Branch", 
+        "content_type": 19
+    }
+},
+{
+    "pk": 58, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_venue", 
+        "name": "Can add Venue", 
+        "content_type": 20
+    }
+},
+{
+    "pk": 59, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_venue", 
+        "name": "Can change Venue", 
+        "content_type": 20
+    }
+},
+{
+    "pk": 60, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_venue", 
+        "name": "Can delete Venue", 
+        "content_type": 20
+    }
+},
+{
+    "pk": 61, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_person", 
+        "name": "Can add Person", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 62, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_person", 
+        "name": "Can change Person", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 63, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_person", 
+        "name": "Can delete Person", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 64, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_organizer", 
+        "name": "Can add Organizer", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 65, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_organizer", 
+        "name": "Can change Organizer", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 66, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_organizer", 
+        "name": "Can delete Organizer", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 67, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teacher", 
+        "name": "Can add Teacher", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 68, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teacher", 
+        "name": "Can change Teacher", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 69, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teacher", 
+        "name": "Can delete Teacher", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 70, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_student", 
+        "name": "Can add Student", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 71, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_student", 
+        "name": "Can change Student", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 72, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_student", 
+        "name": "Can delete Student", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 73, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_course", 
+        "name": "Can add Class", 
+        "content_type": 22
+    }
+},
+{
+    "pk": 74, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_course", 
+        "name": "Can change Class", 
+        "content_type": 22
+    }
+},
+{
+    "pk": 75, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_course", 
+        "name": "Can delete Class", 
+        "content_type": 22
+    }
+},
+{
+    "pk": 76, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_time", 
+        "name": "Can add Calendar Open Time Slot", 
+        "content_type": 23
+    }
+},
+{
+    "pk": 77, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_time", 
+        "name": "Can change Calendar Open Time Slot", 
+        "content_type": 23
+    }
+},
+{
+    "pk": 78, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_time", 
+        "name": "Can delete Calendar Open Time Slot", 
+        "content_type": 23
+    }
+},
+{
+    "pk": 79, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_timerange", 
+        "name": "Can add Calendar Open Time Slot Range", 
+        "content_type": 24
+    }
+},
+{
+    "pk": 80, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_timerange", 
+        "name": "Can change Calendar Open Time Slot Range", 
+        "content_type": 24
+    }
+},
+{
+    "pk": 81, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_timerange", 
+        "name": "Can delete Calendar Open Time Slot Range", 
+        "content_type": 24
+    }
+},
+{
+    "pk": 82, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_barteritem", 
+        "name": "Can add Barter item", 
+        "content_type": 25
+    }
+},
+{
+    "pk": 83, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_barteritem", 
+        "name": "Can change Barter item", 
+        "content_type": 25
+    }
+},
+{
+    "pk": 84, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_barteritem", 
+        "name": "Can delete Barter item", 
+        "content_type": 25
+    }
+},
+{
+    "pk": 85, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_schedule", 
+        "name": "Can add Class Schedule", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 86, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_schedule", 
+        "name": "Can change Class Schedule", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 87, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_schedule", 
+        "name": "Can delete Class Schedule", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 88, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_pendingschedule", 
+        "name": "Can add Pending Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 89, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_pendingschedule", 
+        "name": "Can change Pending Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 90, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_pendingschedule", 
+        "name": "Can delete Pending Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 91, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_approvedschedule", 
+        "name": "Can add Approved Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 92, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_approvedschedule", 
+        "name": "Can change Approved Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 93, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_approvedschedule", 
+        "name": "Can delete Approved Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 94, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_pastschedule", 
+        "name": "Can add Past Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 95, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_pastschedule", 
+        "name": "Can change Past Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 96, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_pastschedule", 
+        "name": "Can delete Past Scheduled Classes", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 97, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_registration", 
+        "name": "Can add Registration", 
+        "content_type": 27
+    }
+},
+{
+    "pk": 98, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_registration", 
+        "name": "Can change Registration", 
+        "content_type": 27
+    }
+},
+{
+    "pk": 99, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_registration", 
+        "name": "Can delete Registration", 
+        "content_type": 27
+    }
+},
+{
+    "pk": 100, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_feedback", 
+        "name": "Can add Feedback", 
+        "content_type": 28
+    }
+},
+{
+    "pk": 101, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_feedback", 
+        "name": "Can change Feedback", 
+        "content_type": 28
+    }
+},
+{
+    "pk": 102, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_feedback", 
+        "name": "Can delete Feedback", 
+        "content_type": 28
+    }
+},
+{
+    "pk": 103, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_photo", 
+        "name": "Can add Photo", 
+        "content_type": 29
+    }
+},
+{
+    "pk": 104, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_photo", 
+        "name": "Can change Photo", 
+        "content_type": 29
+    }
+},
+{
+    "pk": 105, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_photo", 
+        "name": "Can delete Photo", 
+        "content_type": 29
+    }
+},
+{
+    "pk": 106, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_branchpage", 
+        "name": "Can add Branch Page", 
+        "content_type": 30
+    }
+},
+{
+    "pk": 107, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_branchpage", 
+        "name": "Can change Branch Page", 
+        "content_type": 30
+    }
+},
+{
+    "pk": 108, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_branchpage", 
+        "name": "Can delete Branch Page", 
+        "content_type": 30
+    }
+},
+{
+    "pk": 109, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_branchpages", 
+        "name": "Can add branch pages", 
+        "content_type": 37
+    }
+},
+{
+    "pk": 110, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_branchpages", 
+        "name": "Can change branch pages", 
+        "content_type": 37
+    }
+},
+{
+    "pk": 111, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_branchpages", 
+        "name": "Can delete branch pages", 
+        "content_type": 37
+    }
+},
+{
+    "pk": 112, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_branchphotos", 
+        "name": "Can add branch photos", 
+        "content_type": 38
+    }
+},
+{
+    "pk": 113, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_branchphotos", 
+        "name": "Can change branch photos", 
+        "content_type": 38
+    }
+},
+{
+    "pk": 114, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_branchphotos", 
+        "name": "Can delete branch photos", 
+        "content_type": 38
+    }
+},
+{
+    "pk": 115, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_branchseasons", 
+        "name": "Can add branch seasons", 
+        "content_type": 39
+    }
+},
+{
+    "pk": 116, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_branchseasons", 
+        "name": "Can change branch seasons", 
+        "content_type": 39
+    }
+},
+{
+    "pk": 117, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_branchseasons", 
+        "name": "Can delete branch seasons", 
+        "content_type": 39
+    }
+},
+{
+    "pk": 118, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_branches", 
+        "name": "Can add branches", 
+        "content_type": 40
+    }
+},
+{
+    "pk": 119, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_branches", 
+        "name": "Can change branches", 
+        "content_type": 40
+    }
+},
+{
+    "pk": 120, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_branches", 
+        "name": "Can delete branches", 
+        "content_type": 40
+    }
+},
+{
+    "pk": 121, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classcategories", 
+        "name": "Can add class categories", 
+        "content_type": 41
+    }
+},
+{
+    "pk": 122, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classcategories", 
+        "name": "Can change class categories", 
+        "content_type": 41
+    }
+},
+{
+    "pk": 123, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classcategories", 
+        "name": "Can delete class categories", 
+        "content_type": 41
+    }
+},
+{
+    "pk": 124, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classnotifications", 
+        "name": "Can add class notifications", 
+        "content_type": 42
+    }
+},
+{
+    "pk": 125, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classnotifications", 
+        "name": "Can change class notifications", 
+        "content_type": 42
+    }
+},
+{
+    "pk": 126, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classnotifications", 
+        "name": "Can delete class notifications", 
+        "content_type": 42
+    }
+},
+{
+    "pk": 127, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classes", 
+        "name": "Can add classes", 
+        "content_type": 43
+    }
+},
+{
+    "pk": 128, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classes", 
+        "name": "Can change classes", 
+        "content_type": 43
+    }
+},
+{
+    "pk": 129, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classes", 
+        "name": "Can delete classes", 
+        "content_type": 43
+    }
+},
+{
+    "pk": 130, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classesxitems", 
+        "name": "Can add classes x items", 
+        "content_type": 44
+    }
+},
+{
+    "pk": 131, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classesxitems", 
+        "name": "Can change classes x items", 
+        "content_type": 44
+    }
+},
+{
+    "pk": 132, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classesxitems", 
+        "name": "Can delete classes x items", 
+        "content_type": 44
+    }
+},
+{
+    "pk": 133, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_feedbacks", 
+        "name": "Can add feedbacks", 
+        "content_type": 45
+    }
+},
+{
+    "pk": 134, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_feedbacks", 
+        "name": "Can change feedbacks", 
+        "content_type": 45
+    }
+},
+{
+    "pk": 135, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_feedbacks", 
+        "name": "Can delete feedbacks", 
+        "content_type": 45
+    }
+},
+{
+    "pk": 136, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_items", 
+        "name": "Can add items", 
+        "content_type": 46
+    }
+},
+{
+    "pk": 137, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_items", 
+        "name": "Can change items", 
+        "content_type": 46
+    }
+},
+{
+    "pk": 138, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_items", 
+        "name": "Can delete items", 
+        "content_type": 46
+    }
+},
+{
+    "pk": 139, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_mailinglist", 
+        "name": "Can add mailinglist", 
+        "content_type": 47
+    }
+},
+{
+    "pk": 140, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_mailinglist", 
+        "name": "Can change mailinglist", 
+        "content_type": 47
+    }
+},
+{
+    "pk": 141, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_mailinglist", 
+        "name": "Can delete mailinglist", 
+        "content_type": 47
+    }
+},
+{
+    "pk": 142, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_notifications", 
+        "name": "Can add notifications", 
+        "content_type": 48
+    }
+},
+{
+    "pk": 143, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_notifications", 
+        "name": "Can change notifications", 
+        "content_type": 48
+    }
+},
+{
+    "pk": 144, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_notifications", 
+        "name": "Can delete notifications", 
+        "content_type": 48
+    }
+},
+{
+    "pk": 145, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_notificationsdefaults", 
+        "name": "Can add notifications defaults", 
+        "content_type": 49
+    }
+},
+{
+    "pk": 146, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_notificationsdefaults", 
+        "name": "Can change notifications defaults", 
+        "content_type": 49
+    }
+},
+{
+    "pk": 147, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_notificationsdefaults", 
+        "name": "Can delete notifications defaults", 
+        "content_type": 49
+    }
+},
+{
+    "pk": 148, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_students", 
+        "name": "Can add students", 
+        "content_type": 50
+    }
+},
+{
+    "pk": 149, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_students", 
+        "name": "Can change students", 
+        "content_type": 50
+    }
+},
+{
+    "pk": 150, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_students", 
+        "name": "Can delete students", 
+        "content_type": 50
+    }
+},
+{
+    "pk": 151, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_studentsxclasses", 
+        "name": "Can add students x classes", 
+        "content_type": 51
+    }
+},
+{
+    "pk": 152, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_studentsxclasses", 
+        "name": "Can change students x classes", 
+        "content_type": 51
+    }
+},
+{
+    "pk": 153, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_studentsxclasses", 
+        "name": "Can delete students x classes", 
+        "content_type": 51
+    }
+},
+{
+    "pk": 154, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_studentsxitems", 
+        "name": "Can add students x items", 
+        "content_type": 52
+    }
+},
+{
+    "pk": 155, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_studentsxitems", 
+        "name": "Can change students x items", 
+        "content_type": 52
+    }
+},
+{
+    "pk": 156, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_studentsxitems", 
+        "name": "Can delete students x items", 
+        "content_type": 52
+    }
+},
+{
+    "pk": 157, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teachers", 
+        "name": "Can add teachers", 
+        "content_type": 53
+    }
+},
+{
+    "pk": 158, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teachers", 
+        "name": "Can change teachers", 
+        "content_type": 53
+    }
+},
+{
+    "pk": 159, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teachers", 
+        "name": "Can delete teachers", 
+        "content_type": 53
+    }
+},
+{
+    "pk": 160, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teachersxclasses", 
+        "name": "Can add teachers x classes", 
+        "content_type": 54
+    }
+},
+{
+    "pk": 161, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teachersxclasses", 
+        "name": "Can change teachers x classes", 
+        "content_type": 54
+    }
+},
+{
+    "pk": 162, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teachersxclasses", 
+        "name": "Can delete teachers x classes", 
+        "content_type": 54
+    }
+},
+{
+    "pk": 163, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_users", 
+        "name": "Can add users", 
+        "content_type": 55
+    }
+},
+{
+    "pk": 164, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_users", 
+        "name": "Can change users", 
+        "content_type": 55
+    }
+},
+{
+    "pk": 165, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_users", 
+        "name": "Can delete users", 
+        "content_type": 55
+    }
+},
+{
+    "pk": 166, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_venuerules", 
+        "name": "Can add venue rules", 
+        "content_type": 56
+    }
+},
+{
+    "pk": 167, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_venuerules", 
+        "name": "Can change venue rules", 
+        "content_type": 56
+    }
+},
+{
+    "pk": 168, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_venuerules", 
+        "name": "Can delete venue rules", 
+        "content_type": 56
+    }
+},
+{
+    "pk": 169, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_venuerulesexceptions", 
+        "name": "Can add venue rules exceptions", 
+        "content_type": 57
+    }
+},
+{
+    "pk": 170, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_venuerulesexceptions", 
+        "name": "Can change venue rules exceptions", 
+        "content_type": 57
+    }
+},
+{
+    "pk": 171, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_venuerulesexceptions", 
+        "name": "Can delete venue rules exceptions", 
+        "content_type": 57
+    }
+},
+{
+    "pk": 172, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_venuetimes", 
+        "name": "Can add venue times", 
+        "content_type": 58
+    }
+},
+{
+    "pk": 173, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_venuetimes", 
+        "name": "Can change venue times", 
+        "content_type": 58
+    }
+},
+{
+    "pk": 174, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_venuetimes", 
+        "name": "Can delete venue times", 
+        "content_type": 58
+    }
+},
+{
+    "pk": 175, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_venues", 
+        "name": "Can add venues", 
+        "content_type": 59
+    }
+},
+{
+    "pk": 176, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_venues", 
+        "name": "Can change venues", 
+        "content_type": 59
+    }
+},
+{
+    "pk": 177, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_venues", 
+        "name": "Can delete venues", 
+        "content_type": 59
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "translators", 
+        "permissions": [
+            7, 
+            8, 
+            22, 
+            23, 
+            24, 
+            109, 
+            110, 
+            111, 
+            112, 
+            113, 
+            114, 
+            25, 
+            26, 
+            27, 
+            82, 
+            83, 
+            84, 
+            55, 
+            56, 
+            57, 
+            106, 
+            107, 
+            108, 
+            53, 
+            73, 
+            74, 
+            75, 
+            100, 
+            101, 
+            102, 
+            64, 
+            61, 
+            70, 
+            67, 
+            65, 
+            62, 
+            71, 
+            68, 
+            66, 
+            63, 
+            72, 
+            69, 
+            103, 
+            104, 
+            105, 
+            97, 
+            98, 
+            99, 
+            91, 
+            94, 
+            88, 
+            92, 
+            95, 
+            89, 
+            86, 
+            93, 
+            96, 
+            90, 
+            29, 
+            35, 
+            32, 
+            41, 
+            38, 
+            47, 
+            44, 
+            76, 
+            77, 
+            78, 
+            79, 
+            80, 
+            81, 
+            58, 
+            59, 
+            60
+        ]
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "admin", 
+        "bio": "", 
+        "updated": "2013-06-06T22:03:54Z", 
+        "branches": [], 
+        "language": "en", 
+        "created": "2013-06-06T22:03:54Z", 
+        "is_active": true, 
+        "phone": null, 
+        "slug": "", 
+        "website": null, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2013-08-06T22:56:43Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "admin", 
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin@test.tradeschool.coop"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "SampleOrganizer", 
+        "bio": "", 
+        "updated": "2013-08-06T22:50:23Z", 
+        "branches": [], 
+        "language": "en", 
+        "created": "2013-08-06T22:50:23Z", 
+        "is_active": true, 
+        "phone": null, 
+        "slug": "", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": true, 
+        "last_login": "2013-08-06T22:50:23Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Organizer", 
+        "password": "", 
+        "email": "sampleorganizer@tstest.net"
+    }
+},
+{
+    "pk": 3, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-teacher", 
+        "bio": "I am a sample teacher!", 
+        "updated": "2013-08-06T22:56:16Z", 
+        "branches": [
+            1
+        ], 
+        "language": "en", 
+        "created": "2013-08-06T22:54:52Z", 
+        "is_active": true, 
+        "phone": "123-123-1234", 
+        "slug": "sample-teacher", 
+        "website": "http://tradeschool.coop/", 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:54:51Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Teacher", 
+        "password": "pbkdf2_sha256$10000$eoAm2tTtLiu6$9g9x46Aq2aUdG6gKU32SHy526n3SQFrZhViN+dB7l9E=", 
+        "email": "sampleteacher@tstest.net"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-student-number-1", 
+        "bio": "", 
+        "updated": "2013-08-06T22:58:38Z", 
+        "branches": [
+            1
+        ], 
+        "language": "en", 
+        "created": "2013-08-06T22:58:38Z", 
+        "is_active": true, 
+        "phone": "", 
+        "slug": "sample-student-number-1", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:58:38Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Student Number 1", 
+        "password": "pbkdf2_sha256$10000$uBoqE9rejV5I$2ji90MdksM8TXjE2gZZvgC4GNXKhR5XAxF4QrfC0kmY=", 
+        "email": "samplestudent1@tstest.net"
+    }
+},
+{
+    "pk": 5, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-student-number-2", 
+        "bio": "", 
+        "updated": "2013-08-06T22:59:28Z", 
+        "branches": [
+            1
+        ], 
+        "language": "en", 
+        "created": "2013-08-06T22:59:27Z", 
+        "is_active": true, 
+        "phone": "234-234-2345", 
+        "slug": "sample-student-number-2", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:59:27Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Student Number 2", 
+        "password": "pbkdf2_sha256$10000$OgXhsU1YkneB$Quz7n4nDFj1urTib+0lIMTBQy2s8ldFOAtmm4D6s9AA=", 
+        "email": "samplestudent2@tstest.net"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-student-number-3", 
+        "bio": "", 
+        "updated": "2013-08-06T22:59:51Z", 
+        "branches": [
+            1
+        ], 
+        "language": "en", 
+        "created": "2013-08-06T22:59:51Z", 
+        "is_active": true, 
+        "phone": "", 
+        "slug": "sample-student-number-3", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:59:51Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Student Number 3", 
+        "password": "pbkdf2_sha256$10000$9ydFRBJSbPO1$iEj8y4pjXgXBBHXjrwkFm2cuvzrC9hoZNCT4N07qKPI=", 
+        "email": "samplestudent3@tstest.net"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.course", 
+    "fields": {
+        "category": 0, 
+        "updated": "2013-08-06T22:56:17Z", 
+        "branches": [
+            1
+        ], 
+        "description": "This is a sample class", 
+        "created": "2013-08-06T22:54:52Z", 
+        "slug": "sample-class", 
+        "title": "Sample Class", 
+        "is_active": true, 
+        "teacher": 3, 
+        "max_students": 10
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.schedule", 
+    "fields": {
+        "updated": "2013-08-06T22:57:59Z", 
+        "created": "2013-08-06T22:56:17Z", 
+        "is_active": true, 
+        "start_time": "2050-09-05T23:00:00Z", 
+        "venue": 1, 
+        "course": 1, 
+        "end_time": "2050-09-06T00:30:00Z", 
+        "schedule_status": "approved", 
+        "slug": "sample-class"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.registration", 
+    "fields": {
+        "updated": "2013-08-06T22:58:39Z", 
+        "schedule": 2, 
+        "items": [
+            10
+        ], 
+        "created": "2013-08-06T22:58:39Z", 
+        "is_active": true, 
+        "student": 4, 
+        "registration_status": "registered"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.registration", 
+    "fields": {
+        "updated": "2013-08-06T22:59:28Z", 
+        "schedule": 2, 
+        "items": [
+            9, 
+            7
+        ], 
+        "created": "2013-08-06T22:59:28Z", 
+        "is_active": true, 
+        "student": 5, 
+        "registration_status": "registered"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.registration", 
+    "fields": {
+        "updated": "2013-08-06T23:00:09Z", 
+        "schedule": 2, 
+        "items": [
+            10
+        ], 
+        "created": "2013-08-06T22:59:51Z", 
+        "is_active": true, 
+        "student": 6, 
+        "registration_status": "unregistered"
+    }
+}
+]
