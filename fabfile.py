@@ -79,6 +79,12 @@ def load_data():
         sudo('mysql -u root %s < data.sql' % (db_name), user=fab_username)
 
 @task
+def update_and_test():
+    update_sourcecode()
+
+    test()
+
+@task
 def deploy():
     update_sourcecode()
 

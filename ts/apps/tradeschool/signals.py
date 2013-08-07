@@ -20,7 +20,7 @@ def branch_save_callback(sender, instance, **kwargs):
     # don't generate emails if this is branch is created when running
     # loaddata command. apparently saving from a fixture has the
     # 'raw' key argument
-    if created and not kwargs.get('raw', False): 
+    if kwargs.get('created') and not kwargs.get('raw', False): 
         if instance.emails == None:
             instance.populate_notifications()
     
@@ -38,7 +38,7 @@ def schedule_save_callback(sender, instance, **kwargs):
     # don't generate emails if this is branch is created when running
     # loaddata command. apparently saving from a fixture has the
     # 'raw' key argument
-    if created and not kwargs.get('raw', False):     
+    if kwargs.get('created') and not kwargs.get('raw', False):     
         if instance.emails == None:
             instance.populate_notifications()
 
