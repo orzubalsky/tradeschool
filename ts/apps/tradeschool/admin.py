@@ -772,9 +772,18 @@ class RegistrationAdmin(BaseAdmin):
                 pass
         return super(RegistrationAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)        
             
-    fields          = ('student', 'schedule', 'items', 'registration_status')
-    readonly_fields = ('student', 'schedule',)
-    list_display    = ('student', 'schedule', 'registered_items', 'registration_status', 'branches_string')
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # editing an existing object
+            return self.readonly_fields + (
+                        'student', 
+                        'schedule'
+                    )
+        return self.readonly_fields
+
+    fields              = ('student', 'schedule', 'items', 'registration_status')
+    readonly_fields     = ()
+    list_display        = ('student', 'schedule', 'registered_items', 'registration_status', 'branches_string')
+    filter_horizontal   = ('items',)
 
 
 class BarterItemAdmin(BaseAdmin):
@@ -794,6 +803,7 @@ class BarterItemAdmin(BaseAdmin):
     list_display    = ('title', 'schedule')    
     search_fields   = ('title', 'schedule')
     fields          = ('title', 'schedule')
+
 
 
 class PhotoAdmin(BaseAdmin):
