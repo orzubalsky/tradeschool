@@ -83,7 +83,7 @@ class BranchTestCase(TestCase):
         
         # now submit valid form
         response = self.client.post(self.branch_add_url, follow=True, data=self.branch_data)
-        print response
+        
         # check that the branch was created successfully, following a redirect
         self.assertRedirects(response, response.redirect_chain[0][0], response.redirect_chain[0][1])
         self.assertTemplateUsed('admin/change_list.html')
