@@ -91,7 +91,10 @@ class ScheduleTestCase(TestCase):
         self.assertEqual(schedule_obj.course.max_students, int(self.valid_data['course-max_students']))
         self.assertEqual(schedule_obj.start_time, self.time.start_time)
         self.assertEqual(schedule_obj.end_time, self.time.end_time)
-        self.assertEqual(schedule_obj.venue, self.time.venue)        
+        if self.time.venue == None:
+            self.assertEqual(schedule_obj.venue, self.branch.venue_set.all()[0])
+        else:
+            self.assertEqual(schedule_obj.venue, self.time.venue)        
         self.assertEqual(schedule_obj.course.teacher.fullname, self.valid_data['teacher-fullname'])
         self.assertEqual(schedule_obj.course.teacher.bio, self.valid_data['teacher-bio'])
         self.assertEqual(schedule_obj.course.teacher.email, self.valid_data['teacher-email'])

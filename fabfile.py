@@ -49,7 +49,7 @@ def update_static_files():
 def load_fixtures():
     # load fixtures
     with cd('/opt/projects/tse/'):
-        sudo('./bin/django loaddata email_initial_data.json teacher-info.json', user=fab_username)
+        sudo('./bin/django loaddata email_initial_data.json pages_initial_data.json teacher-info.json', user=fab_username)
 
 @task
 def restart_wsgi():

@@ -246,6 +246,12 @@ def schedule_add(request, branch_slug=None):
             
             if selected_time.venue is not None:
                 schedule.venue = selected_time.venue
+            else:
+                try:
+                    schedule.venue = branch.venue_set.all()[0]
+                except IndexError:
+                    pass
+                    
             schedule.save()
 
             # save barter items

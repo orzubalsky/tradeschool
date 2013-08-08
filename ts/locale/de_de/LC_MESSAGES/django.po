@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-04 11:12-0400\n"
+"POT-Creation-Date: 2013-08-08 19:37-0400\n"
 "PO-Revision-Date: 2012-12-27 06:58\n"
 "Last-Translator:   <juviley@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,127 +19,123 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.6.8\n"
 
 #. Translators: Any times that the word class is shown as plural
-#: dashboard.py:38 apps/tradeschool/models.py:838
+#: dashboard.py:38 apps/tradeschool/models.py:904
 msgid "Classes"
 msgstr ""
 
 #: dashboard.py:51
-msgid "Scheduling"
+msgid "Manage Times for Class Submissions"
 msgstr ""
 
 #: dashboard.py:60
 msgid "People"
 msgstr ""
 
-#: dashboard.py:70 dashboard.py:96
+#: dashboard.py:70 dashboard.py:95
 msgid "Settings"
 msgstr ""
 
-#: dashboard.py:78
+#: dashboard.py:79
 msgid "Emails"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: dashboard.py:87 apps/tradeschool/admin.py:281
+#: dashboard.py:86 apps/tradeschool/admin.py:380
 msgid "Website Content"
 msgstr ""
 
-#: apps/tradeschool/admin.py:144 apps/tradeschool/admin.py:168
+#: apps/tradeschool/admin.py:264 apps/tradeschool/admin.py:288
 msgid "Title"
 msgstr ""
 
-#: apps/tradeschool/admin.py:229 apps/tradeschool/admin.py:700
-#: apps/tradeschool/models.py:1384
+#: apps/tradeschool/admin.py:311 apps/tradeschool/admin.py:849
+#: apps/tradeschool/models.py:1482
 msgid "Thumbnail"
 msgstr ""
 
-#: apps/tradeschool/admin.py:258 apps/tradeschool/admin.py:479
+#: apps/tradeschool/admin.py:357 apps/tradeschool/admin.py:605
 msgid "Generate Email Notifications"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:273 apps/tradeschool/admin.py:308
+#: apps/tradeschool/admin.py:372 apps/tradeschool/admin.py:407
 msgid "Basic Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:277 apps/tradeschool/admin.py:312
+#: apps/tradeschool/admin.py:376 apps/tradeschool/admin.py:411
 msgid "Contact Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
 #. Translators: Plural.
-#: apps/tradeschool/admin.py:285 apps/tradeschool/models.py:782
+#: apps/tradeschool/admin.py:384 apps/tradeschool/models.py:848
 msgid "Organizers"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:316
+#: apps/tradeschool/admin.py:415
 msgid "Additional Info"
 msgstr ""
 
-#: apps/tradeschool/admin.py:364
+#: apps/tradeschool/admin.py:470
 msgid "Courses Taught"
 msgstr ""
 
-#: apps/tradeschool/admin.py:378
+#: apps/tradeschool/admin.py:484
 msgid "change password"
 msgstr ""
 
-#: apps/tradeschool/admin.py:484
+#: apps/tradeschool/admin.py:610
 msgid "Courses Title"
 msgstr ""
 
-#: apps/tradeschool/admin.py:492
+#: apps/tradeschool/admin.py:618
 msgid "Course title link"
 msgstr ""
 
-#: apps/tradeschool/admin.py:497
+#: apps/tradeschool/admin.py:623
 msgid "Course description"
 msgstr ""
 
-#: apps/tradeschool/admin.py:502
+#: apps/tradeschool/admin.py:628
 msgid "Course Max Students"
 msgstr ""
 
-#: apps/tradeschool/admin.py:511
+#: apps/tradeschool/admin.py:637
 msgid "Teacher Fullname"
 msgstr ""
 
-#: apps/tradeschool/admin.py:517
+#: apps/tradeschool/admin.py:643
 msgid "Teacher Email"
 msgstr ""
 
-#: apps/tradeschool/admin.py:522
+#: apps/tradeschool/admin.py:648
 msgid "Teacher phone"
 msgstr ""
 
-#: apps/tradeschool/admin.py:527
+#: apps/tradeschool/admin.py:653
 msgid "Teacher bio"
 msgstr ""
 
-#: apps/tradeschool/admin.py:532
+#: apps/tradeschool/admin.py:658
 msgid "Teacher website"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:581
+#: apps/tradeschool/admin.py:665
 msgid "Class Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
-#: apps/tradeschool/admin.py:585
+#: apps/tradeschool/admin.py:669
 msgid "Teacher Info"
 msgstr ""
 
 #. Translators: This is the a header in the branch admin form
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/admin.py:589 apps/tradeschool/models.py:1039
+#: apps/tradeschool/admin.py:673 apps/tradeschool/models.py:1088
 msgid "Class Schedule"
-msgstr ""
-
-#: apps/tradeschool/admin.py:738
-msgid "Advanced options"
 msgstr ""
 
 #: apps/tradeschool/forms.py:19 apps/tradeschool/forms.py:104
@@ -158,13 +154,13 @@ msgstr ""
 msgid "Please enter phone number"
 msgstr ""
 
-#: apps/tradeschool/forms.py:29 apps/tradeschool/models.py:708
+#: apps/tradeschool/forms.py:29 apps/tradeschool/models.py:762
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:39
 msgid "A few sentences about you"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/forms.py:29 apps/tradeschool/models.py:710
+#: apps/tradeschool/forms.py:29 apps/tradeschool/models.py:764
 msgid "For prospective students to see on the website"
 msgstr ""
 
@@ -205,73 +201,73 @@ msgid "Please enter your feedback"
 msgstr ""
 
 #. Translators:  Used wherever a created time stamp is needed.
-#: apps/tradeschool/models.py:38
+#: apps/tradeschool/models.py:39
 msgid "created"
 msgstr ""
 
-#: apps/tradeschool/models.py:38
+#: apps/tradeschool/models.py:39
 msgid "The time when this object was created."
 msgstr ""
 
 #. Translators: Used wherever an update time stamp is needed.
-#: apps/tradeschool/models.py:41
+#: apps/tradeschool/models.py:42
 msgid "updated"
 msgstr ""
 
-#: apps/tradeschool/models.py:41
+#: apps/tradeschool/models.py:42
 msgid "The time when this object was edited last."
 msgstr ""
 
 #. Translators: Used to determine whether something is active in the front end or not.
-#: apps/tradeschool/models.py:44
+#: apps/tradeschool/models.py:45
 msgid "is active"
 msgstr ""
 
-#: apps/tradeschool/models.py:44
+#: apps/tradeschool/models.py:45
 msgid ""
 "This field indicates whether the object is active on the front end of the "
 "site. Inactive objects will still be available through the admin backend."
 msgstr ""
 
 #. Translators: Determines the status of an e-mail - disabled.
-#: apps/tradeschool/models.py:74
+#: apps/tradeschool/models.py:75
 msgid "Disabled"
 msgstr ""
 
 #. Translators: Determines the status of an e-mail - Not Sent.
-#: apps/tradeschool/models.py:77
+#: apps/tradeschool/models.py:78
 msgid "Not Sent Yet"
 msgstr ""
 
 #. Translators: Determines the status of an e-mail - Sent.
-#: apps/tradeschool/models.py:80
+#: apps/tradeschool/models.py:81
 msgid "Sent"
 msgstr ""
 
 #. Translators: The subject of an e-mail.
-#: apps/tradeschool/models.py:84
+#: apps/tradeschool/models.py:85
 msgid "subject"
 msgstr ""
 
-#: apps/tradeschool/models.py:84
+#: apps/tradeschool/models.py:85
 msgid "The subject line of the email."
 msgstr ""
 
 #. Translators: The content of an e-mail.
-#: apps/tradeschool/models.py:87
+#: apps/tradeschool/models.py:88 apps/tradeschool/models.py:1523
 msgid "content"
 msgstr ""
 
-#: apps/tradeschool/models.py:87
+#: apps/tradeschool/models.py:88
 msgid "The body of the email."
 msgstr ""
 
 #. Translators: The status of an e-mail. See the Toople list above.
-#: apps/tradeschool/models.py:90
+#: apps/tradeschool/models.py:91
 msgid "email status"
 msgstr ""
 
-#: apps/tradeschool/models.py:90
+#: apps/tradeschool/models.py:91
 msgid ""
 "Indicates the current status of the email message. A disabled email won't "
 "get sent, a not sent email was not sent yet, and a sent email was sent by "
@@ -279,11 +275,11 @@ msgid ""
 msgstr ""
 
 #. Translators: The date for when an e-mail will be sent.
-#: apps/tradeschool/models.py:168
+#: apps/tradeschool/models.py:172
 msgid "Send on"
 msgstr ""
 
-#: apps/tradeschool/models.py:168
+#: apps/tradeschool/models.py:172
 msgid ""
 "This is the time in which the email is scheduled to be sent out "
 "automatically by the system. Edit this time if you wish to have the email "
@@ -291,11 +287,11 @@ msgid ""
 msgstr ""
 
 #. Translators: How many days before the class the email will be sent.
-#: apps/tradeschool/models.py:171
+#: apps/tradeschool/models.py:175
 msgid "Days before"
 msgstr ""
 
-#: apps/tradeschool/models.py:171
+#: apps/tradeschool/models.py:175
 msgid ""
 "This value is used internally to calculate the email's \"send on\" date. The "
 "date is calculated by adding or subtracting as many days as this value from "
@@ -303,98 +299,98 @@ msgid ""
 msgstr ""
 
 #. Translators: The time for when an e-mail will be sent.
-#: apps/tradeschool/models.py:174
+#: apps/tradeschool/models.py:178
 msgid "Send time"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:202
+#: apps/tradeschool/models.py:206
 msgid "Student confirmation"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:205
+#: apps/tradeschool/models.py:209
 msgid "Student confirmations"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:213
+#: apps/tradeschool/models.py:217
 msgid "Student reminder"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:216
+#: apps/tradeschool/models.py:220
 msgid "Student reminders"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:230
+#: apps/tradeschool/models.py:234
 msgid "Student feedback e-mail"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:233
+#: apps/tradeschool/models.py:237
 msgid "Student feedback e-mails"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:247
+#: apps/tradeschool/models.py:251
 msgid "Teacher confirmation"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:250
+#: apps/tradeschool/models.py:254
 msgid "Teacher confirmations"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:264
+#: apps/tradeschool/models.py:268
 msgid "Teacher reminder"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:267
+#: apps/tradeschool/models.py:271
 msgid "Teacher reminders"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:281
+#: apps/tradeschool/models.py:285
 msgid "Teacher feedback e-mail"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:284
+#: apps/tradeschool/models.py:288
 msgid "Teacher feedback e-mails"
 msgstr ""
 
 #. Translators: In the Branch E-mail page, the label for student confirmation e-mail
-#: apps/tradeschool/models.py:299
+#: apps/tradeschool/models.py:303
 msgid "Student Confirmation"
 msgstr ""
 
-#: apps/tradeschool/models.py:299
+#: apps/tradeschool/models.py:303
 msgid ""
 "This email is sent to a student's email after they registered to a class "
 "successfully."
 msgstr ""
 
 #. Translators: ... The lable for Student Reminder e-mail
-#: apps/tradeschool/models.py:302
+#: apps/tradeschool/models.py:306
 msgid "Student Reminder"
 msgstr ""
 
-#: apps/tradeschool/models.py:302
+#: apps/tradeschool/models.py:306
 msgid ""
 "This email is sent to all students registered to a class before the class is "
 "scheduled to take place."
 msgstr ""
 
 #. Translators: ... The lable for Student Feedback e-mail
-#: apps/tradeschool/models.py:305
+#: apps/tradeschool/models.py:309
 msgid "Student Feedback"
 msgstr ""
 
-#: apps/tradeschool/models.py:305
+#: apps/tradeschool/models.py:309
 msgid ""
 "This email is sent to all students who were registered to a class after the "
 "class has taken place. It includes a link for students to submit feedback on "
@@ -402,204 +398,207 @@ msgid ""
 msgstr ""
 
 #. Translators: ... The lable for Teacher confirmation e-mail
-#: apps/tradeschool/models.py:308
+#: apps/tradeschool/models.py:312
 msgid "Teacher Confirmation"
 msgstr ""
 
-#: apps/tradeschool/models.py:308
+#: apps/tradeschool/models.py:312
 msgid ""
 "This email is sent to a teacher after they proposed a class using the form "
 "on the front end."
 msgstr ""
 
 #. Translators: ... The lable for Teacher Class Approval e-mail
-#: apps/tradeschool/models.py:311
+#: apps/tradeschool/models.py:315
 msgid "Teacher Class Approval"
 msgstr ""
 
-#: apps/tradeschool/models.py:311
+#: apps/tradeschool/models.py:315
 msgid ""
 "This email is sent to a teacher once their class has been approved by an "
 "organizer using the admin backend."
 msgstr ""
 
 #. Translators: ... The lable for Teacher Reminder e-mail
-#: apps/tradeschool/models.py:314
+#: apps/tradeschool/models.py:318
 msgid "Teacher Reminder"
 msgstr ""
 
-#: apps/tradeschool/models.py:314
+#: apps/tradeschool/models.py:318
 msgid ""
 "This email is sent to a teacher before the class they're teaching is "
 "scheduled to take place."
 msgstr ""
 
 #. Translators: ... The lable for Teacher Feedback e-mail
-#: apps/tradeschool/models.py:317
+#: apps/tradeschool/models.py:321
 msgid "Teacher Feedback"
 msgstr ""
 
-#: apps/tradeschool/models.py:317
+#: apps/tradeschool/models.py:321
 msgid ""
 "This email is sent to a teacher who taught a class after it has taken place. "
 "It includes a link for the teacher to submit feedback about their experience."
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:341
+#: apps/tradeschool/models.py:350
 msgid "Default e-mail container"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:344
+#: apps/tradeschool/models.py:353
 msgid "Default e-mail containers"
 msgstr ""
 
 #. Translators: This is for the name of a Trade School location or venue.
 #. Translators: Wherever the barter item shows up.
-#: apps/tradeschool/models.py:355 apps/tradeschool/models.py:1004
+#: apps/tradeschool/models.py:365 apps/tradeschool/models.py:1031
+#: apps/tradeschool/models.py:1522
 msgid "title"
 msgstr ""
 
 #. Translators: Contextual Help.
-#: apps/tradeschool/models.py:358
+#: apps/tradeschool/models.py:368
 msgid "The name of the space"
 msgstr ""
 
-#: apps/tradeschool/models.py:362
+#: apps/tradeschool/models.py:372
 msgid "phone"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:367 apps/tradeschool/models.py:719
+#: apps/tradeschool/models.py:377 apps/tradeschool/models.py:773
 msgid "Optional."
 msgstr ""
 
-#: apps/tradeschool/models.py:371
+#: apps/tradeschool/models.py:381
 msgid "city"
 msgstr ""
 
-#: apps/tradeschool/models.py:376
+#: apps/tradeschool/models.py:386
 msgid "state"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:380
+#: apps/tradeschool/models.py:390
 msgid "If in the US."
 msgstr ""
 
-#: apps/tradeschool/models.py:384
+#: apps/tradeschool/models.py:394
 msgid "country"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:410
+msgid "Branch Cluster"
+msgstr ""
+
 #. Translators: Plural.
-#: apps/tradeschool/models.py:399 apps/tradeschool/models.py:402
-msgid "Branch Emails"
-msgstr ""
-
-#. Translators: These one is for the dynamic custom pages.
-#: apps/tradeschool/models.py:404 apps/tradeschool/models.py:609
-#: apps/tradeschool/models.py:725 apps/tradeschool/models.py:904
-#: apps/tradeschool/models.py:945 apps/tradeschool/models.py:1373
-#: apps/tradeschool/models.py:1406
-msgid "branch"
-msgstr ""
-
-#: apps/tradeschool/models.py:404
-msgid ""
-"The branch of TS that this email container is related to. There is only one "
-"email container per branch."
+#: apps/tradeschool/models.py:413
+msgid "Branch Clusters"
 msgstr ""
 
 #. Translators: The name of a cluster if there is one.
-#: apps/tradeschool/models.py:417
+#: apps/tradeschool/models.py:418
 msgid "name"
 msgstr ""
 
-#. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:435
-msgid "Branch"
-msgstr ""
-
-#. Translators: Plural.
-#: apps/tradeschool/models.py:438
-msgid "Branches"
-msgstr ""
-
-#. Translators: The thing that shows what the status of the class is
-#: apps/tradeschool/models.py:444 apps/tradeschool/models.py:1048
-msgid "Pending"
-msgstr ""
-
-#: apps/tradeschool/models.py:445
-msgid "Setting up"
-msgstr ""
-
-#: apps/tradeschool/models.py:446
-msgid "In Session"
-msgstr ""
-
 #. Translators: This is the part that comes after tradeschool.coop/ en el URL.
-#: apps/tradeschool/models.py:453
+#: apps/tradeschool/models.py:421 apps/tradeschool/models.py:488
 msgid "slug"
 msgstr ""
 
 #. Translators: Contextual Help.
-#: apps/tradeschool/models.py:456
+#: apps/tradeschool/models.py:424
+msgid ""
+"This is the part that comes after 'http://tradeschool.coop/cluster/' in the "
+"URL"
+msgstr ""
+
+#: apps/tradeschool/models.py:429 apps/tradeschool/models.py:779
+#: apps/tradeschool/models.py:799 apps/tradeschool/models.py:804
+msgid "branches"
+msgstr ""
+
+#. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:470
+msgid "Branch"
+msgstr ""
+
+#. Translators: Plural.
+#: apps/tradeschool/models.py:473
+msgid "Branches"
+msgstr ""
+
+#. Translators: The thing that shows what the status of the class is
+#: apps/tradeschool/models.py:479 apps/tradeschool/models.py:1097
+msgid "Pending"
+msgstr ""
+
+#: apps/tradeschool/models.py:480
+msgid "Setting up"
+msgstr ""
+
+#: apps/tradeschool/models.py:481
+msgid "In Session"
+msgstr ""
+
+#. Translators: Contextual Help.
+#: apps/tradeschool/models.py:491
 msgid "This is the part that comes after 'http://tradeschool.coop/' in the URL"
 msgstr ""
 
-#: apps/tradeschool/models.py:459
+#: apps/tradeschool/models.py:494
 msgid "e-mail"
 msgstr ""
 
-#: apps/tradeschool/models.py:460
+#: apps/tradeschool/models.py:495
 msgid "timezone"
 msgstr ""
 
-#: apps/tradeschool/models.py:460
+#: apps/tradeschool/models.py:495
 msgid ""
 "The local timezone in the area where this branch of TS is taking place. The "
 "timezone is used to calculate all the class and email times."
 msgstr ""
 
-#: apps/tradeschool/models.py:461
+#: apps/tradeschool/models.py:496
 msgid "language"
 msgstr ""
 
-#: apps/tradeschool/models.py:461
+#: apps/tradeschool/models.py:496
 msgid ""
 "Setting this language will cause both the front end and the backend of the "
 "site to try to load text from the translation strings stored in the system. "
 "Text that wasn't translated will fallback on the English version of it."
 msgstr ""
 
-#: apps/tradeschool/models.py:462
+#: apps/tradeschool/models.py:497
 msgid "organizers"
 msgstr ""
 
-#: apps/tradeschool/models.py:462
+#: apps/tradeschool/models.py:497
 msgid ""
 "Select multiple users who help organize this branch of TS. People selected "
 "in this box will have access to the branch's data on the admin backend."
 msgstr ""
 
-#: apps/tradeschool/models.py:466
+#: apps/tradeschool/models.py:501
 msgid "branch status"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:470
+#: apps/tradeschool/models.py:505
 msgid "What is the current status of this branch?"
 msgstr ""
 
 #. Translators: This is the Branches domain address.
-#: apps/tradeschool/models.py:474
+#: apps/tradeschool/models.py:509
 msgid "site"
 msgstr ""
 
-#: apps/tradeschool/models.py:474
+#: apps/tradeschool/models.py:509
 msgid ""
 "The TS system can be installed on several different domains, and still be "
 "managed using the same admin backend. This field indicates what installation "
@@ -608,11 +607,11 @@ msgid ""
 msgstr ""
 
 #. Translators: If this Trade School belogns to a set of Trade Schools.
-#: apps/tradeschool/models.py:477
-msgid "cluster"
+#: apps/tradeschool/models.py:512
+msgid "clusters"
 msgstr ""
 
-#: apps/tradeschool/models.py:477
+#: apps/tradeschool/models.py:512
 msgid ""
 "TS branches can be grouped together in clusters. This is used mostly to be "
 "able to present them together on the same page. For example, all branches in "
@@ -621,246 +620,260 @@ msgid ""
 msgstr ""
 
 #. Translators: This is the part that says 'Barter for Knowledge' which is also editable.
-#: apps/tradeschool/models.py:480
+#: apps/tradeschool/models.py:515
 msgid "header"
 msgstr ""
 
-#: apps/tradeschool/models.py:480
+#: apps/tradeschool/models.py:515
 msgid "This text appears in the header of the website."
 msgstr ""
 
 #. Translators: This is the part with room for a small statement.
-#: apps/tradeschool/models.py:483
+#: apps/tradeschool/models.py:518
 msgid "intro"
 msgstr ""
 
-#: apps/tradeschool/models.py:483
+#: apps/tradeschool/models.py:518
 msgid ""
 "This text appears under the header. Usually it gives brief information about "
 "the current session and has a link to submit class proposals."
 msgstr ""
 
 #. Translators: This is the part at the end of the page.
-#: apps/tradeschool/models.py:486
+#: apps/tradeschool/models.py:521
 msgid "footer"
 msgstr ""
 
-#: apps/tradeschool/models.py:486
+#: apps/tradeschool/models.py:521
 msgid "This text appears on the footer of the page. It's optional."
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:579
+#: apps/tradeschool/models.py:633
 msgid "Venue"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:582
+#: apps/tradeschool/models.py:636
 msgid "Venues"
 msgstr ""
 
-#: apps/tradeschool/models.py:588
+#: apps/tradeschool/models.py:642
 msgid "Address 1"
 msgstr ""
 
 #. Translators: the capacity of the venue where you are hosting classes.
-#: apps/tradeschool/models.py:593
+#: apps/tradeschool/models.py:647
 msgid "capacity"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:595
+#: apps/tradeschool/models.py:649
 msgid "How many people fit in the space?"
 msgstr ""
 
 #. Translators: The field name for resources of a venue.
-#: apps/tradeschool/models.py:600
+#: apps/tradeschool/models.py:654
 msgid "resources"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:604
+#: apps/tradeschool/models.py:658
 msgid "What resources are available at the space?"
 msgstr ""
 
-#: apps/tradeschool/models.py:606
+#: apps/tradeschool/models.py:660
 msgid "color"
 msgstr ""
 
-#: apps/tradeschool/models.py:606
+#: apps/tradeschool/models.py:660
 msgid "A hex value HTML color in the form of #123456"
 msgstr ""
 
-#: apps/tradeschool/models.py:678
+#. Translators: These one is for the dynamic custom pages.
+#: apps/tradeschool/models.py:663 apps/tradeschool/models.py:969
+#: apps/tradeschool/models.py:1010 apps/tradeschool/models.py:1471
+#: apps/tradeschool/models.py:1529
+msgid "branch"
+msgstr ""
+
+#: apps/tradeschool/models.py:732
 msgid "your name"
 msgstr ""
 
 #. Translators: Contextual Help.
-#: apps/tradeschool/models.py:680
+#: apps/tradeschool/models.py:734
 msgid "This will appear on the site."
 msgstr ""
 
-#: apps/tradeschool/models.py:686
+#: apps/tradeschool/models.py:740
 msgid "username"
 msgstr ""
 
-#: apps/tradeschool/models.py:687
+#: apps/tradeschool/models.py:741
 msgid "This is used to login to the site."
 msgstr ""
 
-#: apps/tradeschool/models.py:692
+#: apps/tradeschool/models.py:746
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:42
 msgid "Email address"
 msgstr ""
 
 #. Translators: Contextual Help.
-#: apps/tradeschool/models.py:694
+#: apps/tradeschool/models.py:748
 msgid "Used only for us to contact you."
 msgstr ""
 
-#: apps/tradeschool/models.py:701
+#: apps/tradeschool/models.py:755
 msgid "Phone number"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:703
+#: apps/tradeschool/models.py:757
 msgid "Optional. Used only for us to contact you."
 msgstr ""
 
-#: apps/tradeschool/models.py:717
+#: apps/tradeschool/models.py:771
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:36
 msgid "Your website / blog URL"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:727
+#: apps/tradeschool/models.py:781
 msgid ""
 "People in the TS system can be related to many TS branches. This "
 "relationship is made when a person either teaches or registers to a class."
 msgstr ""
 
-#: apps/tradeschool/models.py:729
+#: apps/tradeschool/models.py:783
+msgid "default branch"
+msgstr ""
+
+#: apps/tradeschool/models.py:783
+msgid ""
+"This is the branch that will be selected automatically for actions this user "
+"makes. Usually the default branch is the one in which the organizer does the "
+"most work in."
+msgstr ""
+
+#: apps/tradeschool/models.py:784
 msgid "backend language"
 msgstr ""
 
-#: apps/tradeschool/models.py:729
+#: apps/tradeschool/models.py:784
 msgid ""
 "Setting this language will cause the admin backend to try to load text from "
 "the translation strings stored in the system FOR THIS USER ONLY. Text that "
 "wasn't translated will fallback on the English version of it."
 msgstr ""
 
-#: apps/tradeschool/models.py:732
+#: apps/tradeschool/models.py:787
 msgid "staff status"
 msgstr ""
 
-#: apps/tradeschool/models.py:734
+#: apps/tradeschool/models.py:789
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 
-#: apps/tradeschool/models.py:744 apps/tradeschool/models.py:749
-msgid "branches"
-msgstr ""
-
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:779
+#: apps/tradeschool/models.py:845
 msgid "Organizer"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:798
+#: apps/tradeschool/models.py:864
 msgid "Teacher"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:801
+#: apps/tradeschool/models.py:867
 msgid "Teachers"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:817
+#: apps/tradeschool/models.py:883
 msgid "Student"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:820
+#: apps/tradeschool/models.py:886
 msgid "Students"
 msgstr ""
 
 #. Translators: Any times that the word class is shown as singular
-#: apps/tradeschool/models.py:835
+#: apps/tradeschool/models.py:901
 msgid "Class"
 msgstr ""
 
-#: apps/tradeschool/models.py:852
+#: apps/tradeschool/models.py:918
 msgid "teacher"
 msgstr ""
 
-#: apps/tradeschool/models.py:852
+#: apps/tradeschool/models.py:918
 msgid "The person teaching this class."
 msgstr ""
 
-#: apps/tradeschool/models.py:854
+#: apps/tradeschool/models.py:920
 msgid "Maximum number of students in your class"
 msgstr ""
 
-#: apps/tradeschool/models.py:854
+#: apps/tradeschool/models.py:920
 msgid ""
 "The maximum number of students that will be able to register to this class."
 msgstr ""
 
-#: apps/tradeschool/models.py:855
+#: apps/tradeschool/models.py:921
 msgid "class title"
 msgstr ""
 
-#: apps/tradeschool/models.py:855
+#: apps/tradeschool/models.py:921
 msgid "The name of the class. This will appear on the website."
 msgstr ""
 
-#: apps/tradeschool/models.py:856
+#: apps/tradeschool/models.py:922
 msgid "URL Slug"
 msgstr ""
 
-#: apps/tradeschool/models.py:856
+#: apps/tradeschool/models.py:922
 msgid "A unique URL for the class."
 msgstr ""
 
-#: apps/tradeschool/models.py:857
+#: apps/tradeschool/models.py:923
 #: apps/tradeschool/templates/branches_base/schedule_submitted.html:17
 msgid "Class description"
 msgstr ""
 
-#: apps/tradeschool/models.py:857
+#: apps/tradeschool/models.py:923
 msgid "The class's description. This will apear on the website."
 msgstr ""
 
 #. Translators: Used to lable the beginning and endings of classes
-#: apps/tradeschool/models.py:872
+#: apps/tradeschool/models.py:937
 msgid "start time"
 msgstr ""
 
 #. Translators: Used to lable the beginning and endings of classes
-#: apps/tradeschool/models.py:875
+#: apps/tradeschool/models.py:940
 msgid "end time"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:888
-msgid "Calendar Open Time Slot"
+#: apps/tradeschool/models.py:953
+msgid "Open Time Slot"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:891
-msgid "Calendar Open Time Slots"
+#: apps/tradeschool/models.py:956
+msgid "Open Time Slots"
 msgstr ""
 
-#: apps/tradeschool/models.py:895 apps/tradeschool/models.py:937
-#: apps/tradeschool/models.py:1057
+#: apps/tradeschool/models.py:960 apps/tradeschool/models.py:1002
+#: apps/tradeschool/models.py:1106
 msgid "venue"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:899
+#: apps/tradeschool/models.py:964
 msgid ""
 "Time slots can be related to specifc venues. When a time slot that's related "
 "a venue is selected by a potential teacher, the proposed class will be "
@@ -869,136 +882,136 @@ msgid ""
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:906
+#: apps/tradeschool/models.py:971
 msgid ""
 "A time slot is related to a specific TS branch since it populates the times "
 "to choose from in the branch's class proposal form."
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:919
-msgid "Calendar Open Time Slot Range"
+#: apps/tradeschool/models.py:984
+msgid "Open Time Slot Batch"
 msgstr ""
 
 #. Translators: Plural.
-#: apps/tradeschool/models.py:922
-msgid "Calendar Open Time Slot Ranges"
+#: apps/tradeschool/models.py:987
+msgid "Open Time Slot Batches"
 msgstr ""
 
-#: apps/tradeschool/models.py:924
+#: apps/tradeschool/models.py:989
 msgid "Start date"
 msgstr ""
 
-#: apps/tradeschool/models.py:924
+#: apps/tradeschool/models.py:989
 msgid ""
 "Pick the start date for the date range. The system will go over all days "
 "between this date and the end date and then create available time slots for "
 "each day of the week that you choose."
 msgstr ""
 
-#: apps/tradeschool/models.py:925
+#: apps/tradeschool/models.py:990
 msgid "End date"
 msgstr ""
 
-#: apps/tradeschool/models.py:925
+#: apps/tradeschool/models.py:990
 msgid ""
 "Pick the end date for the date range. The system will go over all days "
 "between the start date and this date and then create available time slots "
 "for each day of the week that you choose."
 msgstr ""
 
-#: apps/tradeschool/models.py:926
+#: apps/tradeschool/models.py:991
 msgid "Start time"
 msgstr ""
 
-#: apps/tradeschool/models.py:926
+#: apps/tradeschool/models.py:991
 msgid ""
 "This is the start time of the all of the available time slots that are going "
 "to be created."
 msgstr ""
 
-#: apps/tradeschool/models.py:927
+#: apps/tradeschool/models.py:992
 msgid "End time"
 msgstr ""
 
-#: apps/tradeschool/models.py:927
+#: apps/tradeschool/models.py:992
 msgid ""
 "This is the end time of all of the available time slots that are going to be "
 "created."
 msgstr ""
 
-#: apps/tradeschool/models.py:928
+#: apps/tradeschool/models.py:993
 msgid "Sunday"
 msgstr ""
 
-#: apps/tradeschool/models.py:928
+#: apps/tradeschool/models.py:993
 msgid ""
 "Check this day if you wish to create available times on Sundays in the above "
 "date range."
 msgstr ""
 
-#: apps/tradeschool/models.py:929
+#: apps/tradeschool/models.py:994
 msgid "Monday"
 msgstr ""
 
-#: apps/tradeschool/models.py:929
+#: apps/tradeschool/models.py:994
 msgid ""
 "Check this day if you wish to create available times on Mondays in the above "
 "date range."
 msgstr ""
 
-#: apps/tradeschool/models.py:930
+#: apps/tradeschool/models.py:995
 msgid "Tuesday"
 msgstr ""
 
-#: apps/tradeschool/models.py:930
+#: apps/tradeschool/models.py:995
 msgid ""
 "Check this day if you wish to create available times on Tuesdays in the "
 "above date range."
 msgstr ""
 
-#: apps/tradeschool/models.py:931
+#: apps/tradeschool/models.py:996
 msgid "Wednesday"
 msgstr ""
 
-#: apps/tradeschool/models.py:931
+#: apps/tradeschool/models.py:996
 msgid ""
 "Check this day if you wish to create available times on Wednesdays in the "
 "above date range."
 msgstr ""
 
-#: apps/tradeschool/models.py:932
+#: apps/tradeschool/models.py:997
 msgid "Thursday"
 msgstr ""
 
-#: apps/tradeschool/models.py:932
+#: apps/tradeschool/models.py:997
 msgid ""
 "Check this day if you wish to create available times on Thursdays in the "
 "above date range."
 msgstr ""
 
-#: apps/tradeschool/models.py:933
+#: apps/tradeschool/models.py:998
 msgid "Friday"
 msgstr ""
 
-#: apps/tradeschool/models.py:933
+#: apps/tradeschool/models.py:998
 msgid ""
 "Check this day if you wish to create available times on Fridays in the above "
 "date range."
 msgstr ""
 
-#: apps/tradeschool/models.py:934
+#: apps/tradeschool/models.py:999
 msgid "Saturday"
 msgstr ""
 
-#: apps/tradeschool/models.py:934
+#: apps/tradeschool/models.py:999
 msgid ""
 "Check this day if you wish to create available times on Saturdays in the "
 "above date range."
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:941
+#: apps/tradeschool/models.py:1006
 msgid ""
 "All of the avaialble time slots that will be created can be related to a "
 "specifc venue. When a time slot that's related a venue is selected by a "
@@ -1008,265 +1021,265 @@ msgid ""
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:947
+#: apps/tradeschool/models.py:1012
 msgid "The available time slots will be created for this TS branch only."
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:957
-msgid "Schedule Email"
-msgstr ""
-
-#. Translators: Plural
-#: apps/tradeschool/models.py:960
-msgid "Schedule Emails"
-msgstr ""
-
-#: apps/tradeschool/models.py:962
-msgid ""
-"The scheduled class that this email container is related to. There is only "
-"one email container per scheduled class."
-msgstr ""
-
-#. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:998
+#: apps/tradeschool/models.py:1025
 msgid "Barter item"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1001
+#: apps/tradeschool/models.py:1028
 msgid "Barter items"
 msgstr ""
 
-#: apps/tradeschool/models.py:1004
+#: apps/tradeschool/models.py:1031
 msgid "A name or short description of the barter item."
 msgstr ""
 
-#: apps/tradeschool/models.py:1005 apps/tradeschool/models.py:1310
-#: apps/tradeschool/models.py:1343
+#: apps/tradeschool/models.py:1032 apps/tradeschool/models.py:1412
+#: apps/tradeschool/models.py:1441
 msgid "schedule"
 msgstr ""
 
-#: apps/tradeschool/models.py:1005
+#: apps/tradeschool/models.py:1032
 msgid "The scheduled class that this barter item is listed for."
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1042
+#: apps/tradeschool/models.py:1091
 msgid "Class Schedules"
 msgstr ""
 
-#: apps/tradeschool/models.py:1049
+#: apps/tradeschool/models.py:1098
 msgid "Contacted"
 msgstr ""
 
-#: apps/tradeschool/models.py:1050
+#: apps/tradeschool/models.py:1099
 msgid "Updated"
 msgstr ""
 
-#: apps/tradeschool/models.py:1051
+#: apps/tradeschool/models.py:1100
 msgid "Approved"
 msgstr ""
 
-#: apps/tradeschool/models.py:1052
+#: apps/tradeschool/models.py:1101
 msgid "Rejected"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:1061
+#: apps/tradeschool/models.py:1110
 msgid "Where is this class taking place?"
 msgstr ""
 
-#: apps/tradeschool/models.py:1066
-msgid "course"
+#: apps/tradeschool/models.py:1115
+msgid "class"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:1068
+#: apps/tradeschool/models.py:1117
 msgid "What class are you scheduling?"
 msgstr ""
 
-#: apps/tradeschool/models.py:1073
-msgid "course status"
+#: apps/tradeschool/models.py:1124
+msgid "scheduled class status"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:1077
+#: apps/tradeschool/models.py:1128
 msgid ""
 "What is the current status of the class? Only approved classes appear on the "
 "website."
 msgstr ""
 
-#: apps/tradeschool/models.py:1082
+#: apps/tradeschool/models.py:1133
 msgid "students"
 msgstr ""
 
-#: apps/tradeschool/models.py:1084
+#: apps/tradeschool/models.py:1135
 msgid ""
 "The students who registered to this scheduled class, what are they bringing, "
 "and whether they cancelled their attendance."
 msgstr ""
 
-#: apps/tradeschool/models.py:1087
+#: apps/tradeschool/models.py:1138
 msgid "A unique URL for the scheduled class."
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:1311
+msgid "Scheduled Class: Pending"
+msgstr ""
+
 #. Translators: Plural.
-#: apps/tradeschool/models.py:1222 apps/tradeschool/models.py:1225
-msgid "Pending Scheduled Classes"
+#: apps/tradeschool/models.py:1314
+msgid "Scheduled Classes: Pending"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:1336
+msgid "Scheduled Class: Approved"
+msgstr ""
+
 #. Translators: Plural.
-#: apps/tradeschool/models.py:1247 apps/tradeschool/models.py:1250
-msgid "Approved Scheduled Classes"
+#: apps/tradeschool/models.py:1339
+msgid "Scheduled Classes: Approved"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
+#: apps/tradeschool/models.py:1361
+msgid "Scheduled Class: Past"
+msgstr ""
+
 #. Translators: Plural.
-#: apps/tradeschool/models.py:1272 apps/tradeschool/models.py:1275
-msgid "Past Scheduled Classes"
+#: apps/tradeschool/models.py:1364
+msgid "Scheduled Classes: Past"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:1301
+#: apps/tradeschool/models.py:1403
 msgid "Registration"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1304
+#: apps/tradeschool/models.py:1406
 msgid "Registrations"
 msgstr ""
 
 #. Translators: Student registration buttons.
-#: apps/tradeschool/models.py:1307
+#: apps/tradeschool/models.py:1409
 msgid "Registered"
 msgstr ""
 
-#: apps/tradeschool/models.py:1308
+#: apps/tradeschool/models.py:1410
 msgid "Unregistereed"
 msgstr ""
 
-#: apps/tradeschool/models.py:1310
+#: apps/tradeschool/models.py:1412
 msgid "What scheduled class does this registration refer to?"
 msgstr ""
 
-#: apps/tradeschool/models.py:1311
+#: apps/tradeschool/models.py:1413
 msgid "student"
 msgstr ""
 
-#: apps/tradeschool/models.py:1311
+#: apps/tradeschool/models.py:1413
 msgid "Who registered?"
 msgstr ""
 
-#: apps/tradeschool/models.py:1312
+#: apps/tradeschool/models.py:1414
 msgid "registration status"
 msgstr ""
 
-#: apps/tradeschool/models.py:1312
+#: apps/tradeschool/models.py:1414
 msgid "Did the student cancel?"
 msgstr ""
 
-#: apps/tradeschool/models.py:1313
+#: apps/tradeschool/models.py:1415
 msgid "items"
 msgstr ""
 
-#: apps/tradeschool/models.py:1313
+#: apps/tradeschool/models.py:1415
 msgid "The barter items that the student said they were bringing to the class."
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:1335
+#: apps/tradeschool/models.py:1433
 msgid "Feedback"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1338
+#: apps/tradeschool/models.py:1436
 msgid "Feedbacks"
 msgstr ""
 
-#: apps/tradeschool/models.py:1341
+#: apps/tradeschool/models.py:1439
 msgid "From the Teacher"
 msgstr ""
 
-#: apps/tradeschool/models.py:1341
+#: apps/tradeschool/models.py:1439
 msgid "From a student"
 msgstr ""
 
-#: apps/tradeschool/models.py:1343
+#: apps/tradeschool/models.py:1441
 msgid "Feedback is given for a class that was scheduled and took place."
 msgstr ""
 
-#: apps/tradeschool/models.py:1344
+#: apps/tradeschool/models.py:1442
 msgid "feedback type"
 msgstr ""
 
-#: apps/tradeschool/models.py:1344
+#: apps/tradeschool/models.py:1442
 msgid "Was this feedback given by a student in the class or by the teacher?"
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:1346
+#: apps/tradeschool/models.py:1444
 msgid "Your Feedback"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
 #. Translators: These next three are for the photograph files
-#: apps/tradeschool/models.py:1360 apps/tradeschool/models.py:1369
+#: apps/tradeschool/models.py:1458 apps/tradeschool/models.py:1467
 msgid "Photo"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1363
+#: apps/tradeschool/models.py:1461
 msgid "Photos"
 msgstr ""
 
-#: apps/tradeschool/models.py:1370 apps/tradeschool/models.py:1407
+#: apps/tradeschool/models.py:1468 apps/tradeschool/models.py:1531
 msgid "Position"
 msgstr ""
 
-#: apps/tradeschool/models.py:1370
+#: apps/tradeschool/models.py:1468
 msgid "This indicates the order in which the pictures appear on the website."
 msgstr ""
 
 #. Translators: Contextual Help
-#: apps/tradeschool/models.py:1375
+#: apps/tradeschool/models.py:1473
 msgid "What TS branch's page is this photo on?"
 msgstr ""
 
 #. Translators: If there are no images
-#: apps/tradeschool/models.py:1383
+#: apps/tradeschool/models.py:1481
 msgid "(No Image)"
 msgstr ""
 
 #. Translators: This is used in the header navigation to let you know where you are.
-#: apps/tradeschool/models.py:1397
+#: apps/tradeschool/models.py:1514
 msgid "Branch Page"
 msgstr ""
 
 #. Translators: Plural
-#: apps/tradeschool/models.py:1400
+#: apps/tradeschool/models.py:1517
 msgid "Branch Pages"
 msgstr ""
 
+#: apps/tradeschool/models.py:1521
+msgid "URL"
+msgstr ""
+
 #. Translators: Used to determine whether a page is to be shown on the front page menu or not. set to yes.
-#: apps/tradeschool/models.py:1403
+#: apps/tradeschool/models.py:1526
 msgid "is visible"
 msgstr ""
 
-#: apps/tradeschool/models.py:1403
+#: apps/tradeschool/models.py:1526
 msgid ""
 "This indicates whether a page is listed in the menu or not. Visible pages "
 "appear on the menu. Other pages do not, but are still accessible via their "
 "URL."
 msgstr ""
 
-#: apps/tradeschool/models.py:1407
+#: apps/tradeschool/models.py:1531
 msgid "This indicates the order in which the pages are listed in the menu."
 msgstr ""
 
-#: apps/tradeschool/views.py:116
+#: apps/tradeschool/views.py:122
 msgid "You are already registered to this class"
 msgstr ""
 
@@ -1705,12 +1718,12 @@ msgid "Full"
 msgstr ""
 
 #: apps/tradeschool/templates/branches_base/schedule_item.html:42
-#: apps/tradeschool/templates/hub/branch_list.html:70
+#: apps/tradeschool/templates/hub/branch_list.html:81
 msgid "Bring one of the following"
 msgstr ""
 
 #: apps/tradeschool/templates/branches_base/schedule_item.html:51
-#: apps/tradeschool/templates/hub/branch_list.html:76
+#: apps/tradeschool/templates/hub/branch_list.html:87
 msgid "About the teacher"
 msgstr ""
 
@@ -1882,7 +1895,7 @@ msgid ""
 "city, lower east side "
 msgstr ""
 
-#: apps/tradeschool/templates/hub/branch_list.html:81
+#: apps/tradeschool/templates/hub/branch_list.html:92
 msgctxt "Go to class button"
 msgid "GO TO CLASS"
 msgstr ""
