@@ -121,12 +121,11 @@ class Email(Model):
         homepage_url         = "%s%s" % (domain, reverse('schedule-list', kwargs={'branch_slug': branch.slug}))
 
         student_list = ""
-        for registration_obj in schedule_obj.registration_set.all():
-            if registration_obj.registration_status == 'registered':
-                student_list += "\n%s: " % registration_obj.student.fullname
-                student_items = []
-                for item in registration_obj.items.all():
-                    student_items.append(item.title)
+        for registration_obj in schedule_obj.registration_set.registered():            
+            student_list += "\n%s: " % registration_obj.student.fullname
+            student_items = []
+            for item in registration_obj.items.all():
+                student_items.append(item.title)
             student_list += ", ".join(map(str, student_items))
 
         c = Context({
@@ -1049,9 +1048,7 @@ class ScheduleQuerySet(QuerySet):
 
 class ScheduleManager(Manager):
     def get_query_set(self):
-       return ScheduleQuerySet(self.model, using=self._db).annotate(
-            registered_students=Count('students')
-        ).select_related(
+       return ScheduleQuerySet(self.model, using=self._db).select_related(
             'venue__title',
             'course__title',
             'course__description',
@@ -1171,6 +1168,9 @@ class Schedule(Durational):
             return True
         return False
 
+    def registered_students(self):
+        return self.registration_set.registered().count()
+
     objects   = ScheduleManager()
 
     def delete_emails(self):
@@ -1270,10 +1270,9 @@ class Schedule(Durational):
     def email_students(self, email):
         """shortcut method to send an email via the Schedule object."""
         email_count = 0
-        for registration in self.registration_set.all():
-            if registration.registration_status == 'registered':
-                self.email_student(email, registration)
-                email_count += 1
+        for registration in self.registration_set.registered():
+            self.email_student(email, registration)
+            email_count += 1
         return email_count
 
     def save(self, *args, **kwargs):
@@ -1370,10 +1369,23 @@ class PastSchedule(Schedule):
     public  = PastSchedulePublicManager()
 
 
+class RegistrationQuerySet(QuerySet):
+    def registered(self):
+        return self.filter(registration_status='registered')
+
 
 class RegistrationManager(Manager):
     def get_query_set(self):
-        return super(RegistrationManager, self).get_query_set().select_related('schedule', 'student', 'student__fullname', 'items__title').prefetch_related('items')
+        return RegistrationQuerySet(self.model, using=self._db).select_related(
+                'schedule', 
+                'student', 
+                'student__fullname', 
+                'items__title'
+            ).prefetch_related('items')
+
+
+    def registered(self):
+        return self.get_query_set().registered()
 
 
 class Registration(Base):
