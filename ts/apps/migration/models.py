@@ -42,13 +42,13 @@ class BranchPagesManager(Manager):
         print "     saving: %s" % do_save            
         
         if do_save == True:
-            branch_page = BranchPage.objects.filter(url=data['url'])
+            branch_page = Page.objects.filter(url=data['url'])
     
             try:
                 branch = Branch.objects.get(pk=int(data['branch_id']))
             
                 if branch_page.exists() == False:   
-                    branch_page = BranchPage(
+                    branch_page = Page(
                             pk          = data['id'], 
                             branch      = branch,
                             title       = data['title'], 
@@ -60,18 +60,10 @@ class BranchPagesManager(Manager):
                         )
                     branch_page.save()
         
-                    site_data = {
-                            'domain' : 'http://tradeschool.coop',
-                            'name'   : 'tradeschool everywhere'
-                        }
-                    site, created = Site.objects.get_or_create(domain='http://tradeschool.coop', defaults=site_data)
-        
-                    branch_page.sites.add(site)
-        
-                    print "     saved BranchPage: [%s]" % branch_page            
+                    print "     saved Page: [%s]" % branch_page            
                 else:
-                    branch_page = BranchPage.objects.get(url=data['url'])
-                    print "     found BranchPage: [%s]" % branch_page   
+                    branch_page = Page.objects.get(url=data['url'])
+                    print "     found Page: [%s]" % branch_page   
             except Branch.DoesNotExist:
                 pass     
 
