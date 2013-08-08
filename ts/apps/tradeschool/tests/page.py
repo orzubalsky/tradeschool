@@ -35,7 +35,7 @@ class PageTestCase(TestCase):
             'title'   : 'test page',
             'content' : 'test page content',
             }
-        self.branch_page = Page(
+        self.page = Page(
             branch      = self.page_data['branch'],
             url         = self.page_data['url'],
             title       = self.page_data['title'],
