@@ -921,7 +921,6 @@ admin.site.register(Student, StudentAdmin)
 admin.site.register(Time, TimeAdmin)
 admin.site.register(TimeRange, TimeRangeAdmin)
 
-admin.site.unregister(FlatPage)
 admin.site.register(Page, PageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 

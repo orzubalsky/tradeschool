@@ -1,16 +1,13 @@
-{% extends "subpage.html" %}
+{% extends "hub/base.html" %}
 
 {% load flatpage_admin %}
 
 {% block extra_js %}
-
 {% endblock %}
 
-{% block main_content %}
-<div id="subPage">
-	<h2 class="subTitle">{{ flatpage.title }}</h2>
-	<div class="subMain subWide">
-        {{ flatpage.content }}
-	</div>
-</div>
+{% block content %}
+<h1 class="about_title">{{ flatpage.title }}</h1>
+<div id="about">
+    {{ flatpage.content }} 
+</div>    
 {% endblock %}

@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from django.forms.formsets import formset_factory
-from django.contrib.flatpages.views import render_flatpage
+from django.contrib.flatpages.models import FlatPage
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
@@ -14,10 +14,12 @@ from tradeschool.forms import *
 def branch_list(request):
     """display all branches in current site."""
     
-    branches  = Branch.public.all()
+    branches = Branch.public.all()
+    pages = FlatPage.objects.all()
     
     return render_to_response('hub/branch_list.html',{ 
             'branches': branches, 
+            'pages'   : pages,
         }, context_instance=RequestContext(request))
 
 

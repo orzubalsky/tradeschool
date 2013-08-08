@@ -36,8 +36,7 @@ urlpatterns += patterns('',
 
 # flat pages
 urlpatterns += patterns('django.contrib.flatpages.views',
-    # it's probably better to specify specific flat page urls here so they don't interfere with branch slugs
-    #(r'^(?P<url>[0-9A-Za-z]+)$', 'flatpage'),
+    (r'^page/(?P<url>[0-9A-Za-z]+)/$', 'flatpage'),
 )
 
 # static files url patterns
