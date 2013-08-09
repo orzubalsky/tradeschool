@@ -176,6 +176,7 @@ class BranchesManager(Manager):
                         city                   = data['city'], 
                         state                  = data['state'], 
                         country                = data['country'], 
+                        branch_status          = 'in_session',
                         slug                   = data['url'], 
                         email                  = data['email'].lower(),  
                         created                = timezone.make_aware(data['timestamp'], timezone.utc),
@@ -293,9 +294,9 @@ class ClassesManager(Manager):
                     color = '#8a54bb'                                                               
 
                 # create course first
-                course = Course.objects.filter(pk=data['id'])
+                course = Course.objects.filter(title=data['title'])
                                 
-                if course.exists() == False:            
+                if course.exists() == False: 
                     course = Course(
                                 pk           = int(data['id']), 
                                 title        = data['title'], 
@@ -310,7 +311,7 @@ class ClassesManager(Manager):
             
                     print "     saved Course: [%s]" % course
                 else:
-                    course = Course.objects.get(pk=data['id'])
+                    course = Course.objects.get(title=data['title'])
                     print "     found Course: [%s]" % course
             
             
@@ -348,7 +349,6 @@ class ClassesManager(Manager):
                     print "         schedule end time: [%s]" % aware_end_time
                                 
                     # now create the schedule
-                    print Schedule.objects.filter(course=course)
                     schedule = Schedule.objects.filter(course=course)
 
             
@@ -606,8 +606,9 @@ class StudentsManager(Manager):
             if StudentsXClasses.objects.filter(student_id=int(data['id'])).exists():
                 class_old_join_rows = StudentsXClasses.objects.filter(student_id=int(data['id']))
                 for class_old_join_row in class_old_join_rows:
+                    class_old_row = Classes.objects.get(pk=class_old_join_row.class_id)
                     try:
-                        schedule = Schedule.objects.get(course__pk=class_old_join_row.class_id)
+                        schedule = Schedule.objects.get(course__title=class_old_row.title)
                         print "         found Schedule: [%s]" % schedule
                 
                         registration = Registration.objects.filter(schedule=schedule, student=student)
@@ -771,7 +772,7 @@ class UsersManager(Manager):
             pk = int(data['id']) + 10000            
             slug = unique_slugify(Person, data['username'], 'fullname')
             try:
-                user = Person.objects.get(username=data['username'])
+                user = Person.objects.get(username=data['username'], email=data['email'])
                 user.is_staff = True
                 user.save()
                 print "     turned student or teacher into admin: [%s]" % user                            
@@ -799,8 +800,9 @@ class UsersManager(Manager):
                 branch = Branch.objects.get(pk=data['branch_id'])
                 branch.organizers.add(user)
                 user.branches.add(branch)
+                user.default_branch = branch
                 user.save()
-                branch.save()
+                
             except Branch.DoesNotExist:
                 pass
             

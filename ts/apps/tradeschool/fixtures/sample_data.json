@@ -3,8 +3,8 @@
     "pk": 1, 
     "model": "sites.site", 
     "fields": {
-        "domain": "http://test.tradeschool.coop", 
-        "name": "Test Site"
+        "domain": "tstest.net", 
+        "name": "Trade School Test Site"
     }
 },
 {

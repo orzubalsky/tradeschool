@@ -36,6 +36,7 @@ class Command(BaseCommand):
             branch_slug = kwargs.get('branch_slug') 
 
         migrate(self, Branches, branch_slug)
+        migrate(self, Users, branch_slug)        
         migrate(self, Venues, branch_slug)
         migrate(self, Teachers, branch_slug)
         migrate(self, Classes, branch_slug)
@@ -43,5 +44,4 @@ class Command(BaseCommand):
         migrate(self, BranchPages, branch_slug)
         migrate(self, BranchPhotos, branch_slug)
         migrate(self, Feedbacks, branch_slug)
-        migrate(self, Users, branch_slug)
 
