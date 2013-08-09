@@ -567,7 +567,6 @@
     "pk": 1, 
     "model": "tradeschool.course", 
     "fields": {
-        "category": 0, 
         "updated": "2013-08-06T22:56:17Z", 
         "description": "This is a sample class", 
         "created": "2013-08-06T22:54:52Z", 
@@ -1363,6 +1362,7 @@
         "start_time": "2050-09-05T23:00:00Z", 
         "venue": 1, 
         "course": 1, 
+        "color":"#dda51e",
         "end_time": "2050-09-06T00:30:00Z", 
         "branch": 1, 
         "schedule_status": "approved", 
