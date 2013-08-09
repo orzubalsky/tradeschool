@@ -48,15 +48,24 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         return super(BaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
             
     def filter_dbfield(self, request, model, q, **kwargs):
-        qs = model.objects.filter(q)
-        kwargs['queryset'] = qs
-        if model == Branch:
-            kwargs['initial'] = request.user.default_branch
+        if not request.user.is_superuser:
+            qs = model.objects.filter(q)
+            kwargs['queryset'] = qs
+            if model == Branch:
+                kwargs['initial'] = request.user.default_branch
+            else:
+                if qs.count() > 0:
+                    kwargs['initial'] = qs[0]
         else:
-            if qs.count() > 0:
+            qs = model.objects.all()
+            kwargs['queryset'] = qs
+            try:
                 kwargs['initial'] = qs[0]
+            except IndexError:
+                kwargs['initial'] = None
         return kwargs['queryset'], kwargs['initial']
-  
+
+      
 
 class BaseTabularInline(admin.TabularInline):
     def queryset(self, request, q):
@@ -482,7 +491,13 @@ class OrganizerAdmin(PersonAdmin):
         html = '<a target="_blank" href="%s">change password</a>' % (url,)
         return mark_safe(html)
     change_password_link.short_description = _('change password')
-            
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):  
+        if db_field.name == 'default_branch':
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
+
+        return super(OrganizerAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+                     
     list_display = ('username', 'fullname', 'email', 'branches_organized_string')
     fields       = ('username', 'fullname', 'email', 'language', 'default_branch')
     inlines      = (OrganizedBranchInline,)
