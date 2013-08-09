@@ -61,8 +61,8 @@
     
         {% for schedule in branch.schedule_set.approved.public %}
 
-        <div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
-            <div class="classInfo">
+        <div id="{{ schedule.course.slug }}" class="aClass venue{{ schedule.course.venue.title }}">
+            <div class="classInfo" style="background-color:{{ schedule.color }}">
                 <div class="classHeader">
                     <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
                     <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>

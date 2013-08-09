@@ -232,7 +232,7 @@ class ScheduleInline(BaseTabularInline):
                 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'venue':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Venue, Q(branch__in=request.user.branches_organized.all))
+            kwargs['queryset'] = Venue.objects.filter(branch__in=request.user.branches_organized.all)            
         return super(ScheduleInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     model   = Schedule
@@ -424,7 +424,7 @@ class CourseAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'teacher':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Teacher, Q(branches__in=request.user.branches_organized.all))
+            kwargs['queryset'] = Teacher.objects.filter(branches__in=request.user.branches_organized.all)
         return super(CourseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
  
     list_display         = ('title', 'teacher', 'created')

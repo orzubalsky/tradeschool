@@ -116,7 +116,7 @@ class BranchPhotosManager(Manager):
 
                     print "     saved Photo: [%s]" % branch_photo            
                 else:
-                    branch_photo = Photo.objects.get(url=data['url'])
+                    branch_photo = Photo.objects.get(filename=data['filename'])
                     print "     found Photo: [%s]" % branch_photo   
             except Branch.DoesNotExist:
                 pass                
@@ -300,7 +300,6 @@ class ClassesManager(Manager):
                                 pk           = int(data['id']), 
                                 title        = data['title'], 
                                 teacher      = teacher, 
-                                category     = category, 
                                 max_students = int(data['max_students']), 
                                 description  = description, 
                                 slug         = slug, 
@@ -627,7 +626,7 @@ class StudentsManager(Manager):
                             #print "         found Registration: [%s]" % registration
                     
                         # save branch id in student Person object
-                        branch = registration.schedule.course.branches.all()[0]
+                        branch = registration.schedule.branch
                         #print "             found Branch: [%s]" % branch
                 
                         student.branches.add(branch)
