@@ -1,9 +1,9 @@
 {% load humanize smartdate i18n l10n %}
 
 {% block schedule_item %}
-<div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
+<div id="{{ schedule.slug }}" class="aClass venue{{ schedule.course.venue.title }}">
     
-    {% if schedule.registered_students >= schedule.course.max_students %}
+    {% if schedule.registration_set.registered.count >= schedule.course.max_students %}
     {% block schedule_tag %}
     <div class="classTag tagFull">
         ({% blocktrans context "Class full tag" %}Full{% endblocktrans %})
@@ -11,7 +11,7 @@
     {% endblock schedule_tag %}
     {% endif %}
 
-    <div class="classInfo">
+    <div class="classInfo" style="background-color:{{ schedule.color }}">
         {% block schedule_header %}
         <div class="classHeader">
             <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
@@ -56,7 +56,7 @@
             {% endblock schedule_teacher %}            
             
             {% block schedule_join_button %}
-            {% if schedule.registered_students < schedule.course.max_students %}                    
+            {% if schedule.registration_set.registered.count < schedule.course.max_students %}
             <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-register' branch_slug=branch.slug schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
             {% endif %}
             {% endblock schedule_join_button %}            

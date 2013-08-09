@@ -904,19 +904,8 @@ class Course(Base):
         verbose_name_plural = _("Classes")
         
         ordering = ['title',]
-
-    CATEGORIES = (
-        (0, 'Arts'),
-        (1, 'Etc'),
-        (2, 'Food'),
-        (3, 'Info'),
-        (4, 'Lit'),
-        (5, 'Music'),
-        (6, 'Org')
-    )
     
     teacher         = ForeignKey(Person, verbose_name=_("teacher"), related_name='courses_taught', help_text=_("The person teaching this class."))
-    category        = SmallIntegerField(max_length=1, choices=CATEGORIES, default=random.randint(0, 6))
     max_students    = IntegerField(max_length=4, verbose_name=_("Maximum number of students in your class"), help_text=_("The maximum number of students that will be able to register to this class."))
     title           = CharField(max_length=255, verbose_name=_("class title"), help_text=_("The name of the class. This will appear on the website.")) 
     slug            = SlugField(max_length=255,blank=False, null=True, verbose_name=_("URL Slug"), help_text=_("A unique URL for the class."))
@@ -1101,6 +1090,16 @@ class Schedule(Durational):
         ('rejected', _('Rejected'))
     )
 
+    COLORS = (
+        ('#cc3333', 'red'),
+        ('#e26521', 'blood orange'),
+        ('#dda51e', 'light orange'),
+        ('#74ac23', 'green'),
+        ('#2da57c', 'turquoise'),
+        ('#2d9ac2', 'light blue'),
+        ('#8a54bb', 'violet')
+    )    
+
     venue           = ForeignKey(
                             Venue, 
                             verbose_name=_("venue"),
@@ -1136,6 +1135,9 @@ class Schedule(Durational):
                         )
                                                         
     slug            = SlugField(max_length=255,blank=True, null=True, unique=True, verbose_name=_("A unique URL for the scheduled class."))
+
+    color           = CharField(verbose_name=_("color"),choices=COLORS, max_length=7, default=random.randint(0, 6), help_text=_("A hex value HTML color in the form of #123456"))    
+
 
     def emails():
         def fget(self):

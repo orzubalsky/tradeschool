@@ -272,10 +272,26 @@ class ClassesManager(Manager):
 
                 # fake a default category value
                 if data['category_id'] == None:
-                    category = 1
+                    category = 0
                 else:
                     category = data['category_id']
             
+                color = '#cc3333'
+                if category == 0:
+                    color = '#cc3333'
+                elif category == 1:
+                    color = '#e26521'
+                elif category == 2:
+                    color = '#dda51e'
+                elif category == 3:
+                    color = '#74ac23'
+                elif category == 4:
+                    color = '#2da57c'
+                elif category == 5:
+                    color = '#2d9ac2'
+                elif category == 6:
+                    color = '#8a54bb'                                                               
+
                 # create course first
                 course = Course.objects.filter(pk=data['id'])
                                 
@@ -360,6 +376,7 @@ class ClassesManager(Manager):
                                 course                 = course, 
                                 branch                 = branch,
                                 slug                   = slug,
+                                color                  = color,
                                 schedule_status        = schedule_status,
                                 start_time             = aware_start_time, 
                                 end_time               = aware_end_time, 

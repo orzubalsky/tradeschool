@@ -430,7 +430,7 @@ class CourseAdmin(BaseAdmin):
     list_display         = ('title', 'teacher', 'created')
     search_fields        = ('title', 'teacher__fullname')
     inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'category', 'description')
+    fields               = ('title', 'slug', 'teacher', 'max_students', 'description')
     prepopulated_fields  = {'slug': ('title',)}
     
     
@@ -678,7 +678,8 @@ class ScheduleAdmin(BaseAdmin):
                                 'venue',
                                 'start_time',
                                 'end_time',
-                                'schedule_status'
+                                'schedule_status',
+                                'color',
                                 )
 
         return super(ScheduleAdmin, self).get_form(request, obj, **kwargs)
@@ -686,6 +687,7 @@ class ScheduleAdmin(BaseAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj: # editing an existing object
             return self.readonly_fields + (
+                        'course_title_link',
                         'course_description',
                         'course_max_students',
                         'teacher_fullname', 
@@ -705,6 +707,7 @@ class ScheduleAdmin(BaseAdmin):
                         'end_time', 
                         'venue', 
                         'schedule_status', 
+                        'color',
                         'created'
                         )
     list_editable   = (
@@ -712,6 +715,7 @@ class ScheduleAdmin(BaseAdmin):
                         'end_time', 
                         'venue', 
                         'schedule_status',
+                        'color',                        
                         )
     list_filter     = (
                         'schedule_status', 

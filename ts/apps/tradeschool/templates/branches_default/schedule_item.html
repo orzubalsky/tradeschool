@@ -3,7 +3,7 @@
 {% load humanize smartdate i18n l10n %}
 
 {% block schedule_item %}
-<div id="{{ schedule.course.slug }}" class="aClass type{{ schedule.course.category }} venue{{ schedule.course.venue.title }}">
+<div id="{{ schedule.course.slug }}" class="aClass venue{{ schedule.course.venue.title }}">
     
 {% if schedule.registered_students >= schedule.course.max_students %}
     {% block schedule_tag %}
@@ -11,7 +11,7 @@
     {% endblock schedule_tag %}
 {% endif %}
 
-    <div class="classInfo">
+    <div class="classInfo" style="background-color:{{ schedule.color }}">
         {% block schedule_header %}
         {{ block.super }}
         {% endblock schedule_header %}
