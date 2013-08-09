@@ -52,9 +52,19 @@ def load_fixtures():
         sudo('./bin/django loaddata email_initial_data.json pages_initial_data.json teacher-info.json', user=fab_username)
 
 @task
+def restart_memcached():
+    with cd('/etc/init.d/memcached'):
+        sudo('restart')     
+
+@task
 def restart_wsgi():
     with cd('/opt/projects/tse'):
         sudo('touch bin/django.wsgi')
+
+@task
+def restart():
+    #restart_memcached()
+    restart_wsgi()
 
 @task
 def test():
@@ -82,6 +92,8 @@ def load_data():
 def update_and_test():
     update_sourcecode()
 
+    restart()
+
     test()
 
 @task
@@ -101,7 +113,7 @@ def deploy():
     update_db()
     load_fixtures()
     update_static_files()
-    restart_wsgi()
+    restart()
     test()
 
 
