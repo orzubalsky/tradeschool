@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Create ftp user, create folders and set permissions
-# Usage: ./create_ftp_user.sh [username] "[password]"
+# Usage: ./service vsftpd restart.sh [username] "[password]"
 #
 
 NAME=$1
 PASS=$2
 
-echo "USAGE: create_ftp_user.sh [username] [password]"
+echo "USAGE: service vsftpd restart.sh [username] [password]"
 
 # check input parameters
 if [ -z "$NAME" ]; then
