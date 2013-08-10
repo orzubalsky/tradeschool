@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Create ftp user, create folders and set permissions
-# Usage: ./service vsftpd restart.sh [username] "[password]"
+# Usage: ./create_ftp_user.sh [username] "[password]"
 #
 
 NAME=$1
 PASS=$2
 
-echo "USAGE: service vsftpd restart.sh [username] [password]"
+echo "USAGE: create_ftp_user.sh [username] [password]"
 
 # check input parameters
 if [ -z "$NAME" ]; then
@@ -37,7 +37,7 @@ mkdir -p /home/$NAME/public_html
 
 # Set Ownership
 chown root:root /home/$NAME
-chown -R $NAME:$NAME /home/$NAME/public_html
+chown -R $NAME:root /home/$NAME/public_html
 
 # Set permissions
 chmod -R 0777 /home/$NAME/public_html
