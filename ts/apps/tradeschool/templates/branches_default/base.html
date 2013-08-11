@@ -2,8 +2,28 @@
 
 {% load i18n dajaxice_templatetags tz %}
 
-{% block page %}
+{# 
+    This template is for the layout of all the pages on the branch's site
+    
+    It extends a parent template that's from the branches_base directory, 
+    the parent template is located here:
+        https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/base.html
+    
+    In order to make edits to the html of your TS branch file, 
+        1.  Look at the code of the parent template (URL above).
+            The HTML inside of the various 'block' elements is filled in the 'block' elements
+            that have the same name in this file.
+        2.  Copy the content that's in the block element you wish to change from the parent template.
+        3.  In the code below, paste it inside the block that has the same name,
+            instead of {{ block.super }} 
+        4.  Make any edits you wish! 
 
+    *** Keep in mind that the template has django-specific template tags.
+    They affect the way it functions, so be careful with those.
+    It's probably best to just change / add to the html itself.
+#}
+
+{% block page %}
 
 {% block head %}
 <head>

@@ -1,27 +1,30 @@
 {% extends 'branches_base/schedule_list.html' %}
 
+{% load humanize smartdate i18n l10n %}
+
 {# 
     This template displays the list of scheduled classes
     for a specific branch.
     
     It extends a parent template that's located in-
-    tradeschool/templates/branches_base/schedule_list.html
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/schedule_list.html
     
     In order to make edits to the html of this file, 
-        1.  Copy the content that's in either blocks inside of the parent template.
-        2.  Paste it inside the same block instead of the existing content,
-            or the {{ block.super }} template tag.
-        3.  Make any edits you wish!
+        1.  Look at the code of the parent template (URL above).
+            The HTML inside of the various 'block' elements is filled in the 'block' elements
+            that have the same name in this file.
+        2.  Copy the content that's in the block element you wish to change from the parent template.
+        3.  In the code below, paste it inside the block that has the same name,
+            instead of {{ block.super }} 
+        4.  Make any edits you wish! 
     
     *** If you wish to edit the way each scheduled class looks, edit-
-    tradeschool/templates/{{ BRANCH_NAME }}/schedule_item.html
+    public_html/schedule_item.html
     
     *** Keep in mind that the template has django-specific template tags.
     They affect the way if functions, so be careful with those.
     It's probably best to just change / add to the html itself.
 #}
-
-{% load humanize smartdate i18n l10n %}
 
 {% block main_content %}
 

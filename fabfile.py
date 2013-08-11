@@ -1,7 +1,9 @@
 from fabric.operations import local as lrun
+from fabric.context_managers import settings
 from fabric.api import env, task, sudo, prompt, cd, put, puts
 from fabric.contrib.files import upload_template
 from fab_config import Config
+
 
 env.hosts            = Config.hosts
 fab_username         = Config.fab_username
@@ -66,14 +68,15 @@ def create_ftp_user(username=None, password=None):
         
         user_dir = "/home/%s/public_html" % username
        
-        # create system user
-        sudo("useradd -p `mkpasswd -H md5 %s` %s" % (password, username))
+        with settings(warn_only=True):       
+            # create system user
+            sudo("useradd -p `mkpasswd -H md5 %s` %s" % (password, username))
 
-        # create user ftp dir
-        sudo("mkdir -p %s" % user_dir)
-       
+            # create user ftp dir
+            sudo("mkdir -p %s" % user_dir)
+           
         # set owneership
-        sudo("chown root:root %s" % user_dir)
+        sudo("chown root:root /home/%s" % username)
         sudo("chown -R %s:root %s" % (username, user_dir))
 
         # set permissions

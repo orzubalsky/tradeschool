@@ -2,6 +2,14 @@
 
 {% load i18n %}
 
+{# 
+    This template is used to render all of the Page objects as they're defined in the admin backend.
+
+    *** Keep in mind that the template has django-specific template tags.
+    They affect the way it functions, so be careful with those.
+    It's probably best to just change / add to the html itself.
+#}
+
 {% block main_content %}
 <div id="subPage">
 	<h2 class="subTitle">{{ page.title }}</h2>
