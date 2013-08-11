@@ -177,7 +177,7 @@ class BranchesManager(Manager):
                         state                  = data['state'], 
                         country                = data['country'], 
                         branch_status          = 'in_session',
-                        slug                   = data['url'], 
+                        slug                   = data['url'].lower(), 
                         email                  = data['email'].lower(),  
                         created                = timezone.make_aware(data['timestamp'], timezone.utc),
                         updated                = timezone.make_aware(data['timestamp'], timezone.utc),

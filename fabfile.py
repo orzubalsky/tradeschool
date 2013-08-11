@@ -1,3 +1,4 @@
+from fabric.operations import local as lrun
 from fabric.api import env, task, sudo, prompt, cd, put, puts
 from fabric.contrib.files import upload_template
 from fab_config import Config
@@ -7,6 +8,85 @@ fab_username         = Config.fab_username
 fab_password         = Config.fab_password
 server_settings_file = Config.server_settings_file 
 apache_conf_file     = Config.apache_conf_file
+
+
+#####
+#
+# setup environment
+#
+#####
+@task
+def local():
+    env.run   = lrun
+    env.hosts = ['localhost']
+
+@task
+def testing():
+    env.run   = run
+    env.hosts = ['tstest.net']
+
+@task
+def prod():
+    env.run   = run
+    env.hosts = ['tradeschool.coop']
+
+
+
+
+#####
+#
+# setup local machine
+#
+#####
+@task
+def setup_local():
+    # clone repository
+
+    # run buildout
+
+    # copy development.py settings file
+
+    # enter db settings
+
+    # sync database
+
+    # migrate database
+
+    # load data fixtures
+
+    # load sample data
+
+    pass
+
+
+
+@task 
+def create_ftp_user(username=None, password=None):
+    if username is not None and password is not None:
+        
+        user_dir = "/home/%s/public_html" % username
+       
+        # create system user
+        sudo("useradd -p `mkpasswd -H md5 %s` %s" % (password, username))
+
+        # create user ftp dir
+        sudo("mkdir -p %s" % user_dir)
+       
+        # set owneership
+        sudo("chown root:root %s" % user_dir)
+        sudo("chown -R %s:root %s" % (username, user_dir))
+
+        # set permissions
+        sudo("chmod -R 0777 %s" % user_dir)
+
+        # mount the branch html dir
+        sudo("mount --bind /opt/projects/tse/ts/apps/branches/%s %s" %(username, user_dir))
+
+        add_line = "/opt/projects/tse/ts/apps/branches/%s %s none bind 0" % (username, user_dir)
+        sudo("echo %s >> /etc/fstab" % add_line)
+
+        # restart vsftp daemon            
+        sudo("service vsftpd restart")
 
 #####
 #
