@@ -343,9 +343,14 @@ class TeacherFeedbackScheduleInline(TimedEmailScheduleInline):
 
 class OrganizedBranchInline(BaseTabularInline):
     """
-    """    
+    This inline model is used when adding or changing an Organizer.
+    It exposes the reverse of the Branch.organizers m2m field, thus
+    letting admins create Organizers who already have branch they
+    are organizing.
+    """
     def queryset(self, request):
-        return super(OrganizedBranchInline, self).queryset(request, Q())        
+        """Return the super queryset method with no filtering."""
+        return super(OrganizedBranchInline, self).queryset(request, Q())
 
     model = Branch.organizers.through
     extra = 1
@@ -353,113 +358,189 @@ class OrganizedBranchInline(BaseTabularInline):
 
 class ClusteredBranchInline(BaseTabularInline):
     """
-    """    
+    This inline model is used when adding or changing an Cluster.
+    It exposes the reverse of the Branch.clusters m2m field, thus
+    letting admins create Clusters who already have branches.
+    """
     def queryset(self, request):
-        return super(ClusteredBranchInline, self).queryset(request, Q())        
+        """Return the super queryset method with no filtering."""
+        return super(ClusteredBranchInline, self).queryset(request, Q())
 
     model = Branch.clusters.through
     extra = 1
 
 
 class ScheduleInline(BaseTabularInline):
-    """Schedule model inline object. 
-        Can be used in the Course Admin view in order 
-        to allow on the spot scheduling."""
-    
+    """
+    Schedule model inline admin model is used in the Course Admin Model
+    in order to let admins create repeat schedules for a course on quickly.
+    """
     def queryset(self, request):
-        return super(ScheduleInline, self).queryset(request, Q(branch__in=request.user.branches_organized.all))        
-                
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'venue':
-            kwargs['queryset'] = Venue.objects.filter(branch__in=request.user.branches_organized.all)            
-        return super(ScheduleInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        """Filter branches by those organized by the logged in user."""
+        return super(ScheduleInline, self).queryset(
+            request,
+            Q(branch__in=request.user.branches_organized.all)
+        )
 
-    model   = Schedule
-    extra   = 0
-    fields  = ('start_time', 'end_time', 'venue')
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Filter Schedule's venues by those that are related
+        to branches organized by the logged in user.
+        """
+        if db_field.name == 'venue':
+            kwargs['queryset'] = Venue.objects.filter(
+                branch__in=request.user.branches_organized.all
+            )
+        return super(ScheduleInline, self).formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs
+        )
+
+    model = Schedule
+    extra = 0
+    fields = ('start_time', 'end_time', 'venue')
 
 
 class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInline):
-    """Registration model inline object. 
-        Used in the Schedule Admin view in order 
-        to give an overview of students registered."""
-
+    """
+    The Registration inline model is used in the Schedule Admin Model
+    in order to give an overview of Schedule's registrations.
+    """
     def queryset(self, request):
-        return super(RegistrationInline, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))
+        """
+        Filter Registrations by those that are related to Schedules that
+        are scheduled in branches that are organized by the logged in user.
+        """
+        return super(RegistrationInline, self).queryset(
+            request,
+            Q(schedule__branch__in=request.user.branches_organized.all)
+        )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Filter Registration's students by those that are related
+        to branches organized by the logged in user.
+        """
         if db_field.name == 'student':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Student, Q(branch__in=request.user.branches_organized.all))
-        return super(RegistrationInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
-        
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
+                request,
+                Student,
+                Q(branch__in=request.user.branches_organized.all)
+            )
+        return super(RegistrationInline, self).formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs
+        )
+
     def registration_link(self, obj):
         """
+        Return HTML with a link to the Registration object's admin change form.
+        This is used as a readonly field, so each Registration can be edited if
+        necassary in a new window from the Schedule Admin Model.
         """
-        # link to item edit admin form 
+        # url to registration admin edit form
         url = reverse('admin:tradeschool_registration_change', args=(obj.pk,))
-        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.student.fullname)
-        return mark_safe(html)
-    
+
+        # return a safe output so the html can be rendered in the template
+        return mark_safe(
+            '<a target="_blank" href="%s">%s</a>' % (url, obj.student.fullname)
+        )
     registration_link.short_description = _('Title')
-        
-    model           = Registration 
+
+    model           = Registration
     readonly_fields = ('registration_link', 'items', 'registration_status')
     fields          = ('registration_link', 'items', 'registration_status',)
     extra           = 0
 
 
 class BarterItemInline(BaseTabularInline):
-    """BarterItem model inline object. 
-        Used in the Schedule Admin view in order 
-        to give an overview of the items requested."""
-
+    """
+    The BarterItem inline model is used in the Schedule Admin Model
+    in order to give an overview of Schedule's BarterItems and allow
+    for quick editing of the list if necassary.
+    """
     def queryset(self, request):
-        return super(BarterItemInline, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))        
-    
+        """
+        Filter BarterItems that are related to Schedules that are scheduled
+        in branches that are organized by the logged in user.
+        """
+        return super(BarterItemInline, self).queryset(
+            request,
+            Q(schedule__branch__in=request.user.branches_organized.all)
+        )
+
     def title_link(self, obj):
         """
+        Return HTML with a link to the BarterItem object's admin change form.
+        This is used as a readonly field, so each BarterItem can be edited in
+        a new window, easily accessible from the Schedule Admin Model.
         """
-        # link to item edit admin form 
+        # url to registration admin edit form
         url = reverse('admin:tradeschool_barteritem_change', args=(obj.pk,))
-        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.title)
-        return mark_safe(html)
-    
+
+        # return a safe output so the html can be rendered in the template
+        return mark_safe(
+            '<a target="_blank" href="%s">%s</a>' % (url, obj.title)
+        )
     title_link.short_description = _('Title')
-         
+
     model           = BarterItem
     fields          = ('title_link',)
     readonly_fields = ('title_link',)
     extra           = 0
 
 
+class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
+    """
+    The Feedback inline model is used in the PsstSchedule Admin Model
+    in order to give an overview of the Feedback that was submitted
+    about the Schedule by registered students and the teacher.
+    """
+    def queryset(self, request):
+        """
+        Filter to Feedbacks that are related to Schedules that are scheduled
+        in branches that are organized by the logged in user.
+        """
+        return super(FeedbackInline, self).queryset(
+            request,
+            Q(schedule__branch__in=request.user.branches_organized.all)
+        )
+
+    model           = Feedback
+    fields          = ('feedback_type', 'content',)
+    readonly_fields = ('feedback_type',)
+    extra           = 0
+
+
 class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
+    The Photo inline model is used in the Branch Admin Model in order to
+    give an overview of the Photo that appear in the homepage gallery.
     """
-
     def queryset(self, request):
-        return super(PhotoInline, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
-            
+        """
+        Filter photos by those that are related to branches that are
+        organized by the logged in user.
+        """
+        return super(PhotoInline, self).queryset(
+            request,
+            Q(branch__in=request.user.branches_organized.all)
+        )
+
+    def render_image(self, obj):
+        """Return HTML with an img tag showing a thumbnail of the Photo."""
+        return mark_safe(
+            '<img src="%s" class="branch_image"/>' % obj.filename.url
+        )
+    render_image.short_description = _("Thumbnail")
+
     model               = Photo
     fields              = ('render_image', 'filename', 'position',)
     readonly_fields     = ('render_image',)
     extra               = 0
-    sortable_field_name = "position"
-    
-    def render_image(self, obj):
-        return mark_safe("""<img src="%s" class="branch_image"/>""" % obj.filename.url)    
-    render_image.short_description = _("Thumbnail")
-
-
-class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
-    """
-    """
-    def queryset(self, request):
-        return super(FeedbackInline, self).queryset(request, Q(schedule__branch__in=request.user.branches_organized.all))
-    
-    model   = Feedback
-    fields = ('feedback_type', 'content',)
-    readonly_fields = ('feedback_type',)
-    extra   = 0
+    sortable_field_name = 'position'
 
 
 class BranchAdmin(BaseAdmin):
