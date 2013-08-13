@@ -126,145 +126,219 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
 class BaseTabularInline(admin.TabularInline):
     def queryset(self, request, q):
         """
-        queryset is filtered against the Branch objects that the logged in Person is organizing.
-        In the case the logged in Person is a superuser, they see all of the data without filtering.
+        TODO: This is actualy a duplication of the BaseAdmin method
+        and should extend it instead.
         """
         qs = super(BaseTabularInline, self).queryset(request)
 
+        # superusers get to see all data,
+        # only filter queryset if the user is not a superuser
         if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
+            # other users see data filtered by
+            # the branches they're organizing.
+            if q is None:
+                q = Q(branches__in=request.user.branches_organized.all)
             qs = qs.filter(q)
 
         # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+        # otherwise we might try to *None, which is bad
+        ordering = self.ordering or ()
 
         if ordering:
             qs = qs.order_by(*ordering)
-        return qs    
+        return qs
 
     def filter_dbfield(self, request, model, q, **kwargs):
-        qs = model.objects.filter(q)
-        kwargs['queryset'] = qs
-        if model == Branch:
-            kwargs['initial'] = request.user.default_branch
-        else:        
-            if qs.count() > 0:
+        """
+        TODO: This is actualy a duplication of the BaseAdmin method
+        and should extend it instead.
+        """
+        # only perform filtering if the user is not a superuser
+        if not request.user.is_superuser:
+
+            # query the db and filter by the passed in Q obhects
+            qs = model.objects.filter(q)
+
+            # set the queryset key argument.
+            kwargs['queryset'] = qs
+
+            # set the user's default_branch if the passed in model is Branch
+            if model == Branch:
+                kwargs['initial'] = request.user.default_branch
+
+            # only set an 'initial' value if there is at least
+            # one item in the queryset
+            else:
+                if qs.count() > 0:
+                    kwargs['initial'] = qs[0]
+
+        # if the user IS a superuser, don't filter, but do try to
+        # return an 'initial' key argument if there is one
+        else:
+            qs = model.objects.all()
+            kwargs['queryset'] = qs
+            try:
                 kwargs['initial'] = qs[0]
+            except IndexError:
+                kwargs['initial'] = None
         return kwargs['queryset'], kwargs['initial']
 
 
 class BaseStackedInline(admin.StackedInline):
     def queryset(self, request, q):
         """
-        queryset is filtered against the Branch objects that the logged in Person is organizing.
-        In the case the logged in Person is a superuser, they see all of the data without filtering.
+        TODO: This is actualy a duplication of the BaseAdmin method
+        and should extend it instead.
         """
         qs = super(BaseStackedInline, self).queryset(request)
 
+        # superusers get to see all data,
+        # only filter queryset if the user is not a superuser
         if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
+            # other users see data filtered by
+            # the branches they're organizing.
+            if q is None:
+                q = Q(branches__in=request.user.branches_organized.all)
             qs = qs.filter(q)
 
         # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+        # otherwise we might try to *None, which is bad
+        ordering = self.ordering or ()
 
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
-                
+
 
 class TimedEmailBranchInline(BaseTabularInline):
-    """TimedEmailBranchInline"""
+    """
+    All branch TimedEmails are displayed as inlines in the Branch admin model.
+
+    We want to expose different fields of the Email model in the context
+    of editing a branch, since the user is in fact editing a template that
+    will be copied from to each Schedule that's created. Therefore we only
+    display fields that determine the way the send_on is calculated,
+    like 'days_delta' & 'send_time'), but not the fields that reflect the
+    status of a Schedule email, like 'send_on' & 'email_status'.
+
+    Do not allow more than 1 instance of the TimedEmail model,
+    since there is a one-to-one relationship between the email and the branch.
+    """
     def queryset(self, request):
-        return super(TimedEmailBranchInline, self).queryset(request, Q())        
-    extra   = 0
-    max_num = 0    
-    fields  = ('subject', 'content', 'days_delta', 'send_time')
+        """Return the super queryset method with no filtering."""
+        return super(TimedEmailBranchInline, self).queryset(request, Q())
+    extra = 0
+    max_num = 0
+    fields = ('subject', 'content', 'days_delta', 'send_time')
 
 
 class TimedEmailScheduleInline(BaseTabularInline):
-    """TimedEmailScheduleInline"""
+    """
+    All schedule TimedEmails are displayed as inlines in the Schedule
+    admin model.
+
+    We want to expose different fields of the Email model in the context
+    of editing a schedue, since the user is in fact editing an email that
+    will be sent out Therefore we only display fields that reflect the
+    status of a TimedEmail, like 'send_on' & 'email_status', and not any fields
+    that determine the way the send_on is calculated,
+
+    Do not allow more than 1 instance of the TimedEmail model,
+    since there is a onetoone relationship between the email and the scheudle.
+    """
     def queryset(self, request):
-        return super(TimedEmailScheduleInline, self).queryset(request, Q())        
-    extra   = 0
-    max_num = 0    
-    fields  = ('subject', 'content', 'email_status', 'send_on')
+        """Return the super queryset method with no filtering."""
+        return super(TimedEmailScheduleInline, self).queryset(request, Q())
+    extra = 0
+    max_num = 0
+    fields = ('subject', 'content', 'email_status', 'send_on')
 
 
 class EmailBranchInline(BaseTabularInline):
     """
+    All branch Emails are displayed as inlines in the Branch admin model.
+
+    Do not allow more than 1 instance of the TimedEmail model,
+    since there is a one-to-one relationship between the email and the branch.
     """
     def queryset(self, request):
+        """Return the super queryset method with no filtering."""
         return super(EmailBranchInline, self).queryset(request, Q())
-    extra   = 0
+    extra = 0
     max_num = 0
-    fields  = ('subject', 'content')
-        
+    fields = ('subject', 'content')
+
 
 class EmailScheduleInline(BaseTabularInline):
     """
+    All schedule TimedEmails are displayed as inlines in the Schedule
+    admin model.
+
+    Do not allow more than 1 instance of the TimedEmail model,
+    since there is a onetoone relationship between the email and the scheudle.
     """
     def queryset(self, request):
+        """Return the super queryset method with no filtering."""
         return super(EmailScheduleInline, self).queryset(request, Q())
-    extra   = 0
+    extra = 0
     max_num = 0
-    fields  = ('subject', 'content', 'email_status')
+    fields = ('subject', 'content', 'email_status')
 
 
 class StudentConfirmationBranchInline(EmailBranchInline):
-    model   = StudentConfirmation
+    model = StudentConfirmation
 
 
 class StudentConfirmationScheduleInline(EmailScheduleInline):
-    model   = StudentConfirmation
+    model = StudentConfirmation
 
 
 class StudentReminderBranchInline(TimedEmailBranchInline):
-    model   = StudentReminder
+    model = StudentReminder
 
 
 class StudentReminderScheduleInline(TimedEmailScheduleInline):
-    model   = StudentReminder
+    model = StudentReminder
 
 
 class StudentFeedbackBranchInline(TimedEmailBranchInline):
-    model   = StudentFeedback
+    model = StudentFeedback
 
 
 class StudentFeedbackScheduleInline(TimedEmailScheduleInline):
-    model   = StudentFeedback
+    model = StudentFeedback
 
 
 class TeacherConfirmationBranchInline(EmailBranchInline):
-    model   = TeacherConfirmation
+    model = TeacherConfirmation
 
 
 class TeacherConfirmationScheduleInline(EmailScheduleInline):
-    model   = TeacherConfirmation
+    model = TeacherConfirmation
 
 
 class TeacherClassApprovalBranchInline(EmailBranchInline):
-    model   = TeacherClassApproval
+    model = TeacherClassApproval
 
 
 class TeacherClassApprovalScheduleInline(EmailScheduleInline):
-    model   = TeacherClassApproval
+    model = TeacherClassApproval
 
 
 class TeacherReminderBranchInline(TimedEmailBranchInline):
-    model   = TeacherReminder
+    model = TeacherReminder
 
 
 class TeacherReminderScheduleInline(TimedEmailScheduleInline):
-    model   = TeacherReminder
+    model = TeacherReminder
 
 
 class TeacherFeedbackBranchInline(TimedEmailBranchInline):
-    model   = TeacherFeedback
+    model = TeacherFeedback
 
 
 class TeacherFeedbackScheduleInline(TimedEmailScheduleInline):
-    model   = TeacherFeedback
+    mode = TeacherFeedback
 
 
 class OrganizedBranchInline(BaseTabularInline):
