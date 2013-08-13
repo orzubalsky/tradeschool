@@ -544,66 +544,114 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
 
 
 class BranchAdmin(BaseAdmin):
-    """BranchAdmin lets you add and edit tradeschool branches,
-        and reset the email templates for each branch.
-        """
+    """
+    BranchAdmin lets you add and edit tradeschool branches,
+    and reset the email templates for each branch.
+    """
     def queryset(self, request):
-        return super(BranchAdmin, self).queryset(request, Q(pk__in=request.user.branches_organized.all))
-           
-    form = BranchForm
+        """
+        Filter to Branches that are organized by the logged in user.
+        """
+        return super(BranchAdmin, self).queryset(
+            request,
+            Q(pk__in=request.user.branches_organized.all)
+        )
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-        self.inlines = ( 
-                        StudentConfirmationBranchInline,
-                        TeacherConfirmationBranchInline,
-                        TeacherClassApprovalBranchInline,
-                        TeacherReminderBranchInline,
-                        TeacherFeedbackBranchInline,
-                        StudentReminderBranchInline,
-                        StudentFeedbackBranchInline,                            
-                        PhotoInline,
-                    )       
+        """
+        Include the Email inlines and Photo inlines only when editing a Branch.
+        There is no need to show them when creating a new one, as the Emails
+        are genereated automatically and will just make the add form confusing.
+        """
+        self.inlines = (
+            StudentConfirmationBranchInline,
+            TeacherConfirmationBranchInline,
+            TeacherClassApprovalBranchInline,
+            TeacherReminderBranchInline,
+            TeacherFeedbackBranchInline,
+            StudentReminderBranchInline,
+            StudentFeedbackBranchInline,
+            PhotoInline,
+        )
         return super(BranchAdmin, self).change_view(request, object_id)
 
     def add_view(self, request, form_url='', extra_context=None):
+        """The Photo inline should be a part of the add Branch form."""
         self.inlines = (PhotoInline, )
         return super(BranchAdmin, self).add_view(request)
 
-    def populate_notifications(self, request, queryset):
-        """call the populate_notifications() method in order to reset email templates for the branch."""
-        
+    def generate_notifications(self, request, queryset):
+        """
+        Call the populate_notifications() method in order to delete
+        existing Email objects in a set of Branches and copy them again
+        from the DefulatBranchContainer.
+        """
         for branch in queryset:
             branch.populate_notifications()
-    populate_notifications.short_description = _("Generate Email Notifications")
+    generate_notifications.short_description = _("Generate Emails")
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """
+        Filter branch.organizers to Person objects that are marked as staff.
+        """
         if db_field.name == 'organizers':
-            qs = Person.objects.filter(is_staff=True)            
-            kwargs['queryset'] = qs
-        return super(BranchAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-        
-    list_display        = ('title', 'slug', 'site', 'city', 'country', 'email', 'branch_status', 'is_active')
+            kwargs['queryset'] = Person.objects.filter(is_staff=True)
+        return super(BranchAdmin, self).formfield_for_manytomany(
+            db_field,
+            request,
+            **kwargs
+        )
+
+    list_display = (
+        'title',
+        'slug',
+        'site',
+        'city',
+        'country',
+        'email',
+        'branch_status',
+        'is_active'
+    )
     list_editable       = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
     filter_horizontal   = ('organizers', 'clusters')
-    inlines             = ()       
+    inlines             = ()
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Basic Info'), {
-            'fields': ('title', 'slug', 'timezone', 'language', 'branch_status')
+            'fields': (
+                'title',
+                'slug',
+                'timezone',
+                'language',
+                'branch_status',
+            )
         }),
         # Translators: This is the a header in the branch admin form
         (_('Contact Info'), {
-            'fields': ('city', 'state', 'country', 'email', 'phone')
+            'fields': (
+                'city',
+                'state',
+                'country',
+                'email',
+                'phone',
+            )
         }),
         # Translators: This is the a header in the branch admin form
         (_('Website Content'), {
-            'fields': ('header_copy', 'intro_copy', 'footer_copy')
-        }), 
-        # Translators: This is the a header in the branch admin form       
+            'fields': (
+                'header_copy',
+                'intro_copy',
+                'footer_copy'
+            )
+        }),
+        # Translators: This is the a header in the branch admin form
         (_('Organizers'), {
-            'fields': ('organizers', 'clusters')
-        }),        
+            'fields': (
+                'organizers',
+                'clusters'
+            )
+        }),
     )
 
 
@@ -1126,7 +1174,6 @@ class ClusterAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
     list_display = ('name', 'slug', 'branches_string')
     fields       = ('name', 'slug',)
     inlines      = (ClusteredBranchInline,)
-
 
 
 # register admin models
