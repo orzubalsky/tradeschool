@@ -4,8 +4,6 @@ from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.flatpages.admin import FlatpageForm
-from django.contrib.flatpages.models import FlatPage
-from flatpages_tinymce.admin import FlatPageAdmin
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
 from tradeschool.models import *
@@ -13,49 +11,108 @@ from tradeschool.forms import *
 
 
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
-    """Base admin model. Filters objects querysite according to the current branch."""
+    """
+    Base admin model. Filters objects queryset according to the current branch.
+    """
 
     def queryset(self, request, q=None):
         """
-        queryset is filtered against the Branch objects that the logged in Person is organizing.
-        In the case the logged in Person is a superuser, they see all of the data without filtering.
+        queryset is filtered against the Branch objects that the logged in
+        Person is organizing. In the case the logged in Person is a superuser,
+        they see all of the data without filtering.
         """
         qs = super(BaseAdmin, self).queryset(request)
 
+        # superusers get to see all data,
+        # only filter queryset if the user is not a superuser
         if not request.user.is_superuser:
-            # other users see data filtered by the branch they're associated with
-            if q == None:
+            # other users see data filtered by
+            # the branches they're organizing.
+            if q is None:
                 q = Q(branches__in=request.user.branches_organized.all)
             qs = qs.filter(q)
 
         # we need this from the superclass method
-        ordering = self.ordering or () # otherwise we might try to *None, which is bad ;)
+        # otherwise we might try to *None, which is bad
+        ordering = self.ordering or ()
 
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        when an admin model has a branch foreign key field
+        filter the queryset of the barnch field by the branches
+        that the logged in user is ogranizing.
+        """
         if db_field.name == 'branch':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
-        return super(BaseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
+                request,
+                Branch,
+                Q(pk__in=request.user.branches_organized.all)
+            )
+        return super(BaseAdmin, self).formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs
+        )
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """
+        when an admin model has a branch manytomany field
+        filter the queryset of the barnches field by the branches
+        that the logged in user is organizing. Make the user's
+        defulat_branch selected in the form widget.
+        """
         if db_field.name == 'branches':
-            qs = Branch.objects.filter(pk__in=request.user.branches_organized.all)            
+            qs = Branch.objects.filter(
+                pk__in=request.user.branches_organized.all
+            )
             kwargs['queryset'] = qs
-            kwargs['initial'] = [request.user.default_branch,]
-        return super(BaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-            
+
+            #  Make the user's defulat_branch selected in the form widget.
+            kwargs['initial'] = [request.user.default_branch, ]
+
+        return super(BaseAdmin, self).formfield_for_manytomany(
+            db_field,
+            request,
+            **kwargs
+        )
+
     def filter_dbfield(self, request, model, q, **kwargs):
+        """
+        This is a shortcut method to filter a field of a model
+        by the a Q object that's pased as an argument.
+        The filtering is done only when the logged in user
+        is not a superuser, to be consistent with the entire admin,
+        which lets superusers see all data.
+        This method also returns an 'initial' key argument, which is set to
+        the first item in the queryset, unless the model passed is Branch.
+        In that case the 'initial' is set the the logged in user's
+        default_branch.
+        """
+        # only perform filtering if the user is not a superuser
         if not request.user.is_superuser:
+
+            # query the db and filter by the passed in Q obhects
             qs = model.objects.filter(q)
+
+            # set the queryset key argument.
             kwargs['queryset'] = qs
+
+            # set the user's default_branch if the passed in model is Branch
             if model == Branch:
                 kwargs['initial'] = request.user.default_branch
+
+            # only set an 'initial' value if there is at least
+            # one item in the queryset
             else:
                 if qs.count() > 0:
                     kwargs['initial'] = qs[0]
+
+        # if the user IS a superuser, don't filter, but do try to
+        # return an 'initial' key argument if there is one
         else:
             qs = model.objects.all()
             kwargs['queryset'] = qs
@@ -65,7 +122,6 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
                 kwargs['initial'] = None
         return kwargs['queryset'], kwargs['initial']
 
-      
 
 class BaseTabularInline(admin.TabularInline):
     def queryset(self, request, q):
