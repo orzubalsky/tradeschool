@@ -757,21 +757,47 @@ class VenueAdmin(BaseAdmin):
 
 
 class CourseAdmin(BaseAdmin):
-    """CourseAdmin lets you add and edit courses
-        and their corresponding schedules."""
+    """
+    CourseAdmin is used to manage a Branch's Courses.
 
+    The focus of the admin backend is Schedules rather than Courses.
+    Courses should be used mainly to schedule repeat classes.
+    """
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Filter Teachers to those who are related to Branches
+        that are organized by the logged in user.
+        """
         if db_field.name == 'teacher':
-            kwargs['queryset'] = Teacher.objects.filter(branches__in=request.user.branches_organized.all)
-        return super(CourseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
- 
-    list_display         = ('title', 'teacher', 'created')
-    search_fields        = ('title', 'teacher__fullname')
-    inlines              = (ScheduleInline,)
-    fields               = ('title', 'slug', 'teacher', 'max_students', 'description')
-    prepopulated_fields  = {'slug': ('title',)}
-    
-    
+            kwargs['queryset'] = Teacher.objects.filter(
+                branches__in=request.user.branches_organized.all
+            )
+        return super(CourseAdmin, self).formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs
+        )
+
+    list_display = (
+        'title',
+        'teacher',
+        'created'
+    )
+    search_fields = (
+        'title',
+        'teacher__fullname'
+    )
+    inlines = (ScheduleInline,)
+    fields = (
+        'title',
+        'slug',
+        'teacher',
+        'max_students',
+        'description'
+    )
+    prepopulated_fields = {'slug': ('title',)}
+
+
 class PersonAdmin(BaseAdmin):
     """ PersonAdmin lets you add and edit people in the Trade School system,
         and keep track of the classes they took and taught.
