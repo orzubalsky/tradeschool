@@ -545,8 +545,16 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
 
 class BranchAdmin(BaseAdmin):
     """
-    BranchAdmin lets you add and edit tradeschool branches,
-    and reset the email templates for each branch.
+    BranchAdmin is used to manage a Branch. When adding a new Branch,
+    it lets you edit the basic fields, and when editing one it also
+    lets you edit the Emails that will be copied to each Scheduled class.
+
+    Some fields have extra significance in the TS system:
+        * Branch.timezone sets the timezone by which all of the dates and times
+          are calculated on both the frontend and the backend.
+        * Branch.language sets the language that the frontend
+          will be translated to.
+        * Branch.slug will set the URL that the branch website will be on.
     """
     def queryset(self, request):
         """
@@ -656,20 +664,82 @@ class BranchAdmin(BaseAdmin):
 
 
 class VenueAdmin(BaseAdmin):
-    """VenueAdmin lets you add and edit venues."""
+    """
+    VenueAdmin is used to manage a Branch's Venues.
 
+    * The address fields are used both in the frontend and to populate
+      Emails that are sent related to a Schedule.
+    * Venue.capacity DOES NOT create a limit on how many Students can register,
+      it's just used for organizers to figure out Schedules.
+    """
     def queryset(self, request):
-        return super(VenueAdmin, self).queryset(request, Q(branch__in=request.user.branches_organized.all))
-    
+        """
+        Filter to Venues in Branches that are organized by the logged in user.
+        """
+        return super(VenueAdmin, self).queryset(
+            request,
+            Q(branch__in=request.user.branches_organized.all)
+        )
+
     def formfield_for_choice_field(self, db_field, request, **kwargs):
+        """
+        Select the country and state fields of the
+        logged in user's branch.
+        """
+        # select the Branch's country
         if db_field.name == 'country':
-            kwargs['initial'] = Branch.objects.filter(pk__in=request.user.branches_organized.all)[0].country
+
+            # first find the country of the first branch that's
+            # organized by the logged in user
+            initial_country = Branch.objects.filter(
+                pk__in=request.user.branches_organized.all)[0].country
+
+            # if the user has a default_branch set,
+            # select its country instead.
+            if request.user.default_branch is not None:
+                initial_country = Branch.objects.filter(
+                    pk__in=request.user.default_branch)[0].country
+
+            # set the actual initial value
+            kwargs['initial'] = initial_country
+
+        # select the Branch's state
         if db_field.name == 'state':
-            kwargs['initial'] = Branch.objects.filter(pk__in=request.user.branches_organized.all)[0].state
-        return super(VenueAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)
-                
-    list_display    = ('title', 'branch', 'address_1', 'city', 'capacity', 'is_active')
-    list_editable   = ('address_1', 'city', 'capacity', 'is_active',)
+
+            # first find the state of the first branch that's
+            # organized by the logged in user
+            initial_state = Branch.objects.filter(
+                pk__in=request.user.branches_organized.all)[0].state
+
+            # if the user has a default_branch set,
+            # select its state instead.
+            if request.user.default_branch is not None:
+                initial_state = Branch.objects.filter(
+                    pk__in=request.user.default_branch)[0].initial_state
+
+            # select the Branch's state
+            kwargs['initial'] = initial_state
+
+        return super(VenueAdmin, self).formfield_for_choice_field(
+            db_field,
+            request,
+            **kwargs
+        )
+
+    list_display = (
+        'title',
+        'branch',
+        'address_1',
+        'city',
+        'capacity',
+        'is_active'
+    )
+    list_editable = (
+        'address_1',
+        'city',
+        'capacity',
+        'is_active',
+    )
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Basic Info'), {
@@ -682,8 +752,8 @@ class VenueAdmin(BaseAdmin):
         # Translators: This is the a header in the branch admin form
         (_('Additional Info'), {
             'fields': ('capacity', 'resources',)
-        }),        
-    )       
+        }),
+    )
 
 
 class CourseAdmin(BaseAdmin):
