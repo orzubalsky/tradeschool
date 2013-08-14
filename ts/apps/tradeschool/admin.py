@@ -449,10 +449,18 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         )
     registration_link.short_description = _('Title')
 
-    model           = Registration
-    readonly_fields = ('registration_link', 'items', 'registration_status')
-    fields          = ('registration_link', 'items', 'registration_status',)
-    extra           = 0
+    model = Registration
+    readonly_fields = (
+        'registration_link',
+        'items',
+        'registration_status'
+    )
+    fields = (
+        'registration_link',
+        'items',
+        'registration_status',
+    )
+    extra = 0
 
 
 class BarterItemInline(BaseTabularInline):
@@ -486,10 +494,10 @@ class BarterItemInline(BaseTabularInline):
         )
     title_link.short_description = _('Title')
 
-    model           = BarterItem
-    fields          = ('title_link',)
+    model = BarterItem
+    fields = ('title_link',)
     readonly_fields = ('title_link',)
-    extra           = 0
+    extra = 0
 
 
 class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
@@ -508,10 +516,10 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
             Q(schedule__branch__in=request.user.branches_organized.all)
         )
 
-    model           = Feedback
-    fields          = ('feedback_type', 'content',)
+    model = Feedback
+    fields = ('feedback_type', 'content',)
     readonly_fields = ('feedback_type',)
-    extra           = 0
+    extra = 0
 
 
 class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
@@ -536,10 +544,14 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
         )
     render_image.short_description = _("Thumbnail")
 
-    model               = Photo
-    fields              = ('render_image', 'filename', 'position',)
-    readonly_fields     = ('render_image',)
-    extra               = 0
+    model = Photo
+    fields = (
+        'render_image',
+        'filename',
+        'position',
+    )
+    readonly_fields = ('render_image',)
+    extra = 0
     sortable_field_name = 'position'
 
 
@@ -620,10 +632,10 @@ class BranchAdmin(BaseAdmin):
         'branch_status',
         'is_active'
     )
-    list_editable       = ('is_active', 'branch_status',)
+    list_editable = ('is_active', 'branch_status',)
     prepopulated_fields = {'slug': ('title',)}
-    filter_horizontal   = ('organizers', 'clusters')
-    inlines             = ()
+    filter_horizontal = ('organizers', 'clusters')
+    inlines = ()
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Basic Info'), {
@@ -799,31 +811,61 @@ class CourseAdmin(BaseAdmin):
 
 
 class PersonAdmin(BaseAdmin):
-    """ PersonAdmin lets you add and edit people in the Trade School system,
-        and keep track of the classes they took and taught.
-    """ 
-
+    """
+    PersonAdmin is used to add and edit people in the user's Branches.
+    It includes Students, Teachers, and Organizers.
+    """
     def queryset(self, request, q=None):
-        """ Annotate the queryset with counts of registrations and courses taught associated with the Person."""
+        """
+        Annotate the queryset with counts of registrations and courses taught
+        associated with the Person.
+        """
         return super(PersonAdmin, self).queryset(request).annotate(
-            registration_count   = Count('registrations', distinct=True), 
-            courses_taught_count = Count('courses_taught', distinct=True)
+            registration_count=Count('registrations', distinct=True),
+            courses_taught_count=Count('courses_taught', distinct=True)
         )
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):  
-        if db_field.name == 'default_branch':          
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(request, Branch, Q(pk__in=request.user.branches_organized.all))
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'default_branch':
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
+                request,
+                Branch,
+                Q(pk__in=request.user.branches_organized.all)
+            )
+        return super(PersonAdmin, self).formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs
+        )
 
-        return super(PersonAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-            
-    list_display        = ('fullname', 'email', 'phone', 'courses_taken', 'courses_taught', 'branches_string', 'created')
-    search_fields       = ('fullname', 'email', 'phone')
-    fields              = ('fullname', 'username', 'email', 'phone', 'website', 'bio')
+    list_display = (
+        'fullname',
+        'email',
+        'phone',
+        'courses_taken',
+        'courses_taught',
+        'branches_string',
+        'created',
+    )
+    search_fields = (
+        'fullname',
+        'email',
+        'phone',
+    )
+    fields = (
+        'fullname',
+        'username',
+        'email',
+        'phone',
+        'website',
+        'bio',
+    )
     #prepopulated_fields = {'slug': ('username',)}
 
     def courses_taken(self, obj):
-        """ Return registration count from annotated queryset so it can be used in list_display."""
+        """
+        Return registration count from queryset so it can be used in list_display.
+        """
         return obj.registration_count
     courses_taken.short_description = 'Courses Taken'
     courses_taken.admin_order_field = 'registration_count'
@@ -841,7 +883,7 @@ class OrganizerAdmin(PersonAdmin):
     def change_password_link(self, obj):
         """
         """
-        # link to change password admin form 
+        # link to change password admin form
         url = reverse('admin:password_change', args=(obj.course.pk,))
         html = '<a target="_blank" href="%s">change password</a>' % (url,)
         return mark_safe(html)

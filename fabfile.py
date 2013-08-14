@@ -1,7 +1,7 @@
 from fabric.operations import local as lrun
+from fabric.operations import run
 from fabric.context_managers import settings
 from fabric.api import env, task, sudo, prompt, cd, put, puts
-from fabric.contrib.files import upload_template
 from fab_config import Config
 
 
@@ -19,20 +19,20 @@ apache_conf_file     = Config.apache_conf_file
 #####
 @task
 def local():
-    env.run   = lrun
+    env.run = lrun
     env.hosts = ['localhost']
+
 
 @task
 def testing():
-    env.run   = run
+    env.run = run
     env.hosts = ['tstest.net']
+
 
 @task
 def prod():
-    env.run   = run
+    env.run = run
     env.hosts = ['tradeschool.coop']
-
-
 
 
 #####
@@ -61,20 +61,19 @@ def setup_local():
     pass
 
 
-
-@task 
+@task
 def create_ftp_user(username=None, password=None):
     if username is not None and password is not None:
-        
+
         user_dir = "/home/%s/public_html" % username
-       
-        with settings(warn_only=True):       
+
+        with settings(warn_only=True):
             # create system user
             sudo("useradd -p `mkpasswd -H md5 %s` %s" % (password, username))
 
             # create user ftp dir
             sudo("mkdir -p %s" % user_dir)
-           
+
         # set owneership
         sudo("chown root:root /home/%s" % username)
         sudo("chown -R %s:root %s" % (username, user_dir))
@@ -88,88 +87,104 @@ def create_ftp_user(username=None, password=None):
         add_line = "/opt/projects/tse/ts/apps/branches/%s %s none bind 0" % (username, user_dir)
         sudo("echo %s >> /etc/fstab" % add_line)
 
-        # restart vsftp daemon            
+        # restart vsftp daemon
         sudo("service vsftpd restart")
+
 
 #####
 #
 # tasks that will need to be done repeatedly.
 #
 #####
-
 @task
 def update_sourcecode():
     with cd('/opt/projects/tse/'):
-        sudo('git pull',user=fab_username)
+        sudo('git pull', user=fab_username)
+
 
 @task
 def update_project_settings():
-    filename = prompt( 'Enter name of local settings file:',
-                       default=server_settings_file )
+    filename = prompt(
+        'Enter name of local settings file:',
+        default=server_settings_file
+    )
     destination = '/opt/projects/tse/ts/settings/server.py'
-    put(filename,destination,use_sudo=True)
+    put(filename, destination, use_sudo=True)
     sudo('chown %s:webdev %s' % (fab_username, destination))
+
 
 @task
 def run_buildout():
     with cd('/opt/projects/tse/'):
-        sudo('./bin/buildout -v -c server.cfg',user=fab_username)
+        sudo('./bin/buildout -v -c server.cfg', user=fab_username)
+
 
 @task
 def update_db():
     with cd('/opt/projects/tse/'):
         sudo('./bin/django syncdb', user=fab_username)
         sudo('./bin/django migrate tradeschool', user=fab_username)
-        sudo('./bin/django migrate migration', user=fab_username)        
-    
+        sudo('./bin/django migrate migration', user=fab_username)
+
+
 @task
 def update_static_files():
     # run the django command to update static files
     with cd('/opt/projects/tse/'):
-        sudo('./bin/django collectstatic', user=fab_username)    
+        sudo('./bin/django collectstatic', user=fab_username)
 
-@task 
+
+@task
 def load_fixtures():
     # load fixtures
     with cd('/opt/projects/tse/'):
         sudo('./bin/django loaddata email_initial_data.json pages_initial_data.json teacher-info.json', user=fab_username)
 
+
 @task
 def restart_memcached():
     with cd('/etc/init.d/memcached'):
-        sudo('restart')     
+        sudo('restart')
+
 
 @task
 def restart_wsgi():
     with cd('/opt/projects/tse'):
         sudo('touch bin/django.wsgi')
 
+
 @task
 def restart():
     #restart_memcached()
     restart_wsgi()
+
 
 @task
 def test():
     with cd('/opt/projects/tse'):
         sudo('./bin/django test tradeschool -v 2', user=fab_username)
 
-@task 
-def load_data():
-    filename = prompt( 'Enter name of sql file:',
-                       default='data.sql' )
 
+@task
+def load_data():
+    filename = prompt(
+        'Enter name of sql file:',
+        default='data.sql'
+    )
     #sudo('mkdir /opt/projects/tse/sql',user=fab_username)
 
     destination = '/opt/projects/tse/sql/data.sql'
 
-    db_name = prompt( 'Enter name of database:',
-                       default='tradeschool_test' )
-                       
-    put(filename,destination,use_sudo=True)
+    db_name = prompt(
+        'Enter name of database:',
+        default='tradeschool_test'
+    )
+
+    put(filename, destination, use_sudo=True)
 
     with cd('/opt/projects/tse/sql'):
         sudo('mysql -u root %s < data.sql' % (db_name), user=fab_username)
+
 
 @task
 def update_and_test():
@@ -177,19 +192,26 @@ def update_and_test():
 
     restart()
 
-    test()
+    #test()
+
 
 @task
 def deploy():
     update_sourcecode()
 
-    update = prompt( 'Do you want to update the server settings file with a local file? (y/n)',
-                     default='y', validate=r'^[yYnN]$' )
+    update = prompt(
+        'Do you want to update the server settings file with a local file? (y/n)',
+        default='y',
+        validate=r'^[yYnN]$'
+    )
     if update.upper() == 'Y':
         update_project_settings()
 
-    update = prompt( 'Do you want to re-run the buildout? (y/n)',
-                     default='y', validate=r'^[yYnN]$' )
+    update = prompt(
+        'Do you want to re-run the buildout? (y/n)',
+        default='y',
+        validate=r'^[yYnN]$'
+    )
     if update.upper() == 'Y':
         run_buildout()
 
@@ -215,62 +237,77 @@ def init_os_package_setup():
     sudo('apt-get install apache2 libapache2-mod-wsgi')
     sudo('apt-get install gettext memcached')
 
+
 @task
 def init_fab_user():
     sudo('groupadd webdev')
     sudo('useradd -G mysql,webdev --create-home --shell /bin/bash %s' % fab_username)
     sudo('passwd %s' % fab_password)
 
-    sudo('ssh-keygen -t rsa -C "fab@tradeschool.coop"',user=fab_username)
+    sudo('ssh-keygen -t rsa -C "fab@tradeschool.coop"', user=fab_username)
     puts('Created the following id_rsa.pub file for user %s:' % fab_username)
     sudo('cat /home/%s/.ssh/id_rsa.pub' % fab_username)
-    prompt('Please upload this to github as a "deploy key" (https://github.com/orzubalsky/tradeschool/settings/keys).\n' \
-               'When done, press enter to continue.')
+    prompt(
+        'Please upload this to github as a "deploy key"'
+        '(https://github.com/orzubalsky/tradeschool/settings/keys).\n'
+        'When done, press enter to continue.'
+    )
+
 
 @task
 def init_project_sourcecode():
     sudo('mkdir --parents /opt/projects/tse')
     sudo('chown %s:webdev /opt/projects/tse' % fab_username)
     with cd('/opt/projects/tse'):
-        sudo('git clone git@github.com:orzubalsky/tradeschool.git .',user=fab_username)
+        sudo('git clone git@github.com:orzubalsky/tradeschool.git .', user=fab_username)
+
 
 @task
 def init_buildout():
     with cd('/opt/projects/tse'):
-        sudo('python bootstrap.py -v 2.1.1 -c server.cfg',user=fab_username)
+        sudo('python bootstrap.py -v 2.1.1 -c server.cfg', user=fab_username)
+
 
 @task
 def init_mysql_db():
-    db_name = prompt( 'Enter name of database:',
-                       default='tradeschool_test' )    
+    db_name = prompt(
+        'Enter name of database:',
+        default='tradeschool_test'
+    )
     #sudo('mysqladmin create %s -u root' % db_name, user=fab_username)
-    
-    db_user = prompt( 'Enter name of database user:',
-                       default='tradeschooler' )
-    db_password = prompt( 'Enter password:')
-    
+
+    db_user = prompt(
+        'Enter name of database user:',
+        default='tradeschooler'
+    )
+    db_password = prompt('Enter password:')
+
     sudo('mysql_install_db', user=fab_username)
     sudo('/usr/bin/mysql_secure_installation', user=fab_username)
 
-    sudo('mysql -u root CREATE DATABASE %s;' % db_name)                              
-    sudo('mysql -u root CREATE USER %s@localhost IDENTIFIED BY %s;' % (db_user, db_password))                      
+    sudo('mysql -u root CREATE DATABASE %s;' % db_name)
+    sudo('mysql -u root CREATE USER %s@localhost IDENTIFIED BY %s;' % (db_user, db_password))
     sudo('mysql -u root GRANT ALL PRIVILEGES ON %s.* TO %s@localhost;' % (db_name, db_user))
+
 
 @task
 def create_cache_folder():
     with cd('/opt/projects/tse'):
-        sudo('mkdir tmp',user=fab_username)    
+        sudo('mkdir tmp', user=fab_username)
 
 
 @task
 def init_apache():
-    filename = prompt( 'Enter name of local apache conf file:',
-                       default=apache_conf_file )
+    filename = prompt(
+        'Enter name of local apache conf file:',
+        default=apache_conf_file
+    )
     destination = '/etc/apache2/sites-available/tstest.net'
-    put(filename,destination,use_sudo=True)
+    put(filename, destination, use_sudo=True)
 
     sudo('a2ensite tstest.net')
-    sudo('service apache2 reload') # do we need this line??
+    sudo('service apache2 reload')  # do we need this line??
+
 
 @task
 def initialize_everything():
