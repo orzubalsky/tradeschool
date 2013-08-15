@@ -516,6 +516,7 @@ class Cluster(Base):
     def __unicode__ (self):
         return u"%s" % self.name
 
+
 class BranchManager(Manager):
     def get_query_set(self):
         return super(BranchManager, self).get_query_set().select_related(
@@ -525,179 +526,267 @@ class BranchManager(Manager):
             'teacherconfirmation',
             'teacherclassapproval',
             'teacherreminder',
-            'teacherfeedback',   
+            'teacherfeedback',
         )
 
 
 class BranchPublicManager(BranchManager):
     def get_query_set(self):
-        return super(BranchPublicManager, self).get_query_set().exclude(branch_status='pending').filter(is_active=True)
+        return super(BranchPublicManager, self).get_query_set().exclude(
+            branch_status='pending').filter(is_active=True)
 
 
 class Branch(Location):
     """
-    A branch is a ts organization in a specific location (usually city/region).
-    The branch slug should be used to point to the individual branch app functionality.
-    All dates and times in the branch's view templates should reflect the branch's timezone.   
-    """    
-    
+    A branch is a chapter of TS in a specific location (usually city/region).
+    """
     class Meta:
-        
-        # Translators: This is used in the header navigation to let you know where you are.
+
+        # Translators: This is used in the header navigation
+        # to let you know where you are.
         verbose_name = _('Branch')
-        
+
         # Translators: Plural.
         verbose_name_plural = _('Branches')
-        
+
         ordering = ['title']
-    
+
     STATUS_CHOICES = (
         # Translators: The thing that shows what the status of the class is
         ('pending', _('Pending')),
         ('setting_up', _('Setting up')),
         ('in_session', _('In Session'))
-    )        
-    
-    COMMON_TIMEZONE_CHOICES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
-    
-    slug        = SlugField(
-                        # Translators: This is the part that comes after tradeschool.coop/ en el URL.
-                        verbose_name=_("slug"),
-                        max_length=120, 
-                        # Translators: Contextual Help.
-                        help_text=_("This is the part that comes after 'http://tradeschool.coop/' in the URL")
-                    )
-                     
-    email       = EmailField(verbose_name=_("e-mail"), max_length=100)
-    timezone    = CharField(verbose_name=_("timezone"), max_length=100, choices=COMMON_TIMEZONE_CHOICES, help_text=_("The local timezone in the area where this branch of TS is taking place. The timezone is used to calculate all the class and email times."))
-    language    = CharField(verbose_name=_("language"), max_length=50, choices=settings.LANGUAGES, null=True, help_text=_("Setting this language will cause both the front end and the backend of the site to try to load text from the translation strings stored in the system. Text that wasn't translated will fallback on the English version of it."))
-    organizers  = ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_("organizers"), related_name='branches_organized', db_column='person_id', help_text=_("Select multiple users who help organize this branch of TS. People selected in this box will have access to the branch's data on the admin backend."))
-    
-    branch_status   = CharField(
-                            max_length=50, 
-                            verbose_name=_("branch status"),
-                            choices=STATUS_CHOICES, 
-                            default='pending', 
-                            # Translators: Contextual Help
-                            help_text=_("What is the current status of this branch?")
-                        )
-    
-    # Translators: This is the Branches domain address.
-    site        = ForeignKey(Site, verbose_name=_("site"), help_text=_("The TS system can be installed on several different domains, and still be managed using the same admin backend. This field indicates what installation of the software the branch is related to, meaning, what website do you go to in order to access it."))
-    
-    # Translators: If this Trade School belogns to a set of Trade Schools.
-    clusters    = ManyToManyField(Cluster, verbose_name=_("clusters"), null=True, blank=True, help_text=_("TS branches can be grouped together in clusters. This is used mostly to be able to present them together on the same page. For example, all branches in East Coast can belong to the East Coast cluster, and accessed via a separate web page."))
-    
-    # Translators: This is the part that says 'Barter for Knowledge' which is also editable.
-    header_copy = HTMLField(verbose_name=_("header"), null=True, blank=True, default="Barter for knowledge", help_text=_("This text appears in the header of the website."))
-    
-    # Translators: This is the part with room for a small statement.
-    intro_copy  = HTMLField(verbose_name=_("intro"), null=True, blank=True, default="Information for the header of the page", help_text=_("This text appears under the header. Usually it gives brief information about the current session and has a link to submit class proposals."))
-    
-    # Translators: This is the part at the end of the page. 
-    footer_copy = HTMLField(verbose_name=_("footer"), null=True, blank=True, default="Information for the footer of the page", help_text=_("This text appears on the footer of the page. It's optional."))
+    )
+
+    COMMON_TIMEZONE_CHOICES = tuple(
+        zip(pytz.all_timezones, pytz.all_timezones)
+    )
+
+    slug = SlugField(
+        # Translators: This is the part that comes after tradeschool.coop/
+        # in the URL.
+        verbose_name=_("slug"),
+        max_length=120,
+        # Translators: Contextual Help.
+        help_text=_(
+            "This is the part that comes after 'http://tradeschool.coop/'"
+            "in the URL"
+        )
+    )
+    email = EmailField(
+        verbose_name=_("e-mail"),
+        max_length=100
+    )
+    timezone = CharField(
+        verbose_name=_("timezone"),
+        max_length=100,
+        choices=COMMON_TIMEZONE_CHOICES,
+        help_text=_(
+            "The local timezone in the area where this branch of TS"
+            "is taking place. The timezone is used to calculate all "
+            "the class and email times."
+        )
+    )
+    language = CharField(
+        verbose_name=_("language"),
+        max_length=50,
+        choices=settings.LANGUAGES,
+        null=True,
+        help_text=_(
+            "Setting this language will cause both the front end and "
+            "the backend of the site to try to load text from the translation "
+            "strings stored in the system. Text that wasn't translated will "
+            "fallback on the English version of it."
+        )
+    )
+    organizers = ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("organizers"),
+        related_name='branches_organized',
+        db_column='person_id',
+        help_text=_(
+            "Select multiple users who help organize this branch of TS. "
+            "People selected in this box will have access to the branch's "
+            "data on the admin backend."
+        )
+    )
+    branch_status = CharField(
+        max_length=50,
+        verbose_name=_("branch status"),
+        choices=STATUS_CHOICES,
+        default='pending',
+        # Translators: Contextual Help
+        help_text=_("What is the current status of this branch?")
+    )
+    site = ForeignKey(
+        Site,
+        # Translators: This is the Branches domain address.
+        verbose_name=_("site"),
+        help_text=_(
+            "The TS system can be installed on several different domains, "
+            "and still be managed using the same admin backend. This field "
+            "indicates what installation of the software the branch is "
+            "related to, meaning, what website do you go to in order to "
+            "access it."
+        )
+    )
+    clusters = ManyToManyField(
+        Cluster,
+        # Translators: If this Trade School belogns to a set of Trade Schools.
+        verbose_name=_("clusters"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "TS branches can be grouped together in clusters. This is used "
+            "mostly to be able to present them together on the same page. "
+            "For example, all branches in East Coast can belong to the "
+            "East Coast cluster, and accessed via a separate web page."
+        )
+    )
+    header_copy = HTMLField(
+        # Translators: This is the part that says 'Barter for Knowledge'
+        # which is also editable.
+        verbose_name=_("header"),
+        null=True,
+        blank=True,
+        default="Barter for knowledge",
+        help_text=_("This text appears in the header of the website."))
+    intro_copy = HTMLField(
+        # Translators: This is the part with room for a small statement.
+        verbose_name=_("intro"),
+        null=True,
+        blank=True,
+        default="Information for the header of the page",
+        help_text=_(
+            "This text appears under the header. Usually it gives brief "
+            "information about the current session and has a link to "
+            "submit class proposals."
+        )
+    )
+    footer_copy = HTMLField(
+        # Translators: This is the part at the end of the page.
+        verbose_name=_("footer"),
+        null=True,
+        blank=True,
+        default="Information for the footer of the page",
+        help_text=_(
+            "This text appears on the footer of the page. It's optional."
+        )
+    )
 
     def emails():
         def fget(self):
             try:
-                return {"studentconfirmation"   : self.studentconfirmation, 
-                        "studentreminder"       : self.studentreminder, 
-                        "studentfeedback"       : self.studentfeedback,
-                        "teacherconfirmation"   : self.teacherconfirmation, 
-                        "teacherclassapproval"  : self.teacherclassapproval, 
-                        "teacherreminder"       : self.teacherreminder, 
-                        "teacherfeedback"       : self.teacherfeedback
+                return {"studentconfirmation": self.studentconfirmation,
+                        "studentreminder": self.studentreminder,
+                        "studentfeedback": self.studentfeedback,
+                        "teacherconfirmation": self.teacherconfirmation,
+                        "teacherclassapproval": self.teacherclassapproval,
+                        "teacherreminder": self.teacherreminder,
+                        "teacherfeedback": self.teacherfeedback
                         }
             except:
                 pass
         return locals()
 
-    emails = property(**emails()) 
+    emails = property(**emails())
 
-    objects   = BranchManager()
-    public    = BranchPublicManager()
-    on_site   = CurrentSiteManager()
+    objects = BranchManager()
+    public = BranchPublicManager()
+    on_site = CurrentSiteManager()
 
     def save(self, *args, **kwargs):
-        """Check to see if the slug field's value has been changed. 
+        """Check to see if the slug field's value has been changed.
         If it has, rename the branch's template dir name."""
-        
+
         self.site = Site.objects.get_current()
-        
-        template_directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
+
+        template_directory = os.path.join(
+            settings.BRANCH_TEMPLATE_DIR,
+            self.slug
+        )
 
         if self.pk is not None and os.path.exists(template_directory):
             original = Branch.objects.get(pk=self.pk)
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
-        super(Branch, self).save(*args, **kwargs)        
-    
+        super(Branch, self).save(*args, **kwargs)
+
     def delete_emails(self):
         # delete existing  emails
         if self.emails is not None:
             for fieldname, email_obj in self.emails.iteritems():
                 email_obj
-                email_obj.delete()  
+                email_obj.delete()
 
     def populate_notifications(self):
-        "resets branch notification templates from the global branch notification templates"
-        
+        """
+        resets branch notification templates from the
+        DefulatEmailContainer templates
+        """
         # delete existing emails
         self.delete_emails()
 
         # copy branch notification from the branch notification templates
         default_email_container = DefaultEmailContainer.objects.all()[0]
-        
+
         for fieldname, email_obj in default_email_container.emails.iteritems():
             new_email = copy_model_instance(email_obj)
             new_email.branch = self
             new_email.save()
-    
+
     def copy_teacher_info_page(self):
-        "Creates a copy of the teacher info flatpage for each new branch that gets created."
-        
+        """
+        Creates a copy of the teacher info flatpage for each
+        new branch that gets created.
+        """
+
         try:
             page = Page.objects.get(url='/teacher-info/', branch=None)
-        
+
             page_copy = copy_model_instance(page)
-        
+
             page_copy.branch = self
-        
+
             page_copy.save()
         except Page.DoesNotExist:
             pass
 
     def generate_files(self):
-        """ Create a directory in the templates directory for the branch.
-            Make a copy of all default template files.
-            Create a css and javascript file for the branch."""
+        """
+        Create a directory in the templates directory for the branch.
+        Make a copy of all default template files.
+        Create a css and javascript file for the branch.
+        """
         src = settings.DEFAULT_BRANCH_TEMPLATE_DIR
         dst = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
-        
-        try:            
+
+        try:
             shutil.copytree(src, dst)
-        except OSError as exc: # python >2.5
+        except OSError as exc:              # python >2.5
             if exc.errno == errno.ENOTDIR:
                 shutil.copy(src, dst)
             else:
                 raise
 
-
     def delete_files(self):
-        """Delete the branch's template directory with all of the files."""
+        """
+        Delete the branch's template directory with all of the files.
+        """
         directory = os.path.join(settings.BRANCH_TEMPLATE_DIR, self.slug)
-        
-        if os.path.exists(directory):
-            shutil.rmtree(directory)        
 
-    
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
+
     def update_template_dir(self, old_dirname, new_dirname):
-        """ Rename the branch's template directory name.
-            Call this method after the branch's slug field has changed."""
-    
+        """
+        Rename the branch's template directory name.
+        Call this method after the branch's slug field has changed.
+        """
+
         old_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, old_dirname)
         new_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, new_dirname)
-    
+
         os.rename(old_dirname, new_dirname)
 
 

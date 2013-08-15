@@ -35,6 +35,7 @@ class CustomIndexDashboard(Dashboard):
                     column=1,
                     collapsible=False,
                     models=(
+                        'tradeschool.models.TemplateFile',
                         'tradeschool.models.PendingSchedule',
                         'tradeschool.models.ApprovedSchedule',
                         'tradeschool.models.PastSchedule',
