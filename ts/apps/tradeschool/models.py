@@ -1,11 +1,17 @@
+import os
+import errno
+import shutil
+import time
+import random
+import pytz
 from django.conf import settings
 from django.db.models import *
 from django.db.models.query import QuerySet
 from django.contrib.localflavor.us.models import USStateField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
-from django.contrib.flatpages.models import FlatPage
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, \
+    PermissionsMixin, BaseUserManager
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
@@ -16,42 +22,60 @@ from django.template import Context
 from django.template import Template
 from django_countries import CountryField
 from tinymce.models import HTMLField
-import pytz, random, time, shutil, errno, os
 from datetime import *
 from tradeschool.utils import copy_model_instance, unique_slugify
 from tradeschool.widgets import *
 
 
-
 class Base(Model):
     """
     Abstract base model for all of the models in the tradeschool application.
-    Base has datetime fields to keep a record of the times an object is created and updated.
-    The Base model also has an is_active boolean field. is_active is implemented in the following way:
-    only objects that are active on will appear on the website. Inactive (is_active=False) objects are 
-    still accessible through the admin backend, but would not appear on the site.
+
+    Base has datetime fields to keep a record of
+    the times an object is created and updated.
+
+    The Base model also has an is_active boolean field.
+    is_active is implemented in the following way:
+
+    only objects that are active on will appear on the website.
+    Inactive (is_active=False) objects are still accessible
+    through the admin backend, but would not appear on the site.
     """
-    
     class Meta:
         abstract = True
-    
-    # Translators:  Used wherever a created time stamp is needed.                   
-    created     = DateTimeField(verbose_name=_("created"), editable=False, help_text=_("The time when this object was created."))
-    
-    # Translators: Used wherever an update time stamp is needed.
-    updated     = DateTimeField(verbose_name=_("updated"), editable=False, help_text=_("The time when this object was edited last."))
-    
-    # Translators: Used to determine whether something is active in the front end or not.
-    is_active   = BooleanField(verbose_name=_("is active"), default=1, help_text=_("This field indicates whether the object is active on the front end of the site. Inactive objects will still be available through the admin backend."))
-    
+
+    created = DateTimeField(
+        # Translators:  Used wherever a created time stamp is needed.
+        verbose_name=_("created"),
+        editable=False,
+        help_text=_("The time when this object was created.")
+    )
+    updated = DateTimeField(
+        # Translators: Used wherever an update time stamp is needed.
+        verbose_name=_("updated"),
+        editable=False,
+        help_text=_("The time when this object was edited last.")
+    )
+    is_active = BooleanField(
+        # Translators: Used to determine whether something
+        # is active in the front end or not.
+        verbose_name=_("is active"),
+        default=1,
+        help_text=_(
+            "This field indicates whether the object is active"
+            "on the front end of the site. Inactive objects will"
+            "still be available through the admin backend."
+        )
+    )
+
     def save(self, *args, **kwargs):
         """Save timezone-aware values for created and updated fields."""
         if self.pk is None:
             self.created = timezone.now()
         self.updated = timezone.now()
         super(Base, self).save(*args, **kwargs)
-        
-    def __unicode__ (self):
+
+    def __unicode__(self):
         if hasattr(self, "title") and self.title:
             return self.title
         else:
@@ -61,48 +85,74 @@ class Base(Model):
 class Email(Model):
     """
     Abstract model for all emails in the TS system.
-    site-wide emails, TS branch emails, and schedule-specific emails all extend this model.
-    The email's body can include variables that will then be populated with relevant data
-    from the Schedule and/or Person that the email is refering to. These variables are populated
-    using Django's templates. The content field is used as a template that's created dynamically.
+
+    site-wide emails, TS branch emails, and schedule-specific emails
+    all extend this model.
+
+    The email's body can include variables that will then be populated
+    with relevant data from the Schedule and/or Person that the email
+    is refering to. These variables are populated using Django's templates.
+    The content field is used as a template that's created dynamically.
     """
-    
     class Meta:
         abstract = True
 
     EMAIL_CHOICES = (
         # Translators: Determines the status of an e-mail - disabled.
         ('disabled', _('Disabled')),
-        
+
         # Translators: Determines the status of an e-mail - Not Sent.
         ('not_sent', _('Not Sent Yet')),
-        
+
         # Translators: Determines the status of an e-mail - Sent.
         ('sent', _('Sent'))
     )
-    
-    # Translators: The subject of an e-mail.
-    subject      = CharField(verbose_name=_("subject"), max_length=140, help_text=_("The subject line of the email."))
-    
-    # Translators: The content of an e-mail.
-    content      = TextField(verbose_name=_("content"), help_text=_("The body of the email."))
-    
-    # Translators: The status of an e-mail. See the Toople list above. 
-    email_status = CharField(verbose_name=_("email status"), max_length=30, choices=EMAIL_CHOICES, default='not_sent', help_text=_("Indicates the current status of the email message. A disabled email won't get sent, a not sent email was not sent yet, and a sent email was sent by the system."))
 
-    branch       = OneToOneField('Branch', null=True, blank=True)
-    schedule     = OneToOneField('Schedule', null=True, blank=True)
+    subject = CharField(
+        # Translators: The subject of an e-mail.
+        verbose_name=_("subject"),
+        max_length=140,
+        help_text=_("The subject line of the email.")
+    )
+    content = TextField(
+        # Translators: The content of an e-mail.
+        verbose_name=_("content"),
+        help_text=_("The body of the email.")
+    )
+    email_status = CharField(
+        # Translators: The status of an e-mail. See the touple above.
+        verbose_name=_("email status"),
+        max_length=30,
+        choices=EMAIL_CHOICES,
+        default='not_sent',
+        help_text=_(
+            "Indicates the current status of the email message."
+            "A disabled email won't get sent,"
+            "a not sent email was not sent yet,"
+            "and a sent email was sent by the system."
+        )
+    )
+    branch = OneToOneField(
+        'Branch',
+        null=True,
+        blank=True
+    )
+    schedule = OneToOneField(
+        'Schedule',
+        null=True,
+        blank=True
+    )
 
     def preview(self, schedule_obj, registration=None):
         template = Template(self.content)
-        context  = self.template_context(schedule_obj, registration)
-        body     = template.render(context)
-        
+        context = self.template_context(schedule_obj, registration)
+        body = template.render(context)
+
         return body
 
     def send(self, schedule_obj, recipient, registration=None):
-        body    = self.preview(schedule_obj, registration)
-        branch  = schedule_obj.branch
+        body = self.preview(schedule_obj, registration)
+        branch = schedule_obj.branch
         send_mail(self.subject, body, branch.email, recipient)
         self.email_status = 'sent'
         self.save()
@@ -110,18 +160,39 @@ class Email(Model):
     def template_context(self, schedule_obj, registration=None):
         """ """
         teacher = schedule_obj.course.teacher
-        site    = Site.objects.get_current()
-        branch  = schedule_obj.branch
-        venue   = schedule_obj.venue
-        domain  = site.domain
-        
-        student_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'feedback_type': 'student'}))
-        teacher_feedback_url = "%s%s" % (domain, reverse('schedule-feedback', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'feedback_type': 'teacher'}))
-        class_edit_url       = "%s%s" % (domain, reverse('schedule-edit', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug,}))
-        homepage_url         = "%s%s" % (domain, reverse('schedule-list', kwargs={'branch_slug': branch.slug}))
+        site = Site.objects.get_current()
+        branch = schedule_obj.branch
+        venue = schedule_obj.venue
+        domain = site.domain
+
+        student_feedback_url = "%s%s" % (
+            domain, reverse('schedule-feedback', kwargs={
+                'branch_slug': branch.slug,
+                'schedule_slug': schedule_obj.slug,
+                'feedback_type': 'student'
+            })
+        )
+        teacher_feedback_url = "%s%s" % (
+            domain, reverse('schedule-feedback', kwargs={
+                'branch_slug': branch.slug,
+                'schedule_slug': schedule_obj.slug,
+                'feedback_type': 'teacher'
+            })
+        )
+        class_edit_url = "%s%s" % (
+            domain, reverse('schedule-edit', kwargs={
+                'branch_slug': branch.slug,
+                'schedule_slug': schedule_obj.slug,
+            })
+        )
+        homepage_url = "%s%s" % (
+            domain, reverse('schedule-list', kwargs={
+                'branch_slug': branch.slug
+            })
+        )
 
         student_list = ""
-        for registration_obj in schedule_obj.registration_set.registered():            
+        for registration_obj in schedule_obj.registration_set.registered():
             student_list += "\n%s: " % registration_obj.student.fullname
             student_items = []
             for item in registration_obj.items.all():
@@ -129,33 +200,39 @@ class Email(Model):
             student_list += ", ".join(map(str, student_items))
 
         c = Context({
-            'schedule'              : schedule_obj,
-            'branch'                : branch,
-            'teacher'               : teacher,
-            'venue'                 : venue,
-            'student_feedback_url'  : student_feedback_url,
-            'teacher_feedback_url'  : teacher_feedback_url,
-            'class_edit_url'        : class_edit_url,
-            'homepage_url'          : homepage_url,
-            'student_list'          : student_list
+            'schedule': schedule_obj,
+            'branch': branch,
+            'teacher': teacher,
+            'venue': venue,
+            'student_feedback_url': student_feedback_url,
+            'teacher_feedback_url': teacher_feedback_url,
+            'class_edit_url': class_edit_url,
+            'homepage_url': homepage_url,
+            'student_list': student_list
         })
         if registration is not None:
-            unregister_url = "%s%s" % (domain, reverse('schedule-unregister', kwargs={'branch_slug': branch.slug, 'schedule_slug': schedule_obj.slug, 'student_slug': registration.student.slug}))
-            
+            unregister_url = "%s%s" % (
+                domain, reverse('schedule-unregister', kwargs={
+                    'branch_slug': branch.slug,
+                    'schedule_slug': schedule_obj.slug,
+                    'student_slug': registration.student.slug
+                })
+            )
+
             item_list = ""
             for item in registration.items.all():
                 item_list += "%s\n" % item.title
 
             c.dicts.append({
-                'student'       : registration.student,
-                'registration'  : registration,
+                'student': registration.student,
+                'registration': registration,
                 'unregister_url': unregister_url,
-                'item_list'     : item_list
+                'item_list': item_list
             })
 
         return c
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.subject
 
 
