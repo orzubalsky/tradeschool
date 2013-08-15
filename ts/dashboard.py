@@ -111,6 +111,7 @@ class CustomIndexDashboard(Dashboard):
                     column=1,
                     children=(
                         ['Translate TS', '/rosetta/pick/'],
+                        ['Edit HTML Templates', '/admin/templatesadmin/'],
                         ['Talk TS', 'http://talk.tradeschool.coop', True],
                         ['Trade School', 'http://tradeschool.coop', True]
                     )

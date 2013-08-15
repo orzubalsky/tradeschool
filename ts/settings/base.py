@@ -155,6 +155,8 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.flatpages',
     'flatpages_tinymce',
+    'django_ace',
+    'templatesadmin',
     'south',              # intelligent schema and data migrations
     'pytz',               # python timezone library
     'dajaxice',           # django ajax app
@@ -230,7 +232,11 @@ DEBUG_TOOLBAR_CONFIG = {
 GRAPPELLI_ADMIN_TITLE = _('Trade School Admin')
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
-# You can find more languages that Django supports @ http://www.i18nguy.com/unicode/language-identifiers.html
+TEMPLATESADMIN_GROUP = 'translators'
+TEMPLATESADMIN_TEMPLATE_DIRS = (BRANCH_TEMPLATE_DIR,)
+
+# You can find more languages that Django supports
+# at http://www.i18nguy.com/unicode/language-identifiers.html
 
 ROSETTA_MESSAGES_PER_PAGE = 100
 LANGUAGES = (

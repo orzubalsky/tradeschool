@@ -8,6 +8,7 @@ from tradeschool.models import *
 class BranchForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(BranchForm, self).__init__(*args, **kwargs)
+
         self.initial['site'] = Site.objects.get_current()
 
     class Meta:

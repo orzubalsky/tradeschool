@@ -896,7 +896,7 @@ class OrganizerAdmin(PersonAdmin):
         return super(OrganizerAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
                      
     list_display = ('username', 'fullname', 'email', 'branches_organized_string')
-    fields       = ('username', 'fullname', 'email', 'language', 'default_branch')
+    fields       = ('username', 'fullname', 'email', 'language', 'default_branch', 'groups')
     inlines      = (OrganizedBranchInline,)
 
 
