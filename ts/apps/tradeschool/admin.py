@@ -820,9 +820,9 @@ class PersonAdmin(BaseAdmin):
         Annotate the queryset with counts of registrations and courses taught
         associated with the Person.
         """
-        return super(PersonAdmin, self).queryset(request).annotate(
-            registration_count=Count('registrations', distinct=True),
-            courses_taught_count=Count('courses_taught', distinct=True)
+        return super(PersonAdmin, self).queryset(
+            request,
+            Q(branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -837,6 +837,16 @@ class PersonAdmin(BaseAdmin):
             request,
             **kwargs
         )
+
+    def courses_taken(self, obj):
+        return obj.registration_count()
+    courses_taken.short_description = 'Courses Taken'
+    courses_taken.admin_order_field = 'registration_count'
+
+    def courses_taught(self, obj):
+        return obj.courses_taught_count()
+    courses_taught.short_description = _('Courses Taught')
+    courses_taught.admin_order_field = 'courses_taught_count'
 
     list_display = (
         'fullname',
@@ -861,20 +871,6 @@ class PersonAdmin(BaseAdmin):
         'bio',
     )
     #prepopulated_fields = {'slug': ('username',)}
-
-    def courses_taken(self, obj):
-        """
-        Return registration count from queryset so it can be used in list_display.
-        """
-        return obj.registration_count
-    courses_taken.short_description = 'Courses Taken'
-    courses_taken.admin_order_field = 'registration_count'
-
-    def courses_taught(self, obj):
-        """ Return courses taught count from annotated queryset so it can be used in list_display."""        
-        return obj.courses_taught_count
-    courses_taught.short_description = _('Courses Taught')
-    courses_taught.admin_order_field = 'courses_taught_count'
 
 
 class OrganizerAdmin(PersonAdmin):
@@ -907,7 +903,7 @@ class TeacherAdmin(PersonAdmin):
     """
     def queryset(self, request):
         """ Filter queryset by the courses taught count, so only people who taught at least one class are returned."""
-        return super(TeacherAdmin, self).queryset(request, Q(courses_taught_count__gt=0, branches__in=request.user.branches_organized.all))
+        return super(TeacherAdmin, self).queryset(request, Q(courses_taught__count__gt=0, branches__in=request.user.branches_organized.all))
 
     list_display = ('fullname', 'email', 'phone', 'courses_taught', 'created')    
 
@@ -919,7 +915,7 @@ class StudentAdmin(PersonAdmin):
     """    
     def queryset(self, request):
         """ Filter queryset by the registration count, so only people who took at least one class are returned."""        
-        return super(StudentAdmin, self).queryset(request, Q(registration_count__gt=0, branches__in=request.user.branches_organized.all))
+        return super(StudentAdmin, self).queryset(request, Q(branches__in=request.user.branches_organized.all))
 
 
 class TimeAdmin(BaseAdmin):

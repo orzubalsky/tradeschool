@@ -871,10 +871,7 @@ class PersonManager(BaseUserManager):
         return person   
             
     def get_query_set(self):
-        return super(PersonManager, self).get_query_set().annotate(
-            registration_count  =Count('registrations', distinct=True), 
-            courses_taught_count=Count('courses_taught', distinct=True)
-        ).select_related().prefetch_related('branches')
+        return super(PersonManager, self).get_query_set().annotate(Count('courses_taught')).select_related().prefetch_related('branches')
 
 
 class Person(AbstractBaseUser, PermissionsMixin, Base):
@@ -968,15 +965,30 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         """ Return the branches that this person organizes. This function is used in the admin list_display() method."""
         return ','.join( str(branch) for branch in self.branches_organized.all())        
     branches_organized_string.short_description = _('branches')
-        
+
     def get_full_name(self):
         return self.fullname
-    
+
     def get_short_name(self):
-        return self.fullname    
+        return self.fullname
 
     def get_absolute_url(self):
         return '/people/%s/' % urlquote(self.slug)
+
+    def registration_count(self):
+        return self.registrations.filter(
+            registration_status='registered',
+            schedule__schedule_status='approved',
+            schedule__is_active=True,
+        ).count()
+
+    def courses_taught_count(self):
+        return self.courses_taught.filter(
+            schedule__schedule_status='approved',
+            schedule__start_time__lte=timezone.now(),
+            schedule__is_active=True,
+            is_active=True,
+        ).count()
 
     def email_user(self, subject, message, from_email=None):
         """
@@ -1039,7 +1051,7 @@ class Teacher(Person):
 
 class StudentManager(PersonManager):
     def get_query_set(self):
-        return super(StudentManager, self).get_query_set().filter(registration_count__gt=0)
+        return super(StudentManager, self).get_query_set()
 
 
 class Student(Person):
