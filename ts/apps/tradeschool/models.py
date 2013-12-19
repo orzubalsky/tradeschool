@@ -1192,7 +1192,7 @@ class TeacherManager(PersonManager):
     def get_query_set(self):
         return super(
             TeacherManager, self).get_query_set().filter(
-                courses_taught_count__gt=0
+                courses_taught__gt=0
             )
 
 
