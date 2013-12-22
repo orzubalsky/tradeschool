@@ -727,7 +727,6 @@ class VenueAdmin(BaseAdmin):
 
         # select the Branch's state
         if db_field.name == 'state':
-            print Branch
             # first find the state of the first branch that's
             # organized by the logged in user
             initial_state = Branch.objects.filter(
@@ -847,22 +846,12 @@ class PersonAdmin(BaseAdmin):
             **kwargs
         )
 
-    def courses_taken(self, obj):
-        return obj.registration_count()
-    courses_taken.short_description = 'Courses Taken'
-    courses_taken.admin_order_field = 'registration_count'
-
-    def courses_taught(self, obj):
-        return obj.courses_taught_count()
-    courses_taught.short_description = _('Courses Taught')
-    courses_taught.admin_order_field = 'courses_taught_count'
-
     list_display = (
         'fullname',
         'email',
         'phone',
-        'courses_taken',
-        'courses_taught',
+        'courses_taken_count',
+        'courses_taught_count',
         'branches_string',
         'created',
     )
@@ -944,7 +933,7 @@ class TeacherAdmin(PersonAdmin):
         'fullname',
         'email',
         'phone',
-        'courses_taught',
+        'courses_taught_count',
         'created'
     )
 
@@ -1086,9 +1075,9 @@ class ScheduleAdmin(BaseAdmin):
         formfield = super(
             ScheduleAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
-        if db_field.name == 'slug':
-            if formfield.initial is None:
-                formfield.initial = 'a'
+        # if db_field.name == 'slug':
+        #     if formfield.initial is None:
+        #         formfield.initial = 'a'
 
         if db_field.name == 'venue':
             venue_choices_cache = getattr(request, 'venue_choices_cache', None)

@@ -989,9 +989,8 @@ class PersonManager(BaseUserManager):
 
     def get_query_set(self):
         return super(
-            PersonManager, self).get_query_set().annotate(
-                Count('courses_taught')
-            ).select_related().prefetch_related('branches')
+            PersonManager, self).get_query_set() \
+            .select_related().prefetch_related('branches')
 
 
 class Person(AbstractBaseUser, PermissionsMixin, Base):
@@ -1099,6 +1098,22 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
             "Designates whether the user can log into this admin site."
         )
     )
+    courses_taught_count = IntegerField(
+        default=0,
+        max_length=7,
+        verbose_name=_("Total Classes Taught"),
+        help_text=_(
+            "Number of courses taught in Trade School"
+        )
+    )
+    courses_taken_count = IntegerField(
+        default=0,
+        max_length=7,
+        verbose_name=_("Total Classes Taken"),
+        help_text=_(
+            "Number of courses taken in Trade School"
+        )
+    )
 
     objects = PersonManager()
 
@@ -1131,14 +1146,14 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
     def get_absolute_url(self):
         return '/people/%s/' % urlquote(self.slug)
 
-    def registration_count(self):
+    def calculate_registration_count(self):
         return self.registrations.filter(
             registration_status='registered',
             schedule__schedule_status='approved',
             schedule__is_active=True,
         ).count()
 
-    def courses_taught_count(self):
+    def calculate_courses_taught_count(self):
         return self.courses_taught.filter(
             schedule__schedule_status='approved',
             schedule__start_time__lte=timezone.now(),
@@ -1158,6 +1173,9 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         organizing at least one Branch
         and their default_branch was not set explicitly.
         """
+        self.courses_taken_count = self.calculate_registration_count()
+        self.courses_taught_count = self.calculate_courses_taught_count()
+
         super(Person, self).save(*args, **kwargs)
         if self.default_branch is None and self.branches_organized.count() > 0:
             self.default_branch = self.branches_organized.all()[0]
@@ -1192,7 +1210,7 @@ class TeacherManager(PersonManager):
     def get_query_set(self):
         return super(
             TeacherManager, self).get_query_set().filter(
-                courses_taught__gt=0
+                courses_taught_count__gt=0
             )
 
 
@@ -1214,7 +1232,8 @@ class Teacher(Person):
 
 class StudentManager(PersonManager):
     def get_query_set(self):
-        return super(StudentManager, self).get_query_set()
+        return super(StudentManager, self).get_query_set().filter(
+            courses_taken_count__gt=0)
 
 
 class Student(Person):
