@@ -1490,7 +1490,7 @@ class BarterItem(Base):
     )
     schedule = ForeignKey(
         'Schedule',
-        verbose_name=_('schedule'),
+        verbose_name=_('Scheduled Class'),
         help_text=_("The scheduled class that this barter item is listed for.")
     )
 
