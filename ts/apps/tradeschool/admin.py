@@ -495,9 +495,20 @@ class BarterItemInline(BaseTabularInline):
     title_link.short_description = _('Title')
 
     model = BarterItem
+    extra = 0
+
+
+class BarterItemReadOnlyInline(BarterItemInline):
+    """
+    """
     fields = ('title_link',)
     readonly_fields = ('title_link',)
-    extra = 0
+
+
+class BarterItemEditableInline(BarterItemInline):
+    """
+    """
+    fields = ('title',)
 
 
 class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
@@ -709,15 +720,14 @@ class VenueAdmin(BaseAdmin):
             # if the user has a default_branch set,
             # select its country instead.
             if request.user.default_branch is not None:
-                initial_country = Branch.objects.filter(
-                    pk__in=request.user.default_branch)[0].country
+                initial_country = request.user.default_branch.country
 
             # set the actual initial value
             kwargs['initial'] = initial_country
 
         # select the Branch's state
         if db_field.name == 'state':
-
+            print Branch
             # first find the state of the first branch that's
             # organized by the logged in user
             initial_state = Branch.objects.filter(
@@ -726,8 +736,7 @@ class VenueAdmin(BaseAdmin):
             # if the user has a default_branch set,
             # select its state instead.
             if request.user.default_branch is not None:
-                initial_state = Branch.objects.filter(
-                    pk__in=request.user.default_branch)[0].initial_state
+                initial_state = request.user.default_branch.state
 
             # select the Branch's state
             kwargs['initial'] = initial_state
@@ -822,7 +831,7 @@ class PersonAdmin(BaseAdmin):
         """
         return super(PersonAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branches__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1077,6 +1086,10 @@ class ScheduleAdmin(BaseAdmin):
         formfield = super(
             ScheduleAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
+        if db_field.name == 'slug':
+            if formfield.initial is None:
+                formfield.initial = 'a'
+
         if db_field.name == 'venue':
             venue_choices_cache = getattr(request, 'venue_choices_cache', None)
             if venue_choices_cache is not None:
@@ -1087,33 +1100,31 @@ class ScheduleAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'venue':
-            pass
-            # kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
-            #    request,
-            #    Venue,
-            #    Q(branch__in=request.user.branches_organized.all)
-            # )
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
+                request,
+                Venue,
+                Q(branch__in=request.user.branches_organized.all)
+            )
 
         if db_field.name == 'course':
-            pass
-            # kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
-            #     request,
-            #     Course,
-            #     Q(branches__in=request.user.branches_organized.all)
-            # )
+            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
+                request,
+                Course,
+                Q(schedule__branch__in=request.user.branches_organized.all)
+            )
 
         return super(ScheduleAdmin, self).formfield_for_foreignkey(
             db_field, request, **kwargs)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = (
-            BarterItemInline,
+            BarterItemReadOnlyInline,
             RegistrationInline,
             StudentConfirmationScheduleInline,
             TeacherConfirmationScheduleInline,
             TeacherClassApprovalScheduleInline,
             TeacherReminderScheduleInline,
-            TeacherFeedbackScheduleInline,
+            #TeacherFeedbackScheduleInline,
             StudentReminderScheduleInline,
             StudentFeedbackScheduleInline,
             FeedbackInline,
@@ -1121,7 +1132,7 @@ class ScheduleAdmin(BaseAdmin):
         return super(ScheduleAdmin, self).change_view(request, object_id)
 
     def add_view(self, request, form_url='', extra_context=None):
-        self.inlines = (BarterItemInline, )
+        self.inlines = (BarterItemEditableInline, )
         return super(ScheduleAdmin, self).add_view(request)
 
     def populate_notifications(self, request, queryset):
@@ -1303,6 +1314,18 @@ class ScheduleAdmin(BaseAdmin):
 class PendingScheduleAdmin(ScheduleAdmin):
     """
     """
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        """
+        Set the schedule_status form field to 'pending'
+        Since we are adding a pending schedule.
+        """
+        formfield = super(PendingScheduleAdmin, self).formfield_for_dbfield(
+            db_field, **kwargs)
+
+        if db_field.name == 'schedule_status':
+                formfield.initial = 'pending'
+        return formfield
+
     def response_change(self, request, obj):
         """
         If the schedule_status was changed to 'approved',
@@ -1326,6 +1349,20 @@ class PendingScheduleAdmin(ScheduleAdmin):
 
 
 class ApprovedScheduleAdmin(ScheduleAdmin):
+    """
+    """
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        """
+        Set the schedule_status form field to 'approved'
+        Since we are adding an approved schedule.
+        """
+        formfield = super(ApprovedScheduleAdmin, self).formfield_for_dbfield(
+            db_field, **kwargs)
+
+        if db_field.name == 'schedule_status':
+                formfield.initial = 'approved'
+        return formfield
+
     def response_change(self, request, obj):
         """
         If the schedule_status was changed from 'approved',
