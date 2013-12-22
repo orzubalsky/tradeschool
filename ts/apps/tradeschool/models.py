@@ -910,7 +910,7 @@ class Venue(Location):
 
     address_1 = CharField(
         max_length=200,
-        verbose_name=_("Address 1"),
+        verbose_name=_("Street"),
     )
     capacity = SmallIntegerField(
         max_length=4,
