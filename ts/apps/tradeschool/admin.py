@@ -353,6 +353,8 @@ class OrganizedBranchInline(BaseTabularInline):
         return super(OrganizedBranchInline, self).queryset(request, Q())
 
     model = Branch.organizers.through
+    verbose_name = "Branch Organized by This Person"
+    verbose_name_plural = "Branches Organized by This Person"
     extra = 1
 
 
