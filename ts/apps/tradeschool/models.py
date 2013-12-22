@@ -1910,7 +1910,12 @@ class Registration(Base):
     """
     class Meta:
         unique_together = ('schedule', 'student')
-        ordering = ['schedule', 'registration_status', 'student']
+        ordering = [
+            '-schedule__start_time',
+            'schedule',
+            'registration_status',
+            'student'
+        ]
 
         # Translators: This is used in the header navigation
         #  to let you know where you are.
