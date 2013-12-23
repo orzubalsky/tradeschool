@@ -43,7 +43,11 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     if schedule_slug is not None:
-        previewed_course = Schedule.objects.get(slug=schedule_slug)
+        previewed_course = get_object_or_404(
+            Schedule,
+            slug=schedule_slug,
+            branch__slug=branch_slug
+        )
     else:
         previewed_course = None
 
@@ -52,6 +56,21 @@ def schedule_list(request, branch_slug=None, schedule_slug=None):
 
     return render_to_response(view_templates.template.name, {
         'previewed_course': previewed_course,
+        'templates': view_templates,
+    }, context_instance=RequestContext(request))
+
+
+def schedule_view(request, branch_slug=None, schedule_slug=None):
+    """
+    """
+    schedule = get_object_or_404(
+        Schedule, slug=schedule_slug, branch__slug=branch_slug)
+
+    view_templates = branch_templates(
+        schedule.branch, 'schedule_view.html', 'base.html')
+
+    return render_to_response(view_templates.template.name, {
+        'schedule': schedule,
         'templates': view_templates,
     }, context_instance=RequestContext(request))
 
