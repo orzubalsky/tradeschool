@@ -439,7 +439,9 @@
         "updated": "2013-08-06T22:56:16Z", 
         "branches": [
             1
-        ], 
+        ],
+        "courses_taught_count": 1,
+        "courses_taken_count": 0,
         "language": "en", 
         "created": "2013-08-06T22:54:52Z", 
         "default_branch": null, 
@@ -466,7 +468,9 @@
         "updated": "2013-08-06T22:58:38Z", 
         "branches": [
             1
-        ], 
+        ],
+        "courses_taught_count": 0,
+        "courses_taken_count": 1,        
         "language": "en", 
         "created": "2013-08-06T22:58:38Z", 
         "default_branch": null, 
