@@ -285,14 +285,26 @@ class Email(Model):
         self.save()
 
     def __unicode__(self):
-        return self.subject
+        """
+        Returns:
+            string of the email's subject
+        """
+        return u"%s" % self.subject
 
 
 class TimedEmail(Email):
     """
-    Abstract model for all email notifications in the ts system.
-    TS-wide notification templates, individulal branch notification templates,
-    and course-specific notification templates extend this model.
+    Abstract model for all emails that are sent on a specific time.
+
+    Attributes:
+        send_on: datetime indicating the time that the email
+            is scheduled to be sent on. Can be null if the object represents
+            a template for other emails.
+        days_delta: an integar that is used to calculate the email's send_on
+            property. This is the number of days that will be subtracted from
+            the schedule's start_time attribute.
+        send_time: A time indicating the time of day in which
+            the email should be sent.
     """
     class Meta:
         abstract = True
@@ -308,7 +320,6 @@ class TimedEmail(Email):
             "the email sent at a different time."
         )
     )
-
     # Translators: How many days before the class the email will be sent.
     days_delta = IntegerField(
         verbose_name=_("Days before"),
@@ -320,7 +331,6 @@ class TimedEmail(Email):
             "the class is scheduled to take place."
         )
     )
-
     # Translators: The time for when an e-mail will be sent.
     send_time = TimeField(
         verbose_name=_("Send time"),
@@ -333,6 +343,13 @@ class TimedEmail(Email):
     )
 
     def set_send_on(self, event_datetime):
+        """
+        Sets the value of the send_on attribute using days_delta and send_time.
+
+        Args:
+            event_datetime: a datetime object that will be used
+                for the calculation. Most likely a Schedule.start_time
+        """
         # construct a datetime object after adding / subtracting the days delta
         send_datetime = event_datetime + timedelta(days=self.days_delta)
 
@@ -357,10 +374,10 @@ class TimedEmail(Email):
 
 
 class StudentConfirmation(Email):
-    """An email that is sent when a student registered to a scheduled class."""
-
+    """
+    An email that is sent when a student registeres to a scheduled class.
+    """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Student confirmation")
@@ -371,11 +388,10 @@ class StudentConfirmation(Email):
 
 class StudentReminder(TimedEmail):
     """
-    An email that is sent to a registered student a day before
+    A reminder email that is sent to a registered student before
     a class is scheduled to start.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Student reminder")
@@ -384,15 +400,20 @@ class StudentReminder(TimedEmail):
         verbose_name_plural = _("Student reminders")
 
     def save(self, *args, **kwargs):
+        """
+        Sets values to days_delta and send_time attributes.
+        """
+        # student reminders should be sent a day before at 10am.
+        # TODO: make this editable per branch / per email.
         self.days_delta = -1
         self.send_time = time(10, 0, 0)
+
         super(StudentReminder, self).save(*args, **kwargs)
 
 
 class StudentFeedback(TimedEmail):
     """
-    An email that is sent to a student a day after
-    a scheduled class took place.
+    An email that is sent to a student afer a scheduled class took place.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -403,6 +424,11 @@ class StudentFeedback(TimedEmail):
         verbose_name_plural = _("Student feedback e-mails")
 
     def save(self, *args, **kwargs):
+        """
+        Sets values to days_delta and send_time attributes.
+        """
+        # student reminders should be sent a day after at 4pm.
+        # TODO: make this editable per branch / per email.
         self.days_delta = 1
         self.send_time = time(16, 0, 0)
         super(StudentFeedback, self).save(*args, **kwargs)
@@ -410,10 +436,9 @@ class StudentFeedback(TimedEmail):
 
 class TeacherConfirmation(Email):
     """
-    An email that is sent when a teacher submitted a class.
+    An email that is sent when a teacher submits a class schedule.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Teacher confirmation")
@@ -424,17 +449,16 @@ class TeacherConfirmation(Email):
 
 class TeacherClassApproval(Email):
     """
-    An email that is sent when an admin approved a teacher submitted a class.
+    An email that is sent when an admin approves a teacher submitted schedule.
     """
     pass
 
 
 class TeacherReminder(TimedEmail):
     """
-    An email that is sent to a teacher a day before their class takes place.
+    A reminder email that is sent to a teacher before their class takes place.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Teacher reminder")
@@ -443,6 +467,11 @@ class TeacherReminder(TimedEmail):
         verbose_name_plural = _("Teacher reminders")
 
     def save(self, *args, **kwargs):
+        """
+        Sets values to days_delta and send_time attributes.
+        """
+        # teachers reminders should be sent a day before at 6pm.
+        # TODO: make this editable per branch / per email.
         self.days_delta = -1
         self.send_time = time(18, 0, 0)
         super(TeacherReminder, self).save(*args, **kwargs)
@@ -450,10 +479,9 @@ class TeacherReminder(TimedEmail):
 
 class TeacherFeedback(TimedEmail):
     """
-    An email that is sent to a teacher a day after a scheduled class took place
+    An email that is sent to a teacher after a scheduled class took place.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Teacher feedback e-mail")
@@ -462,6 +490,11 @@ class TeacherFeedback(TimedEmail):
         verbose_name_plural = _("Teacher feedback e-mails")
 
     def save(self, *args, **kwargs):
+        """
+        Sets values to days_delta and send_time attributes.
+        """
+        # student reminders should be sent a day after at 6pm.
+        # TODO: make this editable per branch / per email.
         self.days_delta = 1
         self.send_time = time(18, 0, 0)
         super(TeacherFeedback, self).save(*args, **kwargs)
@@ -469,6 +502,25 @@ class TeacherFeedback(TimedEmail):
 
 class EmailContainer(Model):
     """
+    An abstract class that groups the different types of TS emails together.
+
+    Attributes:
+        studentconfirmation: A one-to-one relationship with
+            a StudentConfirmation email.
+        studentreminder: A one-to-one relationship with
+            a StudentReminder email.
+        studentfeedback: A one-to-one relationship with
+            a StudentFeedback email.
+        teacherconfirmation: A one-to-one relationship with
+            a TeacherConfirmation email.
+        teacherclassapproval: A one-to-one relationship with
+            a TeacherClassApproval email.
+        teacherreminder: A one-to-one relationship with
+            a TeacherReminder email.
+        teacherfeedback: A one-to-one relationship with
+            a TeacherFeedback email.
+        emails: Dictionary with all of the email attributes' names and values.
+            Used to iterate over the emails easily.
     """
     class Meta:
         abstract = True
@@ -554,16 +606,21 @@ class EmailContainer(Model):
     emails = property(**emails())
 
     def delete_emails(self):
-        # delete existing  emails
+        """
+        Deletes related email objects
+        """
         for fieldname, email_obj in self.emails.iteritems():
             email_obj.delete()
 
 
 class DefaultEmailContainer(Base, EmailContainer):
     """
+    A container for top level Email templates.
+
+    There should be only one instance of this model per TS insatllation.
+    The emails in this container are copied each time a Branch is created.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Default e-mail container")
