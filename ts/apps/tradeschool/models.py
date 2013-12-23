@@ -632,6 +632,15 @@ class DefaultEmailContainer(Base, EmailContainer):
 class Location(Base):
     """
     Abstract for location based models: branch & venue.
+
+    Attributes:
+        title: A string indicating the name of the location.
+        phone: A string indicating the phone number.
+        city: A string indicating the city of the location.
+        state: A string indicating the state. Currently only has US states
+            as options.
+        country: A string indicating the country. Uses CountryField
+            for choices and validation.
     """
     class Meta:
         abstract = True
@@ -668,16 +677,34 @@ class Location(Base):
 
 
 class BranchEmailContainerManager(Manager):
+    """
+    An EmailContainer for a Branch.
+
+    The related Email objects are copied every time a Schedule in saved
+    in relation to the Branch.
+
+    These emails never get sent, they're used as templates.
+    """
     def get_query_set(self):
+        """
+        Chages the model's queryset so it selects the related Email objects.
+
+        Returns: Queryset object.
+        """
         return super(
             BranchEmailContainerManager, self).get_query_set().select_related()
 
 
 class Cluster(Base):
     """
-    Branches can be grouped together for possibly displaying
-    them together on the website.
-    For example: multiple branches in one city can belong to the same group.
+    Branches can be grouped together in Clusters.
+
+    Clusters can be used to display branches together on the website.
+    For example: multiple branches in one city can belong to the same Cluster.
+
+    Attribues:
+        name: A string indicating the name of the Cluster.
+        slug: A string used to generate URL for a Cluster view.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -708,15 +735,18 @@ class Cluster(Base):
 
     def branches_string(self):
         """
-        Return the branches that this cluster relates to.
+        Join related Branch objects in a string.
+
         This function is used in the admin list_display() method.
+
+        Returns: A string of the branches that this cluster relates to.
         """
         return ','.join(str(branch) for branch in self.branch_set.all())
     branches_string.short_description = _('branches')
 
     def save(self, *args, **kwargs):
         """
-        check if there is slug and create one if there isn't.
+        Check if there is slug and create one if there isn't.
         """
         if self.slug is None or self.slug.__len__() == 0:
             self.slug = unique_slugify(Cluster, self.name)
@@ -725,10 +755,16 @@ class Cluster(Base):
         super(Cluster, self).save(*args, **kwargs)
 
     def __unicode__(self):
+        """
+        Returns: a unicode string of the Cluster's name attribute.
+        """
         return u"%s" % self.name
 
 
 class BranchManager(Manager):
+    """
+    A Manager selecting related emails.
+    """
     def get_query_set(self):
         return super(BranchManager, self).get_query_set().select_related(
             'studentconfirmation',
@@ -742,6 +778,9 @@ class BranchManager(Manager):
 
 
 class BranchPublicManager(BranchManager):
+    """
+    Filters queryset to only show active non-pending Branch objects.
+    """
     def get_query_set(self):
         return super(BranchPublicManager, self).get_query_set().exclude(
             branch_status='pending').filter(is_active=True)
@@ -749,10 +788,43 @@ class BranchPublicManager(BranchManager):
 
 class Branch(Location):
     """
-    A branch is a chapter of TS in a specific location (usually city/region).
+    A Branch is a chapter of TS in a specific location (usually city/region).
+
+    All querysets except for those used on the Trade School HQ page
+    are filtered by branch, both in the front end and back end.
+
+    Attributes:
+        slug: A string that's used to construct a URL for the Branch web pages.
+            The Branch's slug is used to identify and get the Branch object
+            in the different views across the system.
+        email: A string that's used to populate the "from" field in emails
+            that are sent by the Branch.
+        timezone: A pytz timezone value that's used to calculate the times of
+            schedules, open time slots, created, and updated.
+        language: A language code that's used when translating the branch's
+            web pages. Read by the django translation framework.
+        organizers: M2M relationship with Person objects who are also
+            organizing this Branch. Organizers have access to the admin backend
+        branch_status: A string indicating the current status of the Branch.
+            A 'pending' branch filled out a form to start a trade school,
+            A 'setting_up' branch was approved by an organizer
+            and is getting ready to open,
+            An 'in_session' branch is running.
+        site: A django.sites Site that the Branch is related to. Different
+            branches could be installed on different servers, but still
+            be connected to the same database.
+        clusters: M2M relationship with Cluter objects. Indicates what groups
+            a Branch is a part of.
+        header_copy: Text that's used to populate the Branch's homepage H1 tag.
+        intro_copy: Text that's used to populate the copy in the top box on
+            the Branch's homepage.
+        footer_copy: Text that's used to populate the footer on Branch pages
+            that have one.
+        emails: A dictonary with the Branch's related Email objects.
+        domain: The current Site's domain.
+        branch_url: A full URL of the Branch's homepage.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _('Branch')
@@ -769,6 +841,7 @@ class Branch(Location):
         ('in_session', _('In Session'))
     )
 
+    # create a tuple of timezones from pytz.
     COMMON_TIMEZONE_CHOICES = tuple(
         zip(pytz.all_timezones, pytz.all_timezones)
     )
@@ -916,14 +989,16 @@ class Branch(Location):
                 'branch_slug': self.slug
             })
         )
+
     objects = BranchManager()
     public = BranchPublicManager()
     on_site = CurrentSiteManager()
 
     def save(self, *args, **kwargs):
-        """Check to see if the slug field's value has been changed.
-        If it has, rename the branch's template dir name."""
-
+        """
+        Check to see if the slug field's value has been changed.
+        If it has, rename the branch's template dir name.
+        """
         self.site = Site.objects.get_current()
 
         template_directory = os.path.join(
@@ -935,10 +1010,13 @@ class Branch(Location):
             original = Branch.objects.get(pk=self.pk)
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
+
         super(Branch, self).save(*args, **kwargs)
 
     def delete_emails(self):
-        # delete existing  emails
+        """
+        Delete related emails.
+        """
         if self.emails is not None:
             for fieldname, email_obj in self.emails.iteritems():
                 email_obj
@@ -946,15 +1024,17 @@ class Branch(Location):
 
     def populate_notifications(self):
         """
-        resets branch notification templates from the
-        DefulatEmailContainer templates
+        Deletes current related emails and creates new ones from the
+        emails that are related to the DefulatEmailContainer object.
         """
         # delete existing emails
         self.delete_emails()
 
-        # copy branch notification from the branch notification templates
+        # copy branch email from the default container's related emails
         default_email_container = DefaultEmailContainer.objects.all()[0]
 
+        # assign the bramch to the branch attribute and save a new copy
+        # of each email
         for fieldname, email_obj in default_email_container.emails.iteritems():
             new_email = copy_model_instance(email_obj)
             new_email.branch = self
@@ -965,7 +1045,6 @@ class Branch(Location):
         Creates a copy of the teacher info flatpage for each
         new branch that gets created.
         """
-
         try:
             page = Page.objects.get(url='/teacher-info/', branch=None)
 
@@ -1008,7 +1087,6 @@ class Branch(Location):
         Rename the branch's template directory name.
         Call this method after the branch's slug field has changed.
         """
-
         old_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, old_dirname)
         new_dirname = os.path.join(settings.BRANCH_TEMPLATE_DIR, new_dirname)
 
