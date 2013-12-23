@@ -31,15 +31,14 @@ class Base(Model):
     """
     Abstract base model for all of the models in the tradeschool application.
 
-    Base has datetime fields to keep a record of
-    the times an object is created and updated.
-
-    The Base model also has an is_active boolean field.
-    is_active is implemented in the following way:
-
-    only objects that are active on will appear on the website.
-    Inactive (is_active=False) objects are still accessible
-    through the admin backend, but would not appear on the site.
+    Attribues:
+        created: A datetime indicating the time the object was created.
+            Saved as timezone-aware value.
+        updtated: A datetime indicating the latest time the object was saved.
+            Saved as timezone-aware value.
+        is_active: A boolean indicating whether the object should appear
+            on the front end of the website. Impleneted through Managers'
+            public() queryset method
     """
     class Meta:
         abstract = True
@@ -69,17 +68,26 @@ class Base(Model):
     )
 
     def save(self, *args, **kwargs):
-        """Save timezone-aware values for created and updated fields."""
+        """
+        Saves timezone-aware values for created and updated fields.
+        """
+        # self.pk is None when the object is saved for the first time
         if self.pk is None:
             self.created = timezone.now()
+
         self.updated = timezone.now()
+
         super(Base, self).save(*args, **kwargs)
 
     def __unicode__(self):
+        """
+        Returning a title attribute if it exists,
+        Otherwise returns the object's type.
+        """
         if hasattr(self, "title") and self.title:
             return self.title
         else:
-            return "%s" % (type(self))
+            return u"%s" % (type(self))
 
 
 class Email(Model):
@@ -91,8 +99,22 @@ class Email(Model):
 
     The email's body can include variables that will then be populated
     with relevant data from the Schedule and/or Person that the email
-    is refering to. These variables are populated using Django's templates.
+    is refering to.
+    These variables are populated using Django's template system.
     The content field is used as a template that's created dynamically.
+
+    Attributes:
+        subject: A string representing the subject line of the email.
+        content: A block of text representing the body of the email.
+            Can include variables formatted in the django template language.
+            For example:
+            {{ schedule.title }}: taught by {{ schedule.teacher.fullname }}
+        email_status: A string indicating whether the email should be sent
+            or not, and whether it was sent already.
+        branch: A one-to-one relationship to a Branch. Used if the email is
+            used as a template for all of one branch's emails.
+        schedule: A one-to-one relationship to a Schedule. Used if the email
+            is used for a Schedule.
     """
     class Meta:
         abstract = True
@@ -143,94 +165,124 @@ class Email(Model):
         blank=True
     )
 
-    def preview(self, schedule_obj, registration=None):
-        template = Template(self.content)
-        context = self.template_context(schedule_obj, registration)
-        body = template.render(context)
-
-        return body
-
-    def send(self, schedule_obj, recipient, registration=None):
-        body = self.preview(schedule_obj, registration)
-        branch = schedule_obj.branch
-        send_mail(self.subject, body, branch.email, recipient)
-        self.email_status = 'sent'
-        self.save()
-
     def template_context(self, schedule_obj, registration=None):
-        """ """
+        """
+        Prepares variables and generates a Context object for an Email.
+
+        Emails are composed and edited on the admin backend. Since most of
+        the people who write them do not know the structure of the data models,
+        the variables are simplified and expressed explicitly.
+
+        For example:
+        Instead of {{ schedule.course.teacher }}, a {{ teacher }} variable
+        will also be available
+
+        In addition, variables are created for the various URLs that could be
+        included in a typical Trade School email, such as leaving feedback,
+        unregistering, editing a class, etc.
+
+        Args:
+            schedule_obj: A Schedule object that is used to fill in
+                the variables in the email's body.
+            registration: A Registration object that is used to
+                fill in the variables in the email body in case it is
+                sent to a registered student.
+
+        Returns:
+            A template Context object.
+        """
+        # simplify variables
         teacher = schedule_obj.course.teacher
-        site = Site.objects.get_current()
         branch = schedule_obj.branch
         venue = schedule_obj.venue
-        domain = site.domain
 
-        student_feedback_url = "%s%s" % (
-            domain, reverse('schedule-feedback', kwargs={
-                'branch_slug': branch.slug,
-                'schedule_slug': schedule_obj.slug,
-                'feedback_type': 'student'
-            })
-        )
-        teacher_feedback_url = "%s%s" % (
-            domain, reverse('schedule-feedback', kwargs={
-                'branch_slug': branch.slug,
-                'schedule_slug': schedule_obj.slug,
-                'feedback_type': 'teacher'
-            })
-        )
-        class_edit_url = "%s%s" % (
-            domain, reverse('schedule-edit', kwargs={
-                'branch_slug': branch.slug,
-                'schedule_slug': schedule_obj.slug,
-            })
-        )
-        homepage_url = "%s%s" % (
-            domain, reverse('schedule-list', kwargs={
-                'branch_slug': branch.slug
-            })
-        )
+        # create a string with the registered students for a scheduled class
+        student_list = schedule_obj.student_list_string()
 
-        student_list = ""
-        for registration_obj in schedule_obj.registration_set.registered():
-            student_list += "\n%s: " % registration_obj.student.fullname
-            student_items = []
-            for item in registration_obj.items.all():
-                student_items.append(item.title)
-            student_list += ", ".join(map(str, student_items))
-
+        # create a Context with all of the above variables
         c = Context({
             'schedule': schedule_obj,
             'branch': branch,
             'teacher': teacher,
             'venue': venue,
-            'student_feedback_url': student_feedback_url,
-            'teacher_feedback_url': teacher_feedback_url,
-            'class_edit_url': class_edit_url,
-            'homepage_url': homepage_url,
+            'student_feedback_url': schedule_obj.student_feedback_url,
+            'teacher_feedback_url': schedule_obj.teacher_feedback_url,
+            'class_edit_url': schedule_obj.schedule_edit_url,
+            'homepage_url': branch.branch_url,
             'student_list': student_list
         })
+
+        # Emails sent to students require additional variables from
+        # the Registration object. If one is passed, create those variables.s
         if registration is not None:
-            unregister_url = "%s%s" % (
-                domain, reverse('schedule-unregister', kwargs={
-                    'branch_slug': branch.slug,
-                    'schedule_slug': schedule_obj.slug,
-                    'student_slug': registration.student.slug
-                })
-            )
 
-            item_list = ""
-            for item in registration.items.all():
-                item_list += "%s\n" % item.title
+            # create a string with the items the student registered to bring.
+            item_list = registration.registered_item_string()
 
+            # add the Registration-related variables to the context
             c.dicts.append({
                 'student': registration.student,
                 'registration': registration,
-                'unregister_url': unregister_url,
+                'unregister_url': registration.unregister_url,
                 'item_list': item_list
             })
 
         return c
+
+    def preview(self, schedule_obj, registration=None):
+        """
+        Previews an email content.
+
+        Populates a generic Template object with the email's content,
+        Then renders it using the Schedule and/or Registration objects
+        that are passed to the function.
+
+        Args:
+            schedule_obj: A Schedule instance is used to fill in
+                the email's data.
+            registration: A Registration instance is used to fill in
+                data for emails written to students.
+
+        Returns:
+            A string with the rendered Template content's
+        """
+        # instantiate a temlate with the email's content
+        template = Template(self.content)
+
+        # create a context using data from the schedule
+        # and/or registration objects
+        context = self.template_context(schedule_obj, registration)
+
+        # render the template with the created context
+        body = template.render(context)
+
+        return body
+
+    def send(self, schedule_obj, recipient, registration=None):
+        """
+        Sends a rendered email and updates its status.
+
+        Args:
+            schedule_obj: A Schedule object that is used to fill in
+                the variables in the email's body.
+            recipient: an email address to send the email to.
+            registration: A Registration object that is used to
+                fill in the variables in the email body in case it is
+                sent to a registered student.
+        """
+        # render the email's content using the the data from the schedule
+        # and/or registration objects
+        body = self.preview(schedule_obj, registration)
+
+        # the branch's email is used as the "from" address field
+        branch = schedule_obj.branch
+
+        # send the email
+        send_mail(self.subject, body, branch.email, recipient)
+
+        # update the email's status to sent
+        self.email_status = 'sent'
+        self.save()
 
     def __unicode__(self):
         return self.subject
@@ -793,6 +845,20 @@ class Branch(Location):
 
     emails = property(**emails())
 
+    @property
+    def domain(self):
+        return Site.objects.get_current().domain
+
+    @property
+    def branch_url(self):
+        """
+        Url for the branch's website
+        """
+        return "%s%s" % (
+            self.domain, reverse('schedule-list', kwargs={
+                'branch_slug': self.slug
+            })
+        )
     objects = BranchManager()
     public = BranchPublicManager()
     on_site = CurrentSiteManager()
@@ -1685,10 +1751,62 @@ class Schedule(Durational):
             return True
         return False
 
+    @property
+    def student_feedback_url(self):
+        """
+        url for students to leave feedback for a scheduled class
+        """
+        return "%s%s" % (
+            self.branch.domain, reverse('schedule-feedback', kwargs={
+                'branch_slug': self.branch.slug,
+                'schedule_slug': self.slug,
+                'feedback_type': 'student'
+            })
+        )
+
+    @property
+    def teacher_feedback_url(self):
+        """
+        url for teachers to leave feedback for a scheduled class
+        """
+        return "%s%s" % (
+            self.branch.domain, reverse('schedule-feedback', kwargs={
+                'branch_slug': self.branch.slug,
+                'schedule_slug': self.slug,
+                'feedback_type': 'teacher'
+            })
+        )
+
+    @property
+    def schedule_edit_url(self):
+        """
+        Url for teachers to edit a scheduled class.
+        """
+        return "%s%s" % (
+            self.branch.domain, reverse('schedule-edit', kwargs={
+                'branch_slug': self.branch.slug,
+                'schedule_slug': self.slug,
+            })
+        )
+
+    objects = ScheduleManager()
+
     def registered_students(self):
         return self.registration_set.registered().count()
 
-    objects = ScheduleManager()
+    def student_list_string(self):
+        """
+        create a string with the registered students for a scheduled class.
+        """
+        student_list = ""
+        for registration_obj in self.registration_set.registered():
+            student_list += "\n%s: " % registration_obj.student.fullname
+            student_items = []
+            for item in registration_obj.items.all():
+                student_items.append(item.title)
+            student_list += ", ".join(map(str, student_items))
+
+        return student_list
 
     def delete_emails(self):
         # delete existing  emails
@@ -1977,7 +2095,33 @@ class Registration(Base):
         )
     )
 
+    @property
+    def unregister_url(self):
+        """
+        Url for student to unregister from a scheduled class.
+        """
+        domain = self.schedule.branch.domain
+
+        return "%s%s" % (
+            domain, reverse('schedule-unregister', kwargs={
+                'branch_slug': self.schedule.branch.slug,
+                'schedule_slug': self.schedule.slug,
+                'student_slug': self.student.slug
+            })
+        )
+
     objects = RegistrationManager()
+
+    def registered_item_string(self):
+        """
+        create a string with the items the student registered to bring.
+        Used in emails for students.
+        """
+        item_list = ""
+        for item in self.items.all():
+            item_list += "%s\n" % item.title
+
+        return item_list
 
     def registered_items(self):
         """ Return the registered items as a string. Used in the admin."""
