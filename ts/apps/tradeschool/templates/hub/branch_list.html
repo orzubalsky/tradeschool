@@ -32,7 +32,12 @@
         <div class="branchInfo">
             <div class="branchHeader">
                 <h3>
-                    <a href="{% url 'schedule-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
+                    {% if branch.branch_status == 'in_session' %}
+                    <a href="{% url 'schedule-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>    
+                    {%else %}
+                    {{ branch.title|title }}
+                    {% endif %}
+                    
                 </h3>
             </div>
         </div>

@@ -18,7 +18,7 @@ def branch_save_callback(sender, instance, **kwargs):
     Create a copy of the default template files when a new branch is created.
     """
     # create files
-    if kwargs.get('created'):
+    if kwargs.get('created') and instance.branch_status != 'pending':
         instance.generate_files()
 
     # don't generate emails if this is branch is created when running

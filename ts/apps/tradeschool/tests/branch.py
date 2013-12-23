@@ -170,7 +170,7 @@ class BranchTestCase(TestCase):
         self.assertNotContains(response, self.branch_data['slug'])
 
         # update the branch_status field
-        self.branch.branch_status = 'in session'
+        self.branch.branch_status = 'in_session'
         self.branch.save()
 
         # render the homepage again

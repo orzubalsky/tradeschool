@@ -17,6 +17,7 @@ def branch_list(request):
     """display all branches in current site."""
 
     branches = Branch.public.all()
+    print branches
     pages = FlatPage.objects.all()
 
     return render_to_response('hub/branch_list.html', {
@@ -557,4 +558,64 @@ def branch_page(request, url, branch_slug=None):
     return render_to_response(view_templates.template.name, {
         'page': page,
         'templates': view_templates
+    }, context_instance=RequestContext(request))
+
+
+def start_a_tradeschool(request):
+    branches = Branch.public.all()
+    pages = FlatPage.objects.all()
+
+    if request.method == 'POST':
+        branch_form = BranchForm(request.POST, prefix="branch")
+        organizer_form = OrganizerForm(request.POST, prefix="organizer")
+
+        if branch_form.is_valid() and organizer_form.is_valid():
+
+            # save branch
+            branch = branch_form.save(commit=False)
+            branch_data = branch_form.cleaned_data
+
+            # create a title from the city field
+            branch_data['title'] = branch_data['city']
+
+            # create a slug for the organizer object
+            branch_data['slug'] = unique_slugify(
+                Branch, branch_data['title'])
+
+            branch_data['is_active'] = False
+            branch_data['branch_status'] = 'pending'
+
+            # save branch
+            branch = Branch(**branch_data)
+            branch.save()
+
+            # save organizer
+            organizer = organizer_form.save(commit=False)
+            organizer_data = organizer_form.cleaned_data
+
+            # create a slug for the organizer object
+            organizer_data['slug'] = unique_slugify(
+                Organizer, organizer.fullname)
+
+            organizer_data['username'] = organizer.fullname
+            organizer_data['is_active'] = False
+            organizer_data['is_staff'] = True
+
+            # save organizer
+            organizer = Organizer(**organizer_data)
+            organizer.save()
+
+            # add an organizer-branch relationship to the current branch
+            organizer.branches.add(branch)
+            branch.organizers.add(organizer)
+
+    else:
+        branch_form = BranchForm(prefix="branch")
+        organizer_form = OrganizerForm(prefix="organizer")
+
+    return render_to_response('hub/start_a_tradeschool.html', {
+        'branches': branches,
+        'pages': pages,
+        'branch_form': branch_form,
+        'organizer_form': organizer_form,
     }, context_instance=RequestContext(request))

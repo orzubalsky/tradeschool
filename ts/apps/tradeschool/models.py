@@ -998,6 +998,8 @@ class Branch(Location):
         """
         Check to see if the slug field's value has been changed.
         If it has, rename the branch's template dir name.
+
+        check if status was changed to approved and create files if it has.
         """
         self.site = Site.objects.get_current()
 
@@ -1010,6 +1012,12 @@ class Branch(Location):
             original = Branch.objects.get(pk=self.pk)
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
+
+        if self.pk is not None:
+            original = Branch.objects.get(pk=self.pk)
+            if original.branch_status != self.branch_status \
+                    and self.branch_status != 'pending':
+                self.generate_files()
 
         super(Branch, self).save(*args, **kwargs)
 
@@ -1071,7 +1079,7 @@ class Branch(Location):
             if exc.errno == errno.ENOTDIR:
                 shutil.copy(src, dst)
             else:
-                raise
+                pass
 
     def delete_files(self):
         """

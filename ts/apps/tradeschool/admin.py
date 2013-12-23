@@ -587,7 +587,10 @@ class BranchAdmin(BaseAdmin):
         """
         return super(BranchAdmin, self).queryset(
             request,
-            Q(pk__in=request.user.branches_organized.all)
+            (
+                Q(pk__in=request.user.branches_organized.all)
+                | Q(branch_status='pending')
+            )
         )
 
     def change_view(self, request, object_id, form_url='', extra_context=None):

@@ -9,10 +9,20 @@ class BranchForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(BranchForm, self).__init__(*args, **kwargs)
 
+        self.fields['city'].error_messages['required'] = _(
+            "Please enter a city")
+        self.fields['country'].error_messages['required'] = _(
+            "Please enter a country")
+
         self.initial['site'] = Site.objects.get_current()
 
     class Meta:
         model = Branch
+        fields = (
+            'city',
+            'state',
+            'country',
+        )
 
 
 class TeacherForm (ModelForm):
@@ -24,7 +34,7 @@ class TeacherForm (ModelForm):
         self.fields['email'].error_messages['required'] = _(
             "Please enter your email")
         self.fields['bio'].error_messages['required'] = _(
-            "Please enter your bio")
+            "Please tell us about yourself")
         self.fields['phone'].error_messages['required'] = _(
             "Please enter phone number")
 
@@ -40,6 +50,10 @@ class TeacherForm (ModelForm):
         help_text=_("For prospective students to see on the website"),
         widget=forms.Textarea
     )
+
+
+class OrganizerForm(TeacherForm):
+    pass
 
 
 class CourseForm (ModelForm):
