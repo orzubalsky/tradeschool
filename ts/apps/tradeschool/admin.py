@@ -1339,12 +1339,22 @@ class PendingScheduleAdmin(ScheduleAdmin):
         # only redirect if the schedule was saved
         # by clicking on "save and continue editing"
         if isinstance(response, HttpResponseRedirect) and '_continue' in request.POST:
+            # if the status was changed to 'approved',
+            # redirect to approvedschedule change view
             if obj.schedule_status == 'approved':
                 url = reverse(
                     'admin:tradeschool_approvedschedule_change',
                     args=(obj.pk,)
                 )
+                response['location'] = url
 
+            # if the schedule was moved to a past date
+            # redirect to pastchedule change view
+            if obj.end_time < timezone.now():
+                url = reverse(
+                    'admin:tradeschool_pastschedule_change',
+                    args=(obj.pk,)
+                )
                 response['location'] = url
 
         return response
@@ -1382,13 +1392,51 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
                     'admin:tradeschool_pendingschedule_change',
                     args=(obj.pk,)
                 )
+                response['location'] = url
 
+            # if the schedule was moved to a past date
+            # redirect to pastchedule change view
+            if obj.end_time < timezone.now():
+                url = reverse(
+                    'admin:tradeschool_pastschedule_change',
+                    args=(obj.pk,)
+                )
                 response['location'] = url
 
         return response
 
 
 class PastScheduleAdmin(ScheduleAdmin):
+    """
+    """
+    def response_change(self, request, obj):
+        """
+        If the schedule_status was changed from 'approved',
+        redirect to the PendingSchedule change-view
+        """
+        response = super(
+            PastScheduleAdmin, self).response_change(request, obj)
+
+        # only redirect if the schedule was saved
+        # by clicking on "save and continue editing"
+        if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
+            # if the schedule was moved to a past date
+            # redirect to pastchedule change view
+            if obj.end_time > timezone.now():
+                if obj.schedule_status == 'approved':
+                    url = reverse(
+                        'admin:tradeschool_approvedschedule_change',
+                        args=(obj.pk,)
+                    )
+                else:
+                    url = reverse(
+                        'admin:tradeschool_pendingschedule_change',
+                        args=(obj.pk,)
+                    )
+                response['location'] = url
+
+        return response
+
     list_per_page = 20
 
 
