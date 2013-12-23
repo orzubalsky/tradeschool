@@ -39,13 +39,16 @@ def branch_save_callback(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=PastSchedule, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=PendingSchedule, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=ApprovedSchedule, dispatch_uid="ts.apps.tradeschool.signals")
 def schedule_save_callback(sender, instance, **kwargs):
     """ create notifications on creation of a new schedule"""
 
-    # don't generate emails if this is branch is created when running
+    # don't generate emails if this is schedule is created when running
     # loaddata command. apparently saving from a fixture has the
     # 'raw' key argument
-    if kwargs.get('created') and not kwargs.get('raw', False):
+    if not kwargs.get('raw', False):
         if instance.emails is None:
             instance.populate_notifications()
 

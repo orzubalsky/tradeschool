@@ -96,7 +96,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         if not request.user.is_superuser:
 
             # query the db and filter by the passed in Q obhects
-            qs = model.objects.filter(q)
+            qs = model.objects.filter(q).distinct()
 
             # set the queryset key argument.
             kwargs['queryset'] = qs
@@ -791,7 +791,9 @@ class CourseAdmin(BaseAdmin):
         """
         return super(CourseAdmin, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(
+                schedule__branch__in=request.user.branches_organized.all
+            ).distinct()
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1118,7 +1120,7 @@ class ScheduleAdmin(BaseAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = (
-            BarterItemReadOnlyInline,
+            BarterItemEditableInline,
             RegistrationInline,
             StudentConfirmationScheduleInline,
             TeacherConfirmationScheduleInline,
@@ -1336,7 +1338,7 @@ class PendingScheduleAdmin(ScheduleAdmin):
 
         # only redirect if the schedule was saved
         # by clicking on "save and continue editing"
-        if (isinstance(response, HttpResponseRedirect) and request.POST.has_key('_continue')):
+        if isinstance(response, HttpResponseRedirect) and '_continue' in request.POST:
             if obj.schedule_status == 'approved':
                 url = reverse(
                     'admin:tradeschool_approvedschedule_change',
@@ -1373,7 +1375,7 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
 
         # only redirect if the schedule was saved
         # by clicking on "save and continue editing"
-        if (isinstance(response, HttpResponseRedirect) and request.POST.has_key('_continue')):
+        if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
 
             if obj.schedule_status is not 'approved':
                 url = reverse(
@@ -1387,7 +1389,7 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
 
 
 class PastScheduleAdmin(ScheduleAdmin):
-    pass
+    list_per_page = 20
 
 
 class RegistrationAdmin(BaseAdmin):

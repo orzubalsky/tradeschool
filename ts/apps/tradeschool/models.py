@@ -1896,6 +1896,8 @@ class PastSchedule(Schedule):
         # Translators: Plural.
         verbose_name_plural = _("Scheduled Classes: Past")
 
+        ordering = ['-start_time', '-venue']
+
         proxy = True
 
     objects = PastScheduleManager()    
