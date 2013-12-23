@@ -338,7 +338,7 @@ class TeacherFeedbackBranchInline(TimedEmailBranchInline):
 
 
 class TeacherFeedbackScheduleInline(TimedEmailScheduleInline):
-    mode = TeacherFeedback
+    model = TeacherFeedback
 
 
 class OrganizedBranchInline(BaseTabularInline):
@@ -1126,7 +1126,7 @@ class ScheduleAdmin(BaseAdmin):
             TeacherConfirmationScheduleInline,
             TeacherClassApprovalScheduleInline,
             TeacherReminderScheduleInline,
-            #TeacherFeedbackScheduleInline,
+            TeacherFeedbackScheduleInline,
             StudentReminderScheduleInline,
             StudentFeedbackScheduleInline,
             FeedbackInline,
