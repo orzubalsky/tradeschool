@@ -785,6 +785,15 @@ class CourseAdmin(BaseAdmin):
     The focus of the admin backend is Schedules rather than Courses.
     Courses should be used mainly to schedule repeat classes.
     """
+    def queryset(self, request):
+        """
+        Filter to Courses in Branches that are organized by the logged in user.
+        """
+        return super(CourseAdmin, self).queryset(
+            request,
+            Q(schedule__branch__in=request.user.branches_organized.all)
+        )
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """
         Filter Teachers to those who are related to Branches
@@ -1468,7 +1477,7 @@ class BarterItemAdmin(BaseAdmin):
         """
         return super(BarterItemAdmin, self).queryset(
             request,
-            Q(registration__schedule__branch__in=request.user.branches_organized.all)
+            Q(schedule__branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
