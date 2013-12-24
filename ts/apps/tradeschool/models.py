@@ -1364,9 +1364,8 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
 
     def calculate_courses_taught_count(self):
         return self.courses_taught.filter(
-            schedule__schedule_status='approved',
-            schedule__start_time__lte=timezone.now(),
-            schedule__is_active=True,
+            schedule_status='approved',
+            start_time__lte=timezone.now(),
             is_active=True,
         ).count()
 
@@ -1382,8 +1381,8 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         organizing at least one Branch
         and their default_branch was not set explicitly.
         """
-        # self.courses_taken_count = self.calculate_registration_count()
-        # self.courses_taught_count = self.calculate_courses_taught_count()
+        self.courses_taken_count = self.calculate_registration_count()
+        self.courses_taught_count = self.calculate_courses_taught_count()
 
         super(Person, self).save(*args, **kwargs)
         if self.default_branch is None and self.branches_organized.count() > 0:
