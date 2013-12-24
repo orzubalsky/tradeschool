@@ -676,25 +676,6 @@ class Location(Base):
     )
 
 
-class BranchEmailContainerManager(Manager):
-    """
-    An EmailContainer for a Branch.
-
-    The related Email objects are copied every time a Course in saved
-    in relation to the Branch.
-
-    These emails never get sent, they're used as templates.
-    """
-    def get_query_set(self):
-        """
-        Chages the model's queryset so it selects the related Email objects.
-
-        Returns: Queryset object.
-        """
-        return super(
-            BranchEmailContainerManager, self).get_query_set().select_related()
-
-
 class Cluster(Base):
     """
     Branches can be grouped together in Clusters.
@@ -761,12 +742,33 @@ class Cluster(Base):
         return u"%s" % self.name
 
 
+class BranchQuerySet(QuerySet):
+    """
+    Defines querysets for public and pending branches.
+    """
+    def public(self):
+        """
+        Returns active branches that have either
+        'in_session' or 'setting_up' status
+        """
+        return self.exclude(branch_status='pending').filter(is_active=True)
+
+    def pending(self):
+        """
+        Returns pending branches
+        """
+        return self.filter(status='pending')
+
+
 class BranchManager(Manager):
     """
     A Manager selecting related emails.
     """
     def get_query_set(self):
-        return super(BranchManager, self).get_query_set().select_related(
+        """
+        Selects related Email objects from the custom QuerySet
+        """
+        return BranchQuerySet(self.model, using=self._db).select_related(
             'studentconfirmation',
             'studentreminder',
             'studentfeedback',
@@ -776,14 +778,11 @@ class BranchManager(Manager):
             'teacherfeedback',
         )
 
+    def pending(self):
+        return self.get_query_set().pending()
 
-class BranchPublicManager(BranchManager):
-    """
-    Filters queryset to only show active non-pending Branch objects.
-    """
-    def get_query_set(self):
-        return super(BranchPublicManager, self).get_query_set().exclude(
-            branch_status='pending').filter(is_active=True)
+    def public(self):
+        return self.get_query_set().public()
 
 
 class Branch(Location):
@@ -994,33 +993,6 @@ class Branch(Location):
     public = BranchPublicManager()
     on_site = CurrentSiteManager()
 
-    def save(self, *args, **kwargs):
-        """
-        Check to see if the slug field's value has been changed.
-        If it has, rename the branch's template dir name.
-
-        check if status was changed to approved and create files if it has.
-        """
-        self.site = Site.objects.get_current()
-
-        template_directory = os.path.join(
-            settings.BRANCH_TEMPLATE_DIR,
-            self.slug
-        )
-
-        if self.pk is not None and os.path.exists(template_directory):
-            original = Branch.objects.get(pk=self.pk)
-            if original.slug != self.slug:
-                self.update_template_dir(original.slug, self.slug)
-
-        super(Branch, self).save(*args, **kwargs)
-
-        if self.pk is not None:
-            original = Branch.objects.get(pk=self.pk)
-            if original.branch_status != self.branch_status \
-                    and self.branch_status != 'pending':
-                self.generate_files()
-
     def delete_emails(self):
         """
         Delete related emails.
@@ -1100,9 +1072,52 @@ class Branch(Location):
 
         os.rename(old_dirname, new_dirname)
 
+    def save(self, *args, **kwargs):
+        """
+        Check to see if the slug field's value has been changed.
+        If it has, rename the branch's template dir name.
+
+        check if status was changed to approved and create files if it has.
+        """
+        self.site = Site.objects.get_current()
+
+        template_directory = os.path.join(
+            settings.BRANCH_TEMPLATE_DIR,
+            self.slug
+        )
+
+        if self.pk is not None and os.path.exists(template_directory):
+            original = Branch.objects.get(pk=self.pk)
+            if original.slug != self.slug:
+                self.update_template_dir(original.slug, self.slug)
+
+        super(Branch, self).save(*args, **kwargs)
+
+        if self.pk is not None:
+            original = Branch.objects.get(pk=self.pk)
+            if original.branch_status != self.branch_status \
+                    and self.branch_status != 'pending':
+                self.generate_files()
+
 
 class Venue(Location):
-    """Branches have venues in which scheduled classes take place."""
+    """
+    Venue represent physical locations where Trade School events take place.
+
+    Venues are used with Course, Time, and TimeRange objects,
+    but are never required.
+
+    Attributes:
+        branch: Relationship to a Branch object. Venues are always saved
+            in relation to a branch.
+        address_1: String indicating the street address of the venue.
+        capacity: Integar indicating the number of people that the venue
+            can hold. The value is not validated in the system, it's used
+            for reference.
+        resources: Text indicating what is available in the venue
+            (like chairs, projects, etc)
+        color: HTML color, currently not implemented anywhere in the system.
+    """
     class Meta:
         ordering = ['branch', 'is_active', 'title']
 
@@ -1117,6 +1132,11 @@ class Venue(Location):
         colorValue = random.randint(0, 16777215)
         return "#%x" % colorValue
 
+    branch = ForeignKey(
+        Branch,
+        verbose_name=_("branch"),
+        help_text="What branch of TS is this venue related to?"
+    )
     address_1 = CharField(
         max_length=200,
         verbose_name=_("Street"),
@@ -1143,29 +1163,48 @@ class Venue(Location):
         default=random_color,
         help_text=_("A hex value HTML color in the form of #123456")
     )
-    branch = ForeignKey(
-        Branch,
-        verbose_name=_("branch"),
-        help_text="What branch of TS is this venue related to?"
-    )
 
 
 class PersonManager(BaseUserManager):
     """
+    Extends Django's BaseUserManager to implement a custom auth.User model.
     """
     def create_user(self, email, fullname=None, username=None, password=None, is_staff=False, **extra_fields):
         """
-        Creates and saves a Person with the given username, email and password.
+        Creates a Person with the given username, email and password.
+
+        Args:
+            email: The person's email address.
+            fullname: the name that is used on the frontend for students
+                and teachers
+            username: the name that is used by organizers to log in to
+                the backend.
+            password: enter a password for organizers. otherwise it will
+                be randomized.
+            is_staff: Boolean indicating whether the person can log in
+                to the backend
+
+        Returns:
+            A Person object
         """
-        now = timezone.now()
+        # ensure an email is saved
         if not email:
             raise ValueError('An email must be set')
+
+        # create a username from the fullname
         if fullname:
             username = unique_slugify(Person, fullname, 'username')
+
+        # set a random password when one is not entered.
+        # this will happen for every saved student or teacher.
         if not password:
             password = self.make_random_password()
 
+        # save a proper email
         email = self.normalize_email(email)
+
+        # save a timezone-aware time
+        now = timezone.now()
 
         person = self.model(
             email=email,
@@ -1180,9 +1219,24 @@ class PersonManager(BaseUserManager):
 
         person.set_password(password)
         person.save(using=self._db)
+
         return person
 
     def create_superuser(self, email, password, username=None, fullname=None, **extra_fields):
+        """
+        Creates an admin with all permissions
+
+        Args:
+            email: The person's email address.
+            password: a password for organizers.
+            username: the name that is used by organizers to log in to
+                the backend.
+            fullname: the name that is used on the frontend for students
+                and teachers
+
+        Returns:
+            A Person object
+        """
         person = self.create_user(
             email,
             fullname,
@@ -1204,11 +1258,38 @@ class PersonManager(BaseUserManager):
 
 class Person(AbstractBaseUser, PermissionsMixin, Base):
     """
-    Person in the tradeschool system is either a teacher or a student.
-    A person submitting a class as a teacher will have to supply a bio as well.
+    A custom model in place of Django's auth.User model.
+
+    A Person in the Trade School system can be an organizer,
+    teacher, and student. Their interaction with the system
+    determines their roles:
+
+    When a person registers to a class, they are acknowledged as a student.
+    When a person teaches an approved class, they are acknowledged as a teacher
+    When a person is given is_staff=True, they are acknowledged as an organizer
+
+    Attributes:
+        fullname: String that's used to display teacher's & students' name on
+            the website and in emails.
+        username: String that's used by organizers to log in to the backend.
+        email: String indicating the person's email.
+        phone: String indicating the person's phone.
+        bio: Text that's filled by teachers when submitting a class.
+        website: URL that's filled by teachers when submitting a class.
+        slug: URL for the person. Currently not implemented but saved.
+        branches: M2M relationship to branches that the person engaged with,
+            updated when a person teaches or registers to a class.
+        default_branch: Foreign key to the branch that will be the default
+            option for admin-related actions done by an organizer.
+        language: Language code indicating the language that the admin backend
+            will be translated to for an organizer.
+        is_staff: Boolean indicating whether a person can log in to the backend
+        courses_taught_count: The total number of approved courses taught by
+            the person. Used by the Teacher proxy model.
+        courses_taken_count: The total number of approved courses that the
+            person was registered to. Used by the Student proxy model.
     """
     class Meta:
-
         # Translators: This is used in the header navigation
         # to let you know where you are.
         verbose_name = _("Person")
@@ -1330,16 +1411,26 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
 
     def branches_string(self):
         """
-        Return the branches that this person relates to.
+        Returns a comma separated string of the branches that this person
+        relates to.
+
         This function is used in the admin list_display() method.
+
+        Returns:
+            A string joined by commas.
         """
         return ','.join(str(branch) for branch in self.branches.all())
     branches_string.short_description = _('branches')
 
     def branches_organized_string(self):
         """
-        Return the branches that this person organizes.
+        Returns a comma separated string of the branches that this person
+        organizes.
+
         This function is used in the admin list_display() method.
+
+        Returns:
+            A string joined by commas.
         """
         return ','.join(
             str(branch) for branch in self.branches_organized.all()
@@ -1347,15 +1438,38 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
     branches_organized_string.short_description = _('branches')
 
     def get_full_name(self):
+        """
+        Retuns the person's fullname.
+        Required in order to implement a replacement to django's auth.User
+        """
         return self.fullname
 
     def get_short_name(self):
+        """
+        Retuns the person's fullname.
+        Required in order to implement a replacement to django's auth.User
+        """
         return self.fullname
 
     def get_absolute_url(self):
+        """
+        Returns a URL for the person's view page using their slug.
+
+        The view itself is not implemented.
+        Required in order to implement a replacement to django's auth.User
+        """
         return '/people/%s/' % urlquote(self.slug)
 
     def calculate_registration_count(self):
+        """
+        Filters person's registrations to only count approved active courses
+        that the person hasn't unregistered from.
+
+        Used to set the courses_taken_count attribute.
+
+        Returns:
+            An integar of the total 'true' registrations.
+        """
         return self.registrations.filter(
             registration_status='registered',
             course__status='approved',
@@ -1363,6 +1477,15 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         ).count()
 
     def calculate_courses_taught_count(self):
+        """
+        Filters person's taught courses to only count approved active courses
+        that already took place.
+
+        Used to set the courses_taught_count attribute.
+
+        Returns:
+            An integar of the total 'true' courses taught.
+        """
         return self.courses_taught.filter(
             status='approved',
             start_time__lte=timezone.now(),
@@ -1371,28 +1494,39 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
 
     def email_user(self, subject, message, from_email=None):
         """
-        Sends an email to this User.
+        Sends an email to this person.
+
+        Args:
+            subject: The subject of the email.
+            message: The body of the email.
+            from_email: An email address to be used in the 'from' field.
         """
         send_mail(subject, message, from_email, [self.email])
 
     def save(self, *args, **kwargs):
         """
-        Set a default branch for the user if they're
-        organizing at least one Branch
-        and their default_branch was not set explicitly.
+        Set the default_branch attribute if it's not set.
+        Set courses_taken_count & courses_taught_count attributes.
         """
         self.courses_taken_count = self.calculate_registration_count()
         self.courses_taught_count = self.calculate_courses_taught_count()
 
         super(Person, self).save(*args, **kwargs)
+
         if self.default_branch is None and self.branches_organized.count() > 0:
             self.default_branch = self.branches_organized.all()[0]
 
     def __unicode__(self):
-        return self.fullname
+        """
+        Return the person's fullname.
+        """
+        return u"%s" % self.fullname
 
 
 class OrganizerManager(PersonManager):
+    """
+    Filter Person objects to those that have is_staff set to True.
+    """
     def get_query_set(self):
         return super(
             OrganizerManager, self).get_query_set().filter(is_staff=True)
@@ -1400,6 +1534,10 @@ class OrganizerManager(PersonManager):
 
 class Organizer(Person):
     """
+    Organizers are Person objects that have is_staff set to True.
+
+    Conceptually, organizers are the people who use the admin backend
+    to run a chapter of Trade School and help others run theirs.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -1415,6 +1553,9 @@ class Organizer(Person):
 
 
 class TeacherManager(PersonManager):
+    """
+    Filter Person objects to those who taught at least one 'true' course.
+    """
     def get_query_set(self):
         return super(
             TeacherManager, self).get_query_set().filter(
@@ -1424,6 +1565,11 @@ class TeacherManager(PersonManager):
 
 class Teacher(Person):
     """
+    Teachers are Person objects that have taught at least one course.
+
+    The distinction is made so organizers can find teacher profiles
+    more easily on the admin backend. Teachers can belong to Students
+    and Organizers as well.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -1439,6 +1585,9 @@ class Teacher(Person):
 
 
 class StudentManager(PersonManager):
+    """
+    Filter Person objects to those who take/took at least one 'true' course.
+    """
     def get_query_set(self):
         return super(StudentManager, self).get_query_set().filter(
             courses_taken_count__gt=0)
@@ -1446,6 +1595,11 @@ class StudentManager(PersonManager):
 
 class Student(Person):
     """
+    Students are Person objects that are registered to least one course.
+
+    The distinction is made so organizers can find student profiles
+    more easily on the admin backend. Students can belong to Teachers
+    and Organizers as well.
     """
     class Meta:
         # Translators: This is used in the header navigation
