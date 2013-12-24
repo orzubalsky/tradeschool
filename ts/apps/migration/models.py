@@ -260,7 +260,7 @@ class ClassesManager(Manager):
                     email=old_teacher_row.email.lower())
 
                 # use django slugify to generate a slug
-                slug = slugify(Course, data['title'])
+                slug = slugify(Schedule, data['title'])
 
                 # fake a default category value
                 if data['category_id'] is None:
@@ -284,135 +284,113 @@ class ClassesManager(Manager):
                 elif category == 6:
                     color = '#8a54bb'
 
-                # create course first
-                course = Course.objects.filter(title=data['title'])
+                # create schedule
+                schedule = Schedule.objects.filter(title=data['title'])
 
-                if course.exists() is False:
-                    course = Course(
-                        pk=int(data['id']),
-                        title=data['title'],
-                        teacher=teacher,
-                        max_students=int(data['max_students']),
-                        description=data['description'],
-                        slug=slug,
-                        created=timezone.make_aware(data['timestamp'], timezone.utc),
-                        updated=timezone.make_aware(data['timestamp'], timezone.utc),
-                    )
-                    course.save()
+                if schedule.exists() is False:
 
-                    print "     saved Course: [%s]" % course
-                else:
-                    course = Course.objects.get(title=data['title'])
-                    print "     found Course: [%s]" % course
+                    # get venue object for the Schedule venue foreign key field
+                    # and for the branch's timezone
+                    if Venue.objects.filter(pk=data['venue_id']).exists():
+                        venue = Venue.objects.get(pk=data['venue_id'])
+                        print "         in venue: [%s]" % venue
+                        branch = Branch.objects.get(pk=venue.branch.id)
+                        print "         in branch: [%s]" % branch
 
-                # get venue object for the Schedule venue foreign key field,
-                # and for the branch's timezone
-                if Venue.objects.filter(pk=data['venue_id']).exists():
-                    venue = Venue.objects.get(pk=data['venue_id'])
-                    print "         in venue: [%s]" % venue
-                    branch = Branch.objects.get(pk=venue.branch.id)
-                    print "         in branch: [%s]" % branch
+                        # save branch to teacher
+                        teacher.branches.add(branch)
+                        teacher.save()
 
-                    # save branch to teacher
-                    course.teacher.branches.add(branch)
-                    course.teacher.save()
+                        # convert the old unix time values (a bigint)
+                        # to a timezone-aware datetime object
+                        from django.utils.dateparse import parse_datetime
+                        import datetime
+                        import pytz
 
-                    # save branch to course
-                    course.save()
+                        start_time_naive = parse_datetime(
+                            datetime.datetime.fromtimestamp(int(data['unix_start_time'])).strftime('%Y-%m-%d %H:%M:%S'))
+                        end_time_naive = parse_datetime(
+                            datetime.datetime.fromtimestamp(int(data['unix_end_time'])).strftime('%Y-%m-%d %H:%M:%S'))
 
-                    # convert the old unix time values (a bigint) to a timezone-aware datetime object
-                    from django.utils.dateparse import parse_datetime
-                    import datetime
-                    start_time_naive = parse_datetime(datetime.datetime.fromtimestamp(int(data['unix_start_time'])).strftime('%Y-%m-%d %H:%M:%S'))
-                    end_time_naive = parse_datetime(datetime.datetime.fromtimestamp(int(data['unix_end_time'])).strftime('%Y-%m-%d %H:%M:%S'))
-                    import pytz
-                    localized_start_time = pytz.timezone(branch.timezone).localize(start_time_naive, is_dst=None)
-                    localized_end_time = pytz.timezone(branch.timezone).localize(end_time_naive, is_dst=None)
+                        localized_start_time = pytz.timezone(branch.timezone).localize(start_time_naive, is_dst=None)
+                        localized_end_time = pytz.timezone(branch.timezone).localize(end_time_naive, is_dst=None)
 
-                    utc = pytz.timezone('UTC')
-                    normalized_start_time = utc.normalize(
-                        localized_start_time.astimezone(utc))
-                    normalized_end_time = utc.normalize(
-                        localized_end_time.astimezone(utc))
+                        utc = pytz.timezone('UTC')
 
-                    aware_start_time = timezone.make_aware(
-                        start_time_naive, utc)
-                    aware_end_time = timezone.make_aware(
-                        end_time_naive, utc)
+                        aware_start_time = timezone.make_aware(
+                            start_time_naive, utc)
+                        aware_end_time = timezone.make_aware(
+                            end_time_naive, utc)
 
-                    print "         schedule start time: [%s]" % aware_start_time
-                    print "         schedule end time: [%s]" % aware_end_time
+                        print "         schedule start time: [%s]" % aware_start_time
+                        print "         schedule end time: [%s]" % aware_end_time
 
-                    # use django slugify to generate a slug
-                    slug = slugify(Schedule, course.title)
+                        if data['status'] == 0:
+                            schedule_status = 'pending'
+                        elif data['status'] == 1:
+                            schedule_status = 'contacted'
+                        elif data['status'] == 2:
+                            schedule_status = 'updated'
+                        elif data['status'] == 3:
+                            schedule_status = 'approved'
+                        elif data['status'] == 4:
+                            schedule_status = 'rejected'
+                        else:
+                            schedule_status = 'pending'
 
-                    if data['status'] == 0:
-                        schedule_status = 'pending'
-                    elif data['status'] == 1:
-                        schedule_status = 'contacted'
-                    elif data['status'] == 2:
-                        schedule_status = 'updated'
-                    elif data['status'] == 3:
-                        schedule_status = 'approved'
-                    elif data['status'] == 4:
-                        schedule_status = 'rejected'
-                    else:
-                        schedule_status = 'pending'
-
-                    # now create the schedule
-                    try:
-                        schedule = Schedule.objects.get(course=course)
-                        schedule.slug = slug
-                        schedule.save()
-                        print 'found schedule'
-
-                    except Schedule.DoesNotExist:
                         print 'saving new schedule'
                         schedule = Schedule(
-                            venue=venue,
-                            course=course,
+                            pk=int(data['id']),
+                            title=data['title'],
                             branch=branch,
+                            venue=venue,
+                            teacher=teacher,
+                            description=data['description'],
+                            max_students=int(data['max_students']),
                             slug=slug,
                             color=color,
                             schedule_status=schedule_status,
                             start_time=aware_start_time,
                             end_time=aware_end_time,
                             created=timezone.make_aware(data['timestamp'], timezone.utc),
+                            updated=timezone.make_aware(data['timestamp'], timezone.utc),                            
                         )
                         schedule.save()
 
-                    print "     schedule: [%s]" % schedule.slug
+                        print "     saved Schedule: [%s]" % schedule
+                else:
+                    schedule = Schedule.objects.get(title=data['title'])
+                    print "     found Schedule: [%s]" % schedule
 
-                    # create the related barter items
-                    # and add them to the schedule item
-                    if ClassesXItems.objects.filter(class_id=int(data['id'])).exists():
+                # create the related barter items
+                # and add them to the schedule item
+                if ClassesXItems.objects.filter(class_id=int(data['id'])).exists():
 
-                        item_old_join_rows = ClassesXItems.objects.filter(class_id=int(data['id']))
+                    item_old_join_rows = ClassesXItems.objects.filter(class_id=int(data['id']))
 
-                        print "    items: %i" % item_old_join_rows.count()
+                    print "    items: %i" % item_old_join_rows.count()
 
-                        for item_old_join_row in item_old_join_rows:
+                    for item_old_join_row in item_old_join_rows:
+
+                        try:
+                            item = Items.objects.get(pk=item_old_join_row.item_id)
+                            barter_item = BarterItem.objects.filter(pk=item.id)
 
                             try:
-                                item = Items.objects.get(pk=item_old_join_row.item_id)
-                                print item.id
-                                barter_item = BarterItem.objects.filter(pk=item.id)
+                                barter_item = BarterItem.objects.get(pk=item.id)
+                                barter_item.schedule = schedule
+                                barter_item.save()
 
-                                try:
-                                    barter_item = BarterItem.objects.get(pk=item.id)
-                                    barter_item.schedule = schedule
-                                    barter_item.save()
-
-                                except BarterItem.DoesNotExist:
-                                    barter_item = BarterItem(
-                                        pk=item.id,
-                                        title=item.title,
-                                        schedule=schedule,
-                                        created=timezone.make_aware(data['timestamp'], timezone.utc),
-                                    )
-                                    barter_item.save()
-                            except Item.DoesNotExist:
-                                pass
+                            except BarterItem.DoesNotExist:
+                                barter_item = BarterItem(
+                                    pk=item.id,
+                                    title=item.title,
+                                    schedule=schedule,
+                                    created=timezone.make_aware(data['timestamp'], timezone.utc),
+                                )
+                                barter_item.save()
+                        except Item.DoesNotExist:
+                            pass
 
 
 class Classes(MigrationBase):
@@ -471,7 +449,7 @@ class FeedbacksManager(Manager):
 
         if do_save is True:
             try:
-                schedule = Schedule.objects.get(course__id=data['class_id'])
+                schedule = Schedule.objects.get(id=data['class_id'])
 
                 feedback = Feedback.objects.filter(
                     content=data['content'],
@@ -629,7 +607,7 @@ class StudentsManager(Manager):
                         pk=class_old_join_row.class_id)
                     try:
                         schedule = Schedule.objects.get(
-                            course__title=class_old_row.title)
+                            title=class_old_row.title)
                         print "         found Schedule: [%s]" % schedule
 
                         registration = Registration.objects.filter(

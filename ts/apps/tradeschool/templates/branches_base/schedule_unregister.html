@@ -33,7 +33,7 @@
         <p>
             You are signed up for<br />
             <strong>
-            {{ registration.schedule.course.title }}<br />
+            {{ registration.schedule.title }}<br />
             {{ schedule.start_time|date:"M j, Y g:ia"|localize }}<br />
             {{ schedule.venue.address_1}}<br />
             {{ schedule.venue.city }}
@@ -56,7 +56,7 @@
         {% if registration.schedule.is_within_a_day %}
         <p>
             The class you registered to is in less than 24 hours.<br />
-            Please <strong><a style="color:white;" href="mailto:{{ registration.schedule.course.teacher.email }}">contact your teacher, {{ registration.schedule.course.teacher.fullname }}</a></strong>, and arrange to bring them the items you signed up for.
+            Please <strong><a style="color:white;" href="mailto:{{ registration.schedule.teacher.email }}">contact your teacher, {{ registration.schedule.teacher.fullname }}</a></strong>, and arrange to bring them the items you signed up for.
         </p>
         {% else %}
         <p>

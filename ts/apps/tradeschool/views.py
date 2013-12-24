@@ -90,8 +90,8 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     schedule = get_object_or_404(Schedule, slug=schedule_slug)
     open_seat_percentage = round(
         (float(schedule.registered_students()) /
-            float(schedule.course.max_students)) * 100)
-    seats_left = schedule.course.max_students - schedule.registered_students()
+            float(schedule.max_students)) * 100)
+    seats_left = schedule.max_students - schedule.registered_students()
 
     if request.method == 'POST' and not request.is_ajax():
         data = request.POST
@@ -264,50 +264,48 @@ def schedule_add(request, branch_slug=None):
             teacher.branches.add(branch)
 
             # process course
-            course = course_form.save(commit=False)
-            course_data = course_form.cleaned_data
+            schedule = course_form.save(commit=False)
+            schedule_data = course_form.cleaned_data
 
             # create a slug for the course object
-            course_data['slug'] = unique_slugify(Course, course.title)
+            schedule_data['slug'] = unique_slugify(Schedule, schedule.title)
 
             # add the teacher as a foreign key
-            course_data['teacher'] = teacher
+            schedule_data['teacher'] = teacher
 
-            # check if the submited course already exists in the system
-            # we determine an existing course by its title
-            course = Course.objects.filter(title=course.title)
+            # schedule branch
+            schedule_data['branch'] = branch
 
-            if course.exists():
-                course = course[0]
+            # schedule status
+            schedule_data['schedule_status'] = 'pending'
 
-                course.title = course_form.cleaned_data['title']
-                course.description = course_form.cleaned_data['description']
-                course.max_students = course_form.cleaned_data['max_students']
-            else:
-                course = Course(**course_data)
-
-            # save course
-            course.save()
-
-            # save schedule
+            # save time
             selected_time = time_form.cleaned_data['time']
-            schedule = Schedule(
-                course=course,
-                branch=branch,
-                start_time=selected_time.start_time,
-                end_time=selected_time.end_time,
-                schedule_status='pending'
-            )
-            schedule.slug = unique_slugify(Schedule, course.title)
+            schedule_data['start_time'] = selected_time.start_time
+            schedule_data['end_time'] = selected_time.end_time
 
             if selected_time.venue is not None:
-                schedule.venue = selected_time.venue
+                schedule_data['venue'] = selected_time.venue
             else:
                 try:
-                    schedule.venue = branch.venue_set.all()[0]
+                    schedule_data['venue'] = branch.venue_set.all()[0]
                 except IndexError:
                     pass
 
+            # check if the submited course already exists in the system
+            # we determine an existing course by its title
+            schedule = Schedule.objects.filter(title=schedule.title)
+
+            if schedule.exists():
+                schedule = schedule[0]
+
+                schedule.title = schedule_data['title']
+                schedule.description = schedule_data['description']
+                schedule.max_students = schedule_data['max_students']
+            else:
+                schedule = Schedule(**schedule_data)
+
+            # save schedule
             schedule.save()
 
             # save barter items
@@ -372,9 +370,9 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
         course_form = CourseForm(
-            request.POST, prefix="course", instance=schedule.course)
+            request.POST, prefix="course", instance=schedule)
         teacher_form = TeacherForm(
-            request.POST, prefix="teacher", instance=schedule.course.teacher)
+            request.POST, prefix="teacher", instance=schedule.teacher)
 
         if barter_item_formset.is_valid() \
                 and course_form.is_valid() \
@@ -384,13 +382,9 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             teacher.slug = unique_slugify(Teacher, teacher.fullname)
             teacher.save()
 
-            # save course
-            course = course_form.save(commit=False)
-            course.slug = unique_slugify(Course, course.title)
-            course.save()
-
             # save schedule
-            schedule.slug = unique_slugify(Schedule, course.title)
+            schedule = course_form.save(commit=False)
+            schedule.slug = unique_slugify(Schedule, schedule.title)
             schedule.save()
 
             # remove all barter item relationships before saving them again
@@ -425,11 +419,11 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             prefix="item", initial=initial_item_data)
         course_form = CourseForm(
             prefix="course",
-            instance=schedule.course
+            instance=schedule
         )
         teacher_form = TeacherForm(
             prefix="teacher",
-            instance=schedule.course.teacher
+            instance=schedule.teacher
         )
 
     view_templates = branch_templates(

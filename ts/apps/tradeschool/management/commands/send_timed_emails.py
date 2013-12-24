@@ -24,5 +24,5 @@ class Command(BaseCommand):
         for schedule in schedules:
             result = schedule.send_timed_emails_in_range(start_date, end_date)
             self.stdout.write(
-                '%i emails sent for: %s' % (result, schedule.course.title)
+                '%i emails sent for: %s' % (result, schedule.title)
             )

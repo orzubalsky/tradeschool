@@ -1,9 +1,9 @@
 {% load humanize smartdate i18n l10n %}
 
 {% block schedule_item %}
-<div id="{{ schedule.slug }}" class="aClass venue{{ schedule.course.venue.title }}">
+<div id="{{ schedule.slug }}" class="aClass venue{{ schedule.venue.title }}">
     
-    {% if schedule.registration_set.registered.count >= schedule.course.max_students %}
+    {% if schedule.registration_set.registered.count >= schedule.max_students %}
     {% block schedule_tag %}
     <div class="classTag tagFull">
         ({% blocktrans context "Class full tag" %}Full{% endblocktrans %})
@@ -14,7 +14,7 @@
     <div class="classInfo" style="background-color:{{ schedule.color }}">
         {% block schedule_header %}
         <div class="classHeader">
-            <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
+            <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.title }}</a></h3>
             <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
         </div>
         {% endblock schedule_header %}
@@ -33,7 +33,7 @@
             
             {% block schedule_description %}
             <p class="description">
-                {{ schedule.course.description }}
+                {{ schedule.description }}
             </p>
             {% endblock schedule_description %}            
             
@@ -48,16 +48,16 @@
             
             {% block schedule_teacher %}
             <h4 class="teacher">
-                {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ schedule.course.teacher.website }}" target="_blank">{{ schedule.course.teacher.fullname }}</a>
+                {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ schedule.teacher.website }}" target="_blank">{{ schedule.teacher.fullname }}</a>
             </h4>
             <p class="description">
-                {{ schedule.course.teacher.bio }}
+                {{ schedule.teacher.bio }}
             </p>
             {% endblock schedule_teacher %}            
             
             {% block schedule_join_button %}
-            {% if schedule.registration_set.registered.count < schedule.course.max_students %}
-            <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-register' branch_slug=branch.slug schedule_slug=schedule.slug %}" title="register to {{ schedule.course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
+            {% if schedule.registration_set.registered.count < schedule.max_students %}
+            <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-register' branch_slug=branch.slug schedule_slug=schedule.slug %}" title="register to {{ schedule.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
             {% endif %}
             {% endblock schedule_join_button %}            
             

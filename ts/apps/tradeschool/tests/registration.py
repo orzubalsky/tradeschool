@@ -149,7 +149,7 @@ class RegistrationTestCase(TestCase):
         self.assertContains(response, 'value="Join"')
 
         # add registrations to fill the schedule
-        for i in range(self.schedule.course.max_students):
+        for i in range(self.schedule.max_students):
             # first create a student to register to the scheduled class
             student_fullname = "student-%i" % i
             student_email = "%i@email.com" % i

@@ -12,16 +12,16 @@
         
         {% block schedule_complete_data %}
         <h4>{% blocktrans %}Class title{% endblocktrans %}:</h4>
-        {{ schedule.course.title }}
+        {{ schedule.title }}
 
         <h4>{% blocktrans %}Class description{% endblocktrans %}:</h4>
-        {{ schedule.course.description }}
+        {{ schedule.description }}
 
         <h4>{% blocktrans %}When you'd like to teach{% endblocktrans %}:</h4>
         {{ schedule.start_time|date:"M j, Y g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}
 
         <h4>{% blocktrans %}Maximum students in your class{% endblocktrans %}:</h4>
-        {{ schedule.course.max_students }}
+        {{ schedule.max_students }}
 
         <h4>{% blocktrans %}Items you want in exchange for teaching{% endblocktrans %}:</h4>
         <ul>
@@ -31,19 +31,19 @@
         </ul>
 
         <h4>{% blocktrans %}Your name{% endblocktrans %}:</h4>
-        {{ schedule.course.teacher.fullname }}
+        {{ schedule.teacher.fullname }}
         
         <h4>{% blocktrans %}Your website / blog URL{% endblocktrans %}:</h4>
-        {{ schedule.course.teacher.website }}
+        {{ schedule.teacher.website }}
 
         <h4>{% blocktrans %}A few sentences about you{% endblocktrans %}:</h4>
-        {{ schedule.course.teacher.bio }}
+        {{ schedule.teacher.bio }}
         
         <h4>{% blocktrans %}Email address{% endblocktrans %}:</h4>
-        {{ schedule.course.teacher.email }}
+        {{ schedule.teacher.email }}
 
         <h4>{% blocktrans %}Cell phone number{% endblocktrans %}:</h4>
-        {{ schedule.course.teacher.phone }}
+        {{ schedule.teacher.phone }}
         {% endblock schedule_complete_data %}        
     </div>
 </div>

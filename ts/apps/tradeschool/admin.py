@@ -374,8 +374,8 @@ class ClusteredBranchInline(BaseTabularInline):
 
 class ScheduleInline(BaseTabularInline):
     """
-    Schedule model inline admin model is used in the Course Admin Model
-    in order to let admins create repeat schedules for a course on quickly.
+    Schedule model inline admin modell is use in order to let admins
+    create repeat schedules quickly.
     """
     def queryset(self, request):
         """Filter branches by those organized by the logged in user."""
@@ -781,59 +781,6 @@ class VenueAdmin(BaseAdmin):
     )
 
 
-class CourseAdmin(BaseAdmin):
-    """
-    CourseAdmin is used to manage a Branch's Courses.
-
-    The focus of the admin backend is Schedules rather than Courses.
-    Courses should be used mainly to schedule repeat classes.
-    """
-    def queryset(self, request):
-        """
-        Filter to Courses in Branches that are organized by the logged in user.
-        """
-        return super(CourseAdmin, self).queryset(
-            request,
-            Q(
-                schedule__branch__in=request.user.branches_organized.all
-            ).distinct()
-        )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """
-        Filter Teachers to those who are related to Branches
-        that are organized by the logged in user.
-        """
-        if db_field.name == 'teacher':
-            kwargs['queryset'] = Teacher.objects.filter(
-                branches__in=request.user.branches_organized.all
-            )
-        return super(CourseAdmin, self).formfield_for_foreignkey(
-            db_field,
-            request,
-            **kwargs
-        )
-
-    list_display = (
-        'title',
-        'teacher',
-        'created'
-    )
-    search_fields = (
-        'title',
-        'teacher__fullname'
-    )
-    inlines = (ScheduleInline,)
-    fields = (
-        'title',
-        'slug',
-        'teacher',
-        'max_students',
-        'description'
-    )
-    prepopulated_fields = {'slug': ('title',)}
-
-
 class PersonAdmin(BaseAdmin):
     """
     PersonAdmin is used to add and edit people in the user's Branches.
@@ -894,7 +841,7 @@ class OrganizerAdmin(PersonAdmin):
         """
         """
         # link to change password admin form
-        url = reverse('admin:password_change', args=(obj.course.pk,))
+        url = reverse('admin:password_change', args=(obj.pk,))
         html = '<a target="_blank" href="%s">change password</a>' % (url,)
         return mark_safe(html)
     change_password_link.short_description = _('change password')
@@ -940,7 +887,7 @@ class TeacherAdmin(PersonAdmin):
         return super(TeacherAdmin, self).queryset(
             request,
             Q(
-                courses_taught__count__gt=0,
+                courses_taught_count__gt=0,
                 branches__in=request.user.branches_organized.all
             )
         )
@@ -1104,19 +1051,26 @@ class ScheduleAdmin(BaseAdmin):
         return formfield
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Filter Venue, and Teacher objects to those who are related
+        to Branches that are organized by the logged in user.
+        """
         if db_field.name == 'venue':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Venue,
                 Q(branch__in=request.user.branches_organized.all)
             )
-
-        if db_field.name == 'course':
-            kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
-                request,
-                Course,
-                Q(schedule__branch__in=request.user.branches_organized.all)
+        if db_field.name == 'teacher':
+            kwargs['queryset'] = Teacher.objects.filter(
+                branches__in=request.user.branches_organized.all
             )
+
+        return super(ScheduleAdmin, self).formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs
+        )
 
         return super(ScheduleAdmin, self).formfield_for_foreignkey(
             db_field, request, **kwargs)
@@ -1149,38 +1103,11 @@ class ScheduleAdmin(BaseAdmin):
             schedule.populate_notifications()
     populate_notifications.short_description = _("Generate Email Notifications")
 
-    def course_title(self, obj):
-        """ Return related course title so it can be used in list_display."""
-        return obj.course.title
-    course_title.short_description = _('Courses Title')
-
-    def course_title_link(self, obj):
-        """ Return related course title so it can be used in list_display."""
-        # link to course edit admin form
-        url = reverse('admin:tradeschool_course_change', args=(obj.course.pk,))
-        html = '<a target="_blank" href="%s">%s</a>' % (url, obj.course.title)
-        return mark_safe(html)
-    course_title_link.short_description = _('Course title link')
-
-    def course_description(self, obj):
-        """
-        Return related course's description so it can be used in list_display.
-        """
-        return obj.course.description
-    course_description.short_description = _('Course description')
-
-    def course_max_students(self, obj):
-        """
-        Return related course's max students so it can be used in list_display.
-        """
-        return obj.course.max_students
-    course_max_students.short_description = _('Course Max Students')
-
     def teacher_fullname(self, obj):
         """
-        Return related course's teacher so it can be used in list_display.
+        Return related teacher so it can be used in list_display.
         """
-        teacher = obj.course.teacher
+        teacher = obj.teacher
         # link to teacher edit admin form
         url = reverse('admin:tradeschool_teacher_change', args=(teacher.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, teacher.fullname)
@@ -1189,37 +1116,37 @@ class ScheduleAdmin(BaseAdmin):
 
     def teacher_email(self, obj):
         """
-        Return related course's teacher's email
+        Return related teacher's email
         so it can be used in list_display.
         """
         html = '<a href="mailto:%s">%s</a>' % (
-            obj.course.teacher.email, obj.course.teacher.email)
+            obj.teacher.email, obj.teacher.email)
 
         return mark_safe(html)
     teacher_email.short_description = _('Teacher Email')
 
     def teacher_phone(self, obj):
         """
-        Return related course's teacher's phone
+        Return related teacher's phone
         so it can be used in list_display.
         """
-        return obj.course.teacher.phone
+        return obj.teacher.phone
     teacher_phone.short_description = _('Teacher phone')
 
     def teacher_bio(self, obj):
         """
-        Return related course's teacher's bio
+        Return related teacher's bio
         so it can be used in list_display.
         """
-        return obj.course.teacher.bio
+        return obj.teacher.bio
     teacher_bio.short_description = _('Teacher bio')
 
     def teacher_website(self, obj):
         """
-        Return related course's teacher's website
+        Return related teacher's website
         so it can be used in list_display.
         """
-        return obj.course.teacher.website
+        return obj.teacher.website
     teacher_website.short_description = _('Teacher website')
 
     def get_form(self, request, obj=None, **kwargs):
@@ -1229,9 +1156,9 @@ class ScheduleAdmin(BaseAdmin):
                 # Translators: This is the a header in the branch admin form
                 (_('Class Info'), {
                     'fields': (
-                        'course_title_link',
-                        'course_description',
-                        'course_max_students',
+                        'title',
+                        'description',
+                        'max_students',
                         'slug'
                     )
                 }),
@@ -1256,21 +1183,20 @@ class ScheduleAdmin(BaseAdmin):
                 }),
             )
             kwargs['fields'] = (
+                'title',
+                'description',
+                'max_students',
                 'venue',
                 'start_time',
                 'end_time',
                 'schedule_status',
                 'color',
             )
-
         return super(ScheduleAdmin, self).get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
         if obj:                                 # editing an existing object
             return self.readonly_fields + (
-                'course_title_link',
-                'course_description',
-                'course_max_students',
                 'teacher_fullname',
                 'teacher_email',
                 'teacher_bio',
@@ -1281,7 +1207,7 @@ class ScheduleAdmin(BaseAdmin):
         return self.readonly_fields
 
     list_display = (
-        'course_title',
+        'title',
         'teacher_fullname',
         'teacher_email',
         'start_time',
@@ -1305,7 +1231,7 @@ class ScheduleAdmin(BaseAdmin):
     )
     readonly_fields = ()
     search_fields = (
-        'get_course_title',
+        'title',
         'get_teacher_fullname'
     )
     inlines = ()
@@ -1693,7 +1619,6 @@ class ClusterAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
 # register admin models
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
-admin.site.register(Course, CourseAdmin)
 admin.site.register(Cluster, ClusterAdmin)
 
 admin.site.register(PendingSchedule, PendingScheduleAdmin)

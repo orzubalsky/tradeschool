@@ -174,7 +174,7 @@ class Email(Model):
         the variables are simplified and expressed explicitly.
 
         For example:
-        Instead of {{ schedule.course.teacher }}, a {{ teacher }} variable
+        Instead of {{ schedule.teacher }}, a {{ teacher }} variable
         will also be available
 
         In addition, variables are created for the various URLs that could be
@@ -192,7 +192,7 @@ class Email(Model):
             A template Context object.
         """
         # simplify variables
-        teacher = schedule_obj.course.teacher
+        teacher = schedule_obj.teacher
         branch = schedule_obj.branch
         venue = schedule_obj.venue
 
@@ -1013,13 +1013,13 @@ class Branch(Location):
             if original.slug != self.slug:
                 self.update_template_dir(original.slug, self.slug)
 
+        super(Branch, self).save(*args, **kwargs)
+
         if self.pk is not None:
             original = Branch.objects.get(pk=self.pk)
             if original.branch_status != self.branch_status \
                     and self.branch_status != 'pending':
                 self.generate_files()
-
-        super(Branch, self).save(*args, **kwargs)
 
     def delete_emails(self):
         """
@@ -1382,8 +1382,8 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         organizing at least one Branch
         and their default_branch was not set explicitly.
         """
-        self.courses_taken_count = self.calculate_registration_count()
-        self.courses_taught_count = self.calculate_courses_taught_count()
+        # self.courses_taken_count = self.calculate_registration_count()
+        # self.courses_taught_count = self.calculate_courses_taught_count()
 
         super(Person, self).save(*args, **kwargs)
         if self.default_branch is None and self.branches_organized.count() > 0:
@@ -1459,54 +1459,6 @@ class Student(Person):
         proxy = True
 
     objects = StudentManager()
-
-
-class Course(Base):
-    """
-    The Course class
-    """
-    class Meta:
-        # Translators: Any times that the word class is shown as singular
-        verbose_name = _("Class")
-
-        # Translators: Any times that the word class is shown as plural
-        verbose_name_plural = _("Classes")
-
-        ordering = ['title', ]
-
-    teacher = ForeignKey(
-        Person,
-        verbose_name=_("teacher"),
-        related_name='courses_taught',
-        help_text=_("The person teaching this class.")
-    )
-    max_students = IntegerField(
-        max_length=4,
-        verbose_name=_("Maximum number of students in your class"),
-        help_text=_(
-            "The maximum number of students that will be able to "
-            "register to this class."
-        )
-    )
-    title = CharField(
-        max_length=255,
-        verbose_name=_("class title"),
-        help_text=_("The name of the class. This will appear on the website.")
-    )
-    slug = SlugField(
-        max_length=255,
-        blank=False,
-        null=True,
-        verbose_name=_("URL Slug"),
-        help_text=_("A unique URL for the class.")
-    )
-    description = TextField(
-        blank=False,
-        verbose_name=_("Class description"),
-        help_text=_("The class's description. This will apear on the website.")
-    )
-
-    objects = Manager()
 
 
 class Durational(Base):
@@ -1780,14 +1732,13 @@ class Schedule(Durational):
     """
     """
     class Meta:
-        # Translators: This is used in the header navigation
-        #  to let you know where you are.
-        verbose_name = _('Class Schedule')
+        # Translators: Any times that the word class is shown as singular
+        verbose_name = _("Class")
 
-        # Translators: Plural
-        verbose_name_plural = _('Class Schedules')
+        # Translators: Any times that the word class is shown as plural
+        verbose_name_plural = _("Classes")
 
-        ordering = ['schedule_status', 'start_time', '-venue']
+        ordering = ['schedule_status', 'start_time', '-venue', 'title']
 
     STATUS_CHOICES = (
         # Translators: The thing that shows what the status of the class is
@@ -1808,6 +1759,17 @@ class Schedule(Durational):
         ('#8a54bb', 'violet')
     )
 
+    title = CharField(
+        max_length=255,
+        verbose_name=_("class title"),
+        help_text=_("The name of the class. This will appear on the website.")
+    )
+    branch = ForeignKey(
+        Branch,
+        help_text="A scheduled class is related to a TS brances. "
+        "The relationship is made when a class is "
+        "submitted through a specific TS branch form."
+    )
     venue = ForeignKey(
         Venue,
         verbose_name=_("venue"),
@@ -1816,28 +1778,11 @@ class Schedule(Durational):
         # Translators: Contextual Help
         help_text=_("Where is this class taking place?")
     )
-    course = ForeignKey(
-        Course,
-        verbose_name=_("class"),
-        # Translators: Contextual Help
-        help_text=_("What class are you scheduling?")
-    )
-    branch = ForeignKey(
-        Branch,
-        help_text="A scheduled class is related to a TS brances. "
-        "The relationship is made when a class is "
-        "submitted through a specific TS branch form."
-    )
-    schedule_status = CharField(
-        max_length=20,
-        verbose_name=_("scheduled class status"),
-        choices=STATUS_CHOICES,
-        default='pending',
-        # Translators: Contextual Help
-        help_text=_(
-            "What is the current status of the class? "
-            "Only approved classes appear on the website."
-        )
+    teacher = ForeignKey(
+        Person,
+        verbose_name=_("teacher"),
+        related_name='courses_taught',
+        help_text=_("The person teaching this class.")
     )
     students = ManyToManyField(
         Person,
@@ -1849,12 +1794,36 @@ class Schedule(Durational):
             "their attendance."
         )
     )
+    description = TextField(
+        blank=False,
+        verbose_name=_("Class description"),
+        help_text=_("The class's description. This will apear on the website.")
+    )
+    max_students = IntegerField(
+        max_length=4,
+        verbose_name=_("Maximum number of students in your class"),
+        help_text=_(
+            "The maximum number of students that will be able to "
+            "register to this class."
+        )
+    )
     slug = SlugField(
         max_length=255,
         blank=True,
         null=True,
         unique=True,
         verbose_name=_("A unique URL for the scheduled class.")
+    )
+    schedule_status = CharField(
+        max_length=20,
+        verbose_name=_("scheduled class status"),
+        choices=STATUS_CHOICES,
+        default='pending',
+        # Translators: Contextual Help
+        help_text=_(
+            "What is the current status of the class? "
+            "Only approved classes appear on the website."
+        )
     )
     color = CharField(
         verbose_name=_("color"),
@@ -2033,8 +2002,7 @@ class Schedule(Durational):
 
         # find a scheduled course to this Schedule's course,
         # which is not this one
-        past_schedules = Schedule.objects.filter(
-            course=self.course).exclude(pk=self.pk)
+        past_schedules = Schedule.objects.exclude(pk=self.pk)
 
         if past_schedules.exists():
 
@@ -2049,7 +2017,7 @@ class Schedule(Durational):
 
     def email_teacher(self, email):
         """shortcut method to send an email via the Schedule object."""
-        return email.send(self, (self.course.teacher.email,))
+        return email.send(self, (self.teacher.email,))
 
     def email_student(self, email, registration):
         """shortcut method to send an email via the Schedule object."""
@@ -2067,28 +2035,23 @@ class Schedule(Durational):
         """
         check if status was changed to approved and email teacher if it has.
         """
-        if self.pk is not None:
-            original = Schedule.objects.get(pk=self.pk)
-            if original.schedule_status != self.schedule_status \
-                    and self.schedule_status == 'approved':
-                self.email_teacher(self.teacherclassapproval)
-
         # generate and save slug if there isn't one
         if self.slug is None or self.slug.__len__() == 0:
-            self.slug = unique_slugify(Schedule, self.course.title)
+            self.slug = unique_slugify(Schedule, self.title)
 
-        # if there are no barter items,
-        # try to find another Schedule of the same Course,
-        # and copy the BarterItem objects from that one
-        if self.barteritem_set.count() == 0:
-            pass
-            #self.generate_barteritems_from_past_schedule()
+        if self.pk is not None:
+            original = Schedule.objects.get(pk=self.pk)
 
-      # call the super class's save method
+            if original.schedule_status != self.schedule_status \
+                    and self.schedule_status == 'approved':
+
+                self.email_teacher(self.teacherclassapproval)
+
+        # call the super class's save method
         super(Schedule, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return "%s" % (self.course.title)
+        return "%s" % (self.title)
 
 
 class PendingScheduleManager(ScheduleManager):
@@ -2317,7 +2280,7 @@ class Feedback(Base):
 
     def __unicode__(self):
         return u'%s: feedback %s' % (
-            self.schedule.course.title, self.feedback_type)
+            self.schedule.title, self.feedback_type)
 
 
 class Photo(Base):

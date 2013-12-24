@@ -100,7 +100,7 @@ class EmailTestCase(TestCase):
         # verify the email data is correct
         sent_email = mail.outbox[0]
         self.verify_email_data(sent_email, email_obj)
-        self.assertTrue(self.schedule.course.teacher.email in sent_email.to)
+        self.assertTrue(self.schedule.teacher.email in sent_email.to)
 
     def verify_email_students(self, email_obj, registration_count=5):
         """ Tests that an Email is sent to students with

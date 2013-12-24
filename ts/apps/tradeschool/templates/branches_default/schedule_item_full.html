@@ -24,9 +24,9 @@
 #}
 
 {% block schedule_item %}
-<div id="{{ schedule.course.slug }}" class="aClass venue{{ schedule.course.venue.title }}">
+<div id="{{ schedule.slug }}" class="aClass venue{{ schedule.venue.title }}">
     
-{% if schedule.registered_students >= schedule.course.max_students %}
+{% if schedule.registered_students >= schedule.max_students %}
     {% block schedule_tag %}
     {{ block.super }}
     {% endblock schedule_tag %}

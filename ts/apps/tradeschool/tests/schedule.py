@@ -93,15 +93,15 @@ class ScheduleTestCase(TestCase):
         the data that was used in the forms.
         """
         self.assertEqual(
-            schedule_obj.course.title,
+            schedule_obj.title,
             self.valid_data['course-title']
         )
         self.assertEqual(
-            schedule_obj.course.description,
+            schedule_obj.description,
             self.valid_data['course-description']
         )
         self.assertEqual(
-            schedule_obj.course.max_students,
+            schedule_obj.max_students,
             int(self.valid_data['course-max_students'])
         )
         self.assertEqual(
@@ -123,24 +123,23 @@ class ScheduleTestCase(TestCase):
                 self.time.venue
             )
         self.assertEqual(
-            schedule_obj.course.teacher.fullname,
+            schedule_obj.teacher.fullname,
             self.valid_data['teacher-fullname']
         )
         self.assertEqual(
-            schedule_obj.course.teacher.bio,
+            schedule_obj.teacher.bio,
             self.valid_data['teacher-bio']
         )
         self.assertEqual(
-            schedule_obj.course.teacher.email,
+            schedule_obj.teacher.email,
             self.valid_data['teacher-email']
         )
         self.assertEqual(
-            schedule_obj.course.teacher.phone,
+            schedule_obj.teacher.phone,
             self.valid_data['teacher-phone']
         )
-        self.assertTrue(schedule_obj.course.slug.__len__() > 0)
         self.assertTrue(schedule_obj.slug.__len__() > 0)
-        self.assertTrue(schedule_obj.course.teacher.slug.__len__() > 0)
+        self.assertTrue(schedule_obj.teacher.slug.__len__() > 0)
         for item in schedule_obj.barteritem_set.all():
             self.assertTrue(item.title in self.valid_data.values())
 
@@ -418,33 +417,32 @@ class ScheduleTestCase(TestCase):
         # check that the schedule got saved correctly
         self.compare_schedule_to_data(response.context['schedule'])
 
-    def test_schedule_submission_existing_teacher_existing_course(self):
-        """
-        Tests the submission of a schedule of an existing class
-        by an existing teacher.
-        """
-        # get a Person who teaches in the branch
-        existing_teacher = Teacher.objects.filter(branches=self.branch)[0]
+    # def test_schedule_submission_existing_teacher_existing_course(self):
+    #     """
+    #     Tests the submission of a schedule of an existing class
+    #     by an existing teacher.
+    #     """
+    #     # get a Person who teaches in the branch
+    #     existing_teacher = Teacher.objects.filter(branches=self.branch)[0]
 
-        # use the existing teacher's email for the form submission
-        # when the teacher-email matches an existing Person object,
-        # the schedule should be saved to the existing Person object
-        self.valid_data['teacher-email'] = existing_teacher.email
+    #     # use the existing teacher's email for the form submission
+    #     # when the teacher-email matches an existing Person object,
+    #     # the schedule should be saved to the existing Person object
+    #     self.valid_data['teacher-email'] = existing_teacher.email
 
-        # get an existing course in the branch
-        existing_course = Course.objects.filter(
-            schedule__branch=self.branch)[0]
+    #     # get an existing course in the branch
+    #     existing_course = Schedule.objects.filter(branch=self.branch)[0]
 
-        # use the existing course's title for the form submission
-        # when the course-title matches an existing Course object,
-        # the schedule should be saved to the existing Course object
-        self.valid_data['course-title'] = existing_course.title
+    #     # use the existing course's title for the form submission
+    #     # when the course-title matches an existing Course object,
+    #     # the schedule should be saved to the existing Course object
+    #     self.valid_data['course-title'] = existing_course.title
 
-        # test that the form submission worked
-        response = self.is_successful_submission(self.valid_data)
+    #     # test that the form submission worked
+    #     response = self.is_successful_submission(self.valid_data)
 
-        # check that the schedule got saved correctly
-        self.compare_schedule_to_data(response.context['schedule'])
+    #     # check that the schedule got saved correctly
+    #     self.compare_schedule_to_data(response.context['schedule'])
 
     def test_venue_is_saved(self):
         """
@@ -546,8 +544,6 @@ class ScheduleTestCase(TestCase):
         response = self.is_successful_submission(self.valid_data)
 
         schedule = response.context['schedule']
-        url = reverse(
-            'schedule-list', kwargs={'branch_slug': self.branch.slug, })
 
         # empty the test outbox
         mail.outbox = []
@@ -677,7 +673,7 @@ class ScheduleTestCase(TestCase):
         response = self.client.get(url)
 
         # verify that the schedule is not on the page
-        self.assertNotContains(response, schedule.course.title)
+        self.assertNotContains(response, schedule.title)
 
         # approve the schedule
         schedule.schedule_status = 'approved'
@@ -687,7 +683,7 @@ class ScheduleTestCase(TestCase):
         response = self.client.get(url)
 
         # verify that the schedule appears on the page
-        self.assertContains(response, schedule.course.title)
+        self.assertContains(response, schedule.title)
 
     def test_schedule_past_page(self):
         """ Tests that the schedule-past page loads and displays
@@ -716,7 +712,7 @@ class ScheduleTestCase(TestCase):
         self.assertTemplateUsed(self.branch.slug + '/schedule_list_past.html')
 
         # verify the scheduled class is not in there
-        self.assertNotContains(response, schedule.course.title)
+        self.assertNotContains(response, schedule.title)
 
         # move schedule to a past time
         now = datetime.utcnow().replace(tzinfo=utc)
@@ -727,7 +723,7 @@ class ScheduleTestCase(TestCase):
 
         # schedule should still not appear, since it's approved
         response = self.client.get(url)
-        self.assertNotContains(response, schedule.course.title)
+        self.assertNotContains(response, schedule.title)
 
         # change the scheduled class's status to approved
         schedule.schedule_status = 'approved'
@@ -735,7 +731,7 @@ class ScheduleTestCase(TestCase):
 
         # verify that the scheduled class now appears
         response = self.client.get(url)
-        self.assertContains(response, schedule.course.title)
+        self.assertContains(response, schedule.title)
 
     def tearDown(self):
         """ Delete branch files in case something went wrong

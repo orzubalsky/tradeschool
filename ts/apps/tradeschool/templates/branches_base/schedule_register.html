@@ -5,15 +5,15 @@
 {% block popup_container_class %}{{ popup_container_class }}{% endblock popup_container_class %}
 
 {% block popup_content %}
-<div class="type{{ schedule.course.category }} ">
+<div class="type{{ schedule.category }} ">
     <div id="classPopup" style="background-color:#567567;">
 
         {% block registration_header %}
         <div id="popupHeader">
             {% blocktrans %}I would like to join{% endblocktrans %}<br />
-            <h3>{{ schedule.course.title }}</h3>
+            <h3>{{ schedule.title }}</h3>
             {{ schedule.start_time|smartdate:"g:ia"|localize }} to {{ schedule.end_time|smartdate:"g:ia"|localize }}<br />
-            at <strong>{{ schedule.course.venue.address_1 }}, {{ schedule.course.venue.city }}</strong><br />
+            at <strong>{{ schedule.venue.address_1 }}, {{ schedule.venue.city }}</strong><br />
         </div>
         {% endblock registration_header %}
 
@@ -56,7 +56,7 @@
                 {{ student_form.phone.label }}<br />
                 {{ student_form.phone }}<br />
                 
-                {% if schedule.registered_students < schedule.course.max_students %}                
+                {% if schedule.registered_students < schedule.max_students %}                
                 <input type="submit" class="join" value="Join" />
                 {% endif %}
             </form>

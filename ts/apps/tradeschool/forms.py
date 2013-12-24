@@ -68,7 +68,7 @@ class CourseForm (ModelForm):
             "Please enter the maximum number of students in your class")
 
     class Meta:
-        model = Course
+        model = Schedule
         fields = ('title', 'description', 'max_students')
 
 
