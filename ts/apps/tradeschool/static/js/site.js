@@ -31,25 +31,28 @@ var site = window.site = new function()
                     
         $('.classInfo .join').bind('click', function(e) 
         {
-            e.preventDefault();
-
-            var slug = $(this).attr('id');				
-
-            $('#matte').fadeIn(100, function() 
+            if (!$(this).hasClass('fromHub'))
             {
-                $('#loader').show();
+                e.preventDefault();
 
-                $('#previewContainer').fadeIn(100, function() 
+                var slug = $(this).attr('id');              
+
+                $('#matte').fadeIn(100, function() 
                 {
-                    Dajaxice.tradeschool.schedule_load_form(
-                        self.schedule_load_register_form_callback, 
-                        {
-                            'branch_slug'   : branchUrl, 
-                            'schedule_slug' : slug
-                        }
-                    );
+                    $('#loader').show();
+
+                    $('#previewContainer').fadeIn(100, function() 
+                    {
+                        Dajaxice.tradeschool.schedule_load_form(
+                            self.schedule_load_register_form_callback, 
+                            {
+                                'branch_slug'   : branchUrl, 
+                                'schedule_slug' : slug
+                            }
+                        );
+                    });
                 });
-            });
+            }
         });	
     };
 
