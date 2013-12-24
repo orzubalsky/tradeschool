@@ -1359,7 +1359,7 @@
         "color":"#dda51e",
         "end_time": "2050-09-06T00:30:00Z", 
         "branch": 1, 
-        "schedule_status": "approved", 
+        "status": "approved", 
         "slug": "sample-class"
     }
 },

@@ -1358,13 +1358,13 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
     def calculate_registration_count(self):
         return self.registrations.filter(
             registration_status='registered',
-            schedule__schedule_status='approved',
+            schedule__status='approved',
             schedule__is_active=True,
         ).count()
 
     def calculate_courses_taught_count(self):
         return self.courses_taught.filter(
-            schedule_status='approved',
+            status='approved',
             start_time__lte=timezone.now(),
             is_active=True,
         ).count()
@@ -1674,70 +1674,11 @@ class BarterItem(Base):
     )
 
 
-class ScheduleQuerySet(QuerySet):
-    def pending(self):
-        return self.filter(end_time__gte=timezone.now()) \
-            .exclude(schedule_status='approved') \
-            .exclude(schedule_status='rejected')
-
-    def approved(self):
-        return self.filter(
-            schedule_status='approved',
-            end_time__gte=timezone.now()
-        )
-
-    def past(self):
-        return self.filter(end_time__lte=timezone.now())
-
-    def public(self):
-        return self.filter(is_active=True, schedule_status='approved')
-
-
-class ScheduleManager(Manager):
-    def get_query_set(self):
-        return ScheduleQuerySet(self.model, using=self._db).select_related(
-            'venue__title',
-            'title',
-            'description',
-            'max_students',
-            'teacher__fullname',
-            'teacher__email',
-            'teacher__phone',
-            'teacher__website',
-            'teacher__bio',
-            'studentconfirmation',
-            'studentreminder',
-            'studentfeedback',
-            'teacherconfirmation',
-            'teacherclassapproval',
-            'teacherreminder',
-            'teacherfeedback',
-        )
-
-    def pending(self):
-        return self.get_query_set().pending()
-
-    def approved(self):
-        return self.get_query_set().approved()
-
-    def past(self):
-        return self.get_query_set().past()
-
-    def public(self):
-        return self.get_query_set().public()
-
-
-class Schedule(Durational):
+class ScheduledEvent(Durational):
     """
     """
     class Meta:
-        # Translators: Any times that the word class is shown as singular
-        verbose_name = _("Class")
-
-        # Translators: Any times that the word class is shown as plural
-        verbose_name_plural = _("Classes")
-
-        ordering = ['schedule_status', 'start_time', '-venue', 'title']
+        abstract = True
 
     STATUS_CHOICES = (
         # Translators: The thing that shows what the status of the class is
@@ -1777,12 +1718,6 @@ class Schedule(Durational):
         # Translators: Contextual Help
         help_text=_("Where is this class taking place?")
     )
-    teacher = ForeignKey(
-        Person,
-        verbose_name=_("teacher"),
-        related_name='courses_taught',
-        help_text=_("The person teaching this class.")
-    )
     students = ManyToManyField(
         Person,
         verbose_name=_("students"),
@@ -1813,7 +1748,7 @@ class Schedule(Durational):
         unique=True,
         verbose_name=_("A unique URL for the scheduled class.")
     )
-    schedule_status = CharField(
+    status = CharField(
         max_length=20,
         verbose_name=_("scheduled class status"),
         choices=STATUS_CHOICES,
@@ -1831,6 +1766,93 @@ class Schedule(Durational):
         default=random.randint(0, 6),
         help_text=_("A hex value HTML color in the form of #123456"))
 
+    @property
+    def is_within_a_day(self):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        if (self.start_time - now) < timedelta(hours=24):
+            return True
+        return False
+
+    @property
+    def is_past(self):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        if self.end_time < now:
+            return True
+        return False
+
+
+class ScheduleQuerySet(QuerySet):
+    def pending(self):
+        return self.filter(end_time__gte=timezone.now()) \
+            .exclude(status='approved') \
+            .exclude(status='rejected')
+
+    def approved(self):
+        return self.filter(
+            status='approved',
+            end_time__gte=timezone.now()
+        )
+
+    def past(self):
+        return self.filter(end_time__lte=timezone.now())
+
+    def public(self):
+        return self.filter(is_active=True, status='approved')
+
+
+class ScheduleManager(Manager):
+    def get_query_set(self):
+        return ScheduleQuerySet(self.model, using=self._db).select_related(
+            'venue__title',
+            'title',
+            'description',
+            'max_students',
+            'teacher__fullname',
+            'teacher__email',
+            'teacher__phone',
+            'teacher__website',
+            'teacher__bio',
+            'studentconfirmation',
+            'studentreminder',
+            'studentfeedback',
+            'teacherconfirmation',
+            'teacherclassapproval',
+            'teacherreminder',
+            'teacherfeedback',
+        )
+
+    def pending(self):
+        return self.get_query_set().pending()
+
+    def approved(self):
+        return self.get_query_set().approved()
+
+    def past(self):
+        return self.get_query_set().past()
+
+    def public(self):
+        return self.get_query_set().public()
+
+
+class Schedule(ScheduledEvent):
+    """
+    """
+    class Meta:
+        # Translators: Any times that the word class is shown as singular
+        verbose_name = _("Class")
+
+        # Translators: Any times that the word class is shown as plural
+        verbose_name_plural = _("Classes")
+
+        ordering = ['status', 'start_time', '-venue', 'title']
+
+    teacher = ForeignKey(
+        Person,
+        verbose_name=_("teacher"),
+        related_name='courses_taught',
+        help_text=_("The person teaching this class.")
+    )
+
     def emails():
         def fget(self):
             try:
@@ -1847,20 +1869,6 @@ class Schedule(Durational):
         return locals()
 
     emails = property(**emails())
-
-    @property
-    def is_within_a_day(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        if (self.start_time - now) < timedelta(hours=24):
-            return True
-        return False
-
-    @property
-    def is_past(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        if self.end_time < now:
-            return True
-        return False
 
     @property
     def student_feedback_url(self):
@@ -1946,7 +1954,7 @@ class Schedule(Durational):
 
     def approve_courses(self, request, queryset):
         "approve multiple courses"
-        rows_updated = queryset.update(schedule_status='approved')
+        rows_updated = queryset.update(status='approved')
         if rows_updated == 1:
             message_bit = "1 class was"
         else:
@@ -2041,8 +2049,8 @@ class Schedule(Durational):
         if self.pk is not None:
             original = Schedule.objects.get(pk=self.pk)
 
-            if original.schedule_status != self.schedule_status \
-                    and self.schedule_status == 'approved':
+            if original.status != self.status \
+                    and self.status == 'approved':
 
                 self.email_teacher(self.teacherclassapproval)
 

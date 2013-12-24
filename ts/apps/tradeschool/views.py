@@ -277,7 +277,7 @@ def schedule_add(request, branch_slug=None):
             schedule_data['branch'] = branch
 
             # schedule status
-            schedule_data['schedule_status'] = 'pending'
+            schedule_data['status'] = 'pending'
 
             # save time
             selected_time = time_form.cleaned_data['time']
@@ -483,7 +483,7 @@ def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_ty
     """
     # don't display form unless schedule is approved
     schedule = get_object_or_404(
-        Schedule, slug=schedule_slug, schedule_status='approved')
+        Schedule, slug=schedule_slug, status='approved')
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     # don't display form unless the scheduled class took place

@@ -31,7 +31,7 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
 
         # approve a scheduled class so it appears on the website
         self.schedule = Schedule.objects.filter(branch=self.branch)[0]
-        self.schedule.schedule_status = 'approved'
+        self.schedule.status = 'approved'
         self.schedule.save()
 
         self.timeout = 2

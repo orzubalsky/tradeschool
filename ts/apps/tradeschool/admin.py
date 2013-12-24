@@ -1178,7 +1178,7 @@ class ScheduleAdmin(BaseAdmin):
                         'venue',
                         'start_time',
                         'end_time',
-                        'schedule_status'
+                        'status'
                     )
                 }),
             )
@@ -1189,7 +1189,7 @@ class ScheduleAdmin(BaseAdmin):
                 'venue',
                 'start_time',
                 'end_time',
-                'schedule_status',
+                'status',
                 'color',
             )
         return super(ScheduleAdmin, self).get_form(request, obj, **kwargs)
@@ -1213,7 +1213,7 @@ class ScheduleAdmin(BaseAdmin):
         'start_time',
         'end_time',
         'venue',
-        'schedule_status',
+        'status',
         'color',
         'created'
     )
@@ -1221,11 +1221,11 @@ class ScheduleAdmin(BaseAdmin):
         'start_time',
         'end_time',
         'venue',
-        'schedule_status',
+        'status',
         'color',
     )
     list_filter = (
-        'schedule_status',
+        'status',
         'venue',
         'start_time'
     )
@@ -1247,19 +1247,19 @@ class PendingScheduleAdmin(ScheduleAdmin):
     """
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
-        Set the schedule_status form field to 'pending'
+        Set the schedule status form field to 'pending'
         Since we are adding a pending schedule.
         """
         formfield = super(PendingScheduleAdmin, self).formfield_for_dbfield(
             db_field, **kwargs)
 
-        if db_field.name == 'schedule_status':
+        if db_field.name == 'status':
                 formfield.initial = 'pending'
         return formfield
 
     def response_change(self, request, obj):
         """
-        If the schedule_status was changed to 'approved',
+        If the status was changed to 'approved',
         redirect to the ApprovedSchedule change-view
         """
         response = super(
@@ -1270,7 +1270,7 @@ class PendingScheduleAdmin(ScheduleAdmin):
         if isinstance(response, HttpResponseRedirect) and '_continue' in request.POST:
             # if the status was changed to 'approved',
             # redirect to approvedschedule change view
-            if obj.schedule_status == 'approved':
+            if obj.status == 'approved':
                 url = reverse(
                     'admin:tradeschool_approvedschedule_change',
                     args=(obj.pk,)
@@ -1294,19 +1294,19 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
     """
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
-        Set the schedule_status form field to 'approved'
+        Set the schedule status form field to 'approved'
         Since we are adding an approved schedule.
         """
         formfield = super(ApprovedScheduleAdmin, self).formfield_for_dbfield(
             db_field, **kwargs)
 
-        if db_field.name == 'schedule_status':
+        if db_field.name == 'status':
                 formfield.initial = 'approved'
         return formfield
 
     def response_change(self, request, obj):
         """
-        If the schedule_status was changed from 'approved',
+        If the status was changed from 'approved',
         redirect to the PendingSchedule change-view
         """
         response = super(
@@ -1316,7 +1316,7 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
         # by clicking on "save and continue editing"
         if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
 
-            if obj.schedule_status is not 'approved':
+            if obj.status is not 'approved':
                 url = reverse(
                     'admin:tradeschool_pendingschedule_change',
                     args=(obj.pk,)
@@ -1340,7 +1340,7 @@ class PastScheduleAdmin(ScheduleAdmin):
     """
     def response_change(self, request, obj):
         """
-        If the schedule_status was changed from 'approved',
+        If the schedule status was changed from 'approved',
         redirect to the PendingSchedule change-view
         """
         response = super(
@@ -1352,7 +1352,7 @@ class PastScheduleAdmin(ScheduleAdmin):
             # if the schedule was moved to a past date
             # redirect to pastchedule change view
             if obj.end_time > timezone.now():
-                if obj.schedule_status == 'approved':
+                if obj.status == 'approved':
                     url = reverse(
                         'admin:tradeschool_approvedschedule_change',
                         args=(obj.pk,)
@@ -1466,7 +1466,7 @@ class BarterItemAdmin(BaseAdmin):
                 Schedule,
                 Q(
                     branch__in=request.user.branches_organized.all,
-                    schedule_status='approved'
+                    status='approved'
                 )
             )
 
