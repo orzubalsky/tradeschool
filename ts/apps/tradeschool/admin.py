@@ -216,10 +216,10 @@ class TimedEmailBranchInline(BaseTabularInline):
 
     We want to expose different fields of the Email model in the context
     of editing a branch, since the user is in fact editing a template that
-    will be copied from to each Schedule that's created. Therefore we only
+    will be copied from to each Course that's created. Therefore we only
     display fields that determine the way the send_on is calculated,
     like 'days_delta' & 'send_time'), but not the fields that reflect the
-    status of a Schedule email, like 'send_on' & 'email_status'.
+    status of a Course email, like 'send_on' & 'email_status'.
 
     Do not allow more than 1 instance of the TimedEmail model,
     since there is a one-to-one relationship between the email and the branch.
@@ -232,9 +232,9 @@ class TimedEmailBranchInline(BaseTabularInline):
     fields = ('subject', 'content', 'days_delta', 'send_time')
 
 
-class TimedEmailScheduleInline(BaseTabularInline):
+class TimedEmailCourseInline(BaseTabularInline):
     """
-    All schedule TimedEmails are displayed as inlines in the Schedule
+    All course TimedEmails are displayed as inlines in the Course
     admin model.
 
     We want to expose different fields of the Email model in the context
@@ -248,7 +248,7 @@ class TimedEmailScheduleInline(BaseTabularInline):
     """
     def queryset(self, request):
         """Return the super queryset method with no filtering."""
-        return super(TimedEmailScheduleInline, self).queryset(request, Q())
+        return super(TimedEmailCourseInline, self).queryset(request, Q())
     extra = 0
     max_num = 0
     fields = ('subject', 'content', 'email_status', 'send_on')
@@ -269,9 +269,9 @@ class EmailBranchInline(BaseTabularInline):
     fields = ('subject', 'content')
 
 
-class EmailScheduleInline(BaseTabularInline):
+class EmailCourseInline(BaseTabularInline):
     """
-    All schedule TimedEmails are displayed as inlines in the Schedule
+    All course TimedEmails are displayed as inlines in the Course
     admin model.
 
     Do not allow more than 1 instance of the TimedEmail model,
@@ -279,7 +279,7 @@ class EmailScheduleInline(BaseTabularInline):
     """
     def queryset(self, request):
         """Return the super queryset method with no filtering."""
-        return super(EmailScheduleInline, self).queryset(request, Q())
+        return super(EmailCourseInline, self).queryset(request, Q())
     extra = 0
     max_num = 0
     fields = ('subject', 'content', 'email_status')
@@ -289,7 +289,7 @@ class StudentConfirmationBranchInline(EmailBranchInline):
     model = StudentConfirmation
 
 
-class StudentConfirmationScheduleInline(EmailScheduleInline):
+class StudentConfirmationCourseInline(EmailCourseInline):
     model = StudentConfirmation
 
 
@@ -297,7 +297,7 @@ class StudentReminderBranchInline(TimedEmailBranchInline):
     model = StudentReminder
 
 
-class StudentReminderScheduleInline(TimedEmailScheduleInline):
+class StudentReminderCourseInline(TimedEmailCourseInline):
     model = StudentReminder
 
 
@@ -305,7 +305,7 @@ class StudentFeedbackBranchInline(TimedEmailBranchInline):
     model = StudentFeedback
 
 
-class StudentFeedbackScheduleInline(TimedEmailScheduleInline):
+class StudentFeedbackCourseInline(TimedEmailCourseInline):
     model = StudentFeedback
 
 
@@ -313,7 +313,7 @@ class TeacherConfirmationBranchInline(EmailBranchInline):
     model = TeacherConfirmation
 
 
-class TeacherConfirmationScheduleInline(EmailScheduleInline):
+class TeacherConfirmationCourseInline(EmailCourseInline):
     model = TeacherConfirmation
 
 
@@ -321,7 +321,7 @@ class TeacherClassApprovalBranchInline(EmailBranchInline):
     model = TeacherClassApproval
 
 
-class TeacherClassApprovalScheduleInline(EmailScheduleInline):
+class TeacherClassApprovalCourseInline(EmailCourseInline):
     model = TeacherClassApproval
 
 
@@ -329,7 +329,7 @@ class TeacherReminderBranchInline(TimedEmailBranchInline):
     model = TeacherReminder
 
 
-class TeacherReminderScheduleInline(TimedEmailScheduleInline):
+class TeacherReminderCourseInline(TimedEmailCourseInline):
     model = TeacherReminder
 
 
@@ -337,7 +337,7 @@ class TeacherFeedbackBranchInline(TimedEmailBranchInline):
     model = TeacherFeedback
 
 
-class TeacherFeedbackScheduleInline(TimedEmailScheduleInline):
+class TeacherFeedbackCourseInline(TimedEmailCourseInline):
     model = TeacherFeedback
 
 
@@ -372,51 +372,51 @@ class ClusteredBranchInline(BaseTabularInline):
     extra = 1
 
 
-class ScheduleInline(BaseTabularInline):
+class CourseInline(BaseTabularInline):
     """
-    Schedule model inline admin modell is use in order to let admins
-    create repeat schedules quickly.
+    Course model inline admin modell is use in order to let admins
+    create repeat courses quickly.
     """
     def queryset(self, request):
         """Filter branches by those organized by the logged in user."""
-        return super(ScheduleInline, self).queryset(
+        return super(CourseInline, self).queryset(
             request,
             Q(branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """
-        Filter Schedule's venues by those that are related
+        Filter Course's venues by those that are related
         to branches organized by the logged in user.
         """
         if db_field.name == 'venue':
             kwargs['queryset'] = Venue.objects.filter(
                 branch__in=request.user.branches_organized.all
             )
-        return super(ScheduleInline, self).formfield_for_foreignkey(
+        return super(CourseInline, self).formfield_for_foreignkey(
             db_field,
             request,
             **kwargs
         )
 
-    model = Schedule
+    model = Course
     extra = 0
     fields = ('start_time', 'end_time', 'venue')
 
 
 class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInline):
     """
-    The Registration inline model is used in the Schedule Admin Model
-    in order to give an overview of Schedule's registrations.
+    The Registration inline model is used in the Course Admin Model
+    in order to give an overview of Course's registrations.
     """
     def queryset(self, request):
         """
-        Filter Registrations by those that are related to Schedules that
+        Filter Registrations by those that are related to Courses that
         are scheduled in branches that are organized by the logged in user.
         """
         return super(RegistrationInline, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -440,7 +440,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         """
         Return HTML with a link to the Registration object's admin change form.
         This is used as a readonly field, so each Registration can be edited if
-        necassary in a new window from the Schedule Admin Model.
+        necassary in a new window from the Course Admin Model.
         """
         # url to registration admin edit form
         url = reverse('admin:tradeschool_registration_change', args=(obj.pk,))
@@ -467,25 +467,25 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
 
 class BarterItemInline(BaseTabularInline):
     """
-    The BarterItem inline model is used in the Schedule Admin Model
-    in order to give an overview of Schedule's BarterItems and allow
+    The BarterItem inline model is used in the Course Admin Model
+    in order to give an overview of Course's BarterItems and allow
     for quick editing of the list if necassary.
     """
     def queryset(self, request):
         """
-        Filter BarterItems that are related to Schedules that are scheduled
+        Filter BarterItems that are related to Courses that are scheduled
         in branches that are organized by the logged in user.
         """
         return super(BarterItemInline, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.branches_organized.all)
         )
 
     def title_link(self, obj):
         """
         Return HTML with a link to the BarterItem object's admin change form.
         This is used as a readonly field, so each BarterItem can be edited in
-        a new window, easily accessible from the Schedule Admin Model.
+        a new window, easily accessible from the Course Admin Model.
         """
         # url to registration admin edit form
         url = reverse('admin:tradeschool_barteritem_change', args=(obj.pk,))
@@ -515,18 +515,18 @@ class BarterItemEditableInline(BarterItemInline):
 
 class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
     """
-    The Feedback inline model is used in the PsstSchedule Admin Model
+    The Feedback inline model is used in the PsstCourse Admin Model
     in order to give an overview of the Feedback that was submitted
-    about the Schedule by registered students and the teacher.
+    about the Course by registered students and the teacher.
     """
     def queryset(self, request):
         """
-        Filter to Feedbacks that are related to Schedules that are scheduled
+        Filter to Feedbacks that are related to Courses that are scheduled
         in branches that are organized by the logged in user.
         """
         return super(FeedbackInline, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.branches_organized.all)
         )
 
     model = Feedback
@@ -696,9 +696,9 @@ class VenueAdmin(BaseAdmin):
     VenueAdmin is used to manage a Branch's Venues.
 
     * The address fields are used both in the frontend and to populate
-      Emails that are sent related to a Schedule.
+      Emails that are sent related to a Course.
     * Venue.capacity DOES NOT create a limit on how many Students can register,
-      it's just used for organizers to figure out Schedules.
+      it's just used for organizers to figure out Courses.
     """
     def queryset(self, request):
         """
@@ -1022,13 +1022,13 @@ class TimeRangeAdmin(BaseAdmin):
     )
 
 
-class ScheduleAdmin(BaseAdmin):
+class CourseAdmin(BaseAdmin):
     """
-    ScheduleAdmin lets you add and edit class schedules,
+    CourseAdmin lets you add and edit class courses,
     their barter items, registrations, and email templates.
     """
     def queryset(self, request):
-        return super(ScheduleAdmin, self).queryset(
+        return super(CourseAdmin, self).queryset(
             request,
             Q(branch__in=request.user.branches_organized.all)
         )
@@ -1036,7 +1036,7 @@ class ScheduleAdmin(BaseAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
         formfield = super(
-            ScheduleAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+            CourseAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
         # if db_field.name == 'slug':
         #     if formfield.initial is None:
@@ -1066,41 +1066,41 @@ class ScheduleAdmin(BaseAdmin):
                 branches__in=request.user.branches_organized.all
             )
 
-        return super(ScheduleAdmin, self).formfield_for_foreignkey(
+        return super(CourseAdmin, self).formfield_for_foreignkey(
             db_field,
             request,
             **kwargs
         )
 
-        return super(ScheduleAdmin, self).formfield_for_foreignkey(
+        return super(CourseAdmin, self).formfield_for_foreignkey(
             db_field, request, **kwargs)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = (
             BarterItemEditableInline,
             RegistrationInline,
-            StudentConfirmationScheduleInline,
-            TeacherConfirmationScheduleInline,
-            TeacherClassApprovalScheduleInline,
-            TeacherReminderScheduleInline,
-            TeacherFeedbackScheduleInline,
-            StudentReminderScheduleInline,
-            StudentFeedbackScheduleInline,
+            StudentConfirmationCourseInline,
+            TeacherConfirmationCourseInline,
+            TeacherClassApprovalCourseInline,
+            TeacherReminderCourseInline,
+            TeacherFeedbackCourseInline,
+            StudentReminderCourseInline,
+            StudentFeedbackCourseInline,
             FeedbackInline,
         )
-        return super(ScheduleAdmin, self).change_view(request, object_id)
+        return super(CourseAdmin, self).change_view(request, object_id)
 
     def add_view(self, request, form_url='', extra_context=None):
         self.inlines = (BarterItemEditableInline, )
-        return super(ScheduleAdmin, self).add_view(request)
+        return super(CourseAdmin, self).add_view(request)
 
     def populate_notifications(self, request, queryset):
         """
         call the populate_notifications() method in order to
-        reset email templates for the schedule.
+        reset email templates for the course.
         """
-        for schedule in queryset:
-            schedule.populate_notifications()
+        for course in queryset:
+            course.populate_notifications()
     populate_notifications.short_description = _("Generate Email Notifications")
 
     def teacher_fullname(self, obj):
@@ -1173,7 +1173,7 @@ class ScheduleAdmin(BaseAdmin):
                     )
                 }),
                 # Translators: This is the a header in the branch admin form
-                (_('Class Schedule'), {
+                (_('Class Course'), {
                     'fields': (
                         'venue',
                         'start_time',
@@ -1192,7 +1192,7 @@ class ScheduleAdmin(BaseAdmin):
                 'status',
                 'color',
             )
-        return super(ScheduleAdmin, self).get_form(request, obj, **kwargs)
+        return super(CourseAdmin, self).get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
         if obj:                                 # editing an existing object
@@ -1242,15 +1242,15 @@ class ScheduleAdmin(BaseAdmin):
     #prepopulated_fields  = {'slug': ('start_time',) }
 
 
-class PendingScheduleAdmin(ScheduleAdmin):
+class PendingCourseAdmin(CourseAdmin):
     """
     """
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
-        Set the schedule status form field to 'pending'
-        Since we are adding a pending schedule.
+        Set the course status form field to 'pending'
+        Since we are adding a pending course.
         """
-        formfield = super(PendingScheduleAdmin, self).formfield_for_dbfield(
+        formfield = super(PendingCourseAdmin, self).formfield_for_dbfield(
             db_field, **kwargs)
 
         if db_field.name == 'status':
@@ -1260,28 +1260,28 @@ class PendingScheduleAdmin(ScheduleAdmin):
     def response_change(self, request, obj):
         """
         If the status was changed to 'approved',
-        redirect to the ApprovedSchedule change-view
+        redirect to the ApprovedCourse change-view
         """
         response = super(
-            PendingScheduleAdmin, self).response_change(request, obj)
+            PendingCourseAdmin, self).response_change(request, obj)
 
-        # only redirect if the schedule was saved
+        # only redirect if the course was saved
         # by clicking on "save and continue editing"
         if isinstance(response, HttpResponseRedirect) and '_continue' in request.POST:
             # if the status was changed to 'approved',
-            # redirect to approvedschedule change view
+            # redirect to approvedcourse change view
             if obj.status == 'approved':
                 url = reverse(
-                    'admin:tradeschool_approvedschedule_change',
+                    'admin:tradeschool_approvedcourse_change',
                     args=(obj.pk,)
                 )
                 response['location'] = url
 
-            # if the schedule was moved to a past date
+            # if the course was moved to a past date
             # redirect to pastchedule change view
             if obj.end_time < timezone.now():
                 url = reverse(
-                    'admin:tradeschool_pastschedule_change',
+                    'admin:tradeschool_pastcourse_change',
                     args=(obj.pk,)
                 )
                 response['location'] = url
@@ -1289,15 +1289,15 @@ class PendingScheduleAdmin(ScheduleAdmin):
         return response
 
 
-class ApprovedScheduleAdmin(ScheduleAdmin):
+class ApprovedCourseAdmin(CourseAdmin):
     """
     """
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
-        Set the schedule status form field to 'approved'
-        Since we are adding an approved schedule.
+        Set the course status form field to 'approved'
+        Since we are adding an approved course.
         """
-        formfield = super(ApprovedScheduleAdmin, self).formfield_for_dbfield(
+        formfield = super(ApprovedCourseAdmin, self).formfield_for_dbfield(
             db_field, **kwargs)
 
         if db_field.name == 'status':
@@ -1307,27 +1307,27 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
     def response_change(self, request, obj):
         """
         If the status was changed from 'approved',
-        redirect to the PendingSchedule change-view
+        redirect to the PendingCourse change-view
         """
         response = super(
-            ApprovedScheduleAdmin, self).response_change(request, obj)
+            ApprovedCourseAdmin, self).response_change(request, obj)
 
-        # only redirect if the schedule was saved
+        # only redirect if the course was saved
         # by clicking on "save and continue editing"
         if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
 
             if obj.status is not 'approved':
                 url = reverse(
-                    'admin:tradeschool_pendingschedule_change',
+                    'admin:tradeschool_pendingcourse_change',
                     args=(obj.pk,)
                 )
                 response['location'] = url
 
-            # if the schedule was moved to a past date
+            # if the course was moved to a past date
             # redirect to pastchedule change view
             if obj.end_time < timezone.now():
                 url = reverse(
-                    'admin:tradeschool_pastschedule_change',
+                    'admin:tradeschool_pastcourse_change',
                     args=(obj.pk,)
                 )
                 response['location'] = url
@@ -1335,31 +1335,31 @@ class ApprovedScheduleAdmin(ScheduleAdmin):
         return response
 
 
-class PastScheduleAdmin(ScheduleAdmin):
+class PastCourseAdmin(CourseAdmin):
     """
     """
     def response_change(self, request, obj):
         """
-        If the schedule status was changed from 'approved',
-        redirect to the PendingSchedule change-view
+        If the course status was changed from 'approved',
+        redirect to the PendingCourse change-view
         """
         response = super(
-            PastScheduleAdmin, self).response_change(request, obj)
+            PastCourseAdmin, self).response_change(request, obj)
 
-        # only redirect if the schedule was saved
+        # only redirect if the course was saved
         # by clicking on "save and continue editing"
         if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
-            # if the schedule was moved to a past date
+            # if the course was moved to a past date
             # redirect to pastchedule change view
             if obj.end_time > timezone.now():
                 if obj.status == 'approved':
                     url = reverse(
-                        'admin:tradeschool_approvedschedule_change',
+                        'admin:tradeschool_approvedcourse_change',
                         args=(obj.pk,)
                     )
                 else:
                     url = reverse(
-                        'admin:tradeschool_pendingschedule_change',
+                        'admin:tradeschool_pendingcourse_change',
                         args=(obj.pk,)
                     )
                 response['location'] = url
@@ -1381,7 +1381,7 @@ class RegistrationAdmin(BaseAdmin):
         """
         return super(RegistrationAdmin, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1392,10 +1392,10 @@ class RegistrationAdmin(BaseAdmin):
                 Q(branches__in=request.user.branches_organized.all)
             )
 
-        if db_field.name == 'schedule':
+        if db_field.name == 'course':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
-                Schedule,
+                Course,
                 Q(branch__in=request.user.branches_organized.all)
             )
 
@@ -1411,7 +1411,7 @@ class RegistrationAdmin(BaseAdmin):
                 registration_pk = int(request.path.split('/')[4])
                 registration = Registration.objects.get(pk=registration_pk)
                 kwargs['queryset'] = BarterItem.objects.filter(
-                    schedule=registration.schedule)
+                    course=registration.course)
             except ValueError:
                 pass
         return super(RegistrationAdmin, self).formfield_for_manytomany(
@@ -1421,20 +1421,20 @@ class RegistrationAdmin(BaseAdmin):
         if obj:                             # editing an existing object
             return self.readonly_fields + (
                 'student',
-                'schedule'
+                'course'
             )
         return self.readonly_fields
 
     fields = (
         'student',
-        'schedule',
+        'course',
         'items',
         'registration_status'
     )
     readonly_fields = ()
     list_display = (
         'student',
-        'schedule',
+        'course',
         'registered_items',
         'registration_status'
     )
@@ -1446,7 +1446,7 @@ class RegistrationAdmin(BaseAdmin):
 class BarterItemAdmin(BaseAdmin):
     """
     BarterItemAdmin is used mostly for introspection.
-    Editing BarterItem should be done within the related Schedule.
+    Editing BarterItem should be done within the related Course.
     """
 
     def queryset(self, request):
@@ -1456,14 +1456,14 @@ class BarterItemAdmin(BaseAdmin):
         """
         return super(BarterItemAdmin, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'schedule':
+        if db_field.name == 'course':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
-                Schedule,
+                Course,
                 Q(
                     branch__in=request.user.branches_organized.all,
                     status='approved'
@@ -1475,15 +1475,15 @@ class BarterItemAdmin(BaseAdmin):
 
     list_display = (
         'title',
-        'schedule'
+        'course'
     )
     search_fields = (
         'title',
-        'schedule'
+        'course'
     )
     fields = (
         'title',
-        'schedule'
+        'course'
     )
 
 
@@ -1574,23 +1574,23 @@ class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
         """
         return super(FeedbackAdmin, self).queryset(
             request,
-            Q(schedule__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.branches_organized.all)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'schedule':
-            kwargs['queryset'] = Schedule.objects.filter(
+        if db_field.name == 'course':
+            kwargs['queryset'] = Course.objects.filter(
                 branch__in=request.user.branches_organized.all)
 
         return super(FeedbackAdmin, self).formfield_for_foreignkey(
             db_field, request, **kwargs)
 
     list_display = (
-        'schedule',
+        'course',
         'feedback_type'
     )
     fields = (
-        'schedule',
+        'course',
         'feedback_type',
         'content',
     )
@@ -1621,9 +1621,9 @@ admin.site.register(Branch, BranchAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Cluster, ClusterAdmin)
 
-admin.site.register(PendingSchedule, PendingScheduleAdmin)
-admin.site.register(ApprovedSchedule, ApprovedScheduleAdmin)
-admin.site.register(PastSchedule, PastScheduleAdmin)
+admin.site.register(PendingCourse, PendingCourseAdmin)
+admin.site.register(ApprovedCourse, ApprovedCourseAdmin)
+admin.site.register(PastCourse, PastCourseAdmin)
 
 admin.site.register(BarterItem, BarterItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)

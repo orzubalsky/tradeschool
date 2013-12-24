@@ -260,7 +260,7 @@ class ClassesManager(Manager):
                     email=old_teacher_row.email.lower())
 
                 # use django slugify to generate a slug
-                slug = slugify(Schedule, data['title'])
+                slug = slugify(Course, data['title'])
 
                 # fake a default category value
                 if data['category_id'] is None:
@@ -284,12 +284,12 @@ class ClassesManager(Manager):
                 elif category == 6:
                     color = '#8a54bb'
 
-                # create schedule
-                schedule = Schedule.objects.filter(title=data['title'])
+                # create course
+                course = Course.objects.filter(title=data['title'])
 
-                if schedule.exists() is False:
+                if course.exists() is False:
 
-                    # get venue object for the Schedule venue foreign key field
+                    # get venue object for the Course venue foreign key field
                     # and for the branch's timezone
                     if Venue.objects.filter(pk=data['venue_id']).exists():
                         venue = Venue.objects.get(pk=data['venue_id'])
@@ -322,24 +322,24 @@ class ClassesManager(Manager):
                         aware_end_time = timezone.make_aware(
                             end_time_naive, utc)
 
-                        print "         schedule start time: [%s]" % aware_start_time
-                        print "         schedule end time: [%s]" % aware_end_time
+                        print "         course start time: [%s]" % aware_start_time
+                        print "         course end time: [%s]" % aware_end_time
 
                         if data['status'] == 0:
-                            schedule_status = 'pending'
+                            status = 'pending'
                         elif data['status'] == 1:
-                            schedule_status = 'contacted'
+                            status = 'contacted'
                         elif data['status'] == 2:
-                            schedule_status = 'updated'
+                            status = 'updated'
                         elif data['status'] == 3:
-                            schedule_status = 'approved'
+                            status = 'approved'
                         elif data['status'] == 4:
-                            schedule_status = 'rejected'
+                            status = 'rejected'
                         else:
-                            schedule_status = 'pending'
+                            status = 'pending'
 
-                        print 'saving new schedule'
-                        schedule = Schedule(
+                        print 'saving new course'
+                        course = Course(
                             pk=int(data['id']),
                             title=data['title'],
                             branch=branch,
@@ -349,21 +349,21 @@ class ClassesManager(Manager):
                             max_students=int(data['max_students']),
                             slug=slug,
                             color=color,
-                            schedule_status=schedule_status,
+                            status=status,
                             start_time=aware_start_time,
                             end_time=aware_end_time,
                             created=timezone.make_aware(data['timestamp'], timezone.utc),
                             updated=timezone.make_aware(data['timestamp'], timezone.utc),                            
                         )
-                        schedule.save()
+                        course.save()
 
-                        print "     saved Schedule: [%s]" % schedule
+                        print "     saved Course: [%s]" % course
                 else:
-                    schedule = Schedule.objects.get(title=data['title'])
-                    print "     found Schedule: [%s]" % schedule
+                    course = Course.objects.get(title=data['title'])
+                    print "     found Course: [%s]" % course
 
                 # create the related barter items
-                # and add them to the schedule item
+                # and add them to the course item
                 if ClassesXItems.objects.filter(class_id=int(data['id'])).exists():
 
                     item_old_join_rows = ClassesXItems.objects.filter(class_id=int(data['id']))
@@ -378,14 +378,14 @@ class ClassesManager(Manager):
 
                             try:
                                 barter_item = BarterItem.objects.get(pk=item.id)
-                                barter_item.schedule = schedule
+                                barter_item.course = course
                                 barter_item.save()
 
                             except BarterItem.DoesNotExist:
                                 barter_item = BarterItem(
                                     pk=item.id,
                                     title=item.title,
-                                    schedule=schedule,
+                                    course=course,
                                     created=timezone.make_aware(data['timestamp'], timezone.utc),
                                 )
                                 barter_item.save()
@@ -449,11 +449,11 @@ class FeedbacksManager(Manager):
 
         if do_save is True:
             try:
-                schedule = Schedule.objects.get(id=data['class_id'])
+                course = Course.objects.get(id=data['class_id'])
 
                 feedback = Feedback.objects.filter(
                     content=data['content'],
-                    schedule=schedule
+                    course=course
                 )
 
                 if feedback.exists() is False:
@@ -464,7 +464,7 @@ class FeedbacksManager(Manager):
 
                     feedback = Feedback(
                         pk=int(data['id']),
-                        schedule=schedule,
+                        course=course,
                         feedback_type=feedback_type,
                         content=data['content'],
                         created=timezone.make_aware(data['timestamp'], timezone.utc),
@@ -475,9 +475,9 @@ class FeedbacksManager(Manager):
                     print "     saved Feedback: [%s]" % feedback 
                 else:
                     feedback = Feedback.objects.get(
-                        content=data['content'], schedule=schedule)
+                        content=data['content'], course=course)
                     print "     found Feedback: [%s]" % feedback
-            except Schedule.DoesNotExist:
+            except Course.DoesNotExist:
                 pass
 
 
@@ -606,12 +606,12 @@ class StudentsManager(Manager):
                     class_old_row = Classes.objects.get(
                         pk=class_old_join_row.class_id)
                     try:
-                        schedule = Schedule.objects.get(
+                        course = Course.objects.get(
                             title=class_old_row.title)
-                        print "         found Schedule: [%s]" % schedule
+                        print "         found Course: [%s]" % course
 
                         registration = Registration.objects.filter(
-                            schedule=schedule,
+                            course=course,
                             student=student
                         )
                         status = 'registered'
@@ -620,7 +620,7 @@ class StudentsManager(Manager):
 
                         if registration.exists() is False:
                             registration = Registration(
-                                schedule=schedule,
+                                course=course,
                                 student=student,
                                 registration_status=status,
                                 created=data['timestamp']
@@ -629,18 +629,18 @@ class StudentsManager(Manager):
                             #print "         saved Registration: [%s]" % registration
                         else:
                             registration = Registration.objects.get(
-                                schedule=schedule, student=student)
+                                course=course, student=student)
                             registration.registration_status = status
                             registration.save()
                             #print "         found Registration: [%s]" % registration
 
                         # save branch id in student Person object
-                        branch = registration.schedule.branch
+                        branch = registration.course.branch
                         #print "             found Branch: [%s]" % branch
 
                         student.branches.add(branch)
                         student.save()
-                    except Schedule.DoesNotExist:
+                    except Course.DoesNotExist:
                         pass
 
                 # create student items

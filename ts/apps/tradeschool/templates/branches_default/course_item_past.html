@@ -1,12 +1,12 @@
-{% extends templates.prefix|add:'schedule_item.html' %}
+{% extends templates.prefix|add:'course_item.html' %}
 
 {% load humanize smartdate i18n l10n %}
 
 {# 
     This template is used to render a single past scheduled class.
     
-    It extends the schedule_item.html template that is in the same folder as this one:
-    	/public_html/schedule_item.html
+    It extends the course_item.html template that is in the same folder as this one:
+    	/public_html/course_item.html
     
     In order to make edits to the html of your TS branch file, 
         1.  Look at the code of the parent template (URL above).
@@ -22,14 +22,14 @@
     It's probably best to just change / add to the html itself.
 #}
 
-{% block schedule_item %}
+{% block course_item %}
     
     {{ block.super }}        
     
-    {% block schedule_tag %}
-    {% endblock schedule_tag %}
+    {% block course_tag %}
+    {% endblock course_tag %}
 
-    {% block schedule_join_button %}            
-    {% endblock schedule_join_button %}            
+    {% block course_join_button %}            
+    {% endblock course_join_button %}            
     
-{% endblock schedule_item %}
+{% endblock course_item %}

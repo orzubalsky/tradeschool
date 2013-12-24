@@ -187,13 +187,13 @@ class BranchTestCase(TestCase):
         # save a new branch
         self.branch.save()
 
-        # schedule-list view
+        # course-list view
         response = self.client.get(reverse(
-            'schedule-list',
+            'course-list',
             kwargs={'branch_slug': self.branch.slug, })
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_list.html')
 
     def test_branch_language(self):
         """ Tests that the templates are rendered
@@ -203,7 +203,7 @@ class BranchTestCase(TestCase):
         # get a branch
         branch = Branch.objects.all()[0]
         url = reverse(
-            'schedule-list',
+            'course-list',
             kwargs={'branch_slug': branch.slug, }
         )
 
@@ -247,7 +247,7 @@ class BranchTestCase(TestCase):
         # get a branch
         branch = Branch.objects.all()[0]
         url = reverse(
-            'schedule-list',
+            'course-list',
             kwargs={'branch_slug': branch.slug, }
         )
 

@@ -1,4 +1,4 @@
-{% extends 'branches_base/schedule_register.html' %}
+{% extends 'branches_base/course_register.html' %}
 
 {% load humanize smartdate i18n l10n %}
 
@@ -6,7 +6,7 @@
     This template is used to render the popup with the scheduled clas information
     
     It extends a parent template that's located in-
-      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/schedule_register.html
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_register.html
     
     In order to make edits to the html of this file, 
         1.  Look at the code of the parent template (URL above).
@@ -24,7 +24,7 @@
 
 {% block popup_content %}
 
-<div class="type{{ schedule.category }} ">
+<div class="type{{ course.category }} ">
     <div id="classPopup" style="background-color:#567567;">
 
         {% block registration_header %}

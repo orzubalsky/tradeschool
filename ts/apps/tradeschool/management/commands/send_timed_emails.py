@@ -12,17 +12,17 @@ class Command(BaseCommand):
         end_date = timezone.now()
         start_date = end_date - timedelta(hours=1, minutes=1)
 
-        schedules = Schedule.objects.filter(
+        courses = Course.objects.filter(
             start_time__gte=(start_date - timedelta(days=14)),
             end_time__lte=(start_date + timedelta(days=14))
         )
 
         self.stdout.write(
-            'found %i schedules in the next 14 days\n' % (schedules.count())
+            'found %i courses in the next 14 days\n' % (courses.count())
         )
 
-        for schedule in schedules:
-            result = schedule.send_timed_emails_in_range(start_date, end_date)
+        for course in courses:
+            result = course.send_timed_emails_in_range(start_date, end_date)
             self.stdout.write(
-                '%i emails sent for: %s' % (result, schedule.title)
+                '%i emails sent for: %s' % (result, course.title)
             )

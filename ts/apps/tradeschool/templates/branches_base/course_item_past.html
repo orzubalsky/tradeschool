@@ -1,0 +1,15 @@
+{% extends 'branches_base/course_item.html' %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block course_item %}
+    
+    {{ block.super }}        
+    
+    {% block course_tag %}
+    {% endblock course_tag %}
+
+    {% block course_join_button %}            
+    {% endblock course_join_button %}            
+    
+{% endblock course_item %}

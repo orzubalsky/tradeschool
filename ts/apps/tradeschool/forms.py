@@ -68,7 +68,7 @@ class CourseForm (ModelForm):
             "Please enter the maximum number of students in your class")
 
     class Meta:
-        model = Schedule
+        model = Course
         fields = ('title', 'description', 'max_students')
 
 
@@ -129,11 +129,11 @@ class TimeSelectionForm(Form):
 
 
 class RegistrationForm(ModelForm):
-    def __init__(self, schedule, *args, **kwargs):
+    def __init__(self, course, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
 
         self.fields['items'].queryset = BarterItem.objects.filter(
-            schedule=schedule)
+            course=course)
         self.fields['items'].error_messages['required'] = _(
             "Please select at least one item")
         self.fields['items'].empty_label = None

@@ -38,60 +38,50 @@ def cluster_list(request, slug=None):
     }, context_instance=RequestContext(request))
 
 
-def schedule_list(request, branch_slug=None, schedule_slug=None):
-    """display all upcoming schedules for branch."""
+def course_list(request, branch_slug=None):
+    """display all upcoming courses for branch."""
 
     branch = get_object_or_404(Branch, slug=branch_slug)
 
-    if schedule_slug is not None:
-        previewed_course = get_object_or_404(
-            Schedule,
-            slug=schedule_slug,
-            branch__slug=branch_slug
-        )
-    else:
-        previewed_course = None
-
     view_templates = branch_templates(
-        branch, 'schedule_list.html', 'base.html')
+        branch, 'course_list.html', 'base.html')
 
     return render_to_response(view_templates.template.name, {
-        'previewed_course': previewed_course,
         'templates': view_templates,
     }, context_instance=RequestContext(request))
 
 
-def schedule_view(request, branch_slug=None, schedule_slug=None):
+def course_view(request, branch_slug=None, course_slug=None):
     """
     """
-    schedule = get_object_or_404(
-        Schedule, slug=schedule_slug, branch__slug=branch_slug)
+    course = get_object_or_404(
+        Course, slug=course_slug, branch__slug=branch_slug)
 
     view_templates = branch_templates(
-        schedule.branch, 'schedule_view.html', 'base.html')
+        course.branch, 'course_view.html', 'base.html')
 
     return render_to_response(view_templates.template.name, {
-        'schedule': schedule,
+        'course': course,
         'templates': view_templates,
     }, context_instance=RequestContext(request))
 
 
-def redirect_to_schedule_list(request, branch_slug=None):
+def redirect_to_course_list(request, branch_slug=None):
     """
     """
     return HttpResponseRedirect(reverse(
-        schedule_list, kwargs={'branch_slug': branch_slug, }))
+        course_list, kwargs={'branch_slug': branch_slug, }))
 
 
-def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
+def course_register(request, branch_slug=None, course_slug=None, data=None):
     """
     """
     branch = get_object_or_404(Branch, slug=branch_slug)
-    schedule = get_object_or_404(Schedule, slug=schedule_slug)
+    course = get_object_or_404(Course, slug=course_slug)
     open_seat_percentage = round(
-        (float(schedule.registered_students()) /
-            float(schedule.max_students)) * 100)
-    seats_left = schedule.max_students - schedule.registered_students()
+        (float(course.registered_students()) /
+            float(course.max_students)) * 100)
+    seats_left = course.max_students - course.registered_students()
 
     if request.method == 'POST' and not request.is_ajax():
         data = request.POST
@@ -99,7 +89,7 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
     if data is not None or request.method == 'POST':
         student_form = StudentForm(data=data, prefix="student")
         registration_form = RegistrationForm(
-            data=data, schedule=schedule, prefix="item")
+            data=data, course=course, prefix="item")
 
         if registration_form.is_valid() and student_form.is_valid():
             # save student
@@ -120,12 +110,12 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
             # save registration
             registration = registration_form.save(commit=False)
             registration.student = student
-            registration.schedule = schedule
+            registration.course = course
 
             # try saving the registration.
             # this may fail because of the unique_together db constraint
-            # on student and schedule fields
-            # if this Student is registered to this Schedule
+            # on student and course fields
+            # if this Student is registered to this Course
             # an IntegrityError will occur
             try:
                 registration.save()
@@ -137,12 +127,12 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
                 registration.save()
 
                 # email confirmation to student
-                schedule.email_student(
-                    schedule.studentconfirmation, registration)
+                course.email_student(
+                    course.studentconfirmation, registration)
 
                 # render thank you template
                 view_templates = branch_templates(
-                    branch, 'schedule_registered.html', 'base.html')
+                    branch, 'course_registered.html', 'base.html')
                 return render_to_response(
                     view_templates.template.name, {
                         'registration': registration,
@@ -162,23 +152,23 @@ def schedule_register(request, branch_slug=None, schedule_slug=None, data=None):
 
     else:
         student_form = StudentForm(prefix="student")
-        registration_form = RegistrationForm(schedule=schedule, prefix="item")
+        registration_form = RegistrationForm(course=course, prefix="item")
 
     # return content as either json or html depending on request type
     if request.is_ajax():
         view_templates = branch_templates(
-            branch, 'schedule_register.html', 'base_ajax.html')
+            branch, 'course_register.html', 'base_ajax.html')
         popup_container_class = ''
         mimetype = "application/json"
     else:
         view_templates = branch_templates(
-            branch, 'schedule_register.html', 'base.html')
+            branch, 'course_register.html', 'base.html')
         popup_container_class = 'visible'
         mimetype = "text/html"
 
     return render_to_response(view_templates.template.name, {
         'branch': branch,
-        'schedule': schedule,
+        'course': course,
         'open_seat_percentage': open_seat_percentage,
         'seats_left': seats_left,
         'registration_form': registration_form,
@@ -204,13 +194,13 @@ def teacher_info(request, branch_slug=None):
     }, context_instance=RequestContext(request))
 
 
-def schedule_list_past(request, branch_slug=None):
+def course_list_past(request, branch_slug=None):
     """display a list of past classes for the current branch."""
 
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     view_templates = branch_templates(
-        branch, 'schedule_list_past.html', 'subpage.html')
+        branch, 'course_list_past.html', 'subpage.html')
 
     return render_to_response(view_templates.template.name, {
         'branch': branch,
@@ -218,7 +208,7 @@ def schedule_list_past(request, branch_slug=None):
     }, context_instance=RequestContext(request))
 
 
-def schedule_add(request, branch_slug=None):
+def course_add(request, branch_slug=None):
     """
     """
     branch = get_object_or_404(Branch, slug=branch_slug)
@@ -264,49 +254,49 @@ def schedule_add(request, branch_slug=None):
             teacher.branches.add(branch)
 
             # process course
-            schedule = course_form.save(commit=False)
-            schedule_data = course_form.cleaned_data
+            course = course_form.save(commit=False)
+            course_data = course_form.cleaned_data
 
             # create a slug for the course object
-            schedule_data['slug'] = unique_slugify(Schedule, schedule.title)
+            course_data['slug'] = unique_slugify(Course, course.title)
 
             # add the teacher as a foreign key
-            schedule_data['teacher'] = teacher
+            course_data['teacher'] = teacher
 
-            # schedule branch
-            schedule_data['branch'] = branch
+            # course branch
+            course_data['branch'] = branch
 
-            # schedule status
-            schedule_data['status'] = 'pending'
+            # course status
+            course_data['status'] = 'pending'
 
             # save time
             selected_time = time_form.cleaned_data['time']
-            schedule_data['start_time'] = selected_time.start_time
-            schedule_data['end_time'] = selected_time.end_time
+            course_data['start_time'] = selected_time.start_time
+            course_data['end_time'] = selected_time.end_time
 
             if selected_time.venue is not None:
-                schedule_data['venue'] = selected_time.venue
+                course_data['venue'] = selected_time.venue
             else:
                 try:
-                    schedule_data['venue'] = branch.venue_set.all()[0]
+                    course_data['venue'] = branch.venue_set.all()[0]
                 except IndexError:
                     pass
 
             # check if the submited course already exists in the system
             # we determine an existing course by its title
-            schedule = Schedule.objects.filter(title=schedule.title)
+            course = Course.objects.filter(title=course.title)
 
-            if schedule.exists():
-                schedule = schedule[0]
+            if course.exists():
+                course = course[0]
 
-                schedule.title = schedule_data['title']
-                schedule.description = schedule_data['description']
-                schedule.max_students = schedule_data['max_students']
+                course.title = course_data['title']
+                course.description = course_data['description']
+                course.max_students = course_data['max_students']
             else:
-                schedule = Schedule(**schedule_data)
+                course = Course(**course_data)
 
-            # save schedule
-            schedule.save()
+            # save course
+            course.save()
 
             # save barter items
             for barter_item_form in barter_item_formset:
@@ -317,22 +307,22 @@ def schedule_add(request, branch_slug=None):
                 # we determine an existing barter item by its title
                 barter_item, barter_item_created = BarterItem.objects.get_or_create(
                     title=barter_item_form_data['title'],
-                    schedule=schedule,
+                    course=course,
                     defaults=barter_item_form_data
                 )
                 barter_item.save()
 
             # send confirmation email to teacher
-            schedule.email_teacher(schedule.teacherconfirmation)
+            course.email_teacher(course.teacherconfirmation)
 
             # delete the selected time slot
             Time.objects.get(pk=selected_time.pk).delete()
 
             # redirect to thank you page
             return HttpResponseRedirect(reverse(
-                schedule_submitted,
+                course_submitted,
                 kwargs={
-                    'schedule_slug': schedule.slug,
+                    'course_slug': course.slug,
                     'branch_slug': branch.slug
                 })
             )
@@ -346,7 +336,7 @@ def schedule_add(request, branch_slug=None):
         time_form = TimeSelectionForm(prefix="time")
 
     view_templates = branch_templates(
-        branch, 'schedule_submit.html', 'subpage.html')
+        branch, 'course_submit.html', 'subpage.html')
 
     return render_to_response(view_templates.template.name, {
         'branch': branch,
@@ -359,10 +349,10 @@ def schedule_add(request, branch_slug=None):
 
 
 #@login_required
-def schedule_edit(request, schedule_slug=None, branch_slug=None):
+def course_edit(request, course_slug=None, branch_slug=None):
     """
     """
-    schedule = get_object_or_404(Schedule, slug=schedule_slug)
+    course = get_object_or_404(Course, slug=course_slug)
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     if request.method == 'POST':
@@ -370,9 +360,9 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
         course_form = CourseForm(
-            request.POST, prefix="course", instance=schedule)
+            request.POST, prefix="course", instance=course)
         teacher_form = TeacherForm(
-            request.POST, prefix="teacher", instance=schedule.teacher)
+            request.POST, prefix="teacher", instance=course.teacher)
 
         if barter_item_formset.is_valid() \
                 and course_form.is_valid() \
@@ -382,13 +372,13 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             teacher.slug = unique_slugify(Teacher, teacher.fullname)
             teacher.save()
 
-            # save schedule
-            schedule = course_form.save(commit=False)
-            schedule.slug = unique_slugify(Schedule, schedule.title)
-            schedule.save()
+            # save course
+            course = course_form.save(commit=False)
+            course.slug = unique_slugify(Course, course.title)
+            course.save()
 
             # remove all barter item relationships before saving them again
-            for item in schedule.barteritem_set.all():
+            for item in course.barteritem_set.all():
                 item.delete()
 
             # save updated barter items
@@ -396,21 +386,21 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
                 barter_item_form_data = barter_item_form.cleaned_data
                 barter_item, created = BarterItem.objects.get_or_create(
                     title=barter_item_form_data['title'],
-                    schedule=schedule,
+                    course=course,
                     defaults=barter_item_form_data
                 )
                 barter_item.save()
             return HttpResponseRedirect(reverse(
-                schedule_submitted,
+                course_submitted,
                 kwargs={
                     'branch_slug': branch.slug,
-                    'schedule_slug': schedule.slug
+                    'course_slug': course.slug
                 })
             )
 
     else:
         initial_item_data = []
-        for item in schedule.barteritem_set.all():
+        for item in course.barteritem_set.all():
             initial_item_data.append({'title': item.title, })
 
         BarterItemFormSet = formset_factory(
@@ -419,15 +409,15 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
             prefix="item", initial=initial_item_data)
         course_form = CourseForm(
             prefix="course",
-            instance=schedule
+            instance=course
         )
         teacher_form = TeacherForm(
             prefix="teacher",
-            instance=schedule.teacher
+            instance=course.teacher
         )
 
     view_templates = branch_templates(
-        branch, 'schedule_submit.html', 'subpage.html')
+        branch, 'course_submit.html', 'subpage.html')
 
     return render_to_response(view_templates.template.name, {
         'barter_item_formset': barter_item_formset,
@@ -437,40 +427,40 @@ def schedule_edit(request, schedule_slug=None, branch_slug=None):
     }, context_instance=RequestContext(request))
 
 
-def schedule_submitted(request, schedule_slug=None, branch_slug=None):
+def course_submitted(request, course_slug=None, branch_slug=None):
     """
-    loaded after a successful submission of the schedule form.
+    loaded after a successful submission of the course form.
     """
 
-    schedule = get_object_or_404(Schedule, slug=schedule_slug)
+    course = get_object_or_404(Course, slug=course_slug)
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     view_templates = branch_templates(
-        branch, 'schedule_submitted.html', 'subpage.html')
+        branch, 'course_submitted.html', 'subpage.html')
 
     return render_to_response(view_templates.template.name, {
-        'schedule': schedule,
+        'course': course,
         'templates': view_templates
     }, context_instance=RequestContext(request))
 
 #@login_required
-def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_slug=None):
+def course_unregister(request, branch_slug=None, course_slug=None, student_slug=None):
     """
     """
     registration = get_object_or_404(
-        Registration, student__slug=student_slug, schedule__slug=schedule_slug)
+        Registration, student__slug=student_slug, course__slug=course_slug)
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     if request.method == 'POST':
         registration.registration_status = 'unregistered'
         registration.save()
         return HttpResponseRedirect(reverse(
-            schedule_list,
+            course_list,
             kwargs={'branch_slug': branch_slug, })
         )
 
     view_templates = branch_templates(
-        branch, 'schedule_unregister.html', 'subpage.html')
+        branch, 'course_unregister.html', 'subpage.html')
 
     return render_to_response(view_templates.template.name, {
         'registration': registration,
@@ -478,19 +468,19 @@ def schedule_unregister(request, branch_slug=None, schedule_slug=None, student_s
     }, context_instance=RequestContext(request))
 
 
-def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_type='student'):
+def course_feedback(request, branch_slug=None, course_slug=None, feedback_type='student'):
     """
     """
-    # don't display form unless schedule is approved
-    schedule = get_object_or_404(
-        Schedule, slug=schedule_slug, status='approved')
+    # don't display form unless course is approved
+    course = get_object_or_404(
+        Course, slug=course_slug, status='approved')
     branch = get_object_or_404(Branch, slug=branch_slug)
 
     # don't display form unless the scheduled class took place
-    if schedule.is_past is False:
+    if course.is_past is False:
         raise Http404
 
-    if request.method == 'POST' and schedule.is_past:
+    if request.method == 'POST' and course.is_past:
         form = FeedbackForm(data=request.POST)
 
         if form.is_valid():
@@ -498,12 +488,12 @@ def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_ty
             # save feedback
             feedback = form.save(commit=False)
             feedback.feedback_type = feedback_type
-            feedback.schedule = schedule
+            feedback.course = course
             feedback.save()
 
             # redirect to thank you page
             return HttpResponseRedirect(reverse(
-                schedule_list,
+                course_list,
                 kwargs={'branch_slug': branch_slug, })
             )
 
@@ -511,7 +501,7 @@ def schedule_feedback(request, branch_slug=None, schedule_slug=None, feedback_ty
         form = FeedbackForm()
 
     view_templates = branch_templates(
-        branch, 'schedule_feedback.html', 'subpage.html')
+        branch, 'course_feedback.html', 'subpage.html')
 
     return render_to_response(view_templates.template.name, {
         'form': form,

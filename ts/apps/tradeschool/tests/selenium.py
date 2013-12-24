@@ -30,9 +30,9 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
         self.branch.save()
 
         # approve a scheduled class so it appears on the website
-        self.schedule = Schedule.objects.filter(branch=self.branch)[0]
-        self.schedule.status = 'approved'
-        self.schedule.save()
+        self.course = Course.objects.filter(branch=self.branch)[0]
+        self.course.status = 'approved'
+        self.course.save()
 
         self.timeout = 2
 
@@ -41,9 +41,9 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
             on the website expands the div.
         """
         # construct server url
-        schedule_list_url = reverse(
-            'schedule-list', kwargs={'branch_slug': self.branch.slug})
-        live_url = "%s%s" % (self.live_server_url, schedule_list_url)
+        course_list_url = reverse(
+            'course-list', kwargs={'branch_slug': self.branch.slug})
+        live_url = "%s%s" % (self.live_server_url, course_list_url)
 
         # load page
         self.selenium.get(live_url)
@@ -58,12 +58,12 @@ class RegistrationSeleniumTestCase(LiveServerTestCase):
         """ Tests that clicking on the join button sends an ajax request.
         """
         # construct server url
-        schedule_register_url = reverse('schedule-register', kwargs={
+        course_register_url = reverse('course-register', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': self.schedule.slug
+            'course_slug': self.course.slug
         })
 
-        live_url = "%s%s" % (self.live_server_url, schedule_register_url)
+        live_url = "%s%s" % (self.live_server_url, course_register_url)
 
         # load page
         self.selenium.get(live_url)

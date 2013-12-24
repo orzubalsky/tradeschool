@@ -9,7 +9,7 @@ from tradeschool.models import *
 class RegistrationTestCase(TestCase):
     """
     Tests the process of registering and unregistering
-    to a schedule using the frontend forms.
+    to a course using the frontend forms.
     """
     fixtures = ['email_initial_data.json',
                 'teacher-info.json',
@@ -27,23 +27,23 @@ class RegistrationTestCase(TestCase):
         self.branch.language = 'en'
         self.branch.save()
 
-        self.schedule = Schedule.objects.filter(branch=self.branch)[0]
+        self.course = Course.objects.filter(branch=self.branch)[0]
 
         self.valid_data = {
             'student-fullname': 'test student',
             'student-email': 'test123!@email.com',
             'student-phone': '',
         }
-        self.url = reverse('schedule-register', kwargs={
+        self.url = reverse('course-register', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': self.schedule.slug
+            'course_slug': self.course.slug
         })
 
     def compare_registration_to_data(self, registration_obj):
         """ Asserts that the objects that were created after a successful
             registration submission match the data that was used in the forms.
         """
-        self.assertEqual(registration_obj.schedule, self.schedule)
+        self.assertEqual(registration_obj.course, self.course)
         self.assertEqual(
             registration_obj.student.fullname,
             self.valid_data['student-fullname']
@@ -57,9 +57,9 @@ class RegistrationTestCase(TestCase):
             )
 
     def do_register(self):
-        """ Register to a given schedule.
+        """ Register to a given course.
         """
-        item = self.schedule.barteritem_set.all()[0]
+        item = self.course.barteritem_set.all()[0]
         self.valid_data['item-items'] = [item.pk, ]
 
         # post a valid form
@@ -70,11 +70,11 @@ class RegistrationTestCase(TestCase):
 
     def test_view_is_loading(self):
         """
-        Tests that the schedule-register view loads with the correct template.
+        Tests that the course-register view loads with the correct template.
         """
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_register.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_register.html')
 
     def test_registration_empty_form(self):
         """
@@ -96,7 +96,7 @@ class RegistrationTestCase(TestCase):
         """
         response = self.do_register()
 
-        self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_registered.html')
         #print response.context
         # check that the registration got saved correctly
         self.compare_registration_to_data(response.context['registration'])
@@ -104,15 +104,15 @@ class RegistrationTestCase(TestCase):
     def test_student_confirmation_email(self):
         """
         Tests that the StudentConfirmation is sent
-        after a schedule is approved.
+        after a course is approved.
         """
-        # register to a schedule
+        # register to a course
         self.do_register()
 
         # test that one message was sent.
         self.assertEqual(len(mail.outbox), 1)
 
-        email = self.schedule.studentconfirmation
+        email = self.course.studentconfirmation
         #self.assertEqual(email.email_status, 'sent')
 
         # verify that the subject of the message is correct.
@@ -129,7 +129,7 @@ class RegistrationTestCase(TestCase):
         response = self.do_register()
 
         # make sure the same template is used (didn't redirect)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_registered.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_registered.html')
 
         # check that the error message is in the page
         self.assertContains(
@@ -138,18 +138,18 @@ class RegistrationTestCase(TestCase):
     def test_capacity(self):
         """
         Tests that the Join button is only visible
-        if there are empty seats in the schedule.
+        if there are empty seats in the course.
         This should also test that a POST request
-        can't be made to a schedule in full capacity.
+        can't be made to a course in full capacity.
         """
         response = self.client.get(self.url)
 
-        # the schedule has not registrations,
+        # the course has not registrations,
         # so the join button should be in the HTML
         self.assertContains(response, 'value="Join"')
 
-        # add registrations to fill the schedule
-        for i in range(self.schedule.max_students):
+        # add registrations to fill the course
+        for i in range(self.course.max_students):
             # first create a student to register to the scheduled class
             student_fullname = "student-%i" % i
             student_email = "%i@email.com" % i
@@ -163,7 +163,7 @@ class RegistrationTestCase(TestCase):
 
             # then create the registration itself
             registration = Registration(
-                schedule=self.schedule,
+                course=self.course,
                 student=student
             )
             registration.save()
@@ -171,13 +171,13 @@ class RegistrationTestCase(TestCase):
         # visit the page again
         response = self.client.get(self.url)
 
-        # the schedule should be full,
+        # the course should be full,
         # so the join button should NOT be in the HTML
         self.assertNotContains(response, 'value="Join"')
 
     def test_unregistration(self):
         """
-        Tests that the schedule-unregister view loads with the
+        Tests that the course-unregister view loads with the
         correct template, that unregistering changes the status in
         the Registration object, and that it is not possible to
         unregister more than once.
@@ -187,11 +187,11 @@ class RegistrationTestCase(TestCase):
 
         registration = response.context['registration']
 
-        # construct unregister url from branch, schedule,
+        # construct unregister url from branch, course,
         # and saved registration
-        url = reverse('schedule-unregister', kwargs={
+        url = reverse('course-unregister', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': self.schedule.slug,
+            'course_slug': self.course.slug,
             'student_slug': registration.student.slug
         })
 
@@ -200,7 +200,7 @@ class RegistrationTestCase(TestCase):
 
         # check that the correct template is loading
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_register.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_register.html')
 
         # unregister
         response = self.client.post(url, data={}, follow=True)
@@ -211,7 +211,7 @@ class RegistrationTestCase(TestCase):
             response.redirect_chain[0][0],
             response.redirect_chain[0][1]
         )
-        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_list.html')
 
         # get registration again after it was saved in the view function
         registration = Registration.objects.get(pk=registration.pk)

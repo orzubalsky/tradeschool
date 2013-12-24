@@ -4,19 +4,19 @@ from tradeschool.views import *
 
 
 @dajaxice_register(method='POST')
-def schedule_load_form(request, branch_slug=None, schedule_slug=None):
+def course_load_form(request, branch_slug=None, course_slug=None):
     """
     """
-    return schedule_register(request, branch_slug, schedule_slug)
+    return course_register(request, branch_slug, course_slug)
 
 
 @dajaxice_register(method='POST')
-def schedule_submit_form(request, data, branch_slug=None, schedule_slug=None):
+def course_submit_form(request, data, branch_slug=None, course_slug=None):
     """
     """
-    return schedule_register(
+    return course_register(
         request,
         branch_slug,
-        schedule_slug,
+        course_slug,
         deserialize_form(data)
     )

@@ -5,15 +5,15 @@
 {% block popup_container_class %}{{ popup_container_class }}{% endblock popup_container_class %}
 
 {% block popup_content %}
-<div class="type{{ schedule.category }} ">
+<div class="type{{ course.category }} ">
     <div id="classPopup" style="background-color:#567567;">
 
         {% block registration_header %}
         <div id="popupHeader">
             {% blocktrans %}I would like to join{% endblocktrans %}<br />
-            <h3>{{ schedule.title }}</h3>
-            {{ schedule.start_time|smartdate:"g:ia"|localize }} to {{ schedule.end_time|smartdate:"g:ia"|localize }}<br />
-            at <strong>{{ schedule.venue.address_1 }}, {{ schedule.venue.city }}</strong><br />
+            <h3>{{ course.title }}</h3>
+            {{ course.start_time|smartdate:"g:ia"|localize }} to {{ course.end_time|smartdate:"g:ia"|localize }}<br />
+            at <strong>{{ course.venue.address_1 }}, {{ course.venue.city }}</strong><br />
         </div>
         {% endblock registration_header %}
 
@@ -31,7 +31,7 @@
             {% endblock registration_body_seats %}
 
             {% block registration_body_form %}
-            <form id="registerToClass" class="{{ schedule.slug }}" method="post" action="{% url 'schedule-register' branch_slug=branch.slug schedule_slug=schedule.slug %}">{% csrf_token %}
+            <form id="registerToClass" class="{{ course.slug }}" method="post" action="{% url 'course-register' branch_slug=branch.slug course_slug=course.slug %}">{% csrf_token %}
                 {% if student_form.errors or registration_form.errors %}
                 <ul class="errors">                    
                 {% for field in student_form %}
@@ -56,7 +56,7 @@
                 {{ student_form.phone.label }}<br />
                 {{ student_form.phone }}<br />
                 
-                {% if schedule.registered_students < schedule.max_students %}                
+                {% if course.registered_students < course.max_students %}                
                 <input type="submit" class="join" value="Join" />
                 {% endif %}
             </form>

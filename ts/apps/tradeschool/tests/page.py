@@ -106,7 +106,7 @@ class PageTestCase(TestCase):
 
         # verify the page is not on the navigation menu
         response = self.client.get(reverse(
-            'schedule-list',
+            'course-list',
             kwargs={'branch_slug': self.branch.slug, })
         )
         self.assertNotContains(response, self.page.url)
@@ -120,7 +120,7 @@ class PageTestCase(TestCase):
         self.page.save()
 
         response = self.client.get(reverse(
-            'schedule-list',
+            'course-list',
             kwargs={'branch_slug': self.branch.slug, })
         )
         self.assertContains(response, self.page.url)

@@ -9,8 +9,8 @@ from datetime import *
 from tradeschool.models import *
 
 
-class ScheduleTestCase(TestCase):
-    """ Tests the process of submitting a schedule using the frontend form.
+class CourseTestCase(TestCase):
+    """ Tests the process of submitting a course using the frontend form.
     """
     fixtures = ['email_initial_data.json',
                 'teacher-info.json',
@@ -43,7 +43,7 @@ class ScheduleTestCase(TestCase):
         self.admin.save()
 
         self.url = reverse(
-            'schedule-add', kwargs={'branch_slug': self.branch.slug})
+            'course-add', kwargs={'branch_slug': self.branch.slug})
 
         self.time = Time.objects.filter(venue__isnull=True)[0]
 
@@ -86,61 +86,61 @@ class ScheduleTestCase(TestCase):
             + self.time_data.items()
         )
 
-    def compare_schedule_to_data(self, schedule_obj):
+    def compare_course_to_data(self, course_obj):
         """
         Asserts that the objects that were created after
-        a successful schedule submission match
+        a successful course submission match
         the data that was used in the forms.
         """
         self.assertEqual(
-            schedule_obj.title,
+            course_obj.title,
             self.valid_data['course-title']
         )
         self.assertEqual(
-            schedule_obj.description,
+            course_obj.description,
             self.valid_data['course-description']
         )
         self.assertEqual(
-            schedule_obj.max_students,
+            course_obj.max_students,
             int(self.valid_data['course-max_students'])
         )
         self.assertEqual(
-            schedule_obj.start_time,
+            course_obj.start_time,
             self.time.start_time
         )
         self.assertEqual(
-            schedule_obj.end_time,
+            course_obj.end_time,
             self.time.end_time
         )
         if self.time.venue is None:
             self.assertEqual(
-                schedule_obj.venue,
+                course_obj.venue,
                 self.branch.venue_set.all()[0]
             )
         else:
             self.assertEqual(
-                schedule_obj.venue,
+                course_obj.venue,
                 self.time.venue
             )
         self.assertEqual(
-            schedule_obj.teacher.fullname,
+            course_obj.teacher.fullname,
             self.valid_data['teacher-fullname']
         )
         self.assertEqual(
-            schedule_obj.teacher.bio,
+            course_obj.teacher.bio,
             self.valid_data['teacher-bio']
         )
         self.assertEqual(
-            schedule_obj.teacher.email,
+            course_obj.teacher.email,
             self.valid_data['teacher-email']
         )
         self.assertEqual(
-            schedule_obj.teacher.phone,
+            course_obj.teacher.phone,
             self.valid_data['teacher-phone']
         )
-        self.assertTrue(schedule_obj.slug.__len__() > 0)
-        self.assertTrue(schedule_obj.teacher.slug.__len__() > 0)
-        for item in schedule_obj.barteritem_set.all():
+        self.assertTrue(course_obj.slug.__len__() > 0)
+        self.assertTrue(course_obj.teacher.slug.__len__() > 0)
+        for item in course_obj.barteritem_set.all():
             self.assertTrue(item.title in self.valid_data.values())
 
     def verify_timezone(self, saved_datetime_obj, saved_time):
@@ -170,7 +170,7 @@ class ScheduleTestCase(TestCase):
     def test_timeslot_creation(self):
         """ Tests that time slots can be created from the admin backend,
             that they are stored and displayed with the branch's timezone,
-            and that they are displayed in the schedule-submit view.
+            and that they are displayed in the course-submit view.
         """
         # login to admin
         self.client.login(username=self.admin.username, password=self.password)
@@ -206,8 +206,8 @@ class ScheduleTestCase(TestCase):
         self.verify_timezone(start_time, time.start_time)
         self.verify_timezone(end_time, time.end_time)
 
-        # verify that the timeslot appears on the schedule-submit form
-        url = reverse('schedule-add', kwargs={'branch_slug': self.branch.slug})
+        # verify that the timeslot appears on the course-submit form
+        url = reverse('course-add', kwargs={'branch_slug': self.branch.slug})
         response = self.client.get(url)
         self.assertContains(response, time.pk)
 
@@ -350,13 +350,13 @@ class ScheduleTestCase(TestCase):
 
     def test_view_loading(self):
         """
-        Tests that the schedule-add view loads properly.
+        Tests that the course-add view loads properly.
         If there's a branch-specific template file,
         make sure it's loaded as well.
         """
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_add.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_add.html')
 
     def test_empty_submission(self):
         """
@@ -369,12 +369,12 @@ class ScheduleTestCase(TestCase):
         self.assertContains(response, 'Please', count=8)
 
         # the same template should be rendered
-        self.assertTemplateUsed(self.branch.slug + '/schedule_submit.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_submit.html')
 
     def is_successful_submission(self, data):
-        """ Tests that the submission of a schedule with valid data works.
+        """ Tests that the submission of a course with valid data works.
         """
-        # post the data to the schedule submission form
+        # post the data to the course submission form
         response = self.client.post(self.url, data=data, follow=True)
 
         self.assertRedirects(
@@ -382,25 +382,25 @@ class ScheduleTestCase(TestCase):
             response.redirect_chain[0][0],
             response.redirect_chain[0][1]
         )
-        self.assertTemplateUsed(self.branch.slug + '/schedule_submitted.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_submitted.html')
 
-        # check that the schedule got saved correctly
-        self.compare_schedule_to_data(response.context['schedule'])
+        # check that the course got saved correctly
+        self.compare_course_to_data(response.context['course'])
 
         return response
 
-    def test_schedule_submission_new_teacher_new_course(self):
-        """ Tests the submission of a schedule of a new class by a new teacher.
+    def test_course_submission_new_teacher_new_course(self):
+        """ Tests the submission of a course of a new class by a new teacher.
         """
         # test that the form submission worked
         response = self.is_successful_submission(self.valid_data)
 
-        # check that the schedule got saved correctly
-        self.compare_schedule_to_data(response.context['schedule'])
+        # check that the course got saved correctly
+        self.compare_course_to_data(response.context['course'])
 
-    def test_schedule_submission_existing_teacher_new_course(self):
+    def test_course_submission_existing_teacher_new_course(self):
         """
-        Tests the submission of a schedule of a new class
+        Tests the submission of a course of a new class
         by an existing teacher.
         """
         # get a Person who teaches in the branch
@@ -408,18 +408,18 @@ class ScheduleTestCase(TestCase):
 
         # use the existing teacher's email for the form submission
         # when the teacher-email matches an existing objects,
-        # the schedule should be saved to the existing teacher object
+        # the course should be saved to the existing teacher object
         self.valid_data['teacher-email'] = existing_teacher.email
 
         # test that the form submission worked
         response = self.is_successful_submission(self.valid_data)
 
-        # check that the schedule got saved correctly
-        self.compare_schedule_to_data(response.context['schedule'])
+        # check that the course got saved correctly
+        self.compare_course_to_data(response.context['course'])
 
-    # def test_schedule_submission_existing_teacher_existing_course(self):
+    # def test_course_submission_existing_teacher_existing_course(self):
     #     """
-    #     Tests the submission of a schedule of an existing class
+    #     Tests the submission of a course of an existing class
     #     by an existing teacher.
     #     """
     #     # get a Person who teaches in the branch
@@ -427,22 +427,22 @@ class ScheduleTestCase(TestCase):
 
     #     # use the existing teacher's email for the form submission
     #     # when the teacher-email matches an existing Person object,
-    #     # the schedule should be saved to the existing Person object
+    #     # the course should be saved to the existing Person object
     #     self.valid_data['teacher-email'] = existing_teacher.email
 
     #     # get an existing course in the branch
-    #     existing_course = Schedule.objects.filter(branch=self.branch)[0]
+    #     existing_course = Course.objects.filter(branch=self.branch)[0]
 
     #     # use the existing course's title for the form submission
     #     # when the course-title matches an existing Course object,
-    #     # the schedule should be saved to the existing Course object
+    #     # the course should be saved to the existing Course object
     #     self.valid_data['course-title'] = existing_course.title
 
     #     # test that the form submission worked
     #     response = self.is_successful_submission(self.valid_data)
 
-    #     # check that the schedule got saved correctly
-    #     self.compare_schedule_to_data(response.context['schedule'])
+    #     # check that the course got saved correctly
+    #     self.compare_course_to_data(response.context['course'])
 
     def test_venue_is_saved(self):
         """
@@ -456,8 +456,8 @@ class ScheduleTestCase(TestCase):
         # test that the form submission worked
         response = self.is_successful_submission(self.valid_data)
 
-        # check that the schedule got saved correctly
-        self.compare_schedule_to_data(response.context['schedule'])
+        # check that the course got saved correctly
+        self.compare_course_to_data(response.context['course'])
 
     def test_time_is_saved(self):
         """ Tests that the selected time in the form is saved in
@@ -466,70 +466,70 @@ class ScheduleTestCase(TestCase):
         # get Time object
         time = Time.objects.get(pk=self.time_data['time-time'])
 
-        # post the data to the schedule submission form
+        # post the data to the course submission form
         response = self.client.post(
             self.url, data=self.valid_data, follow=True)
 
-        # the saved schedule
-        schedule = Schedule.objects.latest('created')
+        # the saved course
+        course = Course.objects.latest('created')
 
-        # verify the Schedule times match the Time's times
-        self.assertEqual(schedule.start_time, time.start_time)
-        self.assertEqual(schedule.end_time, time.end_time)
+        # verify the Course times match the Time's times
+        self.assertEqual(course.start_time, time.start_time)
+        self.assertEqual(course.end_time, time.end_time)
 
     def test_time_deleted_after_successful_submission(self):
         """
         Tests that the selected Time object gets deleted
-        after a schedule has been submitted successfully.
+        after a course has been submitted successfully.
         """
         # get Time object
         time = Time.objects.get(pk=self.time_data['time-time'])
 
-        # post the data to the schedule submission form
+        # post the data to the course submission form
         response = self.client.post(
             self.url, data=self.valid_data, follow=True)
 
         # check that the time object got deleted
         self.assertFalse(Time.objects.filter(pk=time.pk).exists())
 
-    def test_schedule_emails_are_generated(self):
+    def test_course_emails_are_generated(self):
         """
-        Tests that a ScheduleEmailContainer is created
-        after a successful schedule submission,
+        Tests that a CourseEmailContainer is created
+        after a successful course submission,
         and that 7 emails are copied to it from the BranchEmailContainer.
         """
-        # submit a schedule
+        # submit a course
         response = self.is_successful_submission(self.valid_data)
 
-        schedule = response.context['schedule']
+        course = response.context['course']
 
-        # check that the ScheduleEmailContainer has all 7 Email objects
-        self.assertEqual(schedule.emails.__len__(), 7)
+        # check that the CourseEmailContainer has all 7 Email objects
+        self.assertEqual(course.emails.__len__(), 7)
 
-        # iterate over the emails in the schedule's ScheduleEmailContainer
-        for email_name, schedule_email_obj in schedule.emails.items():
+        # iterate over the emails in the course's CourseEmailContainer
+        for email_name, course_email_obj in course.emails.items():
             # find the same email type in the BranchEmailContainer,
-            # where the schedule emails were copied from
-            default_email = getattr(schedule.branch, email_name)
+            # where the course emails were copied from
+            default_email = getattr(course.branch, email_name)
 
             # verify that the email was copied correctly
-            self.assertEqual(schedule_email_obj.subject, default_email.subject)
-            self.assertEqual(schedule_email_obj.content, default_email.content)
+            self.assertEqual(course_email_obj.subject, default_email.subject)
+            self.assertEqual(course_email_obj.content, default_email.content)
 
     def test_teacher_confirmation_email(self):
         """ Tests that the TeacherConfirmation is sent after
             a successful submission.
         """
-        # submit a schedule
+        # submit a course
         response = self.is_successful_submission(self.valid_data)
 
-        schedule = response.context['schedule']
+        course = response.context['course']
 
         # test that one message was sent.
         self.assertEqual(len(mail.outbox), 1)
 
         # verify the email status was updated
-        email = schedule.teacherconfirmation
+        email = course.teacherconfirmation
         self.assertEqual(email.email_status, 'sent')
 
         # verify that the subject of the message is correct.
@@ -538,94 +538,94 @@ class ScheduleTestCase(TestCase):
     def test_teacher_approval_email(self):
         """
         Tests that the TeacherClassApproval is sent
-        after a schedule is approved.
+        after a course is approved.
         """
-        # submit a schedule
+        # submit a course
         response = self.is_successful_submission(self.valid_data)
 
-        schedule = response.context['schedule']
+        course = response.context['course']
 
         # empty the test outbox
         mail.outbox = []
 
-        # approve the schedule
-        schedule.status = 'approved'
-        schedule.save()
+        # approve the course
+        course.status = 'approved'
+        course.save()
 
         # test that one message was sent.
         self.assertEqual(len(mail.outbox), 1)
 
         # verify the email status was updated
-        email = schedule.teacherclassapproval
+        email = course.teacherclassapproval
         self.assertEqual(email.email_status, 'sent')
 
         # verify that the subject of the message is correct.
         self.assertEqual(mail.outbox[0].subject, email.subject)
 
-    def test_edit_schedule_template(self):
+    def test_edit_course_template(self):
         """
-        Test that the schedule-edit view doesn't load unless
-        a schedule_slug for an existing Schedule object is provided.
+        Test that the course-edit view doesn't load unless
+        a course_slug for an existing Course object is provided.
         """
-        # try to load the schedule-edit view without a schedule slug
-        response = self.client.get(reverse('schedule-edit', kwargs={
+        # try to load the course-edit view without a course slug
+        response = self.client.get(reverse('course-edit', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': None
+            'course_slug': None
         }))
 
         # this should lead to a 404 page
         self.assertEqual(response.status_code, 404)
 
-        # post a valid schedule data to save a new schedule
+        # post a valid course data to save a new course
         response = self.client.post(
             self.url, data=self.valid_data, follow=True)
 
-        # try loading the schedule-edit view for the saved schedule
-        response = self.client.get(reverse('schedule-edit', kwargs={
+        # try loading the course-edit view for the saved course
+        response = self.client.get(reverse('course-edit', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': response.context['schedule'].slug
+            'course_slug': response.context['course'].slug
         }))
 
         # check that the correct template was loaded sucessfully
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_edit.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_edit.html')
 
-    def test_editing_schedule_with_empty_data(self):
-        """ Test that editting an existing Schedule and submitting an empty
+    def test_editing_course_with_empty_data(self):
+        """ Test that editting an existing Course and submitting an empty
             form results in the expected number of errors.
         """
-        # post a valid schedule data to save a new schedule
+        # post a valid course data to save a new course
         response = self.client.post(
             self.url, data=self.valid_data, follow=True)
 
-        schedule = response.context['schedule']
-        schedule_edit_url = reverse('schedule-edit', kwargs={
+        course = response.context['course']
+        course_edit_url = reverse('course-edit', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': schedule.slug
+            'course_slug': course.slug
         })
 
         # post empty data to the form
-        response = self.client.post(schedule_edit_url, data=self.empty_data)
+        response = self.client.post(course_edit_url, data=self.empty_data)
 
         # an empty form should return 7 errors for the required fields
-        # there's one less error when editing a schedule sine the time
+        # there's one less error when editing a course sine the time
         # is already saved and can't be edited in the form
         self.assertContains(response, 'Please', count=7)
 
-    def test_editing_schedule_with_valid_data(self):
-        """ Test that editting an existing Schedule and submitting edited
+    def test_editing_course_with_valid_data(self):
+        """ Test that editting an existing Course and submitting edited
             fields results in the new data being saved correctly.
             This includes any new BarterItem objects that may have been added
             to the form.
         """
-        # post a valid schedule data to save a new schedule
+        # post a valid course data to save a new course
         response = self.client.post(
             self.url, data=self.valid_data, follow=True)
 
-        schedule = response.context['schedule']
-        schedule_edit_url = reverse('schedule-edit', kwargs={
+        course = response.context['course']
+        course_edit_url = reverse('course-edit', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': schedule.slug
+            'course_slug': course.slug
         })
 
         # make some changes to the data
@@ -653,85 +653,85 @@ class ScheduleTestCase(TestCase):
 
         # post edited data to the form
         response = self.client.post(
-            schedule_edit_url, data=self.valid_data, follow=True)
+            course_edit_url, data=self.valid_data, follow=True)
 
-        # check that the schedule got saved correctly
-        self.compare_schedule_to_data(response.context['schedule'])
+        # check that the course got saved correctly
+        self.compare_course_to_data(response.context['course'])
 
-    def test_schedule_status(self):
+    def test_course_status(self):
         """
-        Tests that the only approved schedules appear on the schedule-list view
+        Tests that the only approved courses appear on the course-list view
         """
-        # submit a schedule
+        # submit a course
         response = self.is_successful_submission(self.valid_data)
 
-        schedule = response.context['schedule']
+        course = response.context['course']
         url = reverse(
-            'schedule-list', kwargs={'branch_slug': self.branch.slug, })
+            'course-list', kwargs={'branch_slug': self.branch.slug, })
 
-        # go to schedule-list view
+        # go to course-list view
         response = self.client.get(url)
 
-        # verify that the schedule is not on the page
-        self.assertNotContains(response, schedule.title)
+        # verify that the course is not on the page
+        self.assertNotContains(response, course.title)
 
-        # approve the schedule
-        schedule.status = 'approved'
-        schedule.save()
+        # approve the course
+        course.status = 'approved'
+        course.save()
 
         # reload the page
         response = self.client.get(url)
 
-        # verify that the schedule appears on the page
-        self.assertContains(response, schedule.title)
+        # verify that the course appears on the page
+        self.assertContains(response, course.title)
 
-    def test_schedule_past_page(self):
-        """ Tests that the schedule-past page loads and displays
+    def test_course_past_page(self):
+        """ Tests that the course-past page loads and displays
             only approved scheduled classes that took place in the branch.
         """
-        # submit a schedule
+        # submit a course
         response = self.is_successful_submission(self.valid_data)
-        schedule = response.context['schedule']
-        branch = schedule.branch
+        course = response.context['course']
+        branch = course.branch
 
-        # there should be no past schedules at this point,
+        # there should be no past courses at this point,
         # so the link to past scheduled should not appear
-        # on the branch's schedule-list view
-        schedule_list_url = reverse(
-            'schedule-list', kwargs={'branch_slug': branch.slug})
-        response = self.client.get(schedule_list_url)
+        # on the branch's course-list view
+        course_list_url = reverse(
+            'course-list', kwargs={'branch_slug': branch.slug})
+        response = self.client.get(course_list_url)
         #self.assertNotContains(response, 'Past') NOTE: not implemented yet -Or
 
-        # past schedules url
+        # past courses url
         url = reverse(
-            'schedule-list-past', kwargs={'branch_slug': branch.slug})
+            'course-list-past', kwargs={'branch_slug': branch.slug})
 
         # verify page loads with the branch's template
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_list_past.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_list_past.html')
 
         # verify the scheduled class is not in there
-        self.assertNotContains(response, schedule.title)
+        self.assertNotContains(response, course.title)
 
-        # move schedule to a past time
+        # move course to a past time
         now = datetime.utcnow().replace(tzinfo=utc)
-        schedule.start_time = now - timedelta(hours=47)
-        schedule.end_time = now - timedelta(hours=48)
-        schedule.status = 'pending'
-        schedule.save()
+        course.start_time = now - timedelta(hours=47)
+        course.end_time = now - timedelta(hours=48)
+        course.status = 'pending'
+        course.save()
 
-        # schedule should still not appear, since it's approved
+        # course should still not appear, since it's approved
         response = self.client.get(url)
-        self.assertNotContains(response, schedule.title)
+        self.assertNotContains(response, course.title)
 
         # change the scheduled class's status to approved
-        schedule.status = 'approved'
-        schedule.save()
+        course.status = 'approved'
+        course.save()
 
         # verify that the scheduled class now appears
         response = self.client.get(url)
-        self.assertContains(response, schedule.title)
+        self.assertContains(response, course.title)
 
     def tearDown(self):
         """ Delete branch files in case something went wrong

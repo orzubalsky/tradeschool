@@ -3,7 +3,7 @@
     "pk": 1, 
     "model": "tradeschool.studentconfirmation", 
     "fields": {
-        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ schedule.title }}\" on: {{ schedule.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ course.title }}\" on: {{ course.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
         "email_status": "not_sent", 
         "subject": "Welcome to Trade School!"
     }
@@ -14,7 +14,7 @@
     "fields": {
         "days_delta": -1, 
         "send_on": null, 
-        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ schedule.title }}\" with {{ teacher.fullname }} from {{ schedule.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ course.title }}\" with {{ teacher.fullname }} from {{ course.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
         "send_time": "10:00:00", 
         "email_status": "not_sent", 
         "subject": "a reminder about your class tomorrow"
@@ -26,7 +26,7 @@
     "fields": {
         "days_delta": -1, 
         "send_on": null, 
-        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ schedule.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
         "send_time": "10:00:00", 
         "email_status": "not_sent", 
         "subject": "how was your class?"
@@ -36,7 +36,7 @@
     "pk": 1, 
     "model": "tradeschool.teacherconfirmation", 
     "fields": {
-        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ schedule.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the schedule.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the course.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
         "email_status": "not_sent", 
         "subject": "thanks for submitting a class!"
     }
@@ -45,7 +45,7 @@
     "pk": 1, 
     "model": "tradeschool.teacherclassapproval", 
     "fields": {
-        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ schedule.title }}\" has been approved and is scheduled for {{ schedule.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ course.title }}\" has been approved and is scheduled for {{ course.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
         "email_status": "not_sent", 
         "subject": "your class has been approved!"
     }
@@ -56,7 +56,7 @@
     "fields": {
         "days_delta": -1, 
         "send_on": null, 
-        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ schedule.title }}\" is scheduled for {{ schedule.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ course.title }}\" is scheduled for {{ course.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
         "send_time": "10:00:00", 
         "email_status": "not_sent", 
         "subject": "We're excited to see you tomorrow!"
@@ -68,7 +68,7 @@
     "fields": {
         "days_delta": -1, 
         "send_on": null, 
-        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ schedule.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
         "send_time": "10:00:00", 
         "email_status": "not_sent", 
         "subject": "how did it go?"

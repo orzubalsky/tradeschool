@@ -1,4 +1,4 @@
-{% extends 'branches_base/schedule_item.html' %}
+{% extends 'branches_base/course_item.html' %}
 
 {% load humanize smartdate i18n l10n %}
 
@@ -7,7 +7,7 @@
     
     It extends a parent template that's from the branches_base directory, 
     the parent template is located here:
-        https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/schedule_item.html
+        https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_item.html
     
     In order to make edits to the html of your TS branch file, 
         1.  Look at the code of the parent template (URL above).
@@ -23,45 +23,45 @@
     It's probably best to just change / add to the html itself.
 #}
 
-{% block schedule_item %}
-<div id="{{ schedule.slug }}" class="aClass venue{{ schedule.venue.title }}">
+{% block course_item %}
+<div id="{{ course.slug }}" class="aClass venue{{ course.venue.title }}">
     
-{% if schedule.registered_students >= schedule.max_students %}
-    {% block schedule_tag %}
+{% if course.registered_students >= course.max_students %}
+    {% block course_tag %}
     {{ block.super }}
-    {% endblock schedule_tag %}
+    {% endblock course_tag %}
 {% endif %}
 
-    <div class="classInfo" style="background-color:{{ schedule.color }}">
-        {% block schedule_header %}
+    <div class="classInfo" style="background-color:{{ course.color }}">
+        {% block course_header %}
         {{ block.super }}
-        {% endblock schedule_header %}
+        {% endblock course_header %}
         
-        {% block schedule_body %}
-        <div class="classBody" style="display:block;">
+        {% block course_body %}
+        <div class="classBody">
             
-            {% block schedule_venue %}
+            {% block course_venue %}
             {{ block.super }}
-            {% endblock schedule_venue %}            
+            {% endblock course_venue %}            
             
-            {% block schedule_description %}
+            {% block course_description %}
             {{ block.super }}
-            {% endblock schedule_description %}            
+            {% endblock course_description %}            
             
-            {% block schedule_items %}
+            {% block course_items %}
             {{ block.super }}
-            {% endblock schedule_items %}            
+            {% endblock course_items %}            
             
-            {% block schedule_teacher %}
+            {% block course_teacher %}
             {{ block.super }}
-            {% endblock schedule_teacher %}            
+            {% endblock course_teacher %}            
             
-            {% block schedule_join_button %}
+            {% block course_join_button %}
             {{ block.super }}
-            {% endblock schedule_join_button %}            
+            {% endblock course_join_button %}            
             
         </div>
-        {% endblock schedule_body %}
+        {% endblock course_body %}
     </div>
 </div>
-{% endblock schedule_item %}
+{% endblock course_item %}

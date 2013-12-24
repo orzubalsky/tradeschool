@@ -94,11 +94,11 @@ class Email(Model):
     """
     Abstract model for all emails in the TS system.
 
-    site-wide emails, TS branch emails, and schedule-specific emails
+    site-wide emails, TS branch emails, and course-specific emails
     all extend this model.
 
     The email's body can include variables that will then be populated
-    with relevant data from the Schedule and/or Person that the email
+    with relevant data from the Course and/or Person that the email
     is refering to.
     These variables are populated using Django's template system.
     The content field is used as a template that's created dynamically.
@@ -108,13 +108,13 @@ class Email(Model):
         content: A block of text representing the body of the email.
             Can include variables formatted in the django template language.
             For example:
-            {{ schedule.title }}: taught by {{ schedule.teacher.fullname }}
+            {{ course.title }}: taught by {{ course.teacher.fullname }}
         email_status: A string indicating whether the email should be sent
             or not, and whether it was sent already.
         branch: A one-to-one relationship to a Branch. Used if the email is
             used as a template for all of one branch's emails.
-        schedule: A one-to-one relationship to a Schedule. Used if the email
-            is used for a Schedule.
+        course: A one-to-one relationship to a Course. Used if the email
+            is used for a Course.
     """
     class Meta:
         abstract = True
@@ -159,13 +159,13 @@ class Email(Model):
         null=True,
         blank=True
     )
-    schedule = OneToOneField(
-        'Schedule',
+    course = OneToOneField(
+        'Course',
         null=True,
         blank=True
     )
 
-    def template_context(self, schedule_obj, registration=None):
+    def template_context(self, course_obj, registration=None):
         """
         Prepares variables and generates a Context object for an Email.
 
@@ -174,7 +174,7 @@ class Email(Model):
         the variables are simplified and expressed explicitly.
 
         For example:
-        Instead of {{ schedule.teacher }}, a {{ teacher }} variable
+        Instead of {{ course.teacher }}, a {{ teacher }} variable
         will also be available
 
         In addition, variables are created for the various URLs that could be
@@ -182,7 +182,7 @@ class Email(Model):
         unregistering, editing a class, etc.
 
         Args:
-            schedule_obj: A Schedule object that is used to fill in
+            course_obj: A Course object that is used to fill in
                 the variables in the email's body.
             registration: A Registration object that is used to
                 fill in the variables in the email body in case it is
@@ -192,22 +192,22 @@ class Email(Model):
             A template Context object.
         """
         # simplify variables
-        teacher = schedule_obj.teacher
-        branch = schedule_obj.branch
-        venue = schedule_obj.venue
+        teacher = course_obj.teacher
+        branch = course_obj.branch
+        venue = course_obj.venue
 
         # create a string with the registered students for a scheduled class
-        student_list = schedule_obj.student_list_string()
+        student_list = course_obj.student_list_string()
 
         # create a Context with all of the above variables
         c = Context({
-            'schedule': schedule_obj,
+            'course': course_obj,
             'branch': branch,
             'teacher': teacher,
             'venue': venue,
-            'student_feedback_url': schedule_obj.student_feedback_url,
-            'teacher_feedback_url': schedule_obj.teacher_feedback_url,
-            'class_edit_url': schedule_obj.schedule_edit_url,
+            'student_feedback_url': course_obj.student_feedback_url,
+            'teacher_feedback_url': course_obj.teacher_feedback_url,
+            'class_edit_url': course_obj.course_edit_url,
             'homepage_url': branch.branch_url,
             'student_list': student_list
         })
@@ -229,16 +229,16 @@ class Email(Model):
 
         return c
 
-    def preview(self, schedule_obj, registration=None):
+    def preview(self, course_obj, registration=None):
         """
         Previews an email content.
 
         Populates a generic Template object with the email's content,
-        Then renders it using the Schedule and/or Registration objects
+        Then renders it using the Course and/or Registration objects
         that are passed to the function.
 
         Args:
-            schedule_obj: A Schedule instance is used to fill in
+            course_obj: A Course instance is used to fill in
                 the email's data.
             registration: A Registration instance is used to fill in
                 data for emails written to students.
@@ -249,33 +249,33 @@ class Email(Model):
         # instantiate a temlate with the email's content
         template = Template(self.content)
 
-        # create a context using data from the schedule
+        # create a context using data from the course
         # and/or registration objects
-        context = self.template_context(schedule_obj, registration)
+        context = self.template_context(course_obj, registration)
 
         # render the template with the created context
         body = template.render(context)
 
         return body
 
-    def send(self, schedule_obj, recipient, registration=None):
+    def send(self, course_obj, recipient, registration=None):
         """
         Sends a rendered email and updates its status.
 
         Args:
-            schedule_obj: A Schedule object that is used to fill in
+            course_obj: A Course object that is used to fill in
                 the variables in the email's body.
             recipient: an email address to send the email to.
             registration: A Registration object that is used to
                 fill in the variables in the email body in case it is
                 sent to a registered student.
         """
-        # render the email's content using the the data from the schedule
+        # render the email's content using the the data from the course
         # and/or registration objects
-        body = self.preview(schedule_obj, registration)
+        body = self.preview(course_obj, registration)
 
         # the branch's email is used as the "from" address field
-        branch = schedule_obj.branch
+        branch = course_obj.branch
 
         # send the email
         send_mail(self.subject, body, branch.email, recipient)
@@ -302,7 +302,7 @@ class TimedEmail(Email):
             a template for other emails.
         days_delta: an integar that is used to calculate the email's send_on
             property. This is the number of days that will be subtracted from
-            the schedule's start_time attribute.
+            the course's start_time attribute.
         send_time: A time indicating the time of day in which
             the email should be sent.
     """
@@ -348,7 +348,7 @@ class TimedEmail(Email):
 
         Args:
             event_datetime: a datetime object that will be used
-                for the calculation. Most likely a Schedule.start_time
+                for the calculation. Most likely a Course.start_time
         """
         # construct a datetime object after adding / subtracting the days delta
         send_datetime = event_datetime + timedelta(days=self.days_delta)
@@ -436,7 +436,7 @@ class StudentFeedback(TimedEmail):
 
 class TeacherConfirmation(Email):
     """
-    An email that is sent when a teacher submits a class schedule.
+    An email that is sent when a teacher submits a class course.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -449,7 +449,7 @@ class TeacherConfirmation(Email):
 
 class TeacherClassApproval(Email):
     """
-    An email that is sent when an admin approves a teacher submitted schedule.
+    An email that is sent when an admin approves a teacher submitted course.
     """
     pass
 
@@ -680,7 +680,7 @@ class BranchEmailContainerManager(Manager):
     """
     An EmailContainer for a Branch.
 
-    The related Email objects are copied every time a Schedule in saved
+    The related Email objects are copied every time a Course in saved
     in relation to the Branch.
 
     These emails never get sent, they're used as templates.
@@ -800,7 +800,7 @@ class Branch(Location):
         email: A string that's used to populate the "from" field in emails
             that are sent by the Branch.
         timezone: A pytz timezone value that's used to calculate the times of
-            schedules, open time slots, created, and updated.
+            courses, open time slots, created, and updated.
         language: A language code that's used when translating the branch's
             web pages. Read by the django translation framework.
         organizers: M2M relationship with Person objects who are also
@@ -985,7 +985,7 @@ class Branch(Location):
         Url for the branch's website
         """
         return "%s%s" % (
-            self.domain, reverse('schedule-list', kwargs={
+            self.domain, reverse('course-list', kwargs={
                 'branch_slug': self.slug
             })
         )
@@ -1358,8 +1358,8 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
     def calculate_registration_count(self):
         return self.registrations.filter(
             registration_status='registered',
-            schedule__status='approved',
-            schedule__is_active=True,
+            course__status='approved',
+            course__is_active=True,
         ).count()
 
     def calculate_courses_taught_count(self):
@@ -1667,8 +1667,8 @@ class BarterItem(Base):
         max_length=255,
         help_text=_("A name or short description of the barter item.")
     )
-    schedule = ForeignKey(
-        'Schedule',
+    course = ForeignKey(
+        'Course',
         verbose_name=_('Scheduled Class'),
         help_text=_("The scheduled class that this barter item is listed for.")
     )
@@ -1781,7 +1781,7 @@ class ScheduledEvent(Durational):
         return False
 
 
-class ScheduleQuerySet(QuerySet):
+class CourseQuerySet(QuerySet):
     def pending(self):
         return self.filter(end_time__gte=timezone.now()) \
             .exclude(status='approved') \
@@ -1800,9 +1800,9 @@ class ScheduleQuerySet(QuerySet):
         return self.filter(is_active=True, status='approved')
 
 
-class ScheduleManager(Manager):
+class CourseManager(Manager):
     def get_query_set(self):
-        return ScheduleQuerySet(self.model, using=self._db).select_related(
+        return CourseQuerySet(self.model, using=self._db).select_related(
             'venue__title',
             'title',
             'description',
@@ -1834,7 +1834,7 @@ class ScheduleManager(Manager):
         return self.get_query_set().public()
 
 
-class Schedule(ScheduledEvent):
+class Course(ScheduledEvent):
     """
     """
     class Meta:
@@ -1876,9 +1876,9 @@ class Schedule(ScheduledEvent):
         url for students to leave feedback for a scheduled class
         """
         return "%s%s" % (
-            self.branch.domain, reverse('schedule-feedback', kwargs={
+            self.branch.domain, reverse('course-feedback', kwargs={
                 'branch_slug': self.branch.slug,
-                'schedule_slug': self.slug,
+                'course_slug': self.slug,
                 'feedback_type': 'student'
             })
         )
@@ -1889,26 +1889,26 @@ class Schedule(ScheduledEvent):
         url for teachers to leave feedback for a scheduled class
         """
         return "%s%s" % (
-            self.branch.domain, reverse('schedule-feedback', kwargs={
+            self.branch.domain, reverse('course-feedback', kwargs={
                 'branch_slug': self.branch.slug,
-                'schedule_slug': self.slug,
+                'course_slug': self.slug,
                 'feedback_type': 'teacher'
             })
         )
 
     @property
-    def schedule_edit_url(self):
+    def course_edit_url(self):
         """
         Url for teachers to edit a scheduled class.
         """
         return "%s%s" % (
-            self.branch.domain, reverse('schedule-edit', kwargs={
+            self.branch.domain, reverse('course-edit', kwargs={
                 'branch_slug': self.branch.slug,
-                'schedule_slug': self.slug,
+                'course_slug': self.slug,
             })
         )
 
-    objects = ScheduleManager()
+    objects = CourseManager()
 
     def registered_students(self):
         return self.registration_set.registered().count()
@@ -1949,7 +1949,7 @@ class Schedule(ScheduledEvent):
             new_email.branch = None
             if isinstance(new_email, TimedEmail):
                 new_email.set_send_on(self.start_time)
-            new_email.schedule = self
+            new_email.course = self
             new_email.save()
 
     def approve_courses(self, request, queryset):
@@ -1994,44 +1994,44 @@ class Schedule(ScheduledEvent):
                             self.email_teacher(self.teacherfeedback)
                             email_count += 1
 
-        # if there is no ScheduleEmailContainer,
-        # populate new emails for the Schedule
+        # if there is no CourseEmailContainer,
+        # populate new emails for the Course
         else:
             self.populate_notifications()
 
         return email_count
 
-    def generate_barteritems_from_past_schedule(self):
+    def generate_barteritems_from_past_course(self):
         """
-        Find a past Schedule of the same Course
+        Find a past Course of the same Course
         and copy its BarterItem objects.
         """
 
-        # find a scheduled course to this Schedule's course,
+        # find a scheduled course to this Course's course,
         # which is not this one
-        past_schedules = Schedule.objects.exclude(pk=self.pk)
+        past_courses = Course.objects.exclude(pk=self.pk)
 
-        if past_schedules.exists():
+        if past_courses.exists():
 
-            # create copies of the past schedule's BarterItem objects.
+            # create copies of the past course's BarterItem objects.
             # reset the pk for each one so a new object is saved,
-            # and create a relationship to the current Schedule.
-            for item in past_schedules[0].barteritem_set.all():
+            # and create a relationship to the current Course.
+            for item in past_courses[0].barteritem_set.all():
                 new_item = copy_model_instance(item)
                 new_item.pk = None
-                new_item.schedule = self
+                new_item.course = self
                 new_item.save()
 
     def email_teacher(self, email):
-        """shortcut method to send an email via the Schedule object."""
+        """shortcut method to send an email via the Course object."""
         return email.send(self, (self.teacher.email,))
 
     def email_student(self, email, registration):
-        """shortcut method to send an email via the Schedule object."""
+        """shortcut method to send an email via the Course object."""
         return email.send(self, (registration.student.email,), registration)
 
     def email_students(self, email):
-        """shortcut method to send an email via the Schedule object."""
+        """shortcut method to send an email via the Course object."""
         email_count = 0
         for registration in self.registration_set.registered():
             self.email_student(email, registration)
@@ -2044,29 +2044,32 @@ class Schedule(ScheduledEvent):
         """
         # generate and save slug if there isn't one
         if self.slug is None or self.slug.__len__() == 0:
-            self.slug = unique_slugify(Schedule, self.title)
+            self.slug = unique_slugify(Course, self.title)
 
         if self.pk is not None:
-            original = Schedule.objects.get(pk=self.pk)
+            try:
+                original = Course.objects.get(pk=self.pk)
 
-            if original.status != self.status \
-                    and self.status == 'approved':
+                if original.status != self.status \
+                        and self.status == 'approved':
 
-                self.email_teacher(self.teacherclassapproval)
+                    self.email_teacher(self.teacherclassapproval)
+            except Course.DoesNotExist:
+                pass
 
         # call the super class's save method
-        super(Schedule, self).save(*args, **kwargs)
+        super(Course, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "%s" % (self.title)
 
 
-class PendingScheduleManager(ScheduleManager):
+class PendingCourseManager(CourseManager):
     def get_query_set(self):
-        return super(PendingScheduleManager, self).get_query_set().pending()
+        return super(PendingCourseManager, self).get_query_set().pending()
 
 
-class PendingSchedule(Schedule):
+class PendingCourse(Course):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
@@ -2077,22 +2080,22 @@ class PendingSchedule(Schedule):
 
         proxy = True
 
-    objects = PendingScheduleManager()
+    objects = PendingCourseManager()
 
 
-class ApprovedScheduleManager(ScheduleManager):
+class ApprovedCourseManager(CourseManager):
     def get_query_set(self):
-        return super(ApprovedScheduleManager, self).get_query_set().approved()
+        return super(ApprovedCourseManager, self).get_query_set().approved()
 
 
-class ApprovedSchedulePublicManager(ApprovedScheduleManager):
+class ApprovedCoursePublicManager(ApprovedCourseManager):
     def get_query_set(self):
         return super(
-            ApprovedSchedulePublicManager, self) \
+            ApprovedCoursePublicManager, self) \
             .get_query_set().approved().public()
 
 
-class ApprovedSchedule(Schedule):
+class ApprovedCourse(Course):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
@@ -2103,22 +2106,22 @@ class ApprovedSchedule(Schedule):
 
         proxy = True
 
-    objects = ApprovedScheduleManager()
-    public = ApprovedSchedulePublicManager()
+    objects = ApprovedCourseManager()
+    public = ApprovedCoursePublicManager()
 
 
-class PastScheduleManager(ScheduleManager):
+class PastCourseManager(CourseManager):
     def get_query_set(self):
-        return super(PastScheduleManager, self).get_query_set().past()
+        return super(PastCourseManager, self).get_query_set().past()
 
 
-class PastSchedulePublicManager(PastScheduleManager):
+class PastCoursePublicManager(PastCourseManager):
     def get_query_set(self):
         return super(
-            PastSchedulePublicManager, self).get_query_set().past().public()
+            PastCoursePublicManager, self).get_query_set().past().public()
 
 
-class PastSchedule(Schedule):
+class PastCourse(Course):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
@@ -2131,8 +2134,8 @@ class PastSchedule(Schedule):
 
         proxy = True
 
-    objects = PastScheduleManager()    
-    public = PastSchedulePublicManager()
+    objects = PastCourseManager()    
+    public = PastCoursePublicManager()
 
 
 class RegistrationQuerySet(QuerySet):
@@ -2143,7 +2146,7 @@ class RegistrationQuerySet(QuerySet):
 class RegistrationManager(Manager):
     def get_query_set(self):
         return RegistrationQuerySet(self.model, using=self._db).select_related(
-            'schedule',
+            'course',
             'student',
             'student__fullname',
             'items__title'
@@ -2161,10 +2164,10 @@ class Registration(Base):
     and then unregistered from a class.
     """
     class Meta:
-        unique_together = ('schedule', 'student')
+        unique_together = ('course', 'student')
         ordering = [
-            '-schedule__start_time',
-            'schedule',
+            '-course__start_time',
+            'course',
             'registration_status',
             'student'
         ]
@@ -2180,9 +2183,9 @@ class Registration(Base):
     REGISTRATION_CHOICES = (('registered', _('Registered')),
                             ('unregistered', _('Unregistereed')))
 
-    schedule = ForeignKey(
-        Schedule,
-        verbose_name=_("schedule"),
+    course = ForeignKey(
+        Course,
+        verbose_name=_("course"),
         help_text=_("What scheduled class does this registration refer to?")
     )
     student = ForeignKey(
@@ -2213,12 +2216,12 @@ class Registration(Base):
         """
         Url for student to unregister from a scheduled class.
         """
-        domain = self.schedule.branch.domain
+        domain = self.course.branch.domain
 
         return "%s%s" % (
-            domain, reverse('schedule-unregister', kwargs={
-                'branch_slug': self.schedule.branch.slug,
-                'schedule_slug': self.schedule.slug,
+            domain, reverse('course-unregister', kwargs={
+                'branch_slug': self.course.branch.slug,
+                'course_slug': self.course.slug,
                 'student_slug': self.student.slug
             })
         )
@@ -2262,9 +2265,9 @@ class Feedback(Base):
         ('student', _('From a student'))
     )
 
-    schedule = ForeignKey(
-        Schedule,
-        verbose_name=_("schedule"),
+    course = ForeignKey(
+        Course,
+        verbose_name=_("course"),
         help_text=_(
             "Feedback is given for a class that was scheduled and took place."
         )
@@ -2287,7 +2290,7 @@ class Feedback(Base):
 
     def __unicode__(self):
         return u'%s: feedback %s' % (
-            self.schedule.title, self.feedback_type)
+            self.course.title, self.feedback_type)
 
 
 class Photo(Base):

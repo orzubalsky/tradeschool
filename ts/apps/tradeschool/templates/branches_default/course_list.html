@@ -1,4 +1,4 @@
-{% extends 'branches_base/schedule_list.html' %}
+{% extends 'branches_base/course_list.html' %}
 
 {% load humanize smartdate i18n l10n %}
 
@@ -7,7 +7,7 @@
     for a specific branch.
     
     It extends a parent template that's located in-
-      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/schedule_list.html
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_list.html
     
     In order to make edits to the html of this file, 
         1.  Look at the code of the parent template (URL above).
@@ -19,7 +19,7 @@
         4.  Make any edits you wish! 
     
     *** If you wish to edit the way each scheduled class looks, edit-
-    public_html/schedule_item.html
+    public_html/course_item.html
     
     *** Keep in mind that the template has django-specific template tags.
     They affect the way if functions, so be careful with those.
@@ -29,16 +29,16 @@
 {% block main_content %}
 
 <div class="classes" id="future">
-{% for schedule in branch.schedule_set.public.approved %}
+{% for course in branch.course_set.public.approved %}
    
-   {% ifchanged branch.schedule_set.start_time.day %}
-   {% block schedule_date_divider %}
+   {% ifchanged branch.course_set.start_time.day %}
+   {% block course_date_divider %}
    {{ block.super }}
-   {% endblock schedule_date_divider %}    
+   {% endblock course_date_divider %}    
    {% endifchanged %}
 
-    {% with templates.prefix|add:'schedule_item.html' as schedule_item_template %}
-    {% include schedule_item_template %}
+    {% with templates.prefix|add:'course_item.html' as course_item_template %}
+    {% include course_item_template %}
     {% endwith %}
 
 {% endfor %}

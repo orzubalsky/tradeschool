@@ -9,7 +9,7 @@ from tradeschool.models import *
 class AdminTestCase(TestCase):
     """
     Tests the process of submitting feedback
-    for a schedule using the frontend form.
+    for a course using the frontend form.
     """
     fixtures = ['email_initial_data.json',
                 'teacher-info.json',

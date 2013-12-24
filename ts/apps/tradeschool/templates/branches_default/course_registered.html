@@ -1,13 +1,12 @@
-{% extends 'branches_base/schedule_list_past.html' %}
+{% extends 'branches_base/course_registered.html' %}
 
 {% load humanize smartdate i18n l10n %}
 
 {# 
-    This template displays the list of past scheduled classes
-    for a specific branch.
+    This template is used to render the popup with confirmation of a successful registration.
     
     It extends a parent template that's located in-
-      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/schedule_list_past.html
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_registered.html
     
     In order to make edits to the html of this file, 
         1.  Look at the code of the parent template (URL above).
@@ -18,28 +17,22 @@
             instead of {{ block.super }} 
         4.  Make any edits you wish! 
     
-    *** If you wish to edit the way each scheduled class looks, edit-
-    /public_html/schedule_item_past.html
-    
     *** Keep in mind that the template has django-specific template tags.
     They affect the way if functions, so be careful with those.
     It's probably best to just change / add to the html itself.
 #}
 
-{% block main_content %}
 
-{% block page_title %}
-{{ block.super }}
-{% endblock page_title %}<
-
-<div class="classes" id="past">
-{% for schedule in branch.schedule_set.past.public %}
-
-    {% with templates.prefix|add:'schedule_item_past.html' as schedule_item_template %}
-    {% include schedule_item_template %}
-    {% endwith %}
-
-{% endfor %}    
+{% block registration_complete %}
+<div class="course_registered">
+    <div id="classPopup" style="background-color:#123123;">
+        {% block registration_complete_header %}
+        {{ block.super }}
+        {% endblock registration_complete_header %}        
+        
+        {% block registration_complete_body %}
+        {{ block.super }}
+        {% endblock registration_complete_body %}        
+    </div>
 </div>
-
-{% endblock main_content %}
+{% endblock registration_complete %}

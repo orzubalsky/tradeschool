@@ -1,14 +1,14 @@
 {% load humanize smartdate i18n l10n %}
 
 {% block registration_complete %}
-<div class="schedule_registered">
+<div class="course_registered">
     <div id="classPopup" style="background-color:#123123;">
         {% block registration_complete_header %}
         <div id="popupHeader">
             Thanks! You are signed up for<br />
-            <h3>{{ registration.schedule.title }}</h3>
-            {{ registration.schedule.start_time|date:"M j, Y"|localize }}<br />
-            at <strong>{{ registration.schedule.start_time|date:"g:ia"|localize }}</strong><br />
+            <h3>{{ registration.course.title }}</h3>
+            {{ registration.course.start_time|date:"M j, Y"|localize }}<br />
+            at <strong>{{ registration.course.start_time|date:"g:ia"|localize }}</strong><br />
         </div>
         {% endblock registration_complete_header %}        
         

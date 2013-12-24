@@ -38,14 +38,14 @@ def branch_save_callback(sender, instance, **kwargs):
             instance.copy_teacher_info_page()
 
 
-@receiver(post_save, sender=Schedule, dispatch_uid="ts.apps.tradeschool.signals")
-@receiver(post_save, sender=PastSchedule, dispatch_uid="ts.apps.tradeschool.signals")
-@receiver(post_save, sender=PendingSchedule, dispatch_uid="ts.apps.tradeschool.signals")
-@receiver(post_save, sender=ApprovedSchedule, dispatch_uid="ts.apps.tradeschool.signals")
-def schedule_save_callback(sender, instance, **kwargs):
-    """ create notifications on creation of a new schedule"""
+@receiver(post_save, sender=Course, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=PastCourse, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=PendingCourse, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=ApprovedCourse, dispatch_uid="ts.apps.tradeschool.signals")
+def course_save_callback(sender, instance, **kwargs):
+    """ create notifications on creation of a new course"""
 
-    # don't generate emails if this is schedule is created when running
+    # don't generate emails if this is course is created when running
     # loaddata command. apparently saving from a fixture has the
     # 'raw' key argument
     if not kwargs.get('raw', False):

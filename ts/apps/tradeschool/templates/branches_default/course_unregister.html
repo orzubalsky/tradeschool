@@ -1,12 +1,12 @@
-{% extends 'branches_base/schedule_submitted.html' %}
+{% extends 'branches_base/course_unregister.html' %}
 
 {% load humanize smartdate i18n l10n %}
 
 {# 
-    This template is used to render the confirmation page after a successful class submission.
+    This template is used to render the page with the registration cancelling form for a student.
     
     It extends a parent template that's located in-
-      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/schedule_submitted.html
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_unregister.html
     
     In order to make edits to the html of this file, 
         1.  Look at the code of the parent template (URL above).
@@ -24,16 +24,34 @@
 
 
 {% block main_content %}
-<div id="teacherForm">
-    <div class="formThanks">
+<div id="unregister">
+    
+    {% block page_title %}
+    {{ block.super }}
+    {% endblock page_title %}    
+    
+    <div class="subMain">
         
-        {% block schedule_complete_intro %}
+        {% if registration.registration_status == 'unregistered' %}
+        {% block already_unregistered %}        
         {{ block.super }}
-        {% endblock schedule_complete_intro %}
+        {% endblock already_unregistered %}
         
-        {% block schedule_complete_data %}
+        {% else %}
+       
+        {% block registration_data %}
         {{ block.super }}
-        {% endblock schedule_complete_data %}        
+        {% endblock registration_data %}        
     </div>
+
+    {% block sidebar %}
+    {{ block.super }}
+    {% endblock sidebar %}    
+    
+    {% block unregister_submit %}
+    {{ block.super }}
+    {% endblock unregister_submit %}    
+    
+    {% endif %}    
 </div>
 {% endblock main_content %}

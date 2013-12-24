@@ -9,7 +9,7 @@ from tradeschool.models import *
 class FeedbackTestCase(TestCase):
     """
     Tests the process of submitting feedback
-    for a schedule using the frontend form.
+    for a course using the frontend form.
     """
     fixtures = ['email_initial_data.json',
                 'teacher-info.json',
@@ -29,59 +29,59 @@ class FeedbackTestCase(TestCase):
         self.branch.language = 'en'
         self.branch.save()
 
-        # use this schedule for testing
-        self.schedule = Schedule.objects.filter(branch=self.branch)[0]
-        self.schedule.status = 'approved'
-        self.schedule.save()
+        # use this course for testing
+        self.course = Course.objects.filter(branch=self.branch)[0]
+        self.course.status = 'approved'
+        self.course.save()
 
-        self.future_start_time = self.schedule.start_time
-        self.future_end_time = self.schedule.end_time
+        self.future_start_time = self.course.start_time
+        self.future_end_time = self.course.end_time
 
-        self.move_schedule_to_past()
+        self.move_course_to_past()
 
         # construct feedback url
-        self.url = reverse('schedule-feedback', kwargs={
+        self.url = reverse('course-feedback', kwargs={
             'branch_slug': self.branch.slug,
-            'schedule_slug': self.schedule.slug,
+            'course_slug': self.course.slug,
             'feedback_type': 'student'
         })
 
-    def move_schedule_to_past(self):
-        """ Sets the schedule time fields to past times."""
+    def move_course_to_past(self):
+        """ Sets the course time fields to past times."""
         now = datetime.utcnow().replace(tzinfo=utc)
-        self.schedule.start_time = now - timedelta(hours=47)
-        self.schedule.end_time = now - timedelta(hours=48)
-        self.schedule.save()
+        self.course.start_time = now - timedelta(hours=47)
+        self.course.end_time = now - timedelta(hours=48)
+        self.course.save()
 
-    def move_schedule_to_future(self):
-        """ Sets the schedule time fields to future times."""
-        self.schedule.start_time = self.future_start_time
-        self.schedule.end_time = self.future_end_time
-        self.schedule.save()
+    def move_course_to_future(self):
+        """ Sets the course time fields to future times."""
+        self.course.start_time = self.future_start_time
+        self.course.end_time = self.future_end_time
+        self.course.save()
 
     def test_view_loading(self):
-        """ Tests that the schedule-feedbacj view loads properly.
+        """ Tests that the course-feedbacj view loads properly.
             If there's a branch-specific template file,
             make sure it's loaded as well.
         """
-        # approve schedule and save
-        self.schedule.status = 'pending'
-        self.schedule.save()
+        # approve course and save
+        self.course.status = 'pending'
+        self.course.save()
 
-        # make sure schedule is 'pending' and that
+        # make sure course is 'pending' and that
         # the scheduled class did not happen yet
-        self.assertEqual(self.schedule.status, 'pending')
-        self.move_schedule_to_future()
+        self.assertEqual(self.course.status, 'pending')
+        self.move_course_to_future()
 
         # load url
         response = self.client.get(self.url)
 
-        # page should not load if the schedule is not approved
+        # page should not load if the course is not approved
         self.assertEqual(response.status_code, 404)
 
-        # approve schedule and save
-        self.schedule.status = 'approved'
-        self.schedule.save()
+        # approve course and save
+        self.course.status = 'approved'
+        self.course.save()
 
         # loading the url again
         response = self.client.get(self.url)
@@ -89,15 +89,15 @@ class FeedbackTestCase(TestCase):
         # if scheduled class didn't take place yet, the page should not load
         self.assertEqual(response.status_code, 404)
 
-        # move the schedule to a time in the past
-        self.move_schedule_to_past()
+        # move the course to a time in the past
+        self.move_course_to_past()
 
         # loading the url again
         response = self.client.get(self.url)
 
         # view should load now
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(self.branch.slug + '/schedule_feedback.html')
+        self.assertTemplateUsed(self.branch.slug + '/course_feedback.html')
 
     def test_empty_submission(self):
         """
@@ -126,8 +126,8 @@ class FeedbackTestCase(TestCase):
             response.redirect_chain[0][0],
             response.redirect_chain[0][1]
         )
-        self.assertTemplateUsed(self.branch.slug + '/schedule_list.html')
-        self.assertEqual(self.schedule.feedback_set.count(), 1)
+        self.assertTemplateUsed(self.branch.slug + '/course_list.html')
+        self.assertEqual(self.course.feedback_set.count(), 1)
 
     def tearDown(self):
         """ Delete branch files in case something went wrong

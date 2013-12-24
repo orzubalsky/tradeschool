@@ -9,10 +9,10 @@
 {% endblock page_title %}<
 
 <div class="classes" id="past">
-{% for schedule in branch.schedule_set.past.public %}
+{% for course in branch.course_set.past.public %}
 
-    {% with templates.prefix|add:'schedule_item_past.html' as schedule_item_template %}
-    {% include schedule_item_template %}
+    {% with templates.prefix|add:'course_item_past.html' as course_item_template %}
+    {% include course_item_template %}
     {% endwith %}
 
 {% endfor %}    

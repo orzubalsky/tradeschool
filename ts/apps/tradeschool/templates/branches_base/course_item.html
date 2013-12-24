@@ -1,0 +1,68 @@
+{% load humanize smartdate i18n l10n %}
+
+{% block course_item %}
+<div id="{{ course.slug }}" class="aClass venue{{ course.venue.title }}">
+    
+    {% if course.registration_set.registered.count >= course.max_students %}
+    {% block course_tag %}
+    <div class="classTag tagFull">
+        ({% blocktrans context "Class full tag" %}Full{% endblocktrans %})
+    </div>
+    {% endblock course_tag %}
+    {% endif %}
+
+    <div class="classInfo" style="background-color:{{ course.color }}">
+        {% block course_header %}
+        <div class="classHeader">
+            <h3><a class="toggle" href="{% url 'course-view' branch_slug=branch.slug course_slug=course.slug %}">{{ course.title }}</a></h3>
+            <em>{{ course.start_time|date:"g:ia"|localize }} to {{ course.end_time|date:"g:ia"|localize }}</em>
+        </div>
+        {% endblock course_header %}
+        
+        {% block course_body %}
+        <div class="classBody">
+            
+            {% block course_venue %}
+            <div class="classSite">
+                <strong>{{ course.venue.title }}</strong><br />
+                {{ course.venue.address_1 }}<br />
+                {{ course.venue.city }}
+                {{ course.venue.country }}
+            </div>
+            {% endblock course_venue %}            
+            
+            {% block course_description %}
+            <p class="description">
+                {{ course.description }}
+            </p>
+            {% endblock course_description %}            
+            
+            {% block course_items %}
+            <p class="description">
+                {% blocktrans %}Bring one of the following{% endblocktrans %}:<br />
+            {% for item in course.barteritem_set.all %}
+                {{ item.title }}<br />
+            {% endfor %}
+            </p>
+            {% endblock course_items %}            
+            
+            {% block course_teacher %}
+            <h4 class="teacher">
+                {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ course.teacher.website }}" target="_blank">{{ course.teacher.fullname }}</a>
+            </h4>
+            <p class="description">
+                {{ course.teacher.bio }}
+            </p>
+            {% endblock course_teacher %}            
+            
+            {% block course_join_button %}
+            {% if course.registration_set.registered.count < course.max_students %}
+            <a class="join" id="{{ course.slug }}" href="{% url 'course-register' branch_slug=branch.slug course_slug=course.slug %}" title="register to {{ course.title }}">{% blocktrans context "Join a class button" %}Join{% endblocktrans %}</a>
+            {% endif %}
+            {% endblock course_join_button %}            
+            
+        </div>
+        {% endblock course_body %}
+    </div>
+</div>
+{% endblock course_item %}
