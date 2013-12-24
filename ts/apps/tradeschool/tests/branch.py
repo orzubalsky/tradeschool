@@ -135,6 +135,7 @@ class BranchTestCase(TestCase):
             created properly when a new branch is saved.
         """
         # save a new branch
+        self.branch.branch_status = 'in_session'
         self.branch.save()
 
         # check that all branch templates and files were created
