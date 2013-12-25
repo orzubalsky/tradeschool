@@ -16,8 +16,7 @@ from tradeschool.forms import *
 def branch_list(request):
     """display all branches in current site."""
 
-    branches = Branch.public.all()
-    print branches
+    branches = Branch.objects.public()
     pages = FlatPage.objects.all()
 
     return render_to_response('hub/branch_list.html', {
@@ -30,7 +29,7 @@ def cluster_list(request, slug=None):
     """display all branches related to a cluster."""
 
     cluster = get_object_or_404(Cluster, slug=slug)
-    branches = Branch.public.filter(clusters=cluster)
+    branches = Branch.objects.public().filter(clusters=cluster)
 
     return render_to_response('hub/cluster_list.html', {
         'cluster': cluster,
@@ -546,7 +545,7 @@ def branch_page(request, url, branch_slug=None):
 
 
 def start_a_tradeschool(request):
-    branches = Branch.public.all()
+    branches = Branch.objects.public()
     pages = FlatPage.objects.all()
 
     if request.method == 'POST':
