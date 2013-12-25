@@ -1364,6 +1364,48 @@
     }
 },
 {
+    "pk": 3, 
+    "model": "tradeschool.course", 
+    "fields": {
+        "updated": "2010-08-07T14:35:23Z", 
+        "created": "2010-08-06T22:56:17Z", 
+        "is_active": true, 
+        "start_time": "2000-09-05T23:00:00Z", 
+        "venue": 1, 
+        "description": "This is a sample class", 
+        "title": "Sample Class", 
+        "is_active": true, 
+        "teacher": 3, 
+        "max_students": 10,
+        "color":"#dda51e",
+        "end_time": "2000-09-06T00:30:00Z", 
+        "branch": 1, 
+        "status": "approved", 
+        "slug": "sample-past-class"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.course", 
+    "fields": {
+        "updated": "2020-08-07T14:35:23Z", 
+        "created": "2020-08-06T22:56:17Z", 
+        "is_active": true, 
+        "start_time": "2050-09-05T23:00:00Z", 
+        "venue": 1, 
+        "description": "This is a sample class", 
+        "title": "Sample Class", 
+        "is_active": true, 
+        "teacher": 3, 
+        "max_students": 10,
+        "color":"#dda51e",
+        "end_time": "2050-09-06T00:30:00Z", 
+        "branch": 1, 
+        "status": "pending", 
+        "slug": "sample-pending-class"
+    }
+},
+{
     "pk": 1, 
     "model": "tradeschool.registration", 
     "fields": {

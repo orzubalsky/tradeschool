@@ -2448,10 +2448,10 @@ class PendingCourse(Course):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
-        verbose_name = _("Scheduled Class: Pending")
+        verbose_name = _("Class: Pending")
 
         # Translators: Plural.
-        verbose_name_plural = _("Scheduled Classes: Pending")
+        verbose_name_plural = _("Classes: Pending")
 
         proxy = True
 
@@ -2486,10 +2486,10 @@ class ApprovedCourse(Course):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
-        verbose_name = _("Scheduled Class: Approved")
+        verbose_name = _("Class: Approved")
 
         # Translators: Plural.
-        verbose_name_plural = _("Scheduled Classes: Approved")
+        verbose_name_plural = _("Classes: Approved")
 
         proxy = True
 
@@ -2525,10 +2525,10 @@ class PastCourse(Course):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
-        verbose_name = _("Scheduled Class: Past")
+        verbose_name = _("Class: Past")
 
         # Translators: Plural.
-        verbose_name_plural = _("Scheduled Classes: Past")
+        verbose_name_plural = _("Classes: Past")
 
         ordering = ['-start_time', '-venue']
 

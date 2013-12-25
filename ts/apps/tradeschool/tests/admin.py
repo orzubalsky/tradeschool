@@ -98,6 +98,67 @@ class AdminTestCase(TestCase):
             response.context['LANGUAGE_CODE'][3:]
         )
 
+    def validate_url_is_loading(self, url):
+        """
+        Login to the admin backend and verify a URL returns a 200 code.
+
+        Args:
+            url: URL to test.
+        """
+        self.login()
+
+        # load a page to check the template loads
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def validate_model_templates(self, model, model_label):
+        """
+        Format URLs for changelist, add, and change view for a model.
+
+        Args:
+            model: a class from which a model instance will be fetched.
+            model_label: the admin model label, used to reverse URLs.
+        """
+        print model
+
+        # test model change list view
+        self.validate_url_is_loading(
+            reverse('admin:tradeschool_%s_changelist' % model_label))
+
+        # test model add view
+        self.validate_url_is_loading(
+            reverse('admin:tradeschool_%s_add' % model_label))
+
+        # get an object of the data model to test change view with
+        obj = model.objects.all()[0]
+
+        # test model change view
+        self.validate_url_is_loading(
+            reverse(
+                'admin:tradeschool_%s_change' % model_label,
+                args=(obj.pk, )
+            ))
+
+    def test_admin_templates_are_loading(self):
+        """
+        Go over all of the models used in the TS admin to make sure they
+        all load without any errors.
+        """
+        self.validate_model_templates(PastCourse, 'pastcourse')
+        self.validate_model_templates(PendingCourse, 'pendingcourse')
+        self.validate_model_templates(ApprovedCourse, 'approvedcourse')
+        self.validate_model_templates(Registration, 'registration')
+        self.validate_model_templates(Venue, 'venue')
+        self.validate_model_templates(BarterItem, 'barteritem')
+        self.validate_model_templates(Time, 'time')
+        self.validate_model_templates(TimeRange, 'timerange')
+        self.validate_model_templates(Student, 'student')
+        self.validate_model_templates(Teacher, 'teacher')
+        self.validate_model_templates(Organizer, 'organizer')
+        self.validate_model_templates(Branch, 'branch')
+        self.validate_model_templates(Page, 'page')
+
     def tearDown(self):
         """
         Delete branch files in case something went wrong

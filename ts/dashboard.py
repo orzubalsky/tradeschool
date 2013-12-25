@@ -36,9 +36,9 @@ class CustomIndexDashboard(Dashboard):
                     collapsible=False,
                     models=(
                         'tradeschool.models.TemplateFile',
-                        'tradeschool.models.PendingSchedule',
-                        'tradeschool.models.ApprovedSchedule',
-                        'tradeschool.models.PastSchedule',
+                        'tradeschool.models.PendingCourse',
+                        'tradeschool.models.ApprovedCourse',
+                        'tradeschool.models.PastCourse',
                         'tradeschool.models.Registration',
                         'tradeschool.models.Venue',
                         'tradeschool.models.BarterItem',
