@@ -32,7 +32,12 @@
         <div class="branchInfo">
             <div class="branchHeader">
                 <h3>
-                    <a href="{% url 'schedule-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
+                    {% if branch.branch_status == 'in_session' %}
+                    <a href="{% url 'course-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>    
+                    {%else %}
+                    {{ branch.title|title }}
+                    {% endif %}
+                    
                 </h3>
             </div>
         </div>
@@ -47,49 +52,49 @@
 </div>    
 {% endblock start-a-tradeschool %}
 
-{% block schedule-list %}
+{% block course-list %}
 <div id="classes">
     <h3>Classes Happening Around the World</h3>	
 
     <div class="classes" id="upcomingClasses">
 
     {% for branch in branches %}
-    {% if branch.schedule_set.approved.public %}
+    {% if branch.course_set.approved.public %}
         <div class="branchDivider">
     	    <h4 class="branchTitle">{{ branch.title|title }}</h4>
         </div>    
     
-        {% for schedule in branch.schedule_set.approved.public %}
+        {% for course in branch.course_set.approved.public %}
 
-        <div id="{{ schedule.course.slug }}" class="aClass venue{{ schedule.course.venue.title }}">
-            <div class="classInfo" style="background-color:{{ schedule.color }}">
+        <div id="{{ course.slug }}" class="aClass venue{{ course.venue.title }}">
+            <div class="classInfo" style="background-color:{{ course.color }}">
                 <div class="classHeader">
-                    <h3><a class="toggle" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}">{{ schedule.course.title }}</a></h3>
-                    <em>{{ schedule.start_time|date:"g:ia"|localize }} to {{ schedule.end_time|date:"g:ia"|localize }}</em>
+                    <h3><a class="toggle" href="{% url 'course-view' branch_slug=branch.slug course_slug=course.slug %}">{{ course.title }}</a></h3>
+                    <em>{{ course.start_time|date:"g:ia"|localize }} to {{ course.end_time|date:"g:ia"|localize }}</em>
                 </div>
 
                 <div class="classBody">
                     <div class="classSite">
-                        <strong>{{ schedule.course.venue.title }}</strong><br />
-                        {{ schedule.course.venue.address_1 }}<br />
-                        {{ schedule.course.venue.city }}
+                        <strong>{{ course.venue.title }}</strong><br />
+                        {{ course.venue.address_1 }}<br />
+                        {{ course.venue.city }}
                     </div>
                     <p class="description">
-                        {{ schedule.course.description }}
+                        {{ course.description }}
                     </p>
                     <p class="description">
                         {% blocktrans %}Bring one of the following{% endblocktrans %}:<br />
-                    {% for item in schedule.barteritem_set.all %}
+                    {% for item in course.barteritem_set.all %}
                         {{ item.title }}<br />
                     {% endfor %}
                     </p>          
                     <h4 class="teacher">
-                        {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ schedule.course.teacher.website }}" target="_blank">{{ schedule.course.teacher.fullname }}</a>
+                        {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ course.teacher.website }}" target="_blank">{{ course.teacher.fullname }}</a>
                     </h4>
                     <p class="description">
-                        {{ schedule.course.teacher.bio }}
+                        {{ course.teacher.bio }}
                     </p>
-                    <a class="join" id="{{ schedule.slug }}" href="{% url 'schedule-view' branch_slug=branch.slug schedule_slug=schedule.slug %}" title="view {{ schedule.course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
+                    <a class="join fromHub" id="{{ course.slug }}" href="{% url 'course-view' branch_slug=branch.slug course_slug=course.slug %}" title="view {{ course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
                 </div>
             </div>
         </div>
@@ -98,6 +103,6 @@
     {% endfor %}
     </div>
 </div>
-{% endblock schedule-list %}
+{% endblock course-list %}
 
 {% endblock content %}

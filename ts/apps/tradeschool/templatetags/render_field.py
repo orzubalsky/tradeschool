@@ -3,6 +3,7 @@ from tradeschool.utils import branch_template
 
 register = template.Library()
 
+
 def render_field(parser, token):
     render_help = True
 
@@ -23,22 +24,23 @@ def render_field(parser, token):
 
     return FieldRenderNode(branch, field, render_help)
 
+
 class FieldRenderNode(template.Node):
     def __init__(self, branch, field, render_help):
-        self.branch      = template.Variable(branch)
-        self.field       = template.Variable(field)
+        self.branch = template.Variable(branch)
+        self.field = template.Variable(field)
         self.render_help = render_help
 
     def render(self, context):
         branch = self.branch.resolve(context)
-        field  = self.field.resolve(context)
-        
+        field = self.field.resolve(context)
+
         context['field'] = field
         context['render_help'] = self.render_help
-        
+
         template = branch_template(branch, 'form_field.html')
-        
-        html     = template.render(context)
+
+        html = template.render(context)
 
         return html
 

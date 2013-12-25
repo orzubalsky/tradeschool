@@ -369,3 +369,21 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
     display: none;
 }
 /*--------- INLINE FORM END ----------*/
+
+
+
+
+
+/*--------- SELECT WIDGET ------------*/
+.selector .selector-available, .selector .selector-chosen {
+    width: 300px;
+}
+.selector .selector-filter input[type=text] {
+    width: 260px;
+    max-width: 260px !important;
+}
+.selector select[multiple=multiple] {
+    width: 300px;
+    max-width: 300px !important;
+}
+/*--------- SELECT WIDGET END -------*/

@@ -1076,4 +1076,91 @@ iframe{
 	cursor: pointer;
 }
 
+#branchForm {
+	background-color: transparent;
+	width: 100%;
+	margin: 10px auto 0 auto;
+	position: relative;
+	overflow: auto;
+}
 
+#branchForm .formQ .formField {
+	background: #666;
+	width: 100%;
+	padding: 15px 20px;
+	float: left;
+	position: relative;
+	color: #fff;
+}
+
+#branchForm .formQ .formNote {
+	background: #fff;
+	color: #666;
+	width: 160px;
+	padding: 35px 20px 15px 20px;
+	float: right;
+	font: 0.8em/ 1.5em Helvetica, Arial, sans-serif;
+}
+
+#branchForm .formQ .formField > h2 {
+  float: left;
+	font-family: 'TradeGothicLTStdBold';
+  text-transform: uppercase;
+	z-index: 2;
+	color: #fff;
+	overflow: hidden;
+	margin: 0 0 20px 0;
+	font-size: 2em;
+	line-height: 1.3em;
+}
+
+#branchForm .formQ .formField input {
+	border: 0;
+	width: 550px;
+	padding: 5px;
+	font: 1.25em/ 1.5em Helvetica, Arial, sans-serif;
+	margin: 0 0 10px 0;
+}
+
+#branchForm .formQ .formField label {
+	margin: 0 0 5px 0;
+	float: left;
+	font-weight: bold;
+}
+#branchForm .classSubmit{
+  width: 800px;
+  background-color: #666;
+  padding: 0 0 30px 0;
+}
+
+#branchForm input.submit {
+	width: 150px;
+	height: 49px;
+	background: url(../images/buttons/submit.png) no-repeat bottom left;
+	border: 0;
+	overflow: hidden;
+	text-indent: -9999px;
+	margin: 0 300px;
+}
+
+#branchForm input.submit:hover {
+	background: url(../images/buttons/submit.png) no-repeat top left;
+	outline: 0;
+	cursor: pointer;
+}
+
+#branchForm input.update {
+	width: 150px;
+	height: 49px;
+	background: url(../images/buttons/update.png) no-repeat bottom left;
+	border: 0;
+	overflow: hidden;
+	text-indent: -9999px;
+	margin: 40px 0 0 0;
+}
+
+#branchForm input.update:hover {
+	background: url(../images/buttons/update.png) no-repeat top left;
+	outline: 0;
+	cursor: pointer;
+}

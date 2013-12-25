@@ -1,10 +1,12 @@
-{% extends templates.prefix|add:'base.html' %}
+{% extends 'branches_base/course_submit.html' %}
+
+{% load i18n tz render_field %}
 
 {# 
-    This template is used for the layout of all secondary pages (such as dynamic Pages, class submission form, etc)
+    This template is used to render the form for class submissions.
     
-    It extends a parent template that's defined for this branch:
-      /public_html/base.html
+    It extends a parent template that's located in-
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_submit.html
     
     In order to make edits to the html of this file, 
         1.  Look at the code of the parent template (URL above).
@@ -21,20 +23,17 @@
 #}
 
 
-{% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/subpage.css" />
-{% endblock %}
-
-{% block content %}
-<div id="innerHeader">
-	{% block logo %}{{ block.super }}{% endblock %}	
-	{% block navigation %}{{ block.super }}{% endblock %}	
-</div>
-
 {% block main_content %}
+<div id="teacherForm">
+    <form id="addClass" method="post" action="{{ request.path }}">{% csrf_token %}
+        
+        {% block form_errors %}
+        {{ block.super }}
+        {% endblock form_errors %}
+        
+        {% block form_fields %}
+        {{ block.super }}
+        {% endblock form_fields %}        
+	</form>
+</div>
 {% endblock main_content %}
-
-{% endblock %}
-
-{% block lightbox %}
-{% endblock %}

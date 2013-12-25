@@ -7,15 +7,15 @@ var site = window.site = new function()
     this.init = function() 
     {
         //this.classMatch();
-        this.schedule_toggle();
-        this.schedule_load_register_form();
-        this.schedule_submit_register_form();
+        this.course_toggle();
+        this.course_load_register_form();
+        this.course_submit_register_form();
         this.add_barter_items();
         this.gallery();        
     };
 
 
-    this.schedule_load_register_form = function() 
+    this.course_load_register_form = function() 
     {
         var self = this;
 
@@ -31,30 +31,33 @@ var site = window.site = new function()
                     
         $('.classInfo .join').bind('click', function(e) 
         {
-            e.preventDefault();
-
-            var slug = $(this).attr('id');				
-
-            $('#matte').fadeIn(100, function() 
+            if (!$(this).hasClass('fromHub'))
             {
-                $('#loader').show();
+                e.preventDefault();
 
-                $('#previewContainer').fadeIn(100, function() 
+                var slug = $(this).attr('id');              
+
+                $('#matte').fadeIn(100, function() 
                 {
-                    Dajaxice.tradeschool.schedule_load_form(
-                        self.schedule_load_register_form_callback, 
-                        {
-                            'branch_slug'   : branchUrl, 
-                            'schedule_slug' : slug
-                        }
-                    );
+                    $('#loader').show();
+
+                    $('#previewContainer').fadeIn(100, function() 
+                    {
+                        Dajaxice.tradeschool.course_load_form(
+                            self.course_load_register_form_callback, 
+                            {
+                                'branch_slug'   : branchUrl, 
+                                'course_slug' : slug
+                            }
+                        );
+                    });
                 });
-            });
+            }
         });	
     };
 
 
-    this.schedule_load_register_form_callback = function(data)	
+    this.course_load_register_form_callback = function(data)	
     {
         $('#loader').hide();
         $('#preview').html(data);
@@ -73,7 +76,7 @@ var site = window.site = new function()
     };
 
 
-    this.schedule_submit_register_form = function(href) 
+    this.course_submit_register_form = function(href) 
     {
         var self = this;
         
@@ -84,19 +87,19 @@ var site = window.site = new function()
             var slug = $(this).attr('class');
             var data = $(this).serialize();
 
-            Dajaxice.tradeschool.schedule_submit_form(
-                self.schedule_submit_register_form_callback, 
+            Dajaxice.tradeschool.course_submit_form(
+                self.course_submit_register_form_callback, 
                 {
                     'data'          : data, 
                     'branch_slug'   : branchUrl,
-                    'schedule_slug' : slug
+                    'course_slug' : slug
                 }
             );				    
         });
     }; 
 	
 
-    this.schedule_submit_register_form_callback = function(data)	
+    this.course_submit_register_form_callback = function(data)	
     {
         $('#preview').empty().append(data).show();
 
@@ -134,7 +137,7 @@ var site = window.site = new function()
     };
 
 
-    this.schedule_toggle = function() 
+    this.course_toggle = function() 
     {
         var self = this;
 

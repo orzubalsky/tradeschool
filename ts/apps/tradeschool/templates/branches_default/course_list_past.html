@@ -1,0 +1,45 @@
+{% extends 'branches_base/course_list_past.html' %}
+
+{% load humanize smartdate i18n l10n %}
+
+{# 
+    This template displays the list of past scheduled classes
+    for a specific branch.
+    
+    It extends a parent template that's located in-
+      https://github.com/orzubalsky/tradeschool/blob/master/ts/apps/tradeschool/templates/branches_base/course_list_past.html
+    
+    In order to make edits to the html of this file, 
+        1.  Look at the code of the parent template (URL above).
+            The HTML inside of the various 'block' elements is filled in the 'block' elements
+            that have the same name in this file.
+        2.  Copy the content that's in the block element you wish to change from the parent template.
+        3.  In the code below, paste it inside the block that has the same name,
+            instead of {{ block.super }} 
+        4.  Make any edits you wish! 
+    
+    *** If you wish to edit the way each scheduled class looks, edit-
+    /public_html/course_item_past.html
+    
+    *** Keep in mind that the template has django-specific template tags.
+    They affect the way if functions, so be careful with those.
+    It's probably best to just change / add to the html itself.
+#}
+
+{% block main_content %}
+
+{% block page_title %}
+{{ block.super }}
+{% endblock page_title %}<
+
+<div class="classes" id="past">
+{% for course in branch.course_set.past.public %}
+
+    {% with templates.prefix|add:'course_item_past.html' as course_item_template %}
+    {% include course_item_template %}
+    {% endwith %}
+
+{% endfor %}    
+</div>
+
+{% endblock main_content %}

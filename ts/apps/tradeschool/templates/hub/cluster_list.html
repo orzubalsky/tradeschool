@@ -17,7 +17,7 @@
         <div class="branchInfo">
             <div class="branchHeader">
                 <h3>
-                    <a href="{% url 'schedule-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
+                    <a href="{% url 'course-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
                 </h3>
             </div>
         </div>
@@ -30,5 +30,5 @@
 {{ block.super }}
 {% endblock start-a-tradeschool %}
 
-{% block schedule-list %}
-{% endblock schedule-list %}
+{% block course-list %}
+{% endblock course-list %}

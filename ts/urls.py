@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^admin/password_reset/done/$', 'django.contrib.auth.views.password_reset_done', name='password_reset_done'),
     url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', name='password_reset_confirm'),
     url(r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete', name='password_reset_complete'),
+    url(r'^admin/templatesadmin/', include('templatesadmin.urls')),
 )
 
 # administration apps
@@ -50,6 +51,7 @@ if settings.DEBUG:
    
 # tradeschool app urls
 urlpatterns += patterns('',
+    url(r'^start-a-tradeschool/', 'tradeschool.views.start_a_tradeschool', name='start-a-tradeschool'),
     url(r'^cluster/(?P<slug>[0-9A-Za-z\-_]+)/', 'tradeschool.views.cluster_list', name='cluster-list'),
     url(r'^(?P<branch_slug>[0-9A-Za-z\-_]+)/', include('tradeschool.urls')),
     url(r'^$', 'tradeschool.views.branch_list', name='branch-list'),    
