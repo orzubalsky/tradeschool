@@ -990,7 +990,6 @@ class Branch(Location):
         )
 
     objects = BranchManager()
-    public = BranchPublicManager()
     on_site = CurrentSiteManager()
 
     def delete_emails(self):
