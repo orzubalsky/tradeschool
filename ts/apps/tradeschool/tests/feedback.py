@@ -30,7 +30,7 @@ class FeedbackTestCase(TestCase):
         self.branch.save()
 
         # use this course for testing
-        self.course = Course.objects.filter(branch=self.branch)[0]
+        self.course = ApprovedCourse.objects.filter(branch=self.branch)[0]
         self.course.status = 'approved'
         self.course.save()
 

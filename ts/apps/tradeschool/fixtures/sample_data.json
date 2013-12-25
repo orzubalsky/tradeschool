@@ -1288,6 +1288,116 @@
     }
 },
 {
+    "pk": 16, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Drawing paper", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 17, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Tea leaves", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 18, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Bike parts", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 19, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Job-search help", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 110, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Feedback on a project", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 26, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Drawing paper", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 27, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Tea leaves", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 28, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Bike parts", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 29, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Job-search help", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 210, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Feedback on a project", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
     "pk": 6, 
     "model": "tradeschool.barteritem", 
     "fields": {
@@ -1388,8 +1498,8 @@
     "pk": 4, 
     "model": "tradeschool.course", 
     "fields": {
-        "updated": "2020-08-07T14:35:23Z", 
-        "created": "2020-08-06T22:56:17Z", 
+        "updated": "2010-08-07T14:35:23Z", 
+        "created": "2010-08-06T22:56:17Z", 
         "is_active": true, 
         "start_time": "2050-09-05T23:00:00Z", 
         "venue": 1, 

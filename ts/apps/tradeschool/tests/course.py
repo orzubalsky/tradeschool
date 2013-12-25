@@ -467,8 +467,7 @@ class CourseTestCase(TestCase):
         time = Time.objects.get(pk=self.time_data['time-time'])
 
         # post the data to the course submission form
-        response = self.client.post(
-            self.url, data=self.valid_data, follow=True)
+        self.client.post(self.url, data=self.valid_data, follow=True)
 
         # the saved course
         course = Course.objects.latest('created')

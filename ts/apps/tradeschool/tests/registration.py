@@ -27,7 +27,7 @@ class RegistrationTestCase(TestCase):
         self.branch.language = 'en'
         self.branch.save()
 
-        self.course = Course.objects.filter(branch=self.branch)[0]
+        self.course = ApprovedCourse.objects.filter(branch=self.branch)[0]
 
         self.valid_data = {
             'student-fullname': 'test student',
@@ -43,7 +43,11 @@ class RegistrationTestCase(TestCase):
         """ Asserts that the objects that were created after a successful
             registration submission match the data that was used in the forms.
         """
-        self.assertEqual(registration_obj.course, self.course)
+        # get ApprovedCourse instance to verify against
+        approved_course = ApprovedCourse.objects.get(
+            pk=registration_obj.course.pk)
+
+        self.assertEqual(approved_course, self.course)
         self.assertEqual(
             registration_obj.student.fullname,
             self.valid_data['student-fullname']
@@ -98,6 +102,7 @@ class RegistrationTestCase(TestCase):
 
         self.assertTemplateUsed(self.branch.slug + '/course_registered.html')
         #print response.context
+
         # check that the registration got saved correctly
         self.compare_registration_to_data(response.context['registration'])
 
