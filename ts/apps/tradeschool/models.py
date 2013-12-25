@@ -1616,19 +1616,23 @@ class Student(Person):
 
 class Durational(Base):
     """
-    Durational is an abstract model for any model that
-    has a start time and an end time.
-    In the tradeschool system, these would be the Time and Course models.
+    Durational is an abstract model that has a start time and an end time.
+
+    Time and ScheduledEvent extend this model.
+
+    Attributes:
+        start_time: Datetime indicating the beginning of the event.
+        end_time: Datetime indicating the end of the event.
     """
     class Meta:
         abstract = True
 
-    # Translators: Used to lable the beginning and endings of classes
+    # Translators: Used to label the beginning and endings of classes
     start_time = DateTimeField(
         verbose_name=_("start time"),
         default=datetime.now()
     )
-    # Translators: Used to lable the beginning and endings of classes
+    # Translators: Used to label the beginning and endings of classes
     end_time = DateTimeField(
         verbose_name=_("end time"),
         default=datetime.now()
@@ -1637,9 +1641,24 @@ class Durational(Base):
 
 class Time(Durational):
     """
-    Time is an open time slot. It is implemented in the frontend alone:
-    These slots populate the calendar for teachers submitting a class.
-    Times do not affect the admin class schedluing logic.
+    A time slot that can be selected by teachers when submitting a course.
+
+    The Time model is implemented in the frontend alone:
+    These slots populate the class submission form that teachers use when
+    submitting a class.
+
+    After a class was submitted by a teacher using the class submission form,
+    the time that was selected will be deleted and will no longer be available.
+
+    The selected time is NOT bound to the course, and can be edited by
+    the organizers.
+
+    Attributes:
+        venue: Foreign key to a Venue object. If the open time is related to
+            the availability of a location, saving a venue with the time will
+            ensure that the venue is saved to the submitted course.
+        branch: Foreign key to a Branch. Time slots are specific to a branch
+            since they are used in each branch's class submission form.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -1675,11 +1694,45 @@ class Time(Durational):
     )
 
     def __unicode__(self):
+        """
+        Return the start time.
+        """
         return u"%s" % self.start_time
 
 
 class TimeRange(Base):
     """
+    A range of dates, used to create multiple Time objects in a batch.
+
+    An organizer indicates the start and end time of each time slot they
+    want created within a date range. They check off the days in which times
+    should be created.
+
+    When a TimeRange is saved, individual Time objects within the set range
+    are saved individually. They can then be edited/saved/deleted individually.
+
+    When a TimeRange is deleted, the Time objects within the set range
+    are deleted.
+
+    Attributes:
+        start_date: Date indicating start date of the date range.
+        end_date: Date indicating the end date of the date range.
+        start_time: Time indicating the start time of each saved Time object.
+        end_time: Time indicating the end time of each saved Time object.
+        sunday: Boolean indicating whether to create Time slots for Sundays.
+        monday: Boolean indicating whether to create Time slots for Mondays.
+        tuesday: Boolean indicating whether to create Time slots for Tuesdays.
+        wednesday: Boolean indicating whether to create Time slots for
+            Wednesdays.
+        thursday: Boolean indicating whether to create Time slots for Thursday.
+        friday: Boolean indicating whether to create Time slots for Fridays.
+        saturday: Boolean indicating whether to create Time slots for
+            Saturdays.
+        venue: Foreign key to a Venue object. If the times are related to
+            the availability of a location, saving a venue with the time will
+            ensure that the venue is saved to each saved time.
+        branch: Foreign key to a Branch. Time slots are specific to a branch
+            since they are used in each branch's class submission form.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -1801,9 +1854,8 @@ class TimeRange(Base):
 
 class BarterItem(Base):
     """
-    Barter items are the items that teachers request for
-    a class they're teaching.
-    The items themselves can be requested in various classes.
+    Barter items are requested by teachers when submitting a course
+    and are selected by students registering to a course.
     """
     class Meta:
         ordering = ['title', ]
@@ -1830,6 +1882,25 @@ class BarterItem(Base):
 
 class ScheduledEvent(Durational):
     """
+    An abstract class that events in the Trade School system inherits from.
+    A Course is a ScheduledEvent.
+
+    Attributes:
+        title: String indicating the name of the event.
+        branch: Foreign key to a Branch that this event is related to.
+        venue: Foreign key to a Venue that this event is scheduled
+            to take place in
+        students: M2M relationship with the people who are registered
+            to the event.
+        description: Textual description of the event.
+        max_students: Integar of the maximum number of people who can register.
+        slug: URL slug that is used to create a view page for the event.
+        status: String indicating whether the event is proposed or approved
+            by the organizers of the Branch.
+        color: HTML color that will be used to style the event on the website.
+        is_within_a_day: Boolean indicating whether the event is scheduled
+            to start in the next day.
+        is_past: Boolean indicating whether the event already took place.
     """
     class Meta:
         abstract = True
@@ -1922,45 +1993,68 @@ class ScheduledEvent(Durational):
 
     @property
     def is_within_a_day(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        if (self.start_time - now) < timedelta(hours=24):
+        """
+        Indicating whether the event is scheduled to start in the next day.
+        """
+        if (self.start_time - timezone.now()) < timedelta(hours=24):
             return True
         return False
 
     @property
     def is_past(self):
-        now = datetime.utcnow().replace(tzinfo=utc)
-        if self.end_time < now:
+        """
+        Indicating whether the event already took place.
+        """
+        if self.end_time < timezone.now():
             return True
         return False
 
 
 class CourseQuerySet(QuerySet):
+    """
+    Defines querysets for pending, approved, past, and public courses.
+    """
     def pending(self):
+        """
+        Returns courses that were not approved.
+        """
         return self.filter(end_time__gte=timezone.now()) \
             .exclude(status='approved') \
             .exclude(status='rejected')
 
     def approved(self):
+        """
+        Returns courses that were approved but haven't taken place yet.
+        """
         return self.filter(
             status='approved',
             end_time__gte=timezone.now()
         )
 
     def past(self):
+        """
+        Returns courses that already took place.
+        """
         return self.filter(end_time__lte=timezone.now())
 
     def public(self):
+        """
+        Returns active courses that were approved.
+        """
         return self.filter(is_active=True, status='approved')
 
 
 class CourseManager(Manager):
+    """
+    A Manager selecting related emails and teacher attributes.
+    """
     def get_query_set(self):
+        """
+        Selects related Email objects, venue, and teacher attributes from
+        the custom QuerySet.
+        """
         return CourseQuerySet(self.model, using=self._db).select_related(
             'venue__title',
-            'title',
-            'description',
-            'max_students',
             'teacher__fullname',
             'teacher__email',
             'teacher__phone',
@@ -1990,6 +2084,38 @@ class CourseManager(Manager):
 
 class Course(ScheduledEvent):
     """
+    A one time scheduled class that is taught by a teacher in a TS Branch.
+
+    Course is currently the main model that Trade School facilitates:
+
+    A teacher submits a class proposal through the frontend class submission
+    form on a branch's website. The proposal includes the attributes of a
+    ScheduledEvent model, a list of barter items and the teacher's information.
+    The class proposal is either approved or not by the branch's organizers.
+    Approved courses appear on the branch's website so students can register
+    to them. Students register by agreeing to bring one or more of the items
+    that were requested by the teacher.
+
+    A Course also has 7 types of emails that are sent automatically:
+        teacherconfirmation: Sent to the teacher to confirm a successful
+            course submission. Also includes a link to edit the course.
+        teacherclassapproval: Sent to the teacher to notify them the course
+            was approved by the organizers.
+        studentreminder: Sent to a student to confirm a successful course
+            registration.
+        studentconfirmation: Sent to all registered students before the course
+            is scheduled to start to remind them it's happening and what items
+            they said they would bring. It also includes a link to unregister.
+        teacherreminder: Sent to the teacher before the course is scheduled
+            to start to remind them that it's happening.
+        teacherfeedback: Sent to a teacher after the course took place with
+            a link to leave feedback.
+        studentfeedback: Sent to all registered students after the course took
+            place with a link to leave feedback.
+
+    Attributes:
+        teacher: Foreign key to the teacher who submitted the class.
+        emails: Dictionary with all of the related Email objects.
     """
     class Meta:
         # Translators: Any times that the word class is shown as singular
@@ -2027,7 +2153,7 @@ class Course(ScheduledEvent):
     @property
     def student_feedback_url(self):
         """
-        url for students to leave feedback for a scheduled class
+        Returns URL for students to leave feedback for a scheduled class.
         """
         return "%s%s" % (
             self.branch.domain, reverse('course-feedback', kwargs={
@@ -2040,7 +2166,7 @@ class Course(ScheduledEvent):
     @property
     def teacher_feedback_url(self):
         """
-        url for teachers to leave feedback for a scheduled class
+        Returns URL for teachers to leave feedback for a scheduled class.
         """
         return "%s%s" % (
             self.branch.domain, reverse('course-feedback', kwargs={
@@ -2053,7 +2179,7 @@ class Course(ScheduledEvent):
     @property
     def course_edit_url(self):
         """
-        Url for teachers to edit a scheduled class.
+        Returns URL for teachers to edit a scheduled class.
         """
         return "%s%s" % (
             self.branch.domain, reverse('course-edit', kwargs={
@@ -2065,11 +2191,18 @@ class Course(ScheduledEvent):
     objects = CourseManager()
 
     def registered_students(self):
+        """
+        Returns a count of all regisrered students.
+        The number does not include students who unregistered.
+        """
         return self.registration_set.registered().count()
 
     def student_list_string(self):
         """
-        create a string with the registered students for a scheduled class.
+        Creates a string with the registered students for a scheduled class.
+
+        Returns:
+            A string of students and the items they registered to bring.
         """
         student_list = ""
         for registration_obj in self.registration_set.registered():
@@ -2082,7 +2215,9 @@ class Course(ScheduledEvent):
         return student_list
 
     def delete_emails(self):
-        # delete existing  emails
+        """
+        Delete existing related Email objects.
+        """
         if self.emails is not None:
             for fieldname, email_obj in self.emails.iteritems():
                 email_obj
@@ -2090,25 +2225,46 @@ class Course(ScheduledEvent):
 
     def populate_notifications(self):
         """
-        resets course notification templates from
-        the branch notification templates
+        Resets the Course Email objects.
+
+        The emails are copied from the Email objects that
+        are related to the Branch that the course is related to.
         """
-        # delete existing branch emails
+        # delete the existing course related emails
         self.delete_emails()
 
-        # copy course notification from the branch notification templates
+        # copy course emails from the related branch emails
         for fieldname, email_obj in self.branch.emails.iteritems():
+
+            # create a copy of the email object
             new_email = copy_model_instance(email_obj)
+
+            # make sure not to save over the original row
+            # a new pk will be created
             new_email.pk = None
+
+            # remove the relationship between the email and the branch
             new_email.branch = None
+
+            # check if this email is a timed email that needs extra setup
             if isinstance(new_email, TimedEmail):
                 new_email.set_send_on(self.start_time)
+
+            # relate the email to this course
             new_email.course = self
+
+            # finally, save!
             new_email.save()
 
     def approve_courses(self, request, queryset):
-        "approve multiple courses"
+        """
+        Approve multiple Course objects.
+        Implemented as an admin action.
+        """
+        # change status to 'approved'
         rows_updated = queryset.update(status='approved')
+
+        # format a nice grammatically correct message
         if rows_updated == 1:
             message_bit = "1 class was"
         else:
@@ -2119,95 +2275,150 @@ class Course(ScheduledEvent):
 
     def send_timed_emails_in_range(self, start_date, end_date):
         """
+        Email any related TimedEmail objects that are in the given date range.
+
+        These emails can be: student reminder, teacher reminder,
+        student feedback, and teacher feedback.
+
+        A count of the emails that were sent is kept for a unittest.
+
+        Args:
+            start_date: Date indicating the start of the date range.
+            end_date: Date indicating the end of the date range.
+
+        Returns:
+            Integar of the total emails that were sent.
         """
         email_count = 0
 
-        if self.emails is not None:
-            for fieldname, email_obj in self.emails.iteritems():
-                if isinstance(email_obj, TimedEmail):
+        # first make sure that the course has related emails
+        if self.emails is None:
 
-                    # check if email send on is within range & was not sent yet
-                    if start_date < email_obj.send_on < end_date \
-                            and email_obj.email_status == 'not_sent':
-
-                        # email students
-                        if isinstance(email_obj, StudentReminder):
-                            email_count += self.email_students(
-                                self.studentreminder)
-
-                        if isinstance(email_obj, StudentFeedback):
-                            email_count += self.email_students(
-                                self.studentfeedback)
-
-                        # email teacher
-                        if isinstance(email_obj, TeacherReminder):
-                            self.email_teacher(self.teacherreminder)
-                            email_count += 1
-
-                        if isinstance(email_obj, TeacherFeedback):
-                            self.email_teacher(self.teacherfeedback)
-                            email_count += 1
-
-        # if there is no CourseEmailContainer,
-        # populate new emails for the Course
-        else:
+            # create emails for the course
             self.populate_notifications()
+
+        # iterate over course emails
+        for fieldname, email_obj in self.emails.iteritems():
+
+            # only pay attention to emails that are scheduled to be sent
+            # automatically by the system at a certain time.
+            if isinstance(email_obj, TimedEmail):
+
+                # check if email send on is within range & was not sent yet
+                if start_date < email_obj.send_on < end_date \
+                        and email_obj.email_status == 'not_sent':
+
+                    # email students
+                    if isinstance(email_obj, StudentReminder):
+                        email_count += self.email_students(
+                            self.studentreminder)
+
+                    if isinstance(email_obj, StudentFeedback):
+                        email_count += self.email_students(
+                            self.studentfeedback)
+
+                    # email teacher
+                    if isinstance(email_obj, TeacherReminder):
+                        self.email_teacher(self.teacherreminder)
+                        email_count += 1
+
+                    if isinstance(email_obj, TeacherFeedback):
+                        self.email_teacher(self.teacherfeedback)
+                        email_count += 1
 
         return email_count
 
-    def generate_barteritems_from_past_course(self):
+    def copy_barteritems_from_course(self, course):
         """
-        Find a past Course of the same Course
-        and copy its BarterItem objects.
+        Copy BarterItem objects that are related to a course
+        and assign them to this course.
+
+        This is used when creating a copy of a Course for a repeat class.
+
+        Args:
+            course: Course object to copy barter items from.
         """
+        for item in course.barteritem_set.all():
 
-        # find a scheduled course to this Course's course,
-        # which is not this one
-        past_courses = Course.objects.exclude(pk=self.pk)
+            # create a copy of the course's barter item
+            new_item = copy_model_instance(item)
 
-        if past_courses.exists():
-
-            # create copies of the past course's BarterItem objects.
             # reset the pk for each one so a new object is saved,
-            # and create a relationship to the current Course.
-            for item in past_courses[0].barteritem_set.all():
-                new_item = copy_model_instance(item)
-                new_item.pk = None
-                new_item.course = self
-                new_item.save()
+            new_item.pk = None
+
+            # create a relationship to the current Course.
+            new_item.course = self
+
+            # save
+            new_item.save()
 
     def email_teacher(self, email):
-        """shortcut method to send an email via the Course object."""
+        """
+        Shortcut method that emails the course's teacher via the Course object.
+
+        Args:
+            email: Email object that will be sent
+                (along with its subject, body, etc )
+        """
         return email.send(self, (self.teacher.email,))
 
     def email_student(self, email, registration):
-        """shortcut method to send an email via the Course object."""
+        """
+        Shortcut method that emails a student via the Course object.
+
+        Args:
+            email: Email object that will be sent
+                (along with its subject, body, etc )
+            registration: Registration object that is used to populate
+                the email content.
+        """
         return email.send(self, (registration.student.email,), registration)
 
     def email_students(self, email):
-        """shortcut method to send an email via the Course object."""
+        """
+        Shortcut method that emails all registered students via
+        the Course object.
+
+        Args:
+            email: Email object that will be sent
+                (along with its subject, body, etc )
+
+        A count of the emails that were sent is kept for a unittest.
+
+        Returns:
+            Integar of the total emails that were sent.
+        """
         email_count = 0
+
+        # iterate over registered students (excludes unregistered students)
         for registration in self.registration_set.registered():
             self.email_student(email, registration)
             email_count += 1
+
         return email_count
 
     def save(self, *args, **kwargs):
         """
-        check if status was changed to approved and email teacher if it has.
+        Generates slug if it does not exist.
+        Emails teacher if it the status was changed to 'approved'
         """
         # generate and save slug if there isn't one
         if self.slug is None or self.slug.__len__() == 0:
             self.slug = unique_slugify(Course, self.title)
 
+        # if this is not the first time the object is saved
         if self.pk is not None:
             try:
+                # keep the pre-saved values in a variable
                 original = Course.objects.get(pk=self.pk)
 
+                # compare the pre-saved status with the current status
                 if original.status != self.status \
                         and self.status == 'approved':
 
+                    # email teacher if the course was approved to let them know
                     self.email_teacher(self.teacherclassapproval)
+
             except Course.DoesNotExist:
                 pass
 
@@ -2215,15 +2426,26 @@ class Course(ScheduledEvent):
         super(Course, self).save(*args, **kwargs)
 
     def __unicode__(self):
+        """
+        Returns the course's title.
+        """
         return "%s" % (self.title)
 
 
 class PendingCourseManager(CourseManager):
+    """
+    Filter Course objects to those that have status set to 'pending'.
+    """
     def get_query_set(self):
         return super(PendingCourseManager, self).get_query_set().pending()
 
 
 class PendingCourse(Course):
+    """
+    Pending courses are Course objects that were submitted but not approved yet
+
+    Pending courses are only visible to organizers on the admin backend.
+    """
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
@@ -2238,11 +2460,17 @@ class PendingCourse(Course):
 
 
 class ApprovedCourseManager(CourseManager):
+    """
+    Filter Course objects to those that have status set to 'approved'.
+    """
     def get_query_set(self):
         return super(ApprovedCourseManager, self).get_query_set().approved()
 
 
 class ApprovedCoursePublicManager(ApprovedCourseManager):
+    """
+    Filter Course objects to approved courses that should appear on the website
+    """
     def get_query_set(self):
         return super(
             ApprovedCoursePublicManager, self) \
@@ -2250,6 +2478,12 @@ class ApprovedCoursePublicManager(ApprovedCourseManager):
 
 
 class ApprovedCourse(Course):
+    """
+    Pending courses are Course objects that were approved by an organizer.
+
+    Approved course appears on the branch's website and students can
+    register to it.
+    """
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
@@ -2265,17 +2499,30 @@ class ApprovedCourse(Course):
 
 
 class PastCourseManager(CourseManager):
+    """
+    Filter Course objects to those that already took place.
+    """
     def get_query_set(self):
         return super(PastCourseManager, self).get_query_set().past()
 
 
 class PastCoursePublicManager(PastCourseManager):
+    """
+    Filter Course objects to those that already took place and that
+    should appear on the website.
+    """
     def get_query_set(self):
         return super(
             PastCoursePublicManager, self).get_query_set().past().public()
 
 
 class PastCourse(Course):
+    """
+    Past courses are Course objects that already took place.
+
+    Past courses that have is_active set to True (=public) appear on
+    the past classes section of a branch's website.
+    """
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
@@ -2288,16 +2535,26 @@ class PastCourse(Course):
 
         proxy = True
 
-    objects = PastCourseManager()    
+    objects = PastCourseManager()
     public = PastCoursePublicManager()
 
 
 class RegistrationQuerySet(QuerySet):
+    """
+    Defines querysets for 'truly' registered students.
+    """
     def registered(self):
+        """
+        Returns students that do not only have a relationship
+        to a Course, but also who did not unregsiter.
+        """
         return self.filter(registration_status='registered')
 
 
 class RegistrationManager(Manager):
+    """
+    A Manager selecting related course, barter item titles and student fullname
+    """
     def get_query_set(self):
         return RegistrationQuerySet(self.model, using=self._db).select_related(
             'course',
@@ -2312,10 +2569,20 @@ class RegistrationManager(Manager):
 
 class Registration(Base):
     """
-    Registrations represent connections between students and classes.
-    When a student registers to a class a registration row is added.
-    We do this because we also want to keep track of students who registered
-    and then unregistered from a class.
+    When a student joins a course, a new Registration object is created.
+
+    It's a Django 'through' model, between Person and Course.
+
+    Registration keeps track of the items the student signed up to bring,
+    whether they unregistered.
+
+    Attributes:
+        course: Course object that the student registered to.
+        student: Person object indicating who registered to a course.
+        registration_status: String indicating whether the student
+            has unregistered for the course.
+        items: M2M relationship of the Course's barter items that the
+            student had agreed to bring.
     """
     class Meta:
         unique_together = ('course', 'student')
@@ -2368,7 +2635,7 @@ class Registration(Base):
     @property
     def unregister_url(self):
         """
-        Url for student to unregister from a scheduled class.
+        URL for student to unregister from the Course
         """
         domain = self.course.branch.domain
 
@@ -2384,8 +2651,11 @@ class Registration(Base):
 
     def registered_item_string(self):
         """
-        create a string with the items the student registered to bring.
-        Used in emails for students.
+        Create a string with the items the student registered to bring.
+        Used in emails sent to students.
+
+        Returns:
+            String of line break separated barter item titles
         """
         item_list = ""
         for item in self.items.all():
@@ -2394,16 +2664,37 @@ class Registration(Base):
         return item_list
 
     def registered_items(self):
-        """ Return the registered items as a string. Used in the admin."""
+        """
+        Formats registered items as a string.
+        Used in the admin.
+
+        Returns:
+            String of comma separated barter item titles
+        """
         return ','.join(str(item) for item in self.items.all())
 
     def __unicode__(self):
+        """
+        Returns the student's fullname and their registration status.
+        """
         return "%s: %s" % (self.student, self.registration_status)
 
 
 class Feedback(Base):
     """
     Feedback is collected after courses take place.
+
+    Emails are sent to both students and teacher after a course has taken place
+    with a URL to a form where they can leave feedback on a course.
+
+    Feedback is saved anonymously for students. The only indication is whether
+    it was received by the teacher or by one of the students.
+
+    Attributes:
+        course: Course object that the feedback relates to.
+        feedback_type: String indicating whether the feedback was recieved by
+            a teacher or a student.
+        content: Text of the feedback itself.
     """
     class Meta:
         # Translators: This is used in the header navigation
@@ -2449,7 +2740,12 @@ class Feedback(Base):
 
 class Photo(Base):
     """
-    Each branch has photos that can go in a gallery
+    An image that appears on the slideshow on a Branch's homepage.
+
+    Attributes:
+        filename: Django File object of the image file.
+        position: Integar indicating the index of the image in the slideshow.
+        branch: Branch object that the image is related to.
     """
     class Meta:
         ordering = ['position', ]
@@ -2462,6 +2758,12 @@ class Photo(Base):
         verbose_name_plural = _('Photos')
 
     def upload_path(self, filename):
+        """
+        Save images in a folder assigned to the related branch.
+
+        This folder's name is updated automatically when the title
+        of the branch is changed.
+        """
         return "uploads/%s/images/%s" % (self.branch.slug, filename)
 
     # Translators: These next three are for the photograph files
@@ -2485,6 +2787,15 @@ class Photo(Base):
     )
 
     def thumbnail(self):
+        """
+        Create some HTML that displays a thumbnail of the image.
+
+        Used in the admin.
+
+        Returns:
+            HTML string with either an <img> tag or placeholder text
+            if there is no image.
+        """
         if self.filename:
             return u'<img src="%s" class="branch_image" />' % self.filename.url
         else:
@@ -2497,10 +2808,19 @@ class Photo(Base):
 
 
 class PageQuerySet(QuerySet):
+    """
+    Defines querysets for public and visible branch pages.
+    """
     def public(self):
+        """
+        Returns active pages.
+        """
         return self.filter(is_active=True)
 
     def visible(self):
+        """
+        Returns pages set to visible.
+        """
         return self.filter(is_visible=True)
 
 
@@ -2516,7 +2836,20 @@ class PageManager(Manager):
 
 
 class Page(Base):
-    """Extending the FlatPage model to provide branch-specific content pages.
+    """
+    Simple model to supply dynamic content pages for each Branch.
+
+    Pages populate the navigation model if they are visible.
+
+    Attributes:
+        url: String indicating the unique URL of the Page.
+        title: String indicating the Page's header.
+        content: HTML text of the body of the page.
+        is_visible: Boolean indicating whether the page is visible
+            on the navigation menu. Pages that are not visible will
+            still be accessible through their URL.
+        branch: Foreign key to the Branch that the page is related to.
+        position: Integar indicating the index of the image in the slideshow.
     """
     class Meta:
         ordering = ['branch', 'title']
