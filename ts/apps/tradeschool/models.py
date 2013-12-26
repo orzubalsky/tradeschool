@@ -399,17 +399,6 @@ class StudentReminder(TimedEmail):
         # Translators: Plural.
         verbose_name_plural = _("Student reminders")
 
-    def save(self, *args, **kwargs):
-        """
-        Sets values to days_delta and send_time attributes.
-        """
-        # student reminders should be sent a day before at 10am.
-        # TODO: make this editable per branch / per email.
-        self.days_delta = -1
-        self.send_time = time(10, 0, 0)
-
-        super(StudentReminder, self).save(*args, **kwargs)
-
 
 class StudentFeedback(TimedEmail):
     """
@@ -422,16 +411,6 @@ class StudentFeedback(TimedEmail):
 
         # Translators: Plural.
         verbose_name_plural = _("Student feedback e-mails")
-
-    def save(self, *args, **kwargs):
-        """
-        Sets values to days_delta and send_time attributes.
-        """
-        # student reminders should be sent a day after at 4pm.
-        # TODO: make this editable per branch / per email.
-        self.days_delta = 1
-        self.send_time = time(16, 0, 0)
-        super(StudentFeedback, self).save(*args, **kwargs)
 
 
 class TeacherConfirmation(Email):
@@ -466,16 +445,6 @@ class TeacherReminder(TimedEmail):
         # Translators: Plural.
         verbose_name_plural = _("Teacher reminders")
 
-    def save(self, *args, **kwargs):
-        """
-        Sets values to days_delta and send_time attributes.
-        """
-        # teachers reminders should be sent a day before at 6pm.
-        # TODO: make this editable per branch / per email.
-        self.days_delta = -1
-        self.send_time = time(18, 0, 0)
-        super(TeacherReminder, self).save(*args, **kwargs)
-
 
 class TeacherFeedback(TimedEmail):
     """
@@ -488,16 +457,6 @@ class TeacherFeedback(TimedEmail):
 
         # Translators: Plural.
         verbose_name_plural = _("Teacher feedback e-mails")
-
-    def save(self, *args, **kwargs):
-        """
-        Sets values to days_delta and send_time attributes.
-        """
-        # student reminders should be sent a day after at 6pm.
-        # TODO: make this editable per branch / per email.
-        self.days_delta = 1
-        self.send_time = time(18, 0, 0)
-        super(TeacherFeedback, self).save(*args, **kwargs)
 
 
 class EmailContainer(Model):
@@ -724,16 +683,6 @@ class Cluster(Base):
         """
         return ','.join(str(branch) for branch in self.branch_set.all())
     branches_string.short_description = _('branches')
-
-    def save(self, *args, **kwargs):
-        """
-        Check if there is slug and create one if there isn't.
-        """
-        if self.slug is None or self.slug.__len__() == 0:
-            self.slug = unique_slugify(Cluster, self.name)
-
-        # call the super class's save method
-        super(Cluster, self).save(*args, **kwargs)
 
     def __unicode__(self):
         """

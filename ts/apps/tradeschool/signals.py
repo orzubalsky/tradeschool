@@ -1,9 +1,10 @@
+import time
 from tradeschool.models import *
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
 from datetime import datetime
-from tradeschool.utils import daterange
+from tradeschool.utils import daterange, unique_slugify
 
 
 # adding 'dispatch_uid' because this signal was getting reigstered twice.
@@ -146,3 +147,84 @@ def timerange_delete_callback(sender, instance, **kwargs):
                     end_time=end_time)[0].delete()
             except IndexError:
                 pass
+
+
+@receiver(post_save, sender=Course, dispatch_uid="ts.apps.tradeschool.signals")
+def course_postsave_callback(sender, instance, **kwargs):
+    """
+    Set courses_taken_count & courses_taught_count attributes on related people
+    """
+    # update teacher
+    courses_taught = instance.teacher.calculate_courses_taught_count()
+    instance.teacher.courses_taught_count = courses_taught
+    instance.teacher.save()
+
+    # update students
+    for registration in instance.registration_set.all():
+        courses_taken = registration.student.calculate_registration_count()
+        registration.student.courses_taken_count = courses_taken
+        registration.student.save()
+
+
+@receiver(post_save, sender=Registration, dispatch_uid="ts.apps.tradeschool.signals")
+def registration_postsave_callback(sender, instance, **kwargs):
+    """
+    Set courses_taken_count & courses_taught_count attributes on related people
+    """
+    # update student
+    courses_taken = instance.student.calculate_registration_count()
+    instance.student.courses_taken_count = courses_taken
+    instance.student.save()
+
+
+@receiver(pre_save, sender=StudentReminder, dispatch_uid="ts.apps.tradeschool.signals")
+def studentreminder_presave_callback(sender, instance, **kwargs):
+    """
+    Sets values to days_delta and send_time attributes.
+    """
+    # student reminders should be sent a day before at 10am.
+    # TODO: make this editable per branch / per email.
+    instance.days_delta = -1
+    instance.send_time = time(10, 0, 0)
+
+
+@receiver(pre_save, sender=StudentFeedback, dispatch_uid="ts.apps.tradeschool.signals")
+def studentfeedback_presave_callback(sender, instance, **kwargs):
+    """
+    Sets values to days_delta and send_time attributes.
+    """
+    # student reminders should be sent a day after at 4pm.
+    # TODO: make this editable per branch / per email.
+    instance.days_delta = 1
+    instance.send_time = time(16, 0, 0)
+
+
+@receiver(pre_save, sender=TeacherReminder, dispatch_uid="ts.apps.tradeschool.signals")
+def teacherreminder_presave_callback(sender, instance, **kwargs):
+    """
+    Sets values to days_delta and send_time attributes.
+    """
+    # teachers reminders should be sent a day before at 6pm.
+    # TODO: make this editable per branch / per email.
+    instance.days_delta = -1
+    instance.send_time = time(18, 0, 0)
+
+
+@receiver(pre_save, sender=TeacherFeedback, dispatch_uid="ts.apps.tradeschool.signals")
+def teacherfeedback_presave_callback(sender, instance, **kwargs):
+    """
+    Sets values to days_delta and send_time attributes.
+    """
+    # student reminders should be sent a day after at 6pm.
+    # TODO: make this editable per branch / per email.
+    instance.days_delta = 1
+    instance.send_time = time(18, 0, 0)
+
+
+@receiver(pre_save, sender=Cluster, dispatch_uid="ts.apps.tradeschool.signals")
+def cluster_presave_callback(sender, instance, **kwargs):
+    """
+    Check if there is slug and create one if there isn't.
+    """
+    if instance.slug is None or instance.slug.__len__() == 0:
+        instance.slug = unique_slugify(Cluster, instance.name)
