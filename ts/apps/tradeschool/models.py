@@ -926,16 +926,16 @@ class Branch(Location):
     def domain(self):
         return Site.objects.get_current().domain
 
-    # @property
-    # def branch_url(self):
-    #     """
-    #     Url for the branch's website
-    #     """
-    #     return "%s%s" % (
-    #         self.domain, reverse_lazy('course-list', kwargs={
-    #             'branch_slug': self.slug
-    #         })
-    #     )
+    @property
+    def branch_url(self):
+        """
+        Url for the branch's website
+        """
+        return "%s%s" % (
+            self.domain, reverse_lazy('course-list', kwargs={
+                'branch_slug': self.slug
+            })
+        )
 
     objects = BranchManager()
     on_site = CurrentSiteManager()
@@ -2097,43 +2097,43 @@ class Course(ScheduledEvent):
 
     emails = property(**emails())
 
-    # @property
-    # def student_feedback_url(self):
-    #     """
-    #     Returns URL for students to leave feedback for a scheduled class.
-    #     """
-    #     return "%s%s" % (
-    #         self.branch.domain, reverse_lazy('course-feedback', kwargs={
-    #             'branch_slug': self.branch.slug,
-    #             'course_slug': self.slug,
-    #             'feedback_type': 'student'
-    #         })
-    #     )
+    @property
+    def student_feedback_url(self):
+        """
+        Returns URL for students to leave feedback for a scheduled class.
+        """
+        return "%s%s" % (
+            self.branch.domain, reverse_lazy('course-feedback', kwargs={
+                'branch_slug': self.branch.slug,
+                'course_slug': self.slug,
+                'feedback_type': 'student'
+            })
+        )
 
-    # @property
-    # def teacher_feedback_url(self):
-    #     """
-    #     Returns URL for teachers to leave feedback for a scheduled class.
-    #     """
-    #     return "%s%s" % (
-    #         self.branch.domain, reverse_lazy('course-feedback', kwargs={
-    #             'branch_slug': self.branch.slug,
-    #             'course_slug': self.slug,
-    #             'feedback_type': 'teacher'
-    #         })
-    #     )
+    @property
+    def teacher_feedback_url(self):
+        """
+        Returns URL for teachers to leave feedback for a scheduled class.
+        """
+        return "%s%s" % (
+            self.branch.domain, reverse_lazy('course-feedback', kwargs={
+                'branch_slug': self.branch.slug,
+                'course_slug': self.slug,
+                'feedback_type': 'teacher'
+            })
+        )
 
-    # @property
-    # def course_edit_url(self):
-    #     """
-    #     Returns URL for teachers to edit a scheduled class.
-    #     """
-    #     return "%s%s" % (
-    #         self.branch.domain, reverse_lazy('course-edit', kwargs={
-    #             'branch_slug': self.branch.slug,
-    #             'course_slug': self.slug,
-    #         })
-    #     )
+    @property
+    def course_edit_url(self):
+        """
+        Returns URL for teachers to edit a scheduled class.
+        """
+        return "%s%s" % (
+            self.branch.domain, reverse_lazy('course-edit', kwargs={
+                'branch_slug': self.branch.slug,
+                'course_slug': self.slug,
+            })
+        )
 
     objects = CourseManager()
 
@@ -2579,20 +2579,20 @@ class Registration(Base):
         )
     )
 
-    # @property
-    # def unregister_url(self):
-    #     """
-    #     URL for student to unregister from the Course
-    #     """
-    #     domain = self.course.branch.domain
+    @property
+    def unregister_url(self):
+        """
+        URL for student to unregister from the Course
+        """
+        domain = self.course.branch.domain
 
-    #     return "%s%s" % (
-    #         domain, reverse_lazy('course-unregister', kwargs={
-    #             'branch_slug': self.course.branch.slug,
-    #             'course_slug': self.course.slug,
-    #             'student_slug': self.student.slug
-    #         })
-    #     )
+        return "%s%s" % (
+            domain, reverse_lazy('course-unregister', kwargs={
+                'branch_slug': self.course.branch.slug,
+                'course_slug': self.course.slug,
+                'student_slug': self.student.slug
+            })
+        )
 
     objects = RegistrationManager()
 
