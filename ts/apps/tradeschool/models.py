@@ -24,7 +24,6 @@ from django_countries import CountryField
 from tinymce.models import HTMLField
 from datetime import *
 from tradeschool.utils import copy_model_instance, unique_slugify
-from tradeschool.widgets import *
 
 
 class Base(Model):
