@@ -1,15 +1,11 @@
+import os
 from fabric.operations import local as lrun
 from fabric.operations import run
 from fabric.context_managers import settings
 from fabric.api import env, task, sudo, prompt, cd, put, puts
 from fab_config import Config
 
-
-env.hosts            = Config.hosts
-fab_username         = Config.fab_username
-fab_password         = Config.fab_password
-server_settings_file = Config.server_settings_file 
-apache_conf_file     = Config.apache_conf_file
+apache_conf_file = Config.apache_conf_file
 
 
 #####
@@ -21,18 +17,45 @@ apache_conf_file     = Config.apache_conf_file
 def local():
     env.run = lrun
     env.hosts = ['localhost']
+    env.project_dir = Config.local_project_dir
+    env.username = Config.local_username
+    env.password = Config.local_password
+    env.buildout_config_file = 'development.cfg'
+    env.setting_file = Config.local_settings_file
+    env.setting_file_path = os.path.join(
+        Config.local_project_dir,
+        Config.local_settings_file
+    )
 
 
 @task
 def testing():
     env.run = run
-    env.hosts = ['tstest.net']
+    env.hosts = [Config.testing_domain]
+    env.project_dir = Config.test_project_dir
+    env.username = Config.testing_username
+    env.password = Config.testing_password
+    env.buildout_config_file = 'server.cfg'
+    env.setting_file = Config.testing_settings_file
+    env.setting_file_path = os.path.join(
+        Config.testing_project_dir,
+        Config.testing_settings_file
+    )
 
 
 @task
 def prod():
     env.run = run
-    env.hosts = ['tradeschool.coop']
+    env.hosts = [Config.production_domain]
+    env.project_dir = Config.production_project_dir
+    env.username = Config.production_username
+    env.password = Config.production_password
+    env.buildout_config_file = 'server.cfg'
+    env.setting_file = Config.production_settings_file
+    env.setting_file_path = os.path.join(
+        Config.production_project_dir,
+        Config.production_settings_file
+    )
 
 
 #####
@@ -98,47 +121,49 @@ def create_ftp_user(username=None, password=None):
 #####
 @task
 def update_sourcecode():
-    with cd('/opt/projects/tse/'):
-        sudo('git pull', user=fab_username)
+    with cd(env.project_dir):
+        sudo('git pull', user=env.username)
 
 
 @task
 def update_project_settings():
     filename = prompt(
         'Enter name of local settings file:',
-        default=server_settings_file
+        default=env.setting_file
     )
-    destination = '/opt/projects/tse/ts/settings/server.py'
+    destination = env.setting_file_path
     put(filename, destination, use_sudo=True)
-    sudo('chown %s:webdev %s' % (fab_username, destination))
+    sudo('chown %s:webdev %s' % (env.username, destination))
 
 
 @task
 def run_buildout():
-    with cd('/opt/projects/tse/'):
-        sudo('./bin/buildout -v -c server.cfg', user=fab_username)
+    with cd(env.project_dir):
+        sudo(
+            './bin/buildout -v -c %s' % env.buildout_config_file,
+            user=env.username
+        )
 
 
 @task
 def update_db():
-    with cd('/opt/projects/tse/'):
-        sudo('./bin/django syncdb', user=fab_username)
-        sudo('./bin/django migrate tradeschool', user=fab_username)
-        sudo('./bin/django migrate migration', user=fab_username)
+    with cd(env.project_dir):
+        sudo('./bin/django syncdb', user=env.username)
+        sudo('./bin/django migrate', user=env.username)
 
 
 @task
 def update_static_files():
     # run the django command to update static files
-    with cd('/opt/projects/tse/'):
-        sudo('./bin/django collectstatic', user=fab_username)
+    with cd(env.project_dir):
+        sudo('./bin/django collectstatic', user=env.username)
 
 
 @task
 def load_fixtures():
     # load fixtures
-    with cd('/opt/projects/tse/'):
-        sudo('./bin/django loaddata email_initial_data.json pages_initial_data.json teacher-info.json', user=fab_username)
+    with cd(env.project_dir):
+        sudo('./bin/django loaddata email_initial_data.json pages_initial_data.json teacher-info.json', user=env.username)
 
 
 @task
@@ -149,7 +174,7 @@ def restart_memcached():
 
 @task
 def restart_wsgi():
-    with cd('/opt/projects/tse'):
+    with cd(env.project_dir):
         sudo('touch bin/django.wsgi')
 
 
@@ -161,8 +186,8 @@ def restart():
 
 @task
 def test():
-    with cd('/opt/projects/tse'):
-        sudo('./bin/django test tradeschool -v 2', user=fab_username)
+    with cd(env.project_dir):
+        sudo('./bin/django test tradeschool -v 2', user=env.username)
 
 
 @task
@@ -171,9 +196,9 @@ def load_data():
         'Enter name of sql file:',
         default='data.sql'
     )
-    #sudo('mkdir /opt/projects/tse/sql',user=fab_username)
+    #sudo('mkdir /opt/projects/tse/sql',user=env.username)
 
-    destination = '/opt/projects/tse/sql/data.sql'
+    destination = '%s/sql/data.sql' % env.project_dir
 
     db_name = prompt(
         'Enter name of database:',
@@ -182,8 +207,8 @@ def load_data():
 
     put(filename, destination, use_sudo=True)
 
-    with cd('/opt/projects/tse/sql'):
-        sudo('mysql -u root %s < data.sql' % (db_name), user=fab_username)
+    with cd('%s/sql' % env.project_dir):
+        sudo('mysql -u root %s < data.sql' % (db_name), user=env.username)
 
 
 @task
@@ -241,12 +266,12 @@ def init_os_package_setup():
 @task
 def init_fab_user():
     sudo('groupadd webdev')
-    sudo('useradd -G mysql,webdev --create-home --shell /bin/bash %s' % fab_username)
-    sudo('passwd %s' % fab_password)
+    sudo('useradd -G mysql,webdev --create-home --shell /bin/bash %s' % env.username)
+    sudo('passwd %s' % env.password)
 
-    sudo('ssh-keygen -t rsa -C "fab@tradeschool.coop"', user=fab_username)
-    puts('Created the following id_rsa.pub file for user %s:' % fab_username)
-    sudo('cat /home/%s/.ssh/id_rsa.pub' % fab_username)
+    sudo('ssh-keygen -t rsa -C "fab@tradeschool.coop"', user=env.username)
+    puts('Created the following id_rsa.pub file for user %s:' % env.username)
+    sudo('cat /home/%s/.ssh/id_rsa.pub' % env.username)
     prompt(
         'Please upload this to github as a "deploy key"'
         '(https://github.com/orzubalsky/tradeschool/settings/keys).\n'
@@ -256,16 +281,19 @@ def init_fab_user():
 
 @task
 def init_project_sourcecode():
-    sudo('mkdir --parents /opt/projects/tse')
-    sudo('chown %s:webdev /opt/projects/tse' % fab_username)
-    with cd('/opt/projects/tse'):
-        sudo('git clone git@github.com:orzubalsky/tradeschool.git .', user=fab_username)
+    sudo('mkdir --parents %s' % env.project_dir)
+    sudo('chown %s:webdev %s' % (env.username, env.project_dir))
+    with cd(env.project_dir):
+        sudo('git clone git@github.com:orzubalsky/tradeschool.git .', user=env.username)
 
 
 @task
 def init_buildout():
-    with cd('/opt/projects/tse'):
-        sudo('python bootstrap.py -v 2.1.1 -c server.cfg', user=fab_username)
+    with cd(env.project_dir):
+        sudo(
+            'python bootstrap.py -c %s' % env.buildout_config_file,
+            user=env.username
+        )
 
 
 @task
@@ -274,7 +302,7 @@ def init_mysql_db():
         'Enter name of database:',
         default='tradeschool_test'
     )
-    #sudo('mysqladmin create %s -u root' % db_name, user=fab_username)
+    #sudo('mysqladmin create %s -u root' % db_name, user=env.username)
 
     db_user = prompt(
         'Enter name of database user:',
@@ -282,8 +310,8 @@ def init_mysql_db():
     )
     db_password = prompt('Enter password:')
 
-    sudo('mysql_install_db', user=fab_username)
-    sudo('/usr/bin/mysql_secure_installation', user=fab_username)
+    sudo('mysql_install_db', user=env.username)
+    sudo('/usr/bin/mysql_secure_installation', user=env.username)
 
     sudo('mysql -u root CREATE DATABASE %s;' % db_name)
     sudo('mysql -u root CREATE USER %s@localhost IDENTIFIED BY %s;' % (db_user, db_password))
@@ -292,8 +320,8 @@ def init_mysql_db():
 
 @task
 def create_cache_folder():
-    with cd('/opt/projects/tse'):
-        sudo('mkdir tmp', user=fab_username)
+    with cd(env.project_dir):
+        sudo('mkdir tmp', user=env.username)
 
 
 @task
@@ -302,10 +330,10 @@ def init_apache():
         'Enter name of local apache conf file:',
         default=apache_conf_file
     )
-    destination = '/etc/apache2/sites-available/tstest.net'
+    destination = '/etc/apache2/sites-available/%s' % env.hosts[0]
     put(filename, destination, use_sudo=True)
 
-    sudo('a2ensite tstest.net')
+    sudo('a2ensite %s' % env.hosts[0])
     sudo('service apache2 reload')  # do we need this line??
 
 
