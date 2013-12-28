@@ -27,6 +27,8 @@ sys.path.append(PROJECT_DIR)
 sys.path.append(os.path.join(PROJECT_DIR, 'apps'))
 sys.path.append(os.path.join(PROJECT_DIR, 'libs'))
 
+ROOT_URLCONF = 'ts.urls'
+
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' 'static/' subdirectories and in STATICFILES_DIRS.
@@ -104,8 +106,6 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 )
-
-ROOT_URLCONF = 'ts.urls'
 
 BASE_BRANCH_TEMPLATE_DIR    = PROJECT_DIR + '/apps/tradeschool/templates/branches_base'
 DEFAULT_BRANCH_TEMPLATE_DIR = PROJECT_DIR + '/apps/tradeschool/templates/branches_default'
