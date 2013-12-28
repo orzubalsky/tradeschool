@@ -161,7 +161,7 @@ INSTALLED_APPS = (
     'pytz',               # python timezone library
     'dajaxice',           # django ajax app
     'rosetta',            # django admin translation interface
-    'debug_toolbar',
+    #'debug_toolbar',
     'tastypie',
     #'django_mailer',     # handle outgoing email queue
     'tradeschool',        # tradeschool branch app
