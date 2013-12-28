@@ -183,11 +183,13 @@ def restart():
     #restart_memcached()
     restart_wsgi()
 
+    sudo('/etc/init.d/apache2 restart')
+
 
 @task
 def test():
     with cd(env.project_dir):
-        sudo('./bin/django test tradeschool -v 2', user=env.username)
+        sudo('./bin/django test tradeschool -v 3', user=env.username)
 
 
 @task
@@ -265,9 +267,9 @@ def init_os_package_setup():
 
 @task
 def init_fab_user():
-    sudo('groupadd webdev')
+    #sudo('groupadd webdev')
     sudo('useradd -G mysql,webdev --create-home --shell /bin/bash %s' % env.username)
-    sudo('passwd %s' % env.password)
+    sudo('passwd %s' % env.username)
 
     sudo('ssh-keygen -t rsa -C "fab@tradeschool.coop"', user=env.username)
     puts('Created the following id_rsa.pub file for user %s:' % env.username)
@@ -313,9 +315,10 @@ def init_mysql_db():
     sudo('mysql_install_db', user=env.username)
     sudo('/usr/bin/mysql_secure_installation', user=env.username)
 
-    sudo('mysql -u root CREATE DATABASE %s;' % db_name)
-    sudo('mysql -u root CREATE USER %s@localhost IDENTIFIED BY %s;' % (db_user, db_password))
-    sudo('mysql -u root GRANT ALL PRIVILEGES ON %s.* TO %s@localhost;' % (db_name, db_user))
+    sudo('mysql -u root -p CREATE DATABASE %s;' % db_name)
+    sudo("mysql -u root -p CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (db_user, db_password))
+    sudo("mysql -u root -p GRANT ALL PRIVILEGES ON %s.* TO '%s'@'localhost';" % (db_name, db_user))
+    sudo("mysql -u root -p FLUSH PRIVILEGES;")
 
 
 @task
@@ -339,12 +342,12 @@ def init_apache():
 
 @task
 def initialize_everything():
-    init_os_package_setup()
-    init_fab_user()
-    init_project_sourcecode()
-    update_project_settings()
-    init_buildout()
-    init_mysql_db()
+    #init_os_package_setup()
+    #init_fab_user()
+    #init_project_sourcecode()
+    #update_project_settings()
+    #init_buildout()
+    #init_mysql_db()
 
     run_buildout()
     update_db()

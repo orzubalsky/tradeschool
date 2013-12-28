@@ -161,7 +161,7 @@ INSTALLED_APPS = (
     'pytz',               # python timezone library
     'dajaxice',           # django ajax app
     'rosetta',            # django admin translation interface
-    #'debug_toolbar',
+    'debug_toolbar',
     'tastypie',
     #'django_mailer',     # handle outgoing email queue
     'tradeschool',        # tradeschool branch app
@@ -213,21 +213,21 @@ TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
 }
 
-# DEBUG_TOOLBAR_PANELS = (
-#     'debug_toolbar.panels.version.VersionDebugPanel',
-#     'debug_toolbar.panels.timer.TimerDebugPanel',
-#     'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-#     'debug_toolbar.panels.headers.HeaderDebugPanel',
-#     'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-#     'debug_toolbar.panels.template.TemplateDebugPanel',
-#     'debug_toolbar.panels.sql.SQLDebugPanel',
-#     'debug_toolbar.panels.signals.SignalDebugPanel',
-#     'debug_toolbar.panels.logger.LoggingPanel',
-# )
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+)
 
-# DEBUG_TOOLBAR_CONFIG = {
-#     'INTERCEPT_REDIRECTS': False,
-# }
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
 
 GRAPPELLI_ADMIN_TITLE = _('Trade School Admin')
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
