@@ -148,7 +148,7 @@ def run_buildout():
 @task
 def update_db():
     with cd(env.project_dir):
-        sudo('./bin/django syncdb', user=env.username)
+        sudo('./bin/django syncdb --verbosity 2', user=env.username)
         sudo('./bin/django migrate', user=env.username)
 
 
@@ -337,17 +337,20 @@ def init_apache():
     put(filename, destination, use_sudo=True)
 
     sudo('a2ensite %s' % env.hosts[0])
+
+    sudo('a2dissite default')
+
     sudo('service apache2 reload')  # do we need this line??
 
 
 @task
 def initialize_everything():
-    #init_os_package_setup()
-    #init_fab_user()
-    #init_project_sourcecode()
-    #update_project_settings()
-    #init_buildout()
-    #init_mysql_db()
+    init_os_package_setup()
+    init_fab_user()
+    init_project_sourcecode()
+    update_project_settings()
+    init_buildout()
+    init_mysql_db()
 
     run_buildout()
     update_db()

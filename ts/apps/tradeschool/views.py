@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponsePermanentRedirect
 from django.http import HttpResponseRedirect, Http404
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 from django.forms.formsets import formset_factory
 from django.contrib.flatpages.models import FlatPage
 from django.utils.safestring import mark_safe
@@ -68,7 +68,7 @@ def course_view(request, branch_slug=None, course_slug=None):
 def redirect_to_course_list(request, branch_slug=None):
     """
     """
-    return HttpResponseRedirect(reverse(
+    return HttpResponseRedirect(reverse_lazy(
         course_list, kwargs={'branch_slug': branch_slug, }))
 
 
@@ -318,7 +318,7 @@ def course_add(request, branch_slug=None):
             Time.objects.get(pk=selected_time.pk).delete()
 
             # redirect to thank you page
-            return HttpResponseRedirect(reverse(
+            return HttpResponseRedirect(reverse_lazy(
                 course_submitted,
                 kwargs={
                     'course_slug': course.slug,
@@ -389,7 +389,7 @@ def course_edit(request, course_slug=None, branch_slug=None):
                     defaults=barter_item_form_data
                 )
                 barter_item.save()
-            return HttpResponseRedirect(reverse(
+            return HttpResponseRedirect(reverse_lazy(
                 course_submitted,
                 kwargs={
                     'branch_slug': branch.slug,
@@ -453,7 +453,7 @@ def course_unregister(request, branch_slug=None, course_slug=None, student_slug=
     if request.method == 'POST':
         registration.registration_status = 'unregistered'
         registration.save()
-        return HttpResponseRedirect(reverse(
+        return HttpResponseRedirect(reverse_lazy(
             course_list,
             kwargs={'branch_slug': branch_slug, })
         )
@@ -491,7 +491,7 @@ def course_feedback(request, branch_slug=None, course_slug=None, feedback_type='
             feedback.save()
 
             # redirect to thank you page
-            return HttpResponseRedirect(reverse(
+            return HttpResponseRedirect(reverse_lazy(
                 course_list,
                 kwargs={'branch_slug': branch_slug, })
             )

@@ -15,7 +15,7 @@ from django.contrib.auth.models import AbstractBaseUser, \
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 #from django_mailer import send_mail
 from django.template import Context
@@ -932,7 +932,7 @@ class Branch(Location):
         Url for the branch's website
         """
         return "%s%s" % (
-            self.domain, reverse('course-list', kwargs={
+            self.domain, reverse_lazy('course-list', kwargs={
                 'branch_slug': self.slug
             })
         )
@@ -2103,7 +2103,7 @@ class Course(ScheduledEvent):
         Returns URL for students to leave feedback for a scheduled class.
         """
         return "%s%s" % (
-            self.branch.domain, reverse('course-feedback', kwargs={
+            self.branch.domain, reverse_lazy('course-feedback', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
                 'feedback_type': 'student'
@@ -2116,7 +2116,7 @@ class Course(ScheduledEvent):
         Returns URL for teachers to leave feedback for a scheduled class.
         """
         return "%s%s" % (
-            self.branch.domain, reverse('course-feedback', kwargs={
+            self.branch.domain, reverse_lazy('course-feedback', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
                 'feedback_type': 'teacher'
@@ -2129,7 +2129,7 @@ class Course(ScheduledEvent):
         Returns URL for teachers to edit a scheduled class.
         """
         return "%s%s" % (
-            self.branch.domain, reverse('course-edit', kwargs={
+            self.branch.domain, reverse_lazy('course-edit', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
             })
@@ -2587,7 +2587,7 @@ class Registration(Base):
         domain = self.course.branch.domain
 
         return "%s%s" % (
-            domain, reverse('course-unregister', kwargs={
+            domain, reverse_lazy('course-unregister', kwargs={
                 'branch_slug': self.course.branch.slug,
                 'course_slug': self.course.slug,
                 'student_slug': self.student.slug
