@@ -8,16 +8,16 @@ bin/
 develop-eggs/
 eggs/
 parts/
+sql/
 
 # ignore settings files:
 ts/settings/*.py
 !ts/settings/__init__.py
+fab_config.py
+apache.conf
 
 # ignore static files (for now):
 ts/static/
-
-# ignore the migration app
-ts/apps/migration/
 
 # ignore uploaded files
 ts/media/uploads
@@ -28,7 +28,7 @@ ts/tmp/
 ts/settings/tmp/
 
 # ignore sql data dump:
-sample_data.json
+ts/apps/tradeschool/fixtures/migration.json
 
 # ignore branch template files (for now)
 ts/apps/branches/

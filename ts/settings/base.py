@@ -1,9 +1,10 @@
 # Django settings for ts project.
-import os, sys
+import os
+import sys
 from django.utils.translation import ugettext_lazy as _
 
 ADMINS = (
-    # ('Or Zubalsky', 'juviley@gmail.com'),
+    ('Or Zubalsky', 'juviley@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -21,9 +22,9 @@ USE_TZ = True
 
 PROJECT_DIR = os.path.dirname(__file__) + '/..'
 
-sys.path.append(os.path.dirname(PROJECT_DIR))    
+sys.path.append(os.path.dirname(PROJECT_DIR))
 sys.path.append(PROJECT_DIR)
-sys.path.append(os.path.join(PROJECT_DIR, 'apps'))                      
+sys.path.append(os.path.join(PROJECT_DIR, 'apps'))
 sys.path.append(os.path.join(PROJECT_DIR, 'libs'))
 
 # Absolute path to the directory static files should be collected to.
@@ -41,9 +42,16 @@ STATICFILES_DIRS = (
     # Put strings here, like '/home/html/static' or 'C:/www/django/static'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_DIR, 'static/'), 
+    os.path.join(PROJECT_DIR, 'static/'),
     os.path.join(PROJECT_DIR, 'apps', 'branches'),
-    os.path.join(PROJECT_DIR, '..', 'parts', 'django-admin-enhancer', 'admin_enhancer', 'static')
+    os.path.join(
+        PROJECT_DIR,
+        '..',
+        'parts',
+        'django-admin-enhancer',
+        'admin_enhancer',
+        'static'
+    )
 )
 
 # List of finder classes that know how to find static files in
@@ -61,11 +69,11 @@ LOCALE_PATHS = (
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
+    #('django.template.loaders.cached.Loader', (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     #'django.template.loaders.eggs.Loader',
-    )),
+    #)),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -89,12 +97,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'tradeschool.middleware.BranchMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',    
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'    
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 )
 
 ROOT_URLCONF = 'ts.urls'
@@ -109,15 +117,15 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     BRANCH_TEMPLATE_DIR,
     DEFAULT_BRANCH_TEMPLATE_DIR,
-    BASE_BRANCH_TEMPLATE_DIR,    
-    PROJECT_DIR + '/apps/tradeschool/templates',    
+    BASE_BRANCH_TEMPLATE_DIR,
+    PROJECT_DIR + '/apps/tradeschool/templates',
     PROJECT_DIR + '/templates',
-    PROJECT_DIR + '/../parts/django-admin-enhancer/admin_enhancer/templates/',    
+    PROJECT_DIR + '/../parts/django-admin-enhancer/admin_enhancer/templates/',
 )
 
 
 FIXTURE_DIRS = (
-   PROJECT_DIR + '/apps/tradeschool/fixtures',   
+    PROJECT_DIR + '/apps/tradeschool/fixtures',
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
@@ -129,6 +137,8 @@ LOGIN_URL = '/admin'
 INTERNAL_IPS = ('127.0.0.1',)
 #BRANCH_FILES = MEDIA_ROOT + '/branches_files'
 
+AUTH_USER_MODEL = 'tradeschool.Person'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,24 +146,28 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'grappelli.dashboard',    
-    'grappelli',    
-    'rosetta-grappelli',    
+    'grappelli.dashboard',
+    'grappelli',
+    'rosetta-grappelli',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.humanize',
     'django.contrib.redirects',
     'django.contrib.flatpages',
     'flatpages_tinymce',
-    'south',                        # intelligent schema and data migrations
-    'pytz',                         # python timezone library
-    'dajaxice',                     # django ajax app    
-    'rosetta',                      # django admin translation interface
+    'django_ace',
+    'templatesadmin',
+    'south',              # intelligent schema and data migrations
+    'pytz',               # python timezone library
+    'dajaxice',           # django ajax app
+    'rosetta',            # django admin translation interface
     'debug_toolbar',
-    #'django_mailer',               # handle outgoing email queue
-    'tradeschool',                  # tradeschool branch app
-    # 'branches',                     # holding all branch-specific files (templates, css, js)
-    #'migration',                    # tradeschool (zend framework php version) db schema migration
+    'tastypie',
+    #'django_mailer',     # handle outgoing email queue
+    'tradeschool',        # tradeschool branch app
+    # 'branches',         # holding all branch-specific files (templates, css, js)
+    #'migration',         # tradeschool (zend framework php version) db schema migration
+
 )
 
 # A sample logging configuration. The only tangible logging
@@ -175,10 +189,10 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler'
-        },        
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
     },
     'loggers': {
         'django.request': {
@@ -190,7 +204,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
-        },        
+        },
     }
 }
 
@@ -218,11 +232,15 @@ DEBUG_TOOLBAR_CONFIG = {
 GRAPPELLI_ADMIN_TITLE = _('Trade School Admin')
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
-# You can find more languages that Django supports @ http://www.i18nguy.com/unicode/language-identifiers.html
+TEMPLATESADMIN_GROUP = 'translators'
+TEMPLATESADMIN_TEMPLATE_DIRS = (BRANCH_TEMPLATE_DIR,)
+
+# You can find more languages that Django supports
+# at http://www.i18nguy.com/unicode/language-identifiers.html
 
 ROSETTA_MESSAGES_PER_PAGE = 100
 LANGUAGES = (
-    ('en', 'English'), 
+    ('en', 'English'),
     ('es_es', 'Spanish (Spain)'),
     ('es_mx', 'Spanish (Mexico)'),
     ('es_us', 'Spanish (US)'),

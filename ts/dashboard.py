@@ -7,11 +7,7 @@ To activate your index dashboard add the following to your settings.py::
 """
 
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-
 from grappelli.dashboard import modules, Dashboard
-from grappelli.dashboard.utils import get_admin_site_name
-from django.conf import settings
 
 
 class CustomIndexDashboard(Dashboard):
@@ -25,89 +21,100 @@ class CustomIndexDashboard(Dashboard):
                 'css/admin.css',
             ),
         }
-                
+
     columns = 3
     template = 'admin/dashboard.html'
-    
-    
+
     def init_with_context(self, context):
-        site_name = get_admin_site_name(context)
-                
         self.children.append(modules.Group(
             column=1,
             collapsible=False,
-            children = [
+            children=[
                 modules.ModelList(
-                    title=_('Scheduling'),
+                    title=_('Classes'),
                     column=1,
                     collapsible=False,
-                    models=('tradeschool.models.Schedule', 
-                            'tradeschool.models.Time',
-                            'tradeschool.models.TimeRange',
-                            'tradeschool.models.Student',
-                            'tradeschool.models.Teacher',
-                            'tradeschool.models.Course',
-                            'tradeschool.models.Venue',
-                            'tradeschool.models.Branch',),
+                    models=(
+                        'tradeschool.models.TemplateFile',
+                        'tradeschool.models.PendingCourse',
+                        'tradeschool.models.ApprovedCourse',
+                        'tradeschool.models.PastCourse',
+                        'tradeschool.models.Registration',
+                        'tradeschool.models.Venue',
+                        'tradeschool.models.BarterItem',
+                    ),
+                ),
+                modules.ModelList(
+                    title=_('Manage Times for Class Submissions'),
+                    column=1,
+                    collapsible=False,
+                    models=(
+                        'tradeschool.models.Time',
+                        'tradeschool.models.TimeRange',
+                    ),
+                ),
+                modules.ModelList(
+                    title=_('People'),
+                    column=1,
+                    collapsible=False,
+                    models=(
+                        'tradeschool.models.Student',
+                        'tradeschool.models.Teacher',
+                        'tradeschool.models.Organizer',
+                    ),
+                ),
+                modules.ModelList(
+                    title=_('Settings'),
+                    column=1,
+                    collapsible=False,
+                    models=(
+                        'tradeschool.models.Branch',
+                        'tradeschool.models.Cluster',
+                    ),
                 ),
                 modules.ModelList(
                     title=_('Emails'),
-                    collapsible=False,                    
+                    collapsible=False,
                     column=1,
-                    models=('tradeschool.models.BranchNotificationTemplate', 
-                            'tradeschool.models.BranchNotification',
-                            'tradeschool.models.ScheduleNotification',
-                            'mailer.models.MessageLog',
-                            'mailer.models.Message'),                    
+                    models=(
+                        'tradeschool.models.DefaultEmailContainer',
+                    ),
                 ),
                 modules.ModelList(
                     title=_('Website Content'),
-                    collapsible=False,                    
+                    collapsible=False,
                     column=1,
-                    models=('tradeschool.models.Photo',
-                            'tradeschool.models.BranchPage',                    
-                            'tradeschool.models.BranchContentBlock',
-                            'django.contrib.flatpages.models.FlatPage',),
-                ),   
+                    models=(
+                        'tradeschool.models.Photo',
+                        'tradeschool.models.Page',
+                        'django.contrib.flatpages.models.FlatPage',
+                    ),
+                ),
                 modules.ModelList(
                     title=_('Settings'),
-                    collapsible=False,                    
+                    collapsible=False,
                     column=1,
-                    models=('django.contrib.auth.models.Group', 
-                            'django.contrib.auth.models.User',),
+                    models=(
+                        'django.contrib.auth.models.Group',
+                        'django.contrib.sites.models.Site',
+                    ),
                 ),
-                # modules.AppList(
-                #                     title=_('Everything Else'),
-                #                     column=1,
-                #                     collapsible=False,
-                #                     exclude=('',
-                #                              ),
-                #                 )                 
             ]
         ))
-            
+
         self.children.append(modules.Group(
-           column=2,
-           collapsible=False,
-           children = [
-                
-              # append a feed module for talk.tradeschool.coop posts
-              # modules.Feed(
-              #     title=_('Recent TalkTS Posts'),
-              #     collapsible=False,                      
-              #     column=1,
-              #     limit=10,
-              #     feed_url='http://talk.tradeschool.coop/rss',            
-              # ),
-              modules.LinkList(
-                  layout='inline',
-                  column=1,
-                  children=(
-                    ['Translate TS', '/rosetta/pick/'],
-                    ['Talk TS', 'http://talk.tradeschool.coop', True],
-                    ['Trade School', 'http://tradeschool.coop', True]
-                  )
-                  
-              ),
-           ]
-      ))        
+            column=2,
+            collapsible=False,
+            children=[
+                modules.LinkList(
+                    layout='inline',
+                    column=1,
+                    children=(
+                        ['Translate TS', '/rosetta/pick/'],
+                        ['Edit HTML Templates', '/admin/templatesadmin/'],
+                        ['Talk TS', 'http://talk.tradeschool.coop', True],
+                        ['Trade School', 'http://tradeschool.coop', True]
+                    )
+                ),
+            ]
+        ))

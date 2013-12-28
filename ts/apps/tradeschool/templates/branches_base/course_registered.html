@@ -1,0 +1,31 @@
+{% load humanize smartdate i18n l10n %}
+
+{% block registration_complete %}
+<div class="course_registered">
+    <div id="classPopup" style="background-color:#123123;">
+        {% block registration_complete_header %}
+        <div id="popupHeader">
+            Thanks! You are signed up for<br />
+            <h3>{{ registration.course.title }}</h3>
+            {{ registration.course.start_time|date:"M j, Y"|localize }}<br />
+            at <strong>{{ registration.course.start_time|date:"g:ia"|localize }}</strong><br />
+        </div>
+        {% endblock registration_complete_header %}        
+        
+        {% block registration_complete_body %}
+        <div id="popupBody">
+            You are <strong>bringing the following</strong>:<br />
+            <div class="barterItems">
+            {% for item in registration.items.all %}
+                {{ item.title }}<br />
+            {% endfor %}
+            We have you down as <strong>{{ registration.student.fullname }}</strong>
+            {% if registration.student.phone %}
+            , reachable at <strong>{{ registration.student.phone }}</strong>
+            {% endif %}
+            . We've sent a confirmation email to you at <strong>{{ registration.student.email }}</strong>. See you in class!
+        </div>
+        {% endblock registration_complete_body %}        
+    </div>
+</div>
+{% endblock registration_complete %}

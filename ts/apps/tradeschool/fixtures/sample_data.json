@@ -1,0 +1,1594 @@
+[
+{
+    "pk": 1, 
+    "model": "sites.site", 
+    "fields": {
+        "domain": "tstest.net", 
+        "name": "Trade School Test Site"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "admin", 
+        "bio": "", 
+        "updated": "2013-08-07T22:49:56Z", 
+        "branches": [], 
+        "language": "en", 
+        "created": "2013-06-06T22:03:54Z", 
+        "default_branch": 1, 
+        "is_active": true, 
+        "phone": null, 
+        "slug": "", 
+        "website": null, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2013-08-07T23:46:35Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "admin", 
+        "password": "pbkdf2_sha256$10000$0o2NURcmhMJf$KUrv/eVojb1nvM7YxwqAN0wUAxLQdu/taZW6VD+pYok=", 
+        "email": "admin@test.tradeschool.coop"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "SampleOrganizer", 
+        "bio": "", 
+        "updated": "2013-08-07T22:54:12Z", 
+        "branches": [], 
+        "language": "en", 
+        "created": "2013-08-06T22:50:23Z", 
+        "default_branch": 1, 
+        "is_active": true, 
+        "phone": null, 
+        "slug": "", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": true, 
+        "last_login": "2013-08-06T22:50:23Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Organizer", 
+        "password": "", 
+        "email": "sampleorganizer@tstest.net"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.branch", 
+    "fields": {
+        "branch_status": "in_session", 
+        "city": "Sample Town", 
+        "updated": "2013-08-07T10:24:27Z", 
+        "language": "en", 
+        "title": "Sample Trade School Branch", 
+        "intro_copy": "<p>Information for the header of the page</p>", 
+        "country": "US", 
+        "header_copy": "<p>Barter for knowledge</p>", 
+        "created": "2013-08-06T22:45:41Z", 
+        "is_active": true, 
+        "site": 1, 
+        "email": "sample@tstest.net", 
+        "phone": "", 
+        "state": "NY", 
+        "clusters": [
+            1
+        ], 
+        "footer_copy": "<p>Information for the footer of the page</p>", 
+        "timezone": "US/Eastern", 
+        "slug": "sample-trade-school-branch", 
+        "organizers": [
+            1, 
+            2
+        ]
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.studentconfirmation", 
+    "fields": {
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ course.title }}\" on: {{ course.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "email_status": "not_sent", 
+        "course": null, 
+        "branch": null, 
+        "subject": "Welcome to Trade School!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.studentconfirmation", 
+    "fields": {
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ course.title }}\" on: {{ course.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "email_status": "not_sent", 
+        "course": null, 
+        "branch": 1, 
+        "subject": "Welcome to Trade School!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.studentconfirmation", 
+    "fields": {
+        "content": "{{ student.fullname }},\r\n\r\nWelcome to Trade School!\r\n\r\nYou successfully enrolled in: \"{{ course.title }}\" on: {{ course.start_time }}.\r\n\r\nYou agreed to bring:\r\n{{ item_list }}\r\n\r\nClasses are held at: {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nWe can reach you at {{ student.email }} or {{ student.phone }}.\r\n\r\nPlease email {{ branch.email }} if you have any questions or concerns.\r\n\r\nThanks!\r\n\r\nPS: If you have to cancel, just click {{ unregister_url }}. If you cancel less than 48 hours before the class occurs, you still owe your teacher the items you agreed to bring!", 
+        "email_status": "sent", 
+        "course": 2, 
+        "branch": null, 
+        "subject": "Welcome to Trade School!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.studentreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ course.title }}\" with {{ teacher.fullname }} from {{ course.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "a reminder about your class tomorrow"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.studentreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ course.title }}\" with {{ teacher.fullname }} from {{ course.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "branch": 1, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "a reminder about your class tomorrow"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.studentreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "course": 2, 
+        "send_on": "2050-09-04T15:00:00Z", 
+        "content": "Hello Trade Schooler,\r\n\r\nThis is a reminder about your class tomorrow.\r\n\r\nYou are signed up to attend \"{{ course.title }}\" with {{ teacher.fullname }} from {{ course.start_time}}.\r\n\r\nWe're excited to see you!\r\n\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}.\r\n\r\nPlease arrive on time with what you agreed to bring: \r\n{{ item_list }}\r\n\r\nIf you have any questions you can email {{ branch.email }}.\r\n\r\nIf you have to cancel, just click {{ unregister_url }}. You're canceling less than 48 hours before the class occurs, so you still owe your teacher the items you agreed to bring!\r\n\r\nUntil tomorrow,\r\nTrade School {{ branch.title }}", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "a reminder about your class tomorrow"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.studentfeedback", 
+    "fields": {
+        "days_delta": -1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how was your class?"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.studentfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "branch": 1, 
+        "send_time": "16:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how was your class?"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.studentfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "course": 2, 
+        "send_on": "2050-09-06T21:00:00Z", 
+        "content": "{{ student.fullname }},\r\n\r\nWe hope that you enjoyed \"{{ course.title }}\" yesterday. \r\n\r\nDo you have any constructive feedback for {{ teacher.fullname }} about the class? Please be specific, remember that Trade School is a space of mutual respect, and keep in mind that teachers are always learning how to share information.\r\n\r\nYour feedback will be ANONYMOUSLY delivered to {{ teacher.fullname }}.\r\n\r\nPlease send your feedback via {{ student_feedback_url }}.\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\nPS: Do you want to get more involved?\r\nIf you want to support Trade School with time, please contact {{ branch.email }}.\r\nIf you want to support Trade School with money (for supplies), please do so {here https://www.thefield.org/Profile.aspx?SAID=2141}.", 
+        "branch": null, 
+        "send_time": "16:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how was your class?"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherconfirmation", 
+    "fields": {
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the course.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "email_status": "not_sent", 
+        "course": null, 
+        "branch": null, 
+        "subject": "thanks for submitting a class!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherconfirmation", 
+    "fields": {
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the course.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "email_status": "not_sent", 
+        "course": null, 
+        "branch": 1, 
+        "subject": "thanks for submitting a class!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherconfirmation", 
+    "fields": {
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nThanks for proposing a class!\r\n\r\nIf everything looks good, your class \"{{ course.title }}\" will be approved very soon!\r\n\r\nIf you need to change your proposal, you can make edits using {{ class_edit_url }}.\r\n\r\nWe'll let you know when you class is accepted and added to the course.\r\n\r\nIf you have any questions email {{ branch.email }}.", 
+        "email_status": "sent", 
+        "course": 2, 
+        "branch": null, 
+        "subject": "thanks for submitting a class!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherclassapproval", 
+    "fields": {
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ course.title }}\" has been approved and is scheduled for {{ course.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "email_status": "not_sent", 
+        "course": null, 
+        "branch": null, 
+        "subject": "your class has been approved!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherclassapproval", 
+    "fields": {
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ course.title }}\" has been approved and is scheduled for {{ course.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "email_status": "not_sent", 
+        "course": null, 
+        "branch": 1, 
+        "subject": "your class has been approved!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherclassapproval", 
+    "fields": {
+        "content": "Hi  {{ teacher.fullname }},\r\n\r\nYour class, \"{{ course.title }}\" has been approved and is scheduled for {{ course.start_time }}. You can view it on the Trade School {{ branch.title }} homepage at {{ homepage_url }}.\r\n\r\nPlease arrive 15-30 minutes early, to set up.\r\n\r\nIf you have any questions, email {{ branch.email }} or call us at {{ branch.phone }}.\r\n\r\nWe can't wait to learn from you!\r\n\r\n\r\n\r\nPS: A Reminder....\r\n\r\nHOW IT WORKS\r\nTrade School is a space of mutual respect where students barter with teachers for instruction. Teachers submit a class description with a date/time they can teach and a list of items they want in exchange for teaching. Once a class submission is approved, it will be posted to the website. On the day of class, teachers and students meet at Trade School, barter items are given to the teacher, and the class occurs.\r\n\r\nTHE SPACE\r\nTrade School is in at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. The space has: {{ venue.resources }}. You can arrange the space in ANY way you like.", 
+        "email_status": "sent", 
+        "course": 2, 
+        "branch": null, 
+        "subject": "your class has been approved!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ course.title }}\" is scheduled for {{ course.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "We're excited to see you tomorrow!"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ course.title }}\" is scheduled for {{ course.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "branch": 1, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "We're excited to see you tomorrow!"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherreminder", 
+    "fields": {
+        "days_delta": -1, 
+        "course": 2, 
+        "send_on": "2050-09-04T23:00:00Z", 
+        "content": "Hi {{ teacher.fullname }},\r\n\r\nWe're excited to see you tomorrow!\r\n\r\nYour class, \"{{ course.title }}\" is scheduled for {{ course.start_time }}.\r\n\r\nPlease arrive 15-30mins early to set up.\r\n\r\nTrade School is at {{ venue.address_1 }}, {{ venue.city }}. The room can hold roughly {{ venue.capacity }} people. It has {{ venue.resources }}. You can arrange the space in ANY way you like.\r\n\r\nYour students will receive an email reminder today as well.\r\n\r\nHere is your class list and what each student agreed to bring:\r\n{{ student_list }}\r\n\r\nIf you have any questions email {{ branch.email }} or call {{ branch.phone }}.\r\n\r\nSee you later!", 
+        "branch": null, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "We're excited to see you tomorrow!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.teacherfeedback", 
+    "fields": {
+        "days_delta": -1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "branch": null, 
+        "send_time": "10:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how did it go?"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.teacherfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "course": null, 
+        "send_on": null, 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "branch": 1, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how did it go?"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.teacherfeedback", 
+    "fields": {
+        "days_delta": 1, 
+        "course": 2, 
+        "send_on": "2050-09-06T23:00:00Z", 
+        "content": "{{ teacher.fullname }},\r\n\r\nWe hope that you enjoyed teaching \"{{ course.title }}\" yesterday.\r\n\r\nDo you have any constructive feedback for the Trade School organizers? Please be specific and keep in mind that Trade School is an all-volunteer organization.\r\n\r\nPlease give us feedback here- {{ teacher_feedback_url }}\r\n\r\nThanks,\r\nTrade School {{ branch.title }}\r\n\r\n\r\n\r\nPS: Do you want to get more involved?\r\n\r\nIf you want to support Trade School with time, please contact {{ branch.email }}. If you want to support Trade School with money (for supplies), please do so here (https://www.thefield.org/Profile.aspx?SAID=2141)", 
+        "branch": null, 
+        "send_time": "18:00:00", 
+        "email_status": "not_sent", 
+        "subject": "how did it go?"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.defaultemailcontainer", 
+    "fields": {
+        "updated": "2013-01-15T03:36:48Z", 
+        "studentreminder": 1, 
+        "teacherconfirmation": 1, 
+        "created": "2013-01-15T03:36:48Z", 
+        "studentconfirmation": 1, 
+        "is_active": true, 
+        "teacherreminder": 1, 
+        "teacherclassapproval": 1, 
+        "studentfeedback": 1, 
+        "teacherfeedback": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.cluster", 
+    "fields": {
+        "updated": "2013-08-07T10:07:42Z", 
+        "is_active": true, 
+        "name": "a", 
+        "slug": "a", 
+        "created": "2013-08-07T10:07:42Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.cluster", 
+    "fields": {
+        "updated": "2013-08-07T10:16:08Z", 
+        "is_active": true, 
+        "name": "aa", 
+        "slug": "aaa", 
+        "created": "2013-08-07T10:16:08Z"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.venue", 
+    "fields": {
+        "city": "Sampletown", 
+        "updated": "2013-08-06T22:46:34Z", 
+        "capacity": 20, 
+        "title": "Sample Venue no 1", 
+        "color": "#3a490c", 
+        "country": "US", 
+        "created": "2013-08-06T22:46:34Z", 
+        "is_active": true, 
+        "phone": "", 
+        "state": "NY", 
+        "address_1": "100 Sample St.", 
+        "branch": 1, 
+        "resources": "Chairs, Tables"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.venue", 
+    "fields": {
+        "city": "Sampletown", 
+        "updated": "2013-08-06T22:47:02Z", 
+        "capacity": 15, 
+        "title": "Sample Venue no. 2", 
+        "color": "#c05c35", 
+        "country": "US", 
+        "created": "2013-08-06T22:47:02Z", 
+        "is_active": true, 
+        "phone": "", 
+        "state": "NY", 
+        "address_1": "200 Sample Ave.", 
+        "branch": 1, 
+        "resources": "Chairs, Tables, Kitchen"
+    }
+},
+{
+    "pk": 3, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-teacher", 
+        "bio": "I am a sample teacher!", 
+        "updated": "2013-08-06T22:56:16Z", 
+        "branches": [
+            1
+        ],
+        "courses_taught_count": 1,
+        "courses_taken_count": 0,
+        "language": "en", 
+        "created": "2013-08-06T22:54:52Z", 
+        "default_branch": null, 
+        "is_active": true, 
+        "phone": "123-123-1234", 
+        "slug": "sample-teacher", 
+        "website": "http://tradeschool.coop/", 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:54:51Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Teacher", 
+        "password": "pbkdf2_sha256$10000$eoAm2tTtLiu6$9g9x46Aq2aUdG6gKU32SHy526n3SQFrZhViN+dB7l9E=", 
+        "email": "sampleteacher@tstest.net"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-student-number-1", 
+        "bio": "", 
+        "updated": "2013-08-06T22:58:38Z", 
+        "branches": [
+            1
+        ],
+        "courses_taught_count": 0,
+        "courses_taken_count": 1,        
+        "language": "en", 
+        "created": "2013-08-06T22:58:38Z", 
+        "default_branch": null, 
+        "is_active": true, 
+        "phone": "", 
+        "slug": "sample-student-number-1", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:58:38Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Student Number 1", 
+        "password": "pbkdf2_sha256$10000$uBoqE9rejV5I$2ji90MdksM8TXjE2gZZvgC4GNXKhR5XAxF4QrfC0kmY=", 
+        "email": "samplestudent1@tstest.net"
+    }
+},
+{
+    "pk": 5, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-student-number-2", 
+        "bio": "", 
+        "updated": "2013-08-06T22:59:28Z", 
+        "branches": [
+            1
+        ], 
+        "language": "en", 
+        "created": "2013-08-06T22:59:27Z", 
+        "default_branch": null, 
+        "is_active": true, 
+        "phone": "234-234-2345", 
+        "slug": "sample-student-number-2", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:59:27Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Student Number 2", 
+        "password": "pbkdf2_sha256$10000$OgXhsU1YkneB$Quz7n4nDFj1urTib+0lIMTBQy2s8ldFOAtmm4D6s9AA=", 
+        "email": "samplestudent2@tstest.net"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "sample-student-number-3", 
+        "bio": "", 
+        "updated": "2013-08-06T22:59:51Z", 
+        "branches": [
+            1
+        ], 
+        "language": "en", 
+        "created": "2013-08-06T22:59:51Z", 
+        "default_branch": null, 
+        "is_active": true, 
+        "phone": "", 
+        "slug": "sample-student-number-3", 
+        "website": null, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-06T22:59:51Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "Sample Student Number 3", 
+        "password": "pbkdf2_sha256$10000$9ydFRBJSbPO1$iEj8y4pjXgXBBHXjrwkFm2cuvzrC9hoZNCT4N07qKPI=", 
+        "email": "samplestudent3@tstest.net"
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.person", 
+    "fields": {
+        "username": "aaaa", 
+        "bio": "", 
+        "updated": "2013-08-07T10:04:17Z", 
+        "branches": [], 
+        "language": "en", 
+        "created": "2013-08-07T10:04:17Z", 
+        "default_branch": null, 
+        "is_active": true, 
+        "phone": "", 
+        "slug": "", 
+        "website": "", 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2013-08-07T10:04:17Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "fullname": "a d", 
+        "password": "", 
+        "email": "a@asd.com"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-08T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-09T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-09T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-10T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-15T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-16T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-16T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-17T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 5, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-22T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-23T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-23T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-24T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-29T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-30T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 8, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "created": "2013-08-06T22:47:37Z", 
+        "is_active": true, 
+        "start_time": "2050-08-30T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-31T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 10, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-11T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-12T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 11, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-12T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-13T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 12, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-18T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-19T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 13, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-19T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-20T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 14, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-25T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-26T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 15, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-09-26T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-27T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 16, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-10-02T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-03T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 17, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "created": "2013-08-06T22:47:54Z", 
+        "is_active": true, 
+        "start_time": "2050-10-03T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-04T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 18, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:49:37Z", 
+        "created": "2013-08-06T22:49:32Z", 
+        "is_active": true, 
+        "start_time": "2050-10-06T22:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-06T23:00:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 19, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-06T22:49:48Z", 
+        "created": "2013-08-06T22:49:48Z", 
+        "is_active": true, 
+        "start_time": "2050-10-06T23:00:00Z", 
+        "venue": 2, 
+        "end_time": "2050-10-07T00:00:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 20, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-08T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-09T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 21, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-09T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-10T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 22, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-15T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-16T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 23, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-16T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-17T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 24, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-22T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-23T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 25, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-23T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-24T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 26, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-29T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-30T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 27, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-08-30T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-31T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 28, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-05T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-09-06T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 29, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-11T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-12T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 30, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-12T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-13T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 31, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-18T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-19T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 32, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-19T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-20T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 33, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-25T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-26T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 34, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-09-26T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-27T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 35, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-10-02T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-03T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 36, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:52Z", 
+        "created": "2013-08-07T08:02:52Z", 
+        "is_active": true, 
+        "start_time": "2050-10-03T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-04T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 37, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-08T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-09T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 38, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-09T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-10T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 39, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-15T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-16T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 40, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-16T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-17T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 41, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-22T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-23T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 42, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-23T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-24T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 43, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-29T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-30T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 44, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-08-30T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-08-31T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 45, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-05T23:00:00Z", 
+        "venue": 1, 
+        "end_time": "2050-09-06T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 46, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-11T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-12T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 47, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-12T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-13T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 48, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-18T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-19T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 49, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-19T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-20T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 50, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-25T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-26T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 51, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-09-26T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-09-27T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 52, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-10-02T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-03T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 53, 
+    "model": "tradeschool.time", 
+    "fields": {
+        "updated": "2013-08-07T08:02:53Z", 
+        "created": "2013-08-07T08:02:53Z", 
+        "is_active": true, 
+        "start_time": "2050-10-03T23:00:00Z", 
+        "venue": null, 
+        "end_time": "2050-10-04T00:30:00Z", 
+        "branch": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-08-06T22:47:37Z", 
+        "monday": true, 
+        "end_date": "2050-09-06", 
+        "created": "2013-08-06T22:47:37Z", 
+        "venue": 1, 
+        "start_time": "18:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": false, 
+        "thursday": false, 
+        "saturday": false, 
+        "sunday": false, 
+        "end_time": "19:30:00", 
+        "branch": 1, 
+        "tuesday": true, 
+        "start_date": "2050-08-06"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.timerange", 
+    "fields": {
+        "updated": "2013-08-06T22:47:54Z", 
+        "monday": true, 
+        "end_date": "2050-10-06", 
+        "created": "2013-08-06T22:47:54Z", 
+        "venue": null, 
+        "start_time": "18:00:00", 
+        "friday": false, 
+        "is_active": true, 
+        "wednesday": false, 
+        "thursday": false, 
+        "saturday": false, 
+        "sunday": true, 
+        "end_time": "19:30:00", 
+        "branch": 1, 
+        "tuesday": false, 
+        "start_date": "2050-09-06"
+    }
+},
+{
+    "pk": 16, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Drawing paper", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 17, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Tea leaves", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 18, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Bike parts", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 19, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Job-search help", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 110, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Feedback on a project", 
+        "is_active": true, 
+        "course": 3, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 26, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Drawing paper", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 27, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Tea leaves", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 28, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Bike parts", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 29, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Job-search help", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 210, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Feedback on a project", 
+        "is_active": true, 
+        "course": 4, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Drawing paper", 
+        "is_active": true, 
+        "course": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Tea leaves", 
+        "is_active": true, 
+        "course": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 8, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Bike parts", 
+        "is_active": true, 
+        "course": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 9, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Job-search help", 
+        "is_active": true, 
+        "course": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 10, 
+    "model": "tradeschool.barteritem", 
+    "fields": {
+        "updated": "2013-08-06T22:56:18Z", 
+        "title": "Feedback on a project", 
+        "is_active": true, 
+        "course": 2, 
+        "created": "2013-08-06T22:56:18Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.course", 
+    "fields": {
+        "updated": "2013-08-07T14:35:23Z", 
+        "created": "2013-08-06T22:56:17Z", 
+        "is_active": true, 
+        "start_time": "2050-09-05T23:00:00Z", 
+        "venue": 1, 
+        "description": "This is a sample class", 
+        "title": "Sample Class", 
+        "is_active": true, 
+        "teacher": 3, 
+        "max_students": 10,
+        "color":"#dda51e",
+        "end_time": "2050-09-06T00:30:00Z", 
+        "branch": 1, 
+        "status": "approved", 
+        "slug": "sample-class"
+    }
+},
+{
+    "pk": 3, 
+    "model": "tradeschool.course", 
+    "fields": {
+        "updated": "2010-08-07T14:35:23Z", 
+        "created": "2010-08-06T22:56:17Z", 
+        "is_active": true, 
+        "start_time": "2000-09-05T23:00:00Z", 
+        "venue": 1, 
+        "description": "This is a sample class", 
+        "title": "Sample Class", 
+        "is_active": true, 
+        "teacher": 3, 
+        "max_students": 10,
+        "color":"#dda51e",
+        "end_time": "2000-09-06T00:30:00Z", 
+        "branch": 1, 
+        "status": "approved", 
+        "slug": "sample-past-class"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.course", 
+    "fields": {
+        "updated": "2010-08-07T14:35:23Z", 
+        "created": "2010-08-06T22:56:17Z", 
+        "is_active": true, 
+        "start_time": "2050-09-05T23:00:00Z", 
+        "venue": 1, 
+        "description": "This is a sample class", 
+        "title": "Sample Class", 
+        "is_active": true, 
+        "teacher": 3, 
+        "max_students": 10,
+        "color":"#dda51e",
+        "end_time": "2050-09-06T00:30:00Z", 
+        "branch": 1, 
+        "status": "pending", 
+        "slug": "sample-pending-class"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.registration", 
+    "fields": {
+        "updated": "2013-08-07T09:52:46Z", 
+        "course": 2, 
+        "items": [
+            10
+        ], 
+        "created": "2013-08-06T22:58:39Z", 
+        "is_active": true, 
+        "student": 4, 
+        "registration_status": "registered"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.registration", 
+    "fields": {
+        "updated": "2013-08-06T22:59:28Z", 
+        "course": 2, 
+        "items": [
+            9, 
+            7
+        ], 
+        "created": "2013-08-06T22:59:28Z", 
+        "is_active": true, 
+        "student": 5, 
+        "registration_status": "registered"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.registration", 
+    "fields": {
+        "updated": "2013-08-06T23:00:09Z", 
+        "course": 2, 
+        "items": [
+            10
+        ], 
+        "created": "2013-08-06T22:59:51Z", 
+        "is_active": true, 
+        "student": 6, 
+        "registration_status": "unregistered"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tradeschool.page", 
+    "fields": {
+        "is_visible": false, 
+        "updated": "2013-08-07T23:35:08Z", 
+        "title": "Teacher Info", 
+        "url": "/teacher-info/", 
+        "created": "2013-08-07T23:35:08Z", 
+        "is_active": true, 
+        "content": "<h3>Here's a short orientation to get you situated.</h3>\r\n<h4><strong>How Trade School works</strong></h4>\r\n<p>Trade School is a non-traditional learning space where students barter with teachers.</p>\r\n<p>After you submit your class idea, when you'd like to teach, and what you want in exchange for teaching, Trade School organizers will review your submission. If your submission is approved, it will be posted on the website for students to sign up. On the day of class, you will meet your students at Trade School, receive your barter items, and enjoy the class.</p>\r\n<h4><strong>Your class</strong></h4>\r\n<p>Your class can be about anything and can be structured in any way you like. Just be sure that you feel comfortable setting the tone and sharing information. You are in charge during your class! Past topics and approaches to teaching have ranged from butter-making workshops to foraging walking tours; from business lectures to group discussions. We find that students want to get to know each other, so classes work best with break-out groups, work in pairs, and lots of student participation.</p>\r\n<h4><strong>Your barter items</strong></h4>\r\n<p>Think of the barter items you ask for as a giant wish list. Make it as long and as creative as you can. Last year, someone asked for new size 9.5 women's running shoes, and got them. This is a way for students to get to know you, or to begin learning about your topic before class begins. Try to ask for skills and non-monetary things (like research, advice, tips, help cleaning up, enthusiasm) as much as monetary-requests (like clothes, food, materials, etc.).</p>", 
+        "branch": 1, 
+        "position": 0
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.page", 
+    "fields": {
+        "is_visible": true, 
+        "updated": "2013-08-07T23:46:53Z", 
+        "title": "About", 
+        "url": "/about/", 
+        "created": "2013-08-07T23:46:53Z", 
+        "is_active": true, 
+        "content": "<p>This is the about page</p>", 
+        "branch": 1, 
+        "position": 0
+    }
+}
+]

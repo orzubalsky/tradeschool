@@ -1,0 +1,34 @@
+{% extends "hub/branch_list.html" %}
+
+{% block header %}
+<div id="headerBoard">
+    Barter for knowledge
+</div>    
+{% endblock header %}
+
+{% block intro %}
+{% endblock intro %}
+
+{% block branch-list %}
+<div id="branches">
+    <h2>{{ cluster.name }} Locations</h2>
+    {% for branch in branches %}
+    <div class="aBranch">
+        <div class="branchInfo">
+            <div class="branchHeader">
+                <h3>
+                    <a href="{% url 'course-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
+                </h3>
+            </div>
+        </div>
+    </div>        
+    {% endfor %}
+</div>
+{% endblock branch-list %}
+
+{% block start-a-tradeschool %}
+{{ block.super }}
+{% endblock start-a-tradeschool %}
+
+{% block course-list %}
+{% endblock course-list %}

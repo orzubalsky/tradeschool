@@ -1,45 +1,86 @@
 LOCAL_SETTINGS = True
-from django.conf import settings
 from ts.settings.base import *
 
 SITE_ID = 1
 
-# define environment
-STAGE_NAME = 'PROD' # either PROD or DEV
+# define environment, either PROD or DEV
+STAGE_NAME = 'PROD'
 
 # debugging changes according to environment configuration
 if STAGE_NAME == 'DEV':
     DEBUG = True
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    
-else :
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
     DEBUG = False
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'    
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',    # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                         # Or path to database file if using sqlite3.
-        'USER': '',                         # Not used with sqlite3.
-        'PASSWORD': '',                     # Not used with sqlite3.
-        'HOST': '',                         # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                         # Set to empty string for default. Not used with sqlite3.
+        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql',
+
+        # Or path to database file if using sqlite3.
+        'NAME': '',
+
+        # Not used with sqlite3.
+        'USER': '',
+
+        # Not used with sqlite3.
+        'PASSWORD': '',
+
+        # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '',
+
+        # Set to empty string for default. Not used with sqlite3.
+        'PORT': '',
     }
 }
- 
+
 CACHES = {
-    'default' : dict(
-        BACKEND = 'johnny.backends.filebased.FileBasedCache',
-        LOCATION = PROJECT_DIR + '/tmp/django_cache',
-        JOHNNY_CACHE = True,
-    )
+    'default': dict(
+        BACKEND='johnny.backends.memcached.MemcachedCache',
+        LOCATION=['127.0.0.1:11211', ],
+        JOHNNY_CACHE=True,
+    ),
 }
 JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_ts'
+ROSETTA_WSGI_AUTO_RELOAD = True
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' 'static/' subdirectories and in STATICFILES_DIRS.
+# Example: '/home/media/media.lawrence.com/static/'
+STATIC_ROOT = '/path/to/static/'
+
+# URL prefix for static files.
+# Example: 'http://media.lawrence.com/static/'
+STATIC_URL = ''
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like '/home/html/static' or 'C:/www/django/static'.
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_DIR, 'static/'),
+    os.path.join(PROJECT_DIR, 'apps', 'branches'),
+    os.path.join(
+        PROJECT_DIR,
+        '..',
+        'parts',
+        'django-admin-enhancer',
+        'admin_enhancer',
+        'static'
+    )
+)
+
+ALLOWED_HOSTS = ('.tradeschool.coop',)
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_URL = 'http://127.0.0.1:8000/media/'
+MEDIA_URL = 'http://tradeschool.coop/media/'
+MEDIA_ROOT = '/path/to/media/'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

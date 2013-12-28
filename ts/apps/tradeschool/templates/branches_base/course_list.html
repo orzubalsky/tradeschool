@@ -1,0 +1,24 @@
+{% extends templates.extend_template %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+<div class="classes" id="future">
+{% for course in branch.course_set.public.approved %}
+   
+   {% ifchanged branch.course_set.start_time.day %}
+   {% block course_date_divider %}
+    <div class="dateDivider">
+        <strong class="date1">{{ course.start_time|date:"M j, Y"|localize }}</strong>
+        <strong class="date2">{{ course.start_time|date:"l"|naturalday|localize }}</strong>
+    </div>
+    {% endblock course_date_divider %}    
+    {% endifchanged %}
+
+    {% with templates.prefix|add:'course_item.html' as course_item_template %}
+    {% include course_item_template %}
+    {% endwith %}
+
+{% endfor %}
+</div>
+{% endblock main_content %}

@@ -1,0 +1,20 @@
+{% extends templates.extend_template %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block main_content %}
+
+{% block page_title %}
+<h2 class="subTitle">Past classes</h2>
+{% endblock page_title %}<
+
+<div class="classes" id="past">
+{% for course in branch.course_set.past.public %}
+
+    {% with templates.prefix|add:'course_item_past.html' as course_item_template %}
+    {% include course_item_template %}
+    {% endwith %}
+
+{% endfor %}    
+</div>
+{% endblock main_content %}
