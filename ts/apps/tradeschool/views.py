@@ -281,20 +281,8 @@ def course_add(request, branch_slug=None):
                 except IndexError:
                     pass
 
-            # check if the submited course already exists in the system
-            # we determine an existing course by its title
-            course = Course.objects.filter(title=course.title)
-
-            if course.exists():
-                course = course[0]
-
-                course.title = course_data['title']
-                course.description = course_data['description']
-                course.max_students = course_data['max_students']
-            else:
-                course = Course(**course_data)
-
             # save course
+            course = Course(**course_data)
             course.save()
 
             # save barter items
