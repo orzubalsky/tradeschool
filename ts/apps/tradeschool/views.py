@@ -503,12 +503,9 @@ def branch_page(request, url, branch_slug=None):
     """
     branch = get_object_or_404(Branch, slug=branch_slug)
 
-    if not url.startswith('/'):
-        url = '/' + url
-
     try:
         page = get_object_or_404(
-            Page, url__exact=url, branch=branch, is_active=True)
+            Page, url__exact=url, branch__pk=branch.pk, is_active=True)
     except Http404:
         if not url.endswith('/') and settings.APPEND_SLASH:
             url += '/'
