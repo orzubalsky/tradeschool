@@ -34,13 +34,15 @@ class BranchPagesManager(Manager):
             try:
                 branch = Branch.objects.get(pk=int(data['branch_id']))
 
+                url = "/%s/" % data['url']
+
                 if branch_page.exists() is False:
                     branch_page = Page(
                         pk=data['id'],
                         branch=branch,
                         title=data['title'],
                         content=data['content'],
-                        url=data['url'],
+                        url=url,
                         is_active=data['status'],
                         created=timezone.make_aware(data['timestamp'], timezone.utc),
                         updated=timezone.make_aware(data['timestamp'], timezone.utc),
