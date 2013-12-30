@@ -21,7 +21,7 @@ class BranchPagesManager(Manager):
             old_branchpage_row = BranchPages.objects.get(pk=int(data['id']))
             try:
                 branch = Branch.objects.get(pk=old_branchpage_row.branch_id)
-                if branch.slug == branch_slug:
+                if branch.slug.lower() == branch_slug.lower():
                     do_save = True
             except Branch.DoesNotExist:
                 pass
@@ -79,7 +79,7 @@ class BranchPhotosManager(Manager):
             old_branchphoto_row = BranchPhotos.objects.get(pk=int(data['id']))
             try:
                 branch = Branch.objects.get(pk=old_branchphoto_row.branch_id)
-                if branch.slug == branch_slug:
+                if branch.slug.lower() == branch_slug.lower():
                     do_save = True
             except Branch.DoesNotExist:
                 pass
@@ -241,7 +241,7 @@ class ClassesManager(Manager):
                         venue = Venue.objects.get(pk=old_class_row.venue_id)
                         try:
                             branch = Branch.objects.get(pk=venue.branch_id)
-                            if branch.slug == branch_slug:
+                            if branch.slug.lower() == branch_slug.lower():
                                 do_save = True
                         except Branch.DoesNotExist:
                             pass
@@ -436,7 +436,7 @@ class FeedbacksManager(Manager):
                     venue = Venue.objects.get(pk=old_class_row.venue_id)
                     try:
                         branch = Branch.objects.get(pk=venue.branch_id)
-                        if branch.slug == branch_slug:
+                        if branch.slug.lower() == branch_slug.lower():
                             do_save = True
                     except Branch.DoesNotExist:
                         pass
@@ -564,7 +564,7 @@ class StudentsManager(Manager):
                                 pk=old_class_row.venue_id)
                             try:
                                 branch = Branch.objects.get(pk=venue.branch_id)
-                                if branch.slug == branch_slug:
+                                if branch.slug.lower() == branch_slug.lower():
                                     do_save = True
                             except Branch.DoesNotExist:
                                 pass
@@ -717,7 +717,7 @@ class TeachersManager(Manager):
                                 pk=old_class_row.venue_id)
                             try:
                                 branch = Branch.objects.get(pk=venue.branch_id)
-                                if branch.slug == branch_slug:
+                                if branch.slug.lower() == branch_slug.lower():
                                     do_save = True
                             except Branch.DoesNotExist:
                                 pass
@@ -783,7 +783,7 @@ class UsersManager(Manager):
             do_save = False
             try:
                 branch = Branch.objects.get(pk=data['branch_id'])
-                if branch.slug == branch_slug:
+                if branch.slug.lower() == branch_slug.lower():
                     do_save = True
             except Branch.DoesNotExist:
                 pass
@@ -900,7 +900,7 @@ class VenuesManager(Manager):
             do_save = False
             try:
                 branch = Branch.objects.get(pk=data['branch_id'])
-                if branch.slug == branch_slug:
+                if branch.slug.lower() == branch_slug.lower():
                     do_save = True
             except Branch.DoesNotExist:
                 pass

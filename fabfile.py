@@ -167,6 +167,24 @@ def load_fixtures():
 
 
 @task
+def load_fixture():
+    filename = prompt(
+        'Enter name of fixture file:',
+        default=env.setting_file
+    )
+    destination = os.path.join(
+        env.project_dir,
+        'tmp',
+        'data.json'
+    )
+    put(filename, destination, use_sudo=True)
+    sudo('chown %s:webdev %s' % (env.username, destination))
+
+    with cd(env.project_dir):
+        sudo('./bin/django loaddata %s' % destination, user=env.username)
+
+
+@task
 def restart_memcached():
     with cd('/etc/init.d/memcached'):
         sudo('restart')

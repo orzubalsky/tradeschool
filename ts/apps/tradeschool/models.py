@@ -1035,17 +1035,23 @@ class Branch(Location):
         )
 
         if self.pk is not None and os.path.exists(template_directory):
-            original = Branch.objects.get(pk=self.pk)
-            if original.slug != self.slug:
-                self.update_template_dir(original.slug, self.slug)
+            try:
+                original = Branch.objects.get(pk=self.pk)
+                if original.slug != self.slug:
+                    self.update_template_dir(original.slug, self.slug)
+            except Branch.DoesNotExist:
+                pass
 
         super(Branch, self).save(*args, **kwargs)
 
         if self.pk is not None:
-            original = Branch.objects.get(pk=self.pk)
-            if original.branch_status != self.branch_status \
-                    and self.branch_status != 'pending':
-                self.generate_files()
+            try:
+                original = Branch.objects.get(pk=self.pk)
+                if original.branch_status != self.branch_status \
+                        and self.branch_status != 'pending':
+                    self.generate_files()
+            except Branch.DoesNotExist:
+                pass
 
 
 class Venue(Location):
