@@ -58,7 +58,7 @@
         <div id="headerNav">
             <ul>
             {% for page in branch.page_set.public.visible %}
-                <li><a href="/{{ branch.slug }}/page/{{ page.url }}">{{ page.title|title }}</a></li>
+                <li><a href="{% url 'branch-page' branch_slug=branch.slug page=page.url %}">{{ page.title|title }}</a></li>
             {% endfor %}
                 <li><a href="{% url 'course-list-past' branch_slug=branch.slug %}">{% blocktrans context "Past Classes" %}Past{% endblocktrans %}</a></li>               
                 <li class="tshq"><a href="/">{% blocktrans context "Text for the Tradeschool.coop link" %}TS HQ{% endblocktrans %}</a></li>
