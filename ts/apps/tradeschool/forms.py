@@ -5,6 +5,22 @@ from django.contrib.sites.models import Site
 from tradeschool.models import *
 
 
+class DefaultBranchForm(Form):
+    def __init__(self, user, redirect_to, *args, **kwargs):
+        super(DefaultBranchForm, self).__init__(*args, **kwargs)
+
+        branches = Branch.objects.filter(pk__in=user.branches_organized.all)
+        choices = [(o.id, str(o.title)) for o in branches]
+        self.fields['default_branch'] = forms.ChoiceField(choices=choices)
+        self.initial['default_branch'] = user.default_branch.pk
+        self.initial['organizer_id'] = user.pk
+        self.initial['redirect_to'] = redirect_to
+
+    default_branch = forms.ChoiceField()
+    organizer_id = forms.IntegerField(widget=forms.HiddenInput)
+    redirect_to = forms.CharField(widget=forms.HiddenInput)
+
+
 class BranchForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(BranchForm, self).__init__(*args, **kwargs)

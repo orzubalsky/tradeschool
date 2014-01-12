@@ -587,3 +587,25 @@ def start_a_tradeschool(request):
         'branch_form': branch_form,
         'organizer_form': organizer_form,
     }, context_instance=RequestContext(request))
+
+
+def switch_default_branch(request):
+
+    organizer_id = request.GET.get('organizer_id', None)
+    organizer = get_object_or_404(Person, pk=organizer_id)
+
+    default_branch_id = request.GET.get('default_branch', None)
+    default_branch = get_object_or_404(Branch, pk=default_branch_id)
+
+    redirect_url = request.GET.get('redirect_to', None)
+
+    if request.method == 'GET':
+        form = DefaultBranchForm(organizer, redirect_url, data=request.GET)
+
+        if form.is_valid():
+
+            # save organizer
+            organizer.default_branch = default_branch
+            organizer.save()
+
+    return HttpResponseRedirect(redirect_url)

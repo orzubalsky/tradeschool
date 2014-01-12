@@ -1,0 +1,31 @@
+{% load i18n tz default_branch_form %}
+
+<style>
+#switchDefaultBranchForm {
+	display: inline;
+}
+#switchDefaultBranchForm select {
+	background: none repeat scroll 0 0 #FF0000;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    font-size: 12px;
+    height: 18px;
+    padding: 0;
+    width: 120px;
+}
+#switchDefaultBranchForm input.submit {
+    border-radius: 0;
+    height: 18px;
+    padding: 2px 9px;
+}
+#switchDefaultBranchForm input.submit:hover {
+    color: black;
+}
+</style>
+
+<form id="switchDefaultBranchForm" action="{% url 'switch-default-branch' %}" method="get">
+	{% for field in form %}
+		{{ field }}
+	{% endfor %}
+    <input class="submit" type="submit" value="switch branch" />
+</form>

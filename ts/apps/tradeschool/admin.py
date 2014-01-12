@@ -380,7 +380,7 @@ class CourseInline(BaseTabularInline):
         """Filter branches by those organized by the logged in user."""
         return super(CourseInline, self).queryset(
             request,
-            Q(branch__in=request.user.default_branch)
+            Q(branch=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -390,7 +390,7 @@ class CourseInline(BaseTabularInline):
         """
         if db_field.name == 'venue':
             kwargs['queryset'] = Venue.objects.filter(
-                branch__in=request.user.default_branch
+                branch=request.user.default_branch
             )
         return super(CourseInline, self).formfield_for_foreignkey(
             db_field,
@@ -415,7 +415,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         """
         return super(RegistrationInline, self).queryset(
             request,
-            Q(course__branch__in=request.user.default_branch)
+            Q(course__branch=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -427,7 +427,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Student,
-                Q(branch__in=request.user.default_branch)
+                Q(branch__in=[request.user.default_branch, ])
             )
         return super(RegistrationInline, self).formfield_for_foreignkey(
             db_field,
@@ -477,7 +477,7 @@ class BarterItemInline(BaseTabularInline):
         """
         return super(BarterItemInline, self).queryset(
             request,
-            Q(course__branch__in=request.user.default_branch)
+            Q(course__branch=request.user.default_branch)
         )
 
     def title_link(self, obj):
@@ -525,7 +525,7 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
         """
         return super(FeedbackInline, self).queryset(
             request,
-            Q(course__branch__in=request.user.default_branch)
+            Q(course__branch=request.user.default_branch)
         )
 
     model = Feedback
@@ -546,7 +546,7 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
         """
         return super(PhotoInline, self).queryset(
             request,
-            Q(branch__in=request.user.default_branch)
+            Q(branch=request.user.default_branch)
         )
 
     def render_image(self, obj):
@@ -800,7 +800,7 @@ class PersonAdmin(BaseAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Branch,
-                Q(pk__in=request.user.default_branch)
+                Q(pk__in=request.user.branches_organized.all)
             )
         return super(PersonAdmin, self).formfield_for_foreignkey(
             db_field,
@@ -848,7 +848,7 @@ class OrganizerAdmin(PersonAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'default_branch':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
-                request, Branch, Q(pk__in=request.user.default_branch))
+                request, Branch, Q(pk__in=request.user.branches_organized.all))
 
         return super(OrganizerAdmin, self).\
             formfield_for_foreignkey(db_field, request, **kwargs)
@@ -1380,7 +1380,7 @@ class RegistrationAdmin(BaseAdmin):
         """
         return super(RegistrationAdmin, self).queryset(
             request,
-            Q(course__branch__in=request.user.default_branch)
+            Q(course__branch=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1395,7 +1395,7 @@ class RegistrationAdmin(BaseAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Course,
-                Q(branch__in=request.user.default_branch)
+                Q(branch=request.user.default_branch)
             )
 
         return super(RegistrationAdmin, self).formfield_for_foreignkey(
@@ -1455,7 +1455,7 @@ class BarterItemAdmin(BaseAdmin):
         """
         return super(BarterItemAdmin, self).queryset(
             request,
-            Q(course__branch__in=request.user.default_branch)
+            Q(course__branch=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1464,7 +1464,7 @@ class BarterItemAdmin(BaseAdmin):
                 request,
                 Course,
                 Q(
-                    branch__in=request.user.default_branch,
+                    branch=request.user.default_branch,
                     status='approved'
                 )
             )
@@ -1496,7 +1496,7 @@ class PhotoAdmin(BaseAdmin):
         """
         return super(PhotoAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.default_branch)
+            Q(branch=request.user.default_branch)
         )
 
     list_display = (
@@ -1529,7 +1529,7 @@ class PageAdmin(BaseAdmin):
         """
         return super(PageAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.default_branch)
+            Q(branch=request.user.default_branch)
         )
 
     form = PageForm
@@ -1573,13 +1573,13 @@ class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
         """
         return super(FeedbackAdmin, self).queryset(
             request,
-            Q(course__branch__in=request.user.default_branch)
+            Q(course__branch=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'course':
             kwargs['queryset'] = Course.objects.filter(
-                branch__in=request.user.default_branch)
+                branch=request.user.default_branch)
 
         return super(FeedbackAdmin, self).formfield_for_foreignkey(
             db_field, request, **kwargs)
