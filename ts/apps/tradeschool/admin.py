@@ -587,7 +587,7 @@ class BranchAdmin(BaseAdmin):
         return super(BranchAdmin, self).queryset(
             request,
             (
-                Q(pk__in=request.user.default_branch)
+                Q(pk=request.user.default_branch.pk)
                 | Q(branch_status='pending')
             )
         )
