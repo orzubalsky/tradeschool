@@ -12,9 +12,8 @@ from tradeschool.forms import *
 
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
     """
-    Base admin model. Filters objects queryset according to the current branch.
+    Base model for all admin models in the system. Filters objects queryset by the current branch.
     """
-
     def queryset(self, request, q=None):
         """
         queryset is filtered against the Branch objects that the logged in
@@ -29,7 +28,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
             # other users see data filtered by
             # the branches they're organizing.
             if q is None:
-                q = Q(branches__in=request.user.branches_organized.all)
+                q = Q(branches__in=[request.user.default_branch, ])
             qs = qs.filter(q)
 
         # we need this from the superclass method
@@ -50,7 +49,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Branch,
-                Q(pk__in=request.user.branches_organized.all)
+                Q(pk=request.user.default_branch.pk)
             )
         return super(BaseAdmin, self).formfield_for_foreignkey(
             db_field,
@@ -67,7 +66,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         """
         if db_field.name == 'branches':
             qs = Branch.objects.filter(
-                pk__in=request.user.branches_organized.all
+                pk__in=request.user.default_branch
             )
             kwargs['queryset'] = qs
 
@@ -137,7 +136,7 @@ class BaseTabularInline(admin.TabularInline):
             # other users see data filtered by
             # the branches they're organizing.
             if q is None:
-                q = Q(branches__in=request.user.branches_organized.all)
+                q = Q(branches__in=[request.user.default_branch, ])
             qs = qs.filter(q)
 
         # we need this from the superclass method
@@ -198,7 +197,7 @@ class BaseStackedInline(admin.StackedInline):
             # other users see data filtered by
             # the branches they're organizing.
             if q is None:
-                q = Q(branches__in=request.user.branches_organized.all)
+                q = Q(branches__in=[request.user.default_branch, ])
             qs = qs.filter(q)
 
         # we need this from the superclass method
@@ -381,7 +380,7 @@ class CourseInline(BaseTabularInline):
         """Filter branches by those organized by the logged in user."""
         return super(CourseInline, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch__in=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -391,7 +390,7 @@ class CourseInline(BaseTabularInline):
         """
         if db_field.name == 'venue':
             kwargs['queryset'] = Venue.objects.filter(
-                branch__in=request.user.branches_organized.all
+                branch__in=request.user.default_branch
             )
         return super(CourseInline, self).formfield_for_foreignkey(
             db_field,
@@ -416,7 +415,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         """
         return super(RegistrationInline, self).queryset(
             request,
-            Q(course__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -428,7 +427,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Student,
-                Q(branch__in=request.user.branches_organized.all)
+                Q(branch__in=request.user.default_branch)
             )
         return super(RegistrationInline, self).formfield_for_foreignkey(
             db_field,
@@ -478,7 +477,7 @@ class BarterItemInline(BaseTabularInline):
         """
         return super(BarterItemInline, self).queryset(
             request,
-            Q(course__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.default_branch)
         )
 
     def title_link(self, obj):
@@ -526,7 +525,7 @@ class FeedbackInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
         """
         return super(FeedbackInline, self).queryset(
             request,
-            Q(course__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.default_branch)
         )
 
     model = Feedback
@@ -547,7 +546,7 @@ class PhotoInline(enhanced_admin.EnhancedAdminMixin, BaseTabularInline):
         """
         return super(PhotoInline, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch__in=request.user.default_branch)
         )
 
     def render_image(self, obj):
@@ -588,7 +587,7 @@ class BranchAdmin(BaseAdmin):
         return super(BranchAdmin, self).queryset(
             request,
             (
-                Q(pk__in=request.user.branches_organized.all)
+                Q(pk__in=request.user.default_branch)
                 | Q(branch_status='pending')
             )
         )
@@ -706,7 +705,7 @@ class VenueAdmin(BaseAdmin):
         """
         return super(VenueAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch=request.user.default_branch)
         )
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
@@ -793,7 +792,7 @@ class PersonAdmin(BaseAdmin):
         """
         return super(PersonAdmin, self).queryset(
             request,
-            Q(branches__in=request.user.branches_organized.all)
+            Q(branches__in=[request.user.default_branch, ])
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -801,7 +800,7 @@ class PersonAdmin(BaseAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Branch,
-                Q(pk__in=request.user.branches_organized.all)
+                Q(pk__in=request.user.default_branch)
             )
         return super(PersonAdmin, self).formfield_for_foreignkey(
             db_field,
@@ -849,7 +848,7 @@ class OrganizerAdmin(PersonAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'default_branch':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
-                request, Branch, Q(pk__in=request.user.branches_organized.all))
+                request, Branch, Q(pk__in=request.user.default_branch))
 
         return super(OrganizerAdmin, self).\
             formfield_for_foreignkey(db_field, request, **kwargs)
@@ -888,7 +887,7 @@ class TeacherAdmin(PersonAdmin):
             request,
             Q(
                 courses_taught_count__gt=0,
-                branches__in=request.user.branches_organized.all
+                branches__in=[request.user.default_branch, ]
             )
         )
 
@@ -915,7 +914,7 @@ class StudentAdmin(PersonAdmin):
         """
         return super(StudentAdmin, self).queryset(
             request,
-            Q(branches__in=request.user.branches_organized.all)
+            Q(branches__in=[request.user.default_branch, ])
         )
 
 
@@ -935,10 +934,10 @@ class TimeAdmin(BaseAdmin):
 
         else:
             form.base_fields['venue'].queryset = Venue.objects.filter(
-                branch__in=request.user.branches_organized.all)
+                branch=request.user.default_branch)
 
             form.base_fields['branch'].queryset = Branch.objects.filter(
-                pk__in=request.user.branches_organized.all)
+                pk=request.user.default_branch.pk)
 
             form.base_fields['branch'].initial = request.user.default_branch
 
@@ -947,7 +946,7 @@ class TimeAdmin(BaseAdmin):
     def queryset(self, request):
         return super(TimeAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch=request.user.default_branch)
         )
 
     list_display = (
@@ -971,7 +970,7 @@ class TimeRangeAdmin(BaseAdmin):
     def queryset(self, request):
         return super(TimeRangeAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -981,7 +980,7 @@ class TimeRangeAdmin(BaseAdmin):
                 Venue,
                 Q(
                     is_active=True,
-                    branch__in=request.user.branches_organized.all
+                    branch=request.user.default_branch
                 )
             )
 
@@ -989,10 +988,10 @@ class TimeRangeAdmin(BaseAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Branch,
-                Q(pk__in=request.user.branches_organized.all)
+                Q(pk=request.user.default_branch.pk)
             )
             kwargs['queryset'] = Branch.objects.filter(
-                pk__in=request.user.branches_organized.all
+                pk=request.user.default_branch.pk
             )
 
         return super(TimeRangeAdmin, self).formfield_for_foreignkey(
@@ -1030,7 +1029,7 @@ class CourseAdmin(BaseAdmin):
     def queryset(self, request):
         return super(CourseAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch=request.user.default_branch)
         )
 
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -1059,11 +1058,11 @@ class CourseAdmin(BaseAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Venue,
-                Q(branch__in=request.user.branches_organized.all)
+                Q(branch=request.user.default_branch.pk)
             )
         if db_field.name == 'teacher':
             kwargs['queryset'] = Teacher.objects.filter(
-                branches__in=request.user.branches_organized.all
+                branches__in=[request.user.default_branch, ]
             )
 
         return super(CourseAdmin, self).formfield_for_foreignkey(
@@ -1381,7 +1380,7 @@ class RegistrationAdmin(BaseAdmin):
         """
         return super(RegistrationAdmin, self).queryset(
             request,
-            Q(course__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1389,14 +1388,14 @@ class RegistrationAdmin(BaseAdmin):
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Student,
-                Q(branches__in=request.user.branches_organized.all)
+                Q(branches__in=[request.user.default_branch, ])
             )
 
         if db_field.name == 'course':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
                 request,
                 Course,
-                Q(branch__in=request.user.branches_organized.all)
+                Q(branch__in=request.user.default_branch)
             )
 
         return super(RegistrationAdmin, self).formfield_for_foreignkey(
@@ -1456,7 +1455,7 @@ class BarterItemAdmin(BaseAdmin):
         """
         return super(BarterItemAdmin, self).queryset(
             request,
-            Q(course__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -1465,7 +1464,7 @@ class BarterItemAdmin(BaseAdmin):
                 request,
                 Course,
                 Q(
-                    branch__in=request.user.branches_organized.all,
+                    branch__in=request.user.default_branch,
                     status='approved'
                 )
             )
@@ -1497,7 +1496,7 @@ class PhotoAdmin(BaseAdmin):
         """
         return super(PhotoAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch__in=request.user.default_branch)
         )
 
     list_display = (
@@ -1530,7 +1529,7 @@ class PageAdmin(BaseAdmin):
         """
         return super(PageAdmin, self).queryset(
             request,
-            Q(branch__in=request.user.branches_organized.all)
+            Q(branch__in=request.user.default_branch)
         )
 
     form = PageForm
@@ -1574,13 +1573,13 @@ class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
         """
         return super(FeedbackAdmin, self).queryset(
             request,
-            Q(course__branch__in=request.user.branches_organized.all)
+            Q(course__branch__in=request.user.default_branch)
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'course':
             kwargs['queryset'] = Course.objects.filter(
-                branch__in=request.user.branches_organized.all)
+                branch__in=request.user.default_branch)
 
         return super(FeedbackAdmin, self).formfield_for_foreignkey(
             db_field, request, **kwargs)

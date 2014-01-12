@@ -35,7 +35,7 @@ class BranchTestCase(TestCase):
             username='test_admin',
             fullname="test admin",
             email='tester@tradeschool.coop',
-            password=self.password
+            password=self.password,
         )
 
         self.branch_add_url = '/admin/tradeschool/branch/add/'

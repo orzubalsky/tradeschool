@@ -24,18 +24,19 @@ class AdminTestCase(TestCase):
 
         self.site = Site.objects.all()[0]
 
+        # change the language to english for language-based assertations
+        self.branch = Branch.objects.all()[0]
+        self.branch.language = 'en'
+        self.branch.save()
+
         self.password = 'testts123!'
         self.admin = Person.objects.create_superuser(
             username='test_admin',
             fullname="test admin",
             email='tester@tradeschool.coop',
-            password=self.password
+            password=self.password,
+            default_branch=self.branch
         )
-
-        # change the language to english for language-based assertations
-        self.branch = Branch.objects.all()[0]
-        self.branch.language = 'en'
-        self.branch.save()
         self.branch.organizers.add(self.admin)
 
     def login(self):

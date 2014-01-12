@@ -36,8 +36,10 @@ class CourseTestCase(TestCase):
             username='test_admin',
             email='tester@tradeschool.coop',
             fullname='test admin',
-            password=self.password
+            password=self.password,
+            default_branch=self.branch
         )
+
         self.admin.branches.add(self.branch)
         self.branch.organizers.add(self.admin)
         self.admin.save()
