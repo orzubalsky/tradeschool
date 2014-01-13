@@ -609,3 +609,8 @@ def switch_default_branch(request):
             organizer.save()
 
     return HttpResponseRedirect(redirect_url)
+
+
+def redirect_to_admin(request, branch_slug=None):
+    get_object_or_404(Branch, slug=branch_slug)
+    return HttpResponseRedirect('/admin/')
