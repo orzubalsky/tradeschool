@@ -752,7 +752,6 @@ class VenueAdmin(BaseAdmin):
 
     list_display = (
         'title',
-        'branch',
         'address_1',
         'city',
         'capacity',
@@ -1503,7 +1502,6 @@ class PhotoAdmin(BaseAdmin):
         'get_thumbnail',
         'filename',
         'position',
-        'branch'
     )
 
     def get_thumbnail(self, obj):
@@ -1548,7 +1546,6 @@ class PageAdmin(BaseAdmin):
     list_display = (
         'title',
         'url',
-        'branch',
         'is_visible'
     )
     list_filter = (
