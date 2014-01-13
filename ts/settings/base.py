@@ -234,7 +234,9 @@ GRAPPELLI_ADMIN_TITLE = _('Trade School Admin')
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'
 
 TEMPLATESADMIN_GROUP = 'translators'
-TEMPLATESADMIN_TEMPLATE_DIRS = (BRANCH_TEMPLATE_DIR,)
+TEMPLATESADMIN_TEMPLATE_DIRS = (
+    BRANCH_TEMPLATE_DIR,
+)
 
 # You can find more languages that Django supports
 # at http://www.i18nguy.com/unicode/language-identifiers.html
