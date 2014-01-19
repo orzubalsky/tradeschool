@@ -387,3 +387,10 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
     max-width: 300px !important;
 }
 /*--------- SELECT WIDGET END -------*/
+
+
+
+#Branch_organizers-group .add-another,
+#registration_set-group .grp-delete-handler  {
+    display: none;
+}

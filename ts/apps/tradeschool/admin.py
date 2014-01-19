@@ -351,6 +351,14 @@ class OrganizedBranchInline(BaseTabularInline):
         """Return the super queryset method with no filtering."""
         return super(OrganizedBranchInline, self).queryset(request, Q())
 
+    def __init__(self, *args, **kwargs):
+        super(OrganizedBranchInline, self).__init__(*args, **kwargs)
+
+        print dir(self)
+
+    def has_add_permission(self, request):
+        return False
+
     model = Branch.organizers.through
     verbose_name = "Branch Organized by This Person"
     verbose_name_plural = "Branches Organized by This Person"
