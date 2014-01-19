@@ -32,7 +32,7 @@ def local():
 def testing():
     env.run = run
     env.hosts = [Config.testing_domain]
-    env.project_dir = Config.test_project_dir
+    env.project_dir = Config.testing_project_dir
     env.username = Config.testing_username
     env.password = Config.testing_password
     env.buildout_config_file = 'server.cfg'
