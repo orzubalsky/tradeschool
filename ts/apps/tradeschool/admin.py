@@ -1530,7 +1530,7 @@ class PageAdmin(BaseAdmin):
             Q(branch=request.user.default_branch)
         )
 
-    form = PageForm
+    #form = PageForm
     fieldsets = (
         (None, {
             'fields': (
