@@ -1861,8 +1861,6 @@ class ScheduledEvent(Durational):
     STATUS_CHOICES = (
         # Translators: The thing that shows what the status of the class is
         ('pending', _('Pending')),
-        ('contacted', _('Contacted')),
-        ('updated', _('Updated')),
         ('approved', _('Approved')),
         ('rejected', _('Rejected'))
     )
