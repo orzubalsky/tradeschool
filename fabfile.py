@@ -35,7 +35,7 @@ def testing():
     env.project_dir = Config.testing_project_dir
     env.username = Config.testing_username
     env.password = Config.testing_password
-    env.buildout_config_file = 'server.cfg'
+    env.buildout_config_file = 'testing.cfg'
     env.setting_file = Config.testing_settings_file
     env.setting_file_path = os.path.join(
         Config.testing_project_dir,
@@ -285,7 +285,7 @@ def init_os_package_setup():
 
 @task
 def init_fab_user():
-    #sudo('groupadd webdev')
+    sudo('groupadd webdev')
     sudo('useradd -G mysql,webdev --create-home --shell /bin/bash %s' % env.username)
     sudo('passwd %s' % env.username)
 
