@@ -28,7 +28,7 @@ class DefaultBranchFormNode(template.Node):
         user = self.user.resolve(context)
         redirect_page = self.redirect_page.resolve(context)
 
-        if user.is_anonymous() is False:
+        if user.is_anonymous() is False and user.is_superuser() is False:
             context['form'] = DefaultBranchForm(user, redirect_page)
 
             template = get_template('tags/default_branch_form.html')
