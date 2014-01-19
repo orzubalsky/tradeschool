@@ -36,23 +36,27 @@ class BranchPagesManager(Manager):
 
                 url = "/%s/" % data['url']
 
-                if branch_page.exists() is False:
-                    branch_page = Page(
-                        pk=data['id'],
-                        branch=branch,
-                        title=data['title'],
-                        content=data['content'],
-                        url=url,
-                        is_active=data['status'],
-                        created=timezone.make_aware(data['timestamp'], timezone.utc),
-                        updated=timezone.make_aware(data['timestamp'], timezone.utc),
-                    )
-                    branch_page.save()
+                pages_with_url = Page.objects.filter(url=url, branch=branch)
 
-                    print "     saved Page: [%s]" % branch_page
-                else:
-                    branch_page = Page.objects.get(url=data['url'])
-                    print "     found Page: [%s]" % branch_page
+                if pages_with_url.exists() is False:
+
+                    if branch_page.exists() is False:
+                        branch_page = Page(
+                            pk=data['id'],
+                            branch=branch,
+                            title=data['title'],
+                            content=data['content'],
+                            url=url,
+                            is_active=data['status'],
+                            created=timezone.make_aware(data['timestamp'], timezone.utc),
+                            updated=timezone.make_aware(data['timestamp'], timezone.utc),
+                        )
+                        branch_page.save()
+
+                        print "     saved Page: [%s]" % branch_page
+                    else:
+                        branch_page = Page.objects.get(url=data['url'])
+                        print "     found Page: [%s]" % branch_page
             except Branch.DoesNotExist:
                 pass
 
@@ -160,6 +164,7 @@ class BranchesManager(Manager):
         if do_save is True:
             try:
                 branch = Branch.objects.get(id=int(data['id']))
+                branch.save()
             except Branch.DoesNotExist:
                 branch = Branch(
                     id=int(data['id']),
@@ -296,6 +301,7 @@ class ClassesManager(Manager):
                     if Venue.objects.filter(pk=data['venue_id']).exists():
                         venue = Venue.objects.get(pk=data['venue_id'])
                         print "         in venue: [%s]" % venue
+
                         branch = Branch.objects.get(pk=venue.branch.id)
                         print "         in branch: [%s]" % branch
 
@@ -366,33 +372,35 @@ class ClassesManager(Manager):
 
                 # create the related barter items
                 # and add them to the course item
-                if ClassesXItems.objects.filter(class_id=int(data['id'])).exists():
+                if Venue.objects.filter(pk=data['venue_id']).exists():
 
-                    item_old_join_rows = ClassesXItems.objects.filter(class_id=int(data['id']))
+                    if ClassesXItems.objects.filter(class_id=int(data['id'])).exists():
 
-                    print "    items: %i" % item_old_join_rows.count()
+                        item_old_join_rows = ClassesXItems.objects.filter(class_id=int(data['id']))
 
-                    for item_old_join_row in item_old_join_rows:
+                        print "    items: %i" % item_old_join_rows.count()
 
-                        try:
-                            item = Items.objects.get(pk=item_old_join_row.item_id)
-                            barter_item = BarterItem.objects.filter(pk=item.id)
+                        for item_old_join_row in item_old_join_rows:
 
                             try:
-                                barter_item = BarterItem.objects.get(pk=item.id)
-                                barter_item.course = course
-                                barter_item.save()
+                                item = Items.objects.get(pk=item_old_join_row.item_id)
+                                barter_item = BarterItem.objects.filter(pk=item.id)
 
-                            except BarterItem.DoesNotExist:
-                                barter_item = BarterItem(
-                                    pk=item.id,
-                                    title=item.title,
-                                    course=course,
-                                    created=timezone.make_aware(data['timestamp'], timezone.utc),
-                                )
-                                barter_item.save()
-                        except Item.DoesNotExist:
-                            pass
+                                try:
+                                    barter_item = BarterItem.objects.get(pk=item.id)
+                                    barter_item.course = course
+                                    barter_item.save()
+
+                                except BarterItem.DoesNotExist:
+                                    barter_item = BarterItem(
+                                        pk=item.id,
+                                        title=item.title,
+                                        course=course,
+                                        created=timezone.make_aware(data['timestamp'], timezone.utc),
+                                    )
+                                    barter_item.save()
+                            except Items.DoesNotExist:
+                                pass
 
 
 class Classes(MigrationBase):
