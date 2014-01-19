@@ -662,13 +662,24 @@ class StudentsManager(Manager):
 
                     for item_old_join_row in item_old_join_rows:
 
-                        try:
-                            barter_item = BarterItem.objects.get(
-                                pk=item_old_join_row.item_id)
-                            registration.items.add(barter_item)
-                            registration.save()
-                        except BarterItem.DoesNotExist:
-                            pass
+                        if ClassesXItems.objects.filter(
+                                class_id=course.pk, item_id=item_old_join_row.item_id).exists():
+                            
+                            class_old_join_rows = ClassesXItems.objects.filter(class_id=course.pk, item_id=item_old_join_row.item_id)
+                            for class_old_row in class_old_join_rows:
+
+                                print course.pk
+                                print class_old_row.class_id
+
+                                if course.pk == class_old_row.class_id:
+
+                                    try:
+                                        barter_item = BarterItem.objects.get(
+                                            pk=item_old_join_row.item_id)
+                                        registration.items.add(barter_item)
+                                        registration.save()
+                                    except BarterItem.DoesNotExist:
+                                        pass
 
 
 class Students(MigrationBase):

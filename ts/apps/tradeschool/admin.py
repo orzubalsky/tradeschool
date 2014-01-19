@@ -1431,13 +1431,24 @@ class RegistrationAdmin(BaseAdmin):
             )
         return self.readonly_fields
 
+    def student_fullname(self, obj):
+        """
+        Return related student so it can be used in list_display.
+        """
+        student = obj.student
+        # link to teacher edit admin form
+        url = reverse('admin:tradeschool_student_change', args=(student.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, student.fullname)
+        return mark_safe(html)
+    student_fullname.short_description = _('Student')
+
     fields = (
-        'student',
+        'student_fullname',
         'course',
         'items',
         'registration_status'
     )
-    readonly_fields = ()
+    readonly_fields = ('student_fullname',)
     list_display = (
         'student',
         'course',
