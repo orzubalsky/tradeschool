@@ -22,12 +22,14 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         """
         qs = super(BaseAdmin, self).queryset(request)
 
-        # users see data filtered by
-        # the branches they're organizing.
-        if q is None:
-            if request.user.default_branch:
+        # superusers get to see all data,
+        # only filter queryset if the user is not a superuser
+        if not request.user.is_superuser:
+            # other users see data filtered by
+            # the branches they're organizing.
+            if q is None:
                 q = Q(branches__in=[request.user.default_branch, ])
-                qs = qs.filter(q)
+            qs = qs.filter(q)
 
         # we need this from the superclass method
         # otherwise we might try to *None, which is bad
@@ -226,7 +228,7 @@ class TimedEmailBranchInline(BaseTabularInline):
         return super(TimedEmailBranchInline, self).queryset(request, Q())
     extra = 0
     max_num = 0
-    fields = ('subject', 'content', 'days_delta', 'send_time')
+    fields = ('subject', 'content', 'email_status', 'days_delta', 'send_time')
 
 
 class TimedEmailCourseInline(BaseTabularInline):
@@ -764,7 +766,7 @@ class VenueAdmin(BaseAdmin):
     fieldsets = (
         # Translators: This is the a header in the branch admin form
         (_('Basic Info'), {
-            'fields': ('title', 'branch',)
+            'fields': ('title',)
         }),
         # Translators: This is the a header in the branch admin form
         (_('Contact Info'), {
@@ -811,7 +813,6 @@ class PersonAdmin(BaseAdmin):
         'phone',
         'courses_taken_count',
         'courses_taught_count',
-        'branches_string',
         'created',
     )
     search_fields = (
@@ -955,7 +956,6 @@ class TimeAdmin(BaseAdmin):
         'start_time',
         'end_time',
         'venue',
-        'branch'
     )
 
 
@@ -1087,6 +1087,9 @@ class CourseAdmin(BaseAdmin):
 
     def add_view(self, request, form_url='', extra_context=None):
         self.inlines = (BarterItemEditableInline, )
+        self.exclude = ('is_active', )
+        self.prepopulated_fields = {'slug': ('title',)}
+
         return super(CourseAdmin, self).add_view(request)
 
     def populate_notifications(self, request, queryset):

@@ -8,7 +8,7 @@ To activate your index dashboard add the following to your settings.py::
 
 from django.utils.translation import ugettext_lazy as _
 from grappelli.dashboard import modules, Dashboard
-
+from tradeschool.models import Person
 
 class CustomIndexDashboard(Dashboard):
     """
@@ -26,6 +26,9 @@ class CustomIndexDashboard(Dashboard):
     template = 'admin/dashboard.html'
 
     def init_with_context(self, context):
+
+        user = Person.objects.get(fullname=context['user'])
+
         self.children.append(modules.Group(
             column=1,
             collapsible=False,
@@ -90,8 +93,12 @@ class CustomIndexDashboard(Dashboard):
                         'django.contrib.flatpages.models.FlatPage',
                     ),
                 ),
+            ]
+        ))
+
+        if user.is_superuser:
+            self.children.append(
                 modules.ModelList(
-                    title=_('Settings'),
                     collapsible=False,
                     column=1,
                     models=(
@@ -99,8 +106,7 @@ class CustomIndexDashboard(Dashboard):
                         'django.contrib.sites.models.Site',
                     ),
                 ),
-            ]
-        ))
+            )
 
         self.children.append(modules.Group(
             column=2,

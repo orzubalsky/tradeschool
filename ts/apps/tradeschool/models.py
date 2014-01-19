@@ -123,7 +123,7 @@ class Email(Model):
         ('disabled', _('Disabled')),
 
         # Translators: Determines the status of an e-mail - Not Sent.
-        ('not_sent', _('Not Sent Yet')),
+        ('not_sent', _('Enabled (Not Sent Yet)')),
 
         # Translators: Determines the status of an e-mail - Sent.
         ('sent', _('Sent'))
@@ -1441,7 +1441,6 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         """
         return self.courses_taught.filter(
             status='approved',
-            start_time__lte=timezone.now(),
             is_active=True,
         ).count()
 
