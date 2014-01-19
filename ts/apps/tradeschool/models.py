@@ -2571,7 +2571,7 @@ class Registration(Base):
         max_length=20,
         choices=REGISTRATION_CHOICES,
         default='registered',
-        help_text=_("Did the student cancel?")
+        help_text=_("Student registration status")
     )
     items = ManyToManyField(
         BarterItem,

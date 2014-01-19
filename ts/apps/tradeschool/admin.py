@@ -22,14 +22,12 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         """
         qs = super(BaseAdmin, self).queryset(request)
 
-        # superusers get to see all data,
-        # only filter queryset if the user is not a superuser
-        if not request.user.is_superuser:
-            # other users see data filtered by
-            # the branches they're organizing.
-            if q is None:
+        # users see data filtered by
+        # the branches they're organizing.
+        if q is None:
+            if request.user.default_branch:
                 q = Q(branches__in=[request.user.default_branch, ])
-            qs = qs.filter(q)
+                qs = qs.filter(q)
 
         # we need this from the superclass method
         # otherwise we might try to *None, which is bad
@@ -1084,7 +1082,6 @@ class CourseAdmin(BaseAdmin):
             TeacherFeedbackCourseInline,
             StudentReminderCourseInline,
             StudentFeedbackCourseInline,
-            FeedbackInline,
         )
         return super(CourseAdmin, self).change_view(request, object_id)
 
@@ -1363,6 +1360,14 @@ class PastCourseAdmin(CourseAdmin):
                 response['location'] = url
 
         return response
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        self.inlines = (
+            BarterItemEditableInline,
+            RegistrationInline,
+            FeedbackInline,
+        )
+        return super(CourseAdmin, self).change_view(request, object_id)
 
     list_per_page = 20
 
