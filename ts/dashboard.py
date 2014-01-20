@@ -72,15 +72,6 @@ class CustomIndexDashboard(Dashboard):
                     collapsible=False,
                     models=(
                         'tradeschool.models.Branch',
-                        'tradeschool.models.Cluster',
-                    ),
-                ),
-                modules.ModelList(
-                    title=_('Emails'),
-                    collapsible=False,
-                    column=1,
-                    models=(
-                        'tradeschool.models.DefaultEmailContainer',
                     ),
                 ),
                 modules.ModelList(
@@ -90,7 +81,6 @@ class CustomIndexDashboard(Dashboard):
                     models=(
                         'tradeschool.models.Photo',
                         'tradeschool.models.Page',
-                        'django.contrib.flatpages.models.FlatPage',
                     ),
                 ),
             ]
@@ -104,6 +94,9 @@ class CustomIndexDashboard(Dashboard):
                     models=(
                         'django.contrib.auth.models.Group',
                         'django.contrib.sites.models.Site',
+                        'django.contrib.flatpages.models.FlatPage',
+                        'tradeschool.models.Cluster',
+                        'tradeschool.models.DefaultEmailContainer',
                     ),
                 ),
             )
