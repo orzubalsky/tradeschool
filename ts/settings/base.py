@@ -162,7 +162,7 @@ INSTALLED_APPS = (
     'dajaxice',           # django ajax app
     'rosetta',            # django admin translation interface
     'admin_enhancer',
-    'debug_toolbar',
+    #'debug_toolbar',
     'tastypie',
     #'django_mailer',     # handle outgoing email queue
     'tradeschool',        # tradeschool branch app
