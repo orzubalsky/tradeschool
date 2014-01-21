@@ -8,6 +8,7 @@ from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
 from tradeschool.models import *
 from tradeschool.forms import *
+from tradeschool.actions import export_as_csv_action
 
 
 class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
@@ -753,6 +754,18 @@ class BranchAdmin(BaseAdmin):
             )
         }),
     )
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'title',
+            'city',
+            'state',
+            'country',
+            'email',
+            'phone',
+            'created',
+            'branch_status'
+        ]),
+    ]
 
 
 class VenueAdmin(BaseAdmin):
@@ -842,6 +855,19 @@ class VenueAdmin(BaseAdmin):
             'fields': ('capacity', 'resources',)
         }),
     )
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'title',
+            'address_1',
+            'city',
+            'state',
+            'country',
+            'capacity',
+            'resources',
+            'created',
+            'is_active'
+        ]),
+    ]
 
 
 class PersonAdmin(BaseAdmin):
@@ -898,6 +924,17 @@ class PersonAdmin(BaseAdmin):
         CourseInline
     )
     #prepopulated_fields = {'slug': ('username',)}
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'fullname',
+            'email',
+            'website',
+            'phone',
+            'courses_taken_count',
+            'courses_taught_count',
+            'created'
+        ]),
+    ]
 
 
 class OrganizerAdmin(PersonAdmin):
@@ -1028,6 +1065,13 @@ class TimeAdmin(BaseAdmin):
         'venue',
         'branch'
     )
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'start_time',
+            'end_time',
+            'venue',
+        ]),
+    ]
 
 
 class TimeRangeAdmin(BaseAdmin):
@@ -1302,10 +1346,23 @@ class CourseAdmin(BaseAdmin):
         'get_teacher_fullname'
     )
     inlines = ()
-    actions = (
+    actions = [
         'approve_courses',
-        'populate_notifications'
-    )
+        'populate_notifications',
+        export_as_csv_action(
+            'CSV Export',
+            fields=[
+                'title',
+                'teacher',
+                'students',
+                'start_time',
+                'end_time',
+                'status',
+                'venue',
+                'created',
+            ]
+        ),
+    ]
     #prepopulated_fields  = {'slug': ('start_time',) }
 
 
@@ -1527,6 +1584,14 @@ class RegistrationAdmin(BaseAdmin):
     filter_horizontal = (
         'items',
     )
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'course',
+            'student',
+            'registration_status',
+            'registration_items',
+        ]),
+    ]
 
 
 class BarterItemAdmin(BaseAdmin):
@@ -1571,6 +1636,12 @@ class BarterItemAdmin(BaseAdmin):
         'title',
         'course'
     )
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'title',
+            'course',
+        ]),
+    ]
 
 
 class PhotoAdmin(BaseAdmin):
@@ -1678,6 +1749,13 @@ class FeedbackAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
         'feedback_type',
         'content',
     )
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'course',
+            'feedback_type',
+            'content',
+        ]),
+    ]
 
 
 class ClusterAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
