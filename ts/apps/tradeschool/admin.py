@@ -351,14 +351,6 @@ class OrganizedBranchInline(BaseTabularInline):
         """Return the super queryset method with no filtering."""
         return super(OrganizedBranchInline, self).queryset(request, Q())
 
-    def __init__(self, *args, **kwargs):
-        super(OrganizedBranchInline, self).__init__(*args, **kwargs)
-
-        print dir(self)
-
-    def has_add_permission(self, request):
-        return False
-
     model = Branch.organizers.through
     verbose_name = "Branch Organized by This Person"
     verbose_name_plural = "Branches Organized by This Person"
@@ -391,24 +383,36 @@ class CourseInline(BaseTabularInline):
             Q(branch=request.user.default_branch)
         )
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def course_link(self, obj):
         """
-        Filter Course's venues by those that are related
-        to branches organized by the logged in user.
+        Return HTML with a link to the Course object's admin change form.
         """
-        if db_field.name == 'venue':
-            kwargs['queryset'] = Venue.objects.filter(
-                branch=request.user.default_branch
-            )
-        return super(CourseInline, self).formfield_for_foreignkey(
-            db_field,
-            request,
-            **kwargs
+        url = reverse(
+            'admin:tradeschool_approvedcourse_change',
+            args=(obj.pk,)
         )
+
+        if obj.status == 'pending':
+            url = reverse(
+                'admin:tradeschool_pendingcourse_change',
+                args=(obj.pk,)
+            )
+        if obj.is_past:
+            url = reverse(
+                'admin:tradeschool_pastcourse_change',
+                args=(obj.pk,)
+            )
+        # return a safe output so the html can be rendered in the template
+        return mark_safe(
+            '<a href="%s">%s</a>' % (url, obj.title)
+        )
+
+    course_link.short_description = _('Taught')
 
     model = Course
     extra = 0
-    fields = ('start_time', 'end_time', 'venue')
+    readonly_fields = ('course_link', 'status')
+    fields = ('course_link', 'status')
 
 
 class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInline):
@@ -467,6 +471,59 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
     fields = (
         'registration_link',
         'items',
+        'registration_status',
+    )
+    extra = 0
+
+
+class CourseRegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInline):
+    """
+    The Registration inline model is used in the Course Admin Model
+    in order to give an overview of Course's registrations.
+    """
+    def queryset(self, request):
+        """
+        Filter Registrations by those that are related to Courses that
+        are scheduled in branches that are organized by the logged in user.
+        """
+        return super(CourseRegistrationInline, self).queryset(
+            request,
+            Q(course__branch=request.user.default_branch)
+        )
+
+    def course_link(self, obj):
+        """
+        Return HTML with a link to the Course object's admin change form.
+        """
+        url = reverse(
+            'admin:tradeschool_approvedcourse_change',
+            args=(obj.course.pk,)
+        )
+
+        if obj.course.status == 'pending':
+            url = reverse(
+                'admin:tradeschool_pendingcourse_change',
+                args=(obj.course.pk,)
+            )
+        if obj.course.is_past:
+            url = reverse(
+                'admin:tradeschool_pastcourse_change',
+                args=(obj.course.pk,)
+            )
+
+        # return a safe output so the html can be rendered in the template
+        return mark_safe(
+            '<a href="%s">%s</a>' % (url, obj.course)
+        )
+
+    course_link.short_description = _('Class')
+
+    model = Registration
+    readonly_fields = (
+        'course_link',
+    )
+    fields = (
+        'course_link',
         'registration_status',
     )
     extra = 0
@@ -836,6 +893,10 @@ class PersonAdmin(BaseAdmin):
         'website',
         'bio',
     )
+    inlines = (
+        CourseRegistrationInline,
+        CourseInline
+    )
     #prepopulated_fields = {'slug': ('username',)}
 
 
@@ -871,10 +932,11 @@ class OrganizerAdmin(PersonAdmin):
         'email',
         'language',
         'default_branch',
-        'groups'
     )
     inlines = (
         OrganizedBranchInline,
+        CourseRegistrationInline,
+        CourseInline
     )
 
 
@@ -958,12 +1020,13 @@ class TimeAdmin(BaseAdmin):
     list_display = (
         'start_time',
         'end_time',
-        'venue'
+        'venue',
     )
     fields = (
         'start_time',
         'end_time',
         'venue',
+        'branch'
     )
 
 
@@ -1076,9 +1139,6 @@ class CourseAdmin(BaseAdmin):
             **kwargs
         )
 
-        return super(CourseAdmin, self).formfield_for_foreignkey(
-            db_field, request, **kwargs)
-
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = (
             BarterItemEditableInline,
@@ -1190,6 +1250,7 @@ class CourseAdmin(BaseAdmin):
             )
             kwargs['fields'] = (
                 'title',
+                'slug',
                 'description',
                 'max_students',
                 'venue',
@@ -1378,7 +1439,7 @@ class PastCourseAdmin(CourseAdmin):
             RegistrationInline,
             FeedbackInline,
         )
-        return super(CourseAdmin, self).change_view(request, object_id)
+        return super(PastCourseAdmin, self).change_view(request, object_id)
 
     list_per_page = 20
 

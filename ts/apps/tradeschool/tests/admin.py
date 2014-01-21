@@ -107,7 +107,7 @@ class AdminTestCase(TestCase):
             url: URL to test.
         """
         self.login()
-
+        print url
         # load a page to check the template loads
         response = self.client.get(url)
 
@@ -121,8 +121,6 @@ class AdminTestCase(TestCase):
             model: a class from which a model instance will be fetched.
             model_label: the admin model label, used to reverse URLs.
         """
-        print model
-
         # test model change list view
         self.validate_url_is_loading(
             reverse('admin:tradeschool_%s_changelist' % model_label))

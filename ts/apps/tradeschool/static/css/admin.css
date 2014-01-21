@@ -391,6 +391,7 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
 
 
 #Branch_organizers-group .add-another,
-#registration_set-group .grp-delete-handler  {
+#registration_set-group .grp-delete-handler,
+.tradeschool-time .branch {
     display: none;
 }

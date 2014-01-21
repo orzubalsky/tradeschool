@@ -162,7 +162,7 @@ INSTALLED_APPS = (
     'dajaxice',           # django ajax app
     'rosetta',            # django admin translation interface
     'admin_enhancer',
-    #'debug_toolbar',
+    'debug_toolbar',
     'tastypie',
     #'django_mailer',     # handle outgoing email queue
     'tradeschool',        # tradeschool branch app
@@ -214,21 +214,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
 }
 
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-)
-
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-}
 
 GRAPPELLI_ADMIN_TITLE = _('Trade School Admin')
 GRAPPELLI_INDEX_DASHBOARD = 'ts.dashboard.CustomIndexDashboard'

@@ -2138,6 +2138,16 @@ class Course(ScheduledEvent):
             })
         )
 
+    @property
+    def is_past(self):
+        """
+        Returns True if the course would be a PastCourse.
+        """
+        if self.end_time < timezone.now():
+            return True
+        else:
+            return False
+
     objects = CourseManager()
 
     def registered_students(self):
