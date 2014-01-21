@@ -311,14 +311,15 @@ class ClassesManager(Manager):
 
                         # convert the old unix time values (a bigint)
                         # to a timezone-aware datetime object
-                        from django.utils.dateparse import parse_datetime
                         import datetime
                         import pytz
 
-                        start_time_naive = parse_datetime(
-                            datetime.datetime.fromtimestamp(int(data['unix_start_time'])).strftime('%Y-%m-%d %H:%M:%S'))
-                        end_time_naive = parse_datetime(
-                            datetime.datetime.fromtimestamp(int(data['unix_end_time'])).strftime('%Y-%m-%d %H:%M:%S'))
+                        start_time_naive = datetime.datetime.fromtimestamp(
+                            int(data['unix_start_time'])
+                        )
+                        end_time_naive = datetime.datetime.fromtimestamp(
+                            int(data['unix_end_time'])
+                        )
 
                         localized_start_time = pytz.timezone(branch.timezone).localize(start_time_naive, is_dst=None)
                         localized_end_time = pytz.timezone(branch.timezone).localize(end_time_naive, is_dst=None)

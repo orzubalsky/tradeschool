@@ -7,20 +7,21 @@ from tradeschool.models import *
 class BranchMiddleware(object):
     def process_request(self, request):
 
-        try:        
+        try:
             url = resolve(request.path)
 
             # normal requests to branch URLs will have a branch_slug URL param
             branch_slug = url.kwargs.get('branch_slug')
 
-            # ajax requests, however, contain the branch_slug in the the POST data,
-            # as part of the Dajaxice arguments
+            # ajax requests, however, contain the branch_slug
+            # in the the POST data, as part of the Dajaxice arguments
             if (branch_slug is None and
                request.method == 'POST' and
                request.is_ajax()):
 
-                # the incoming data from Dajaxice looks like a Python dictionary,
-                # but it's a string. We're parsing it using the ast library
+                # the incoming data from Dajaxice looks like
+                # a Python dictionary, but it's a string.
+                # We're parsing it using the ast library
                 ajax_dict = ast.literal_eval(request.POST.dict()['argv'])
 
                 # after that we can get the branch_slug value,
@@ -47,6 +48,7 @@ class BranchMiddleware(object):
                         pass
 
                 branch = Branch.objects.get(slug=branch_slug)
+
                 timezone.activate(branch.timezone)
 
                 # translate the frontend to the language set in the branch
