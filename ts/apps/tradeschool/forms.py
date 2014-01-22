@@ -145,11 +145,15 @@ class TimeSelectionForm(Form):
     A simple dropdown menu for teachers to select an available time
     when submitting a class. Uses the Time model
     """
-    time = TimeModelChoiceField(
-        queryset=Time.objects.all(),
-        error_messages={'required': _('Please select a time'), }
-    )
+    # def __init__(self, branch, *args, **kwargs):
+    #     super(TimeSelectionForm, self).__init__(*args, **kwargs)
 
+    #     self.fields['default_branch'].queryset = Time.objects.filter(branch=branch)
+
+    # time = TimeModelChoiceField(
+    #     error_messages={'required': _('Please select a time'), }
+    # )
+    pass
 
 class RegistrationForm(ModelForm):
     def __init__(self, course, *args, **kwargs):

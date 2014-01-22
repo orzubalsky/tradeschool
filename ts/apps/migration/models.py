@@ -321,18 +321,15 @@ class ClassesManager(Manager):
                             int(data['unix_end_time'])
                         )
 
-                        localized_start_time = pytz.timezone(branch.timezone).localize(start_time_naive, is_dst=None)
-                        localized_end_time = pytz.timezone(branch.timezone).localize(end_time_naive, is_dst=None)
+                        tz = pytz.timezone(branch.timezone)
 
-                        utc = pytz.timezone('UTC')
+                        aware_start_time = tz.normalize(
+                            tz.localize(start_time_naive)).astimezone(pytz.utc)
+                        aware_end_time = tz.normalize(
+                            tz.localize(end_time_naive)).astimezone(pytz.utc)
 
-                        aware_start_time = timezone.make_aware(
-                            start_time_naive, utc)
-                        aware_end_time = timezone.make_aware(
-                            end_time_naive, utc)
-
-                        print "         course start time: [%s]" % aware_start_time
-                        print "         course end time: [%s]" % aware_end_time
+                        print "     course start time: [%s]" % aware_start_time
+                        print "     course end time: [%s]" % aware_end_time
 
                         if data['status'] == 0:
                             status = 'pending'

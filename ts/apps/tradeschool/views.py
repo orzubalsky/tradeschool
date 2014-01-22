@@ -218,7 +218,11 @@ def course_add(request, branch_slug=None):
         barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
         course_form = CourseForm(request.POST, prefix="course")
         teacher_form = TeacherForm(request.POST, prefix="teacher")
-        time_form = TimeSelectionForm(request.POST, prefix="time")
+        time_form = TimeSelectionForm(
+            data=request.POST,
+            prefix="time",
+            branch=branch
+        )
 
         if barter_item_formset.is_valid() \
                 and course_form.is_valid() \
@@ -320,7 +324,7 @@ def course_add(request, branch_slug=None):
         barter_item_formset = BarterItemFormSet(prefix="item")
         course_form = CourseForm(prefix="course")
         teacher_form = TeacherForm(prefix="teacher")
-        time_form = TimeSelectionForm(prefix="time")
+        time_form = TimeSelectionForm(prefix="time", branch=branch)
 
     view_templates = branch_templates(
         branch, 'course_submit.html', 'subpage.html')
