@@ -2562,7 +2562,7 @@ class Registration(Base):
 
     # Translators: Student registration buttons.
     REGISTRATION_CHOICES = (('registered', _('Registered')),
-                            ('unregistered', _('Unregistereed')))
+                            ('unregistered', _('Unregistered')))
 
     course = ForeignKey(
         Course,

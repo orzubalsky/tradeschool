@@ -355,7 +355,8 @@ class OrganizedBranchInline(BaseTabularInline):
     model = Branch.organizers.through
     verbose_name = "Branch Organized by This Person"
     verbose_name_plural = "Branches Organized by This Person"
-    extra = 1
+    readonly_fields = ('branch', )
+    extra = 0
 
 
 class ClusteredBranchInline(BaseTabularInline):
@@ -1027,6 +1028,12 @@ class TimeAdmin(BaseAdmin):
     """
     TimeAdmin lets you add and edit time slots in the Trade School system.
     """
+    class Media:
+        js = (
+            '../static/js/lib/jquery.js',
+            '../static/js/admin/Timeslot.js',
+        )
+
     def get_form(self, request, obj=None, **kwargs):
         form = super(TimeAdmin, self).get_form(request, obj, **kwargs)
 
@@ -1568,13 +1575,41 @@ class RegistrationAdmin(BaseAdmin):
         return mark_safe(html)
     student_fullname.short_description = _('Student')
 
+    def course_link(self, obj):
+        """
+        Return HTML with a link to the Course object's admin change form.
+        """
+        url = reverse(
+            'admin:tradeschool_approvedcourse_change',
+            args=(obj.course.pk,)
+        )
+
+        if obj.course.status == 'pending':
+            url = reverse(
+                'admin:tradeschool_pendingcourse_change',
+                args=(obj.course.pk,)
+            )
+        if obj.course.is_past:
+            url = reverse(
+                'admin:tradeschool_pastcourse_change',
+                args=(obj.course.pk,)
+            )
+        # return a safe output so the html can be rendered in the template
+        return mark_safe(
+            '<a href="%s">%s</a>' % (url, obj.course.title)
+        )
+    course_link.short_description = _('Class')
+
     fields = (
         'student_fullname',
-        'course',
+        'course_link',
         'items',
         'registration_status'
     )
-    readonly_fields = ('student_fullname',)
+    readonly_fields = (
+        'student_fullname',
+        'course_link',
+    )
     list_display = (
         'student',
         'course',

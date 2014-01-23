@@ -17,5 +17,6 @@
         {% if show_save_and_continue %}
         	<li><input type="submit" value="{% trans 'Save and continue editing' %}" class="grp-button" name="_continue" {{ onclick_attrib }}/></li>
         {% endif %}
+        <li><a href="{% url 'admin:index' %}" class="grp-button grp-default">{% trans 'Cancel' %}</a></li>                
     </ul>
 </footer>

@@ -250,6 +250,8 @@ input[type="text"].grp-search-field  {
 }
 .grp-fixed-footer {
     padding: 5px 10px 0px;
+    background-image: none;
+    background-color: red;
 }
 input[type="text"],
 input[type="password"],
@@ -289,6 +291,26 @@ input[type="submit"]:hover,
     background-image: none;    
     background-color: yellow;
 }
+.grp-fixed-footer.grp-submit-row > ul > li a.grp-button.grp-default,
+.grp-fixed-footer a.grp-button {
+    border-radius: 0px;    
+    border: none;
+    background-image: none;  
+    background-color: #FFFFFF;
+    background-image: none;
+    border: medium none;
+    color: #000000;
+    opacity: 0.75;
+}
+.grp-fixed-footer.grp-submit-row > ul > li a.grp-button.grp-default:hover,
+.grp-fixed-footer a.grp-button:hover {
+    border-radius: 0px;    
+    border: none;
+    background-image: none;  
+    background-color: yellow;
+    opacity: 1;
+}
+
 #grp-changelist-form .grp-module .grp-row:not(tr) {
     background-color: white;
 }
@@ -390,8 +412,30 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
 
 
 
-#Branch_organizers-group .add-another,
-#registration_set-group .grp-delete-handler,
 .tradeschool-time .branch {
     display: none;
+}
+
+#courses_taught-group .grp-add-handler,
+#Branch_organizers-group .grp-add-handler,
+#Branch_organizers-group .add-another,
+#registrations-group .grp-add-handler {
+    display: none;
+}
+
+#Branch_organizers-group .grp-delete-handler,
+#registration_set-group .grp-delete-handler,
+#registrations-group  .grp-delete-handler {
+    display: none;
+}
+
+#registrations-group .registration_status  .grp-help {
+    display: none;
+}
+
+.end_time #id_end_time_0 {
+    display: none;
+}
+.end_time #id_end_time_1 {
+    margin-left: 124px;
 }
