@@ -411,6 +411,18 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
 /*--------- SELECT WIDGET END -------*/
 
 
+#ui-timepicker {
+    width: 500px;
+    height: 140px;
+}
+#ui-timepicker ul li.row {
+    width: 50px;
+    padding: 2px 4px 1px;
+}
+
+
+
+
 
 .tradeschool-time .branch {
     display: none;
