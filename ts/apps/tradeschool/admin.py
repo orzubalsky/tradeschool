@@ -750,7 +750,6 @@ class BranchAdmin(BaseAdmin):
         (_('Organizers'), {
             'fields': (
                 'organizers',
-                'clusters'
             )
         }),
     )
@@ -1624,7 +1623,7 @@ class PastCourseAdmin(CourseAdmin):
             RegistrationInline,
             FeedbackInline,
         )
-        return super(PastCourseAdmin, self).change_view(request, object_id)
+        return super(CourseAdmin, self).change_view(request, object_id)
 
     list_per_page = 20
 
