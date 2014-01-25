@@ -512,10 +512,9 @@ def branch_page(request, url, branch_slug=None):
         page = get_object_or_404(
             Page, url__exact=url, branch__pk=branch.pk, is_active=True)
     except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
+        if url.endswith('/'):
+            url = url[:-1]
             page = get_object_or_404(Page, url__exact=url, is_active=True)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
         else:
             raise
 
