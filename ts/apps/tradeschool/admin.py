@@ -940,6 +940,16 @@ class PersonAdmin(BaseAdmin):
 class OrganizerAdmin(PersonAdmin):
     """
     """
+    def queryset(self, request):
+        """
+        Filter queryset by the registration count,
+        so only people who took at least one class are returned.
+        """
+        return super(PersonAdmin, self).queryset(
+            request,
+            Q(branches_organized__in=[request.user.default_branch, ])
+        )
+
     def change_password_link(self, obj):
         """
         """
