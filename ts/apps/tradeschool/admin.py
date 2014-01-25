@@ -654,7 +654,6 @@ class BranchAdmin(BaseAdmin):
             request,
             (
                 Q(pk=request.user.default_branch.pk)
-                | Q(branch_status='pending')
             )
         )
 
@@ -766,6 +765,99 @@ class BranchAdmin(BaseAdmin):
             'branch_status'
         ]),
     ]
+
+
+class PendingBranchAdmin(BranchAdmin):
+    """
+    """
+    def queryset(self, request):
+        """
+        Filter to Branches that are organized by the logged in user.
+        """
+        return super(BranchAdmin, self).queryset(
+            request,
+            Q(branch_status='pending')
+        )
+
+    def organizer_fullname(self, obj):
+        """
+        """
+        organizer = obj.organizers.all()[0]
+        # link to teacher edit admin form
+        url = reverse('admin:tradeschool_organizer_change', args=(organizer.pk,))
+        html = '<a target="_blank" href="%s">%s</a>' % (url, organizer.fullname)
+        return mark_safe(html)
+    organizer_fullname.short_description = _('Organizer Fullname')
+
+    def organizer_email(self, obj):
+        """
+        """
+        organizer = obj.organizers.all()[0]
+
+        html = '<a href="mailto:%s">%s</a>' % (
+            organizer.email, organizer.email)
+
+        return mark_safe(html)
+    organizer_email.short_description = _('Organizer Email')
+
+    def organizer_bio(self, obj):
+        """
+        """
+        organizer = obj.organizers.all()[0]
+        return organizer.bio
+    organizer_bio.short_description = _('Organizer description')
+
+    def organizer_names_of_co_organizers(self, obj):
+        """
+        """
+        organizer = obj.organizers.all()[0]
+        return organizer.names_of_co_organizers
+    organizer_names_of_co_organizers.short_description = _('Teacher phone')
+
+    list_display = (
+        'title',
+        'slug',
+        'city',
+        'country',
+        'branch_status',
+        'is_active'
+    )
+    readonly_fields = (
+        'organizer_fullname',
+        'organizer_email',
+        'organizer_bio',
+        'organizer_names_of_co_organizers',
+    )
+    list_editable = ('is_active', 'branch_status',)
+    filter_horizontal = ('organizers', 'clusters')
+    fieldsets = (
+        # Translators: This is the a header in the branch admin form
+        (_('Basic Info'), {
+            'fields': (
+                'title',
+                'slug',
+                'city',
+                'state',
+                'country',
+                'branch_status',
+            )
+        }),
+        # Translators: This is the a header in the branch admin form
+        (_('Organizer Info'), {
+            'fields': (
+                'organizer_fullname',
+                'organizer_email',
+                'organizer_names_of_co_organizers',
+                'organizer_bio',
+            )
+        }),
+        # Translators: This is the a header in the branch admin form
+        (_('Organizers'), {
+            'fields': (
+                'organizers',
+            )
+        }),
+    )
 
 
 class VenueAdmin(BaseAdmin):
@@ -1824,6 +1916,7 @@ class ClusterAdmin(BaseAdmin, enhanced_admin.EnhancedModelAdminMixin):
 
 # register admin models
 admin.site.register(Branch, BranchAdmin)
+admin.site.register(PendingBranch, PendingBranchAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Cluster, ClusterAdmin)
 

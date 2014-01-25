@@ -619,7 +619,7 @@ class Location(Base):
         help_text=_("Optional.")
     )
     city = CharField(
-        verbose_name=_("city"),
+        verbose_name=_("City/Province/Region"),
         max_length=100
     )
     state = USStateField(
@@ -1053,6 +1053,36 @@ class Branch(Location):
                 pass
 
 
+class PendingBranchManager(BranchManager):
+    """
+    Filter Branch objects to those that have branch_status set to 'pending'.
+    """
+    def get_query_set(self):
+        return super(
+            PendingBranchManager, self).get_query_set().filter(
+                branch_status='pending')
+
+
+class PendingBranch(Branch):
+    """
+    Pending Branches are Branch objects that have branch_status set to pending.
+
+    Conceptually, pending branches are the result of the start a trade school
+    form.
+    """
+    class Meta:
+        # Translators: This is used in the header navigation
+        # to let you know where you are.
+        verbose_name = _("Pending Branch")
+
+        # Translators: Plural.
+        verbose_name_plural = _("Pending Branches")
+
+        proxy = True
+
+    objects = PendingBranchManager()
+
+
 class Venue(Location):
     """
     Venue represent physical locations where Trade School events take place.
@@ -1356,6 +1386,12 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         help_text=_(
             "Number of courses taken in Trade School"
         )
+    )
+    names_of_co_organizers = CharField(
+        max_length=50,
+        verbose_name=_("names of co-organizers"),
+        null=True,
+        blank=True
     )
 
     objects = PersonManager()

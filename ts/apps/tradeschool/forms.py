@@ -101,7 +101,32 @@ class TeacherForm (ModelForm):
 
 
 class OrganizerForm(TeacherForm):
-    pass
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        "Sets custom meta data to the form's fields"
+        super(OrganizerForm, self).__init__(*args, **kwargs)
+
+        self.fields['names_of_co_organizers'].error_messages['required'] = _(
+            "Please enter the names of at least one or two more organizers")
+        self.fields['bio'].error_messages['required'] = _(
+            "Please tell us about why you would like to open a Trade School in your area")
+
+    class Meta:
+        model = Person
+        fields = (
+            'fullname',
+            'names_of_co_organizers',
+            'email',
+            'bio',
+        )
+
+    # since names_of_co_organizers is set to blank=True in the Person model
+    # to accommodate students and teachers, we're setting it here manually.
+    names_of_co_organizers = forms.CharField(
+        required=True,
+        label=_("Names of Co-Organizers"),
+    )
 
 
 class CourseForm (ModelForm):

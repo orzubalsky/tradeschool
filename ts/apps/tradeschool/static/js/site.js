@@ -19,7 +19,7 @@ var site = window.site = new function()
     {
         var self = this;
 
-        $('#closePreview, #matte').live('click', function(e)
+        $('#closePreview, #matte').on('click', function(e)
         {
             e.preventDefault();
             $('#matte').fadeOut(100, function() 
@@ -29,7 +29,7 @@ var site = window.site = new function()
             });
         });
                     
-        $('.classInfo .join').bind('click', function(e) 
+        $('.classInfo .join').on('click', function(e) 
         {
             if (!$(this).hasClass('fromHub'))
             {
@@ -80,7 +80,7 @@ var site = window.site = new function()
     {
         var self = this;
         
-        $('#registerToClass').live('submit', function(e) 
+        $('#registerToClass').on('submit', function(e) 
         {            
             e.preventDefault();
 
@@ -143,7 +143,7 @@ var site = window.site = new function()
 
         var past = ($('#past').size() > 0) ? true : false;
 
-        $('.classHeader').live('click', function(e) 
+        $('.classHeader').on('click', function(e) 
         {
             e.preventDefault();
 
@@ -177,7 +177,7 @@ var site = window.site = new function()
             $el.attr("name", $el.attr("name").replace(id_regex, replacement));
         };
 
-        $('#addItem').live('click', function(e) 
+        $('#addItem').on('click', function(e) 
         {
             e.preventDefault();
             var prefix = 'item';

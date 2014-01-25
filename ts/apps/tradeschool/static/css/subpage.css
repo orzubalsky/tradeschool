@@ -217,7 +217,7 @@ input#start_time, input#end_time, input#venue_id, input#unix_start_time, input#u
 	background: #fff;
 	color: #666;
 	width: 160px;
-	padding: 35px 20px 15px 20px;
+	padding: 35px 20px 0px 20px;
 	float: right;
 	font: 0.8em/ 1.5em Helvetica, Arial, sans-serif;
 }
