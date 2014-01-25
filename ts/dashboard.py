@@ -96,6 +96,7 @@ class CustomIndexDashboard(Dashboard):
                     models=(
                         'django.contrib.auth.models.Group',
                         'django.contrib.sites.models.Site',
+                        'tradeschool.models.Language',
                         'django.contrib.flatpages.models.FlatPage',
                         'tradeschool.models.Cluster',
                         'tradeschool.models.DefaultEmailContainer',

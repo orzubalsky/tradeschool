@@ -690,6 +690,37 @@ class Cluster(Base):
         return u"%s" % self.name
 
 
+class Language(Base):
+    """
+    A database representation of a language that's in django.settings.
+
+    It's redundant to duplicate this data, but this is how branches can
+    use more than one language.
+
+    Attributes:
+        code: String indicating the language code as it's defined in settings
+        branches: M2M to the Branches that use this language.
+        position: Integar indicating the index of the image in the slideshow.
+    """
+    class Meta:
+        # Translators: This is used in the header navigation
+        #  to let you know where you are.
+        verbose_name = _('Language')
+
+        # Translators: Plural
+        verbose_name_plural = _('Languages')
+
+    code = CharField(
+        verbose_name=_('Name'),
+        max_length=6,
+        choices=settings.LANGUAGES,
+        db_index=True
+    )
+
+    def __unicode__(self):
+        return u'%s' % dict(settings.LANGUAGES).get(self.code)
+
+
 class BranchQuerySet(QuerySet):
     """
     Defines querysets for public and pending branches.
@@ -819,7 +850,7 @@ class Branch(Location):
         )
     )
     language = CharField(
-        verbose_name=_("language"),
+        verbose_name=_("default language"),
         max_length=50,
         choices=settings.LANGUAGES,
         null=True,
@@ -828,6 +859,14 @@ class Branch(Location):
             "the backend of the site to try to load text from the translation "
             "strings stored in the system. Text that wasn't translated will "
             "fallback on the English version of it."
+        )
+    )
+    languages = ManyToManyField(
+        Language,
+        verbose_name=_("languagaes"),
+        help_text=_(
+            "Select multiple languages that you would like the site to be "
+            "displayed in."
         )
     )
     organizers = ManyToManyField(
@@ -2935,8 +2974,6 @@ class Page(Base):
     )
 
     objects = PageManager()
-
-
 
 
 # signals are separated to signals.py

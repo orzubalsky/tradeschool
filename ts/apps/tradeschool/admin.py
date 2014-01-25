@@ -724,6 +724,7 @@ class BranchAdmin(BaseAdmin):
                 'slug',
                 'timezone',
                 'language',
+                'languages',
                 'branch_status',
             )
         }),
@@ -2003,6 +2004,7 @@ admin.site.register(Page, PageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 
 admin.site.register(DefaultEmailContainer)
+admin.site.register(Language)
 
 admin.site.register(StudentConfirmation)
 admin.site.register(StudentReminder)
