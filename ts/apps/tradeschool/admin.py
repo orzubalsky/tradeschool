@@ -1509,6 +1509,13 @@ class PendingCourseAdmin(CourseAdmin):
                 )
                 response['location'] = url
 
+            if obj.status == 'rejected':
+                url = reverse(
+                    'admin:tradeschool_rejectedcourse_change',
+                    args=(obj.pk,)
+                )
+                response['location'] = url
+
             # if the course was moved to a past date
             # redirect to pastchedule change view
             if obj.end_time < timezone.now():
@@ -1555,6 +1562,13 @@ class ApprovedCourseAdmin(CourseAdmin):
                 )
                 response['location'] = url
 
+            if obj.status == 'rejected':
+                url = reverse(
+                    'admin:tradeschool_rejectedcourse_change',
+                    args=(obj.pk,)
+                )
+                response['location'] = url
+
             # if the course was moved to a past date
             # redirect to pastchedule change view
             if obj.end_time < timezone.now():
@@ -1589,6 +1603,11 @@ class PastCourseAdmin(CourseAdmin):
                         'admin:tradeschool_approvedcourse_change',
                         args=(obj.pk,)
                     )
+                if obj.status == 'rejected':
+                    url = reverse(
+                        'admin:tradeschool_rejectedcourse_change',
+                        args=(obj.pk,)
+                    )
                 else:
                     url = reverse(
                         'admin:tradeschool_pendingcourse_change',
@@ -1607,6 +1626,49 @@ class PastCourseAdmin(CourseAdmin):
         return super(PastCourseAdmin, self).change_view(request, object_id)
 
     list_per_page = 20
+
+
+class RejectedCourseAdmin(CourseAdmin):
+    """
+    """
+    def response_change(self, request, obj):
+        """
+        If the course status was changed from 'rejected',
+        redirect to the appropriate change-view
+        """
+        response = super(
+            CourseAdmin, self).response_change(request, obj)
+
+        # only redirect if the course was saved
+        # by clicking on "save and continue editing"
+        if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
+            # if the course was moved to a past date
+            # redirect to pastchedule change view
+            if obj.status == 'approved' and obj.end_time > timezone.now():
+                url = reverse(
+                    'admin:tradeschool_approvedcourse_change',
+                    args=(obj.pk,)
+                )
+            elif obj.status == 'approved' and obj.end_time < timezone.now():
+                url = reverse(
+                    'admin:tradeschool_pastcourse_change',
+                    args=(obj.pk,)
+                )
+            elif obj.status == 'pending':
+                url = reverse(
+                    'admin:tradeschool_pendingcourse_change',
+                    args=(obj.pk,)
+                )
+
+            response['location'] = url
+
+        return response
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        self.inlines = (
+            BarterItemEditableInline,
+        )
+        return super(CourseAdmin, self).change_view(request, object_id)
 
 
 class RegistrationAdmin(BaseAdmin):
@@ -1923,6 +1985,7 @@ admin.site.register(Cluster, ClusterAdmin)
 admin.site.register(PendingCourse, PendingCourseAdmin)
 admin.site.register(ApprovedCourse, ApprovedCourseAdmin)
 admin.site.register(PastCourse, PastCourseAdmin)
+admin.site.register(RejectedCourse, RejectedCourseAdmin)
 
 admin.site.register(BarterItem, BarterItemAdmin)
 admin.site.register(Registration, RegistrationAdmin)

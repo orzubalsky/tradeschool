@@ -42,6 +42,7 @@ class CustomIndexDashboard(Dashboard):
                         'tradeschool.models.PendingCourse',
                         'tradeschool.models.ApprovedCourse',
                         'tradeschool.models.PastCourse',
+                        'tradeschool.models.RejectedCourse',
                         'tradeschool.models.Registration',
                         'tradeschool.models.Venue',
                         'tradeschool.models.BarterItem',

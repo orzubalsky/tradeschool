@@ -2023,6 +2023,12 @@ class CourseQuerySet(QuerySet):
         """
         return self.filter(end_time__lte=timezone.now())
 
+    def rejected(self):
+        """
+        Returns courses that were rejected.
+        """
+        return self.filter(status='rejected')
+
     def public(self):
         """
         Returns active courses that were approved.
@@ -2063,6 +2069,9 @@ class CourseManager(Manager):
 
     def past(self):
         return self.get_query_set().past()
+
+    def rejected(self):
+        return self.get_query_set().rejected()
 
     def public(self):
         return self.get_query_set().public()
@@ -2533,6 +2542,33 @@ class PastCourse(Course):
 
     objects = PastCourseManager()
     public = PastCoursePublicManager()
+
+
+class RejectedCourseManager(CourseManager):
+    """
+    Filter Course objects to those that have status set to 'pending'.
+    """
+    def get_query_set(self):
+        return super(RejectedCourseManager, self).get_query_set().rejected()
+
+
+class RejectedCourse(Course):
+    """
+    Rejected courses are Course objects that have status set to rejeceted.
+
+    Rejected courses are only visible to organizers on the admin backend.
+    """
+    class Meta:
+        # Translators: This is used in the header navigation
+        # to let you know where you are.
+        verbose_name = _("Class: Rejected")
+
+        # Translators: Plural.
+        verbose_name_plural = _("Classes: Rejected")
+
+        proxy = True
+
+    objects = RejectedCourseManager()
 
 
 class RegistrationQuerySet(QuerySet):

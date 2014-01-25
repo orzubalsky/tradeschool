@@ -222,7 +222,7 @@ def course_add(request, branch_slug=None):
             data=request.POST,
             prefix="time",
         )
-        time_form.fields['time'].queryset = Branch.objects.filter(branch=branch)
+        time_form.fields['time'].queryset = Time.objects.filter(branch=branch)
 
         if barter_item_formset.is_valid() \
                 and course_form.is_valid() \
