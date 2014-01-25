@@ -1615,10 +1615,10 @@ class Time(Durational):
     class Meta:
         # Translators: This is used in the header navigation
         # to let you know where you are.
-        verbose_name = _("Open Time Slot")
+        verbose_name = _("One Time Slot")
 
        # Translators: Plural
-        verbose_name_plural = _("Open Time Slots")
+        verbose_name_plural = _("One Time Slot")
 
     venue = ForeignKey(
         Venue,
@@ -1689,10 +1689,10 @@ class TimeRange(Base):
     class Meta:
         # Translators: This is used in the header navigation
         #  to let you know where you are.
-        verbose_name = _("Open Time Slot Batch")
+        verbose_name = _("Many Time Slots")
 
         # Translators: Plural.
-        verbose_name_plural = _("Open Time Slot Batches")
+        verbose_name_plural = _("Many Time Slots")
 
     start_date = DateField(
         verbose_name=_("Start date"),
@@ -1716,7 +1716,7 @@ class TimeRange(Base):
     )
     start_time = TimeField(
         verbose_name=_("Start time"),
-        default=datetime(2008, 1, 31, 18, 00, 00),
+        default=datetime(2008, 1, 31, 8, 00, 00),
         help_text=_(
             "This is the start time of the all of the available time slots "
             "that are going to be created."
@@ -1724,7 +1724,7 @@ class TimeRange(Base):
     )
     end_time = TimeField(
         verbose_name=_("End time"),
-        default=datetime(2008, 1, 31, 19, 30, 00),
+        default=datetime(2008, 1, 31, 10, 00, 00),
         help_text=_(
             "This is the end time of all of the available time slots "
             "that are going to be created."
