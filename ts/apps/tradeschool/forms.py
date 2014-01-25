@@ -28,6 +28,31 @@ class DefaultBranchForm(Form):
     redirect_to = forms.CharField(widget=forms.HiddenInput)
 
 
+class TimeModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        from django.utils import timezone
+
+        current_tz = timezone.get_current_timezone()
+        date = obj.start_time.astimezone(current_tz).strftime('%A, %b %d')
+        time = obj.start_time.astimezone(current_tz).strftime(
+            '%I:%M%p').lstrip('0').lower()
+
+        if obj.venue is not None:
+            return "%s %s at %s" % (date, time, obj.venue)
+        return "%s %s" % (date, time)
+
+
+class TimeSelectionForm(Form):
+    """
+    A simple dropdown menu for teachers to select an available time
+    when submitting a class. Uses the Time model
+    """
+    time = TimeModelChoiceField(
+        queryset=Time.objects.all(),
+        error_messages={'required': _('Please select a time'), }
+    )
+
+
 class BranchForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(BranchForm, self).__init__(*args, **kwargs)
@@ -125,35 +150,6 @@ class BaseBarterItemFormSet(BaseFormSet):
                 _("Please add at least 5 barter items")
             )
 
-
-class TimeModelChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        from django.utils import timezone
-
-        current_tz = timezone.get_current_timezone()
-        date = obj.start_time.astimezone(current_tz).strftime('%A, %b %d')
-        time = obj.start_time.astimezone(current_tz).strftime(
-            '%I:%M%p').lstrip('0').lower()
-
-        if obj.venue is not None:
-            return "%s %s at %s" % (date, time, obj.venue)
-        return "%s %s" % (date, time)
-
-
-class TimeSelectionForm(Form):
-    """
-    A simple dropdown menu for teachers to select an available time
-    when submitting a class. Uses the Time model
-    """
-    # def __init__(self, branch, *args, **kwargs):
-    #     super(TimeSelectionForm, self).__init__(*args, **kwargs)
-
-    #     self.fields['default_branch'].queryset = Time.objects.filter(branch=branch)
-
-    # time = TimeModelChoiceField(
-    #     error_messages={'required': _('Please select a time'), }
-    # )
-    pass
 
 class RegistrationForm(ModelForm):
     def __init__(self, course, *args, **kwargs):

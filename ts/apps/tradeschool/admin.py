@@ -7,7 +7,6 @@ from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
 from tradeschool.models import *
-from tradeschool.forms import *
 from tradeschool.actions import export_as_csv_action
 
 
