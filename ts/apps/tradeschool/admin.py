@@ -945,7 +945,7 @@ class VenueAdmin(BaseAdmin):
         }),
         # Translators: This is the a header in the branch admin form
         (_('Additional Info'), {
-            'fields': ('capacity', 'resources' 'branch',)
+            'fields': ('capacity', 'resources', 'branch',)
         }),
     )
     actions = [
