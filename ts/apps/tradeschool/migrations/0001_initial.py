@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -9,241 +9,273 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'StudentConfirmation'
-        db.create_table('tradeschool_studentconfirmation', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_studentconfirmation', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
         ))
-        db.send_create_signal('tradeschool', ['StudentConfirmation'])
+        db.send_create_signal(u'tradeschool', ['StudentConfirmation'])
 
         # Adding model 'StudentReminder'
-        db.create_table('tradeschool_studentreminder', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_studentreminder', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
             ('send_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('days_delta', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('send_time', self.gf('django.db.models.fields.TimeField')(default=datetime.time(10, 0))),
         ))
-        db.send_create_signal('tradeschool', ['StudentReminder'])
+        db.send_create_signal(u'tradeschool', ['StudentReminder'])
 
         # Adding model 'StudentFeedback'
-        db.create_table('tradeschool_studentfeedback', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_studentfeedback', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
             ('send_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('days_delta', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('send_time', self.gf('django.db.models.fields.TimeField')(default=datetime.time(10, 0))),
         ))
-        db.send_create_signal('tradeschool', ['StudentFeedback'])
+        db.send_create_signal(u'tradeschool', ['StudentFeedback'])
 
         # Adding model 'TeacherConfirmation'
-        db.create_table('tradeschool_teacherconfirmation', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_teacherconfirmation', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
         ))
-        db.send_create_signal('tradeschool', ['TeacherConfirmation'])
+        db.send_create_signal(u'tradeschool', ['TeacherConfirmation'])
 
         # Adding model 'TeacherClassApproval'
-        db.create_table('tradeschool_teacherclassapproval', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_teacherclassapproval', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
         ))
-        db.send_create_signal('tradeschool', ['TeacherClassApproval'])
+        db.send_create_signal(u'tradeschool', ['TeacherClassApproval'])
 
         # Adding model 'TeacherReminder'
-        db.create_table('tradeschool_teacherreminder', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_teacherreminder', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
             ('send_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('days_delta', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('send_time', self.gf('django.db.models.fields.TimeField')(default=datetime.time(10, 0))),
         ))
-        db.send_create_signal('tradeschool', ['TeacherReminder'])
+        db.send_create_signal(u'tradeschool', ['TeacherReminder'])
 
         # Adding model 'TeacherFeedback'
-        db.create_table('tradeschool_teacherfeedback', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        db.create_table(u'tradeschool_teacherfeedback', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('subject', self.gf('django.db.models.fields.CharField')(max_length=140)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('email_status', self.gf('django.db.models.fields.CharField')(default='not_sent', max_length=30)),
+            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Branch'], unique=True, null=True, blank=True)),
+            ('course', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.Course'], unique=True, null=True, blank=True)),
             ('send_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('days_delta', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('send_time', self.gf('django.db.models.fields.TimeField')(default=datetime.time(10, 0))),
         ))
-        db.send_create_signal('tradeschool', ['TeacherFeedback'])
+        db.send_create_signal(u'tradeschool', ['TeacherFeedback'])
 
         # Adding model 'DefaultEmailContainer'
-        db.create_table('tradeschool_defaultemailcontainer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_defaultemailcontainer', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('student_confirmation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentConfirmation'])),
-            ('student_reminder', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentReminder'])),
-            ('student_feedback', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentFeedback'])),
-            ('teacher_confirmation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherConfirmation'])),
-            ('teacher_class_approval', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherClassApproval'])),
-            ('teacher_reminder', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherReminder'])),
-            ('teacher_feedback', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherFeedback'])),
+            ('studentconfirmation', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.StudentConfirmation'], unique=True)),
+            ('studentreminder', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.StudentReminder'], unique=True)),
+            ('studentfeedback', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.StudentFeedback'], unique=True)),
+            ('teacherconfirmation', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.TeacherConfirmation'], unique=True)),
+            ('teacherclassapproval', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.TeacherClassApproval'], unique=True)),
+            ('teacherreminder', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.TeacherReminder'], unique=True)),
+            ('teacherfeedback', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tradeschool.TeacherFeedback'], unique=True)),
         ))
-        db.send_create_signal('tradeschool', ['DefaultEmailContainer'])
+        db.send_create_signal(u'tradeschool', ['DefaultEmailContainer'])
 
-        # Adding model 'BranchEmailContainer'
-        db.create_table('tradeschool_branchemailcontainer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        # Adding model 'Cluster'
+        db.create_table(u'tradeschool_cluster', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('student_confirmation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentConfirmation'])),
-            ('student_reminder', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentReminder'])),
-            ('student_feedback', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentFeedback'])),
-            ('teacher_confirmation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherConfirmation'])),
-            ('teacher_class_approval', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherClassApproval'])),
-            ('teacher_reminder', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherReminder'])),
-            ('teacher_feedback', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherFeedback'])),
-            ('branch', self.gf('django.db.models.fields.related.OneToOneField')(related_name='emails', unique=True, to=orm['tradeschool.Branch'])),
-            ('site', self.gf('django.db.models.fields.related.OneToOneField')(related_name='emails', unique=True, to=orm['sites.Site'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=120)),
         ))
-        db.send_create_signal('tradeschool', ['BranchEmailContainer'])
+        db.send_create_signal(u'tradeschool', ['Cluster'])
+
+        # Adding model 'Language'
+        db.create_table(u'tradeschool_language', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('code', self.gf('django.db.models.fields.CharField')(max_length=6, db_index=True)),
+        ))
+        db.send_create_signal(u'tradeschool', ['Language'])
 
         # Adding model 'Branch'
-        db.create_table('tradeschool_branch', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_branch', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('city', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('state', self.gf('django.contrib.localflavor.us.models.USStateField')(max_length=2, null=True, blank=True)),
             ('country', self.gf('django_countries.fields.CountryField')(max_length=2)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=120)),
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=100)),
             ('timezone', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('site', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['sites.Site'], unique=True)),
+            ('language', self.gf('django.db.models.fields.CharField')(max_length=50, null=True)),
+            ('branch_status', self.gf('django.db.models.fields.CharField')(default='pending', max_length=50)),
+            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
+            ('header_copy', self.gf('tinymce.models.HTMLField')(default='Barter for knowledge', null=True, blank=True)),
+            ('intro_copy', self.gf('tinymce.models.HTMLField')(default='Information for the header of the page', null=True, blank=True)),
+            ('footer_copy', self.gf('tinymce.models.HTMLField')(default='Information for the footer of the page', null=True, blank=True)),
         ))
-        db.send_create_signal('tradeschool', ['Branch'])
+        db.send_create_signal(u'tradeschool', ['Branch'])
+
+        # Adding M2M table for field languages on 'Branch'
+        m2m_table_name = db.shorten_name(u'tradeschool_branch_languages')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('branch', models.ForeignKey(orm[u'tradeschool.branch'], null=False)),
+            ('language', models.ForeignKey(orm[u'tradeschool.language'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['branch_id', 'language_id'])
+
+        # Adding M2M table for field organizers on 'Branch'
+        m2m_table_name = db.shorten_name(u'tradeschool_branch_organizers')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('branch', models.ForeignKey(orm[u'tradeschool.branch'], null=False)),
+            ('person', models.ForeignKey(orm[u'tradeschool.person'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['branch_id', 'person_id'])
+
+        # Adding M2M table for field clusters on 'Branch'
+        m2m_table_name = db.shorten_name(u'tradeschool_branch_clusters')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('branch', models.ForeignKey(orm[u'tradeschool.branch'], null=False)),
+            ('cluster', models.ForeignKey(orm[u'tradeschool.cluster'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['branch_id', 'cluster_id'])
 
         # Adding model 'Venue'
-        db.create_table('tradeschool_venue', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_venue', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('city', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('state', self.gf('django.contrib.localflavor.us.models.USStateField')(max_length=2, null=True, blank=True)),
             ('country', self.gf('django_countries.fields.CountryField')(max_length=2)),
-            ('venue_type', self.gf('django.db.models.fields.SmallIntegerField')(default=0, max_length=1)),
-            ('address_1', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('address_2', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'])),
+            ('address_1', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('capacity', self.gf('django.db.models.fields.SmallIntegerField')(default=20, max_length=4)),
-            ('resources', self.gf('django.db.models.fields.TextField')(default='Chairs, Tables', null=True)),
-            ('color', self.gf('django.db.models.fields.CharField')(default='#491b0d', max_length=7)),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(default='2', to=orm['sites.Site'])),
+            ('resources', self.gf('django.db.models.fields.TextField')(default='For Example: Chairs, Tables', null=True)),
+            ('color', self.gf('django.db.models.fields.CharField')(default='#471ee0', max_length=7)),
         ))
-        db.send_create_signal('tradeschool', ['Venue'])
+        db.send_create_signal(u'tradeschool', ['Venue'])
 
         # Adding model 'Person'
-        db.create_table('tradeschool_person', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_person', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('fullname', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('fullname', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('username', self.gf('django.db.models.fields.CharField')(unique=True, max_length=200)),
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=100)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=20, null=True)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
             ('bio', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('website', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
-            ('hashcode', self.gf('django.db.models.fields.CharField')(default='473f5c406a4d11e291c314109fdfc929', unique=True, max_length=32)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=120)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=220)),
+            ('default_branch', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='default_branch', null=True, to=orm['tradeschool.Branch'])),
+            ('language', self.gf('django.db.models.fields.CharField')(default='en', max_length=50, null=True)),
+            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('courses_taught_count', self.gf('django.db.models.fields.IntegerField')(default=0, max_length=7)),
+            ('courses_taken_count', self.gf('django.db.models.fields.IntegerField')(default=0, max_length=7)),
+            ('names_of_co_organizers', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
         ))
-        db.send_create_signal('tradeschool', ['Person'])
+        db.send_create_signal(u'tradeschool', ['Person'])
 
-        # Adding M2M table for field site on 'Person'
-        db.create_table('tradeschool_person_site', (
+        # Adding M2M table for field groups on 'Person'
+        m2m_table_name = db.shorten_name(u'tradeschool_person_groups')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('person', models.ForeignKey(orm['tradeschool.person'], null=False)),
-            ('site', models.ForeignKey(orm['sites.site'], null=False))
+            ('person', models.ForeignKey(orm[u'tradeschool.person'], null=False)),
+            ('group', models.ForeignKey(orm[u'auth.group'], null=False))
         ))
-        db.create_unique('tradeschool_person_site', ['person_id', 'site_id'])
+        db.create_unique(m2m_table_name, ['person_id', 'group_id'])
 
-        # Adding model 'Course'
-        db.create_table('tradeschool_course', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('teacher', self.gf('django.db.models.fields.related.ForeignKey')(related_name='courses_taught', to=orm['tradeschool.Person'])),
-            ('category', self.gf('django.db.models.fields.SmallIntegerField')(default=2, max_length=1)),
-            ('max_students', self.gf('django.db.models.fields.IntegerField')(max_length=4)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=140)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=120, null=True)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('tradeschool', ['Course'])
-
-        # Adding M2M table for field site on 'Course'
-        db.create_table('tradeschool_course_site', (
+        # Adding M2M table for field user_permissions on 'Person'
+        m2m_table_name = db.shorten_name(u'tradeschool_person_user_permissions')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('course', models.ForeignKey(orm['tradeschool.course'], null=False)),
-            ('site', models.ForeignKey(orm['sites.site'], null=False))
+            ('person', models.ForeignKey(orm[u'tradeschool.person'], null=False)),
+            ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
         ))
-        db.create_unique('tradeschool_course_site', ['course_id', 'site_id'])
+        db.create_unique(m2m_table_name, ['person_id', 'permission_id'])
+
+        # Adding M2M table for field branches on 'Person'
+        m2m_table_name = db.shorten_name(u'tradeschool_person_branches')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('person', models.ForeignKey(orm[u'tradeschool.person'], null=False)),
+            ('branch', models.ForeignKey(orm[u'tradeschool.branch'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['person_id', 'branch_id'])
 
         # Adding model 'Time'
-        db.create_table('tradeschool_time', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_time', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('start_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 1, 29, 0, 0))),
-            ('end_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 1, 29, 0, 0))),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(default='2', to=orm['sites.Site'])),
+            ('start_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 25, 0, 0))),
+            ('end_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 25, 0, 0))),
+            ('venue', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Venue'], null=True, blank=True)),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'])),
         ))
-        db.send_create_signal('tradeschool', ['Time'])
+        db.send_create_signal(u'tradeschool', ['Time'])
 
         # Adding model 'TimeRange'
-        db.create_table('tradeschool_timerange', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_timerange', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('start_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime(2013, 1, 29, 0, 0))),
-            ('end_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime(2013, 1, 29, 0, 0))),
+            ('start_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime(2014, 1, 25, 0, 0))),
+            ('end_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime(2014, 1, 25, 0, 0))),
             ('start_time', self.gf('django.db.models.fields.TimeField')(default=datetime.datetime(2008, 1, 31, 0, 0))),
             ('end_time', self.gf('django.db.models.fields.TimeField')(default=datetime.datetime(2008, 1, 31, 0, 0))),
             ('sunday', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -253,472 +285,503 @@ class Migration(SchemaMigration):
             ('thursday', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('friday', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('saturday', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(default='2', to=orm['sites.Site'])),
-        ))
-        db.send_create_signal('tradeschool', ['TimeRange'])
-
-        # Adding model 'ScheduleEmailContainer'
-        db.create_table('tradeschool_scheduleemailcontainer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('student_confirmation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentConfirmation'])),
-            ('student_reminder', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentReminder'])),
-            ('student_feedback', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.StudentFeedback'])),
-            ('teacher_confirmation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherConfirmation'])),
-            ('teacher_class_approval', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherClassApproval'])),
-            ('teacher_reminder', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherReminder'])),
-            ('teacher_feedback', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.TeacherFeedback'])),
-            ('schedule', self.gf('django.db.models.fields.related.OneToOneField')(related_name='emails', unique=True, to=orm['tradeschool.Schedule'])),
-        ))
-        db.send_create_signal('tradeschool', ['ScheduleEmailContainer'])
-
-        # Adding model 'Schedule'
-        db.create_table('tradeschool_schedule', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('start_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 1, 29, 0, 0))),
-            ('end_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 1, 29, 0, 0))),
             ('venue', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Venue'], null=True, blank=True)),
-            ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Course'])),
-            ('course_status', self.gf('django.db.models.fields.SmallIntegerField')(default=0, max_length=1)),
-            ('hashcode', self.gf('django.db.models.fields.CharField')(default='4740ebd16a4d11e29db914109fdfc929', unique=True, max_length=32)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=120, unique=True, null=True)),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'])),
         ))
-        db.send_create_signal('tradeschool', ['Schedule'])
+        db.send_create_signal(u'tradeschool', ['TimeRange'])
 
         # Adding model 'BarterItem'
-        db.create_table('tradeschool_barteritem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_barteritem', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('requested', self.gf('django.db.models.fields.IntegerField')(default=1, max_length=3)),
-            ('schedule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Schedule'], null=True)),
+            ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Course'])),
         ))
-        db.send_create_signal('tradeschool', ['BarterItem'])
+        db.send_create_signal(u'tradeschool', ['BarterItem'])
+
+        # Adding model 'Course'
+        db.create_table(u'tradeschool_course', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('start_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 25, 0, 0))),
+            ('end_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 25, 0, 0))),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'])),
+            ('venue', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Venue'], null=True, blank=True)),
+            ('description', self.gf('django.db.models.fields.TextField')()),
+            ('max_students', self.gf('django.db.models.fields.IntegerField')(max_length=4)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255, unique=True, null=True, blank=True)),
+            ('status', self.gf('django.db.models.fields.CharField')(default='pending', max_length=20)),
+            ('color', self.gf('django.db.models.fields.CharField')(default=5, max_length=7)),
+            ('teacher', self.gf('django.db.models.fields.related.ForeignKey')(related_name='courses_taught', to=orm['tradeschool.Person'])),
+        ))
+        db.send_create_signal(u'tradeschool', ['Course'])
 
         # Adding model 'Registration'
-        db.create_table('tradeschool_registration', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_registration', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('schedule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Schedule'])),
+            ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Course'])),
             ('student', self.gf('django.db.models.fields.related.ForeignKey')(related_name='registrations', to=orm['tradeschool.Person'])),
             ('registration_status', self.gf('django.db.models.fields.CharField')(default='registered', max_length=20)),
         ))
-        db.send_create_signal('tradeschool', ['Registration'])
+        db.send_create_signal(u'tradeschool', ['Registration'])
 
-        # Adding model 'RegisteredItem'
-        db.create_table('tradeschool_registereditem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('registration', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Registration'])),
-            ('barter_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.BarterItem'])),
-            ('registered', self.gf('django.db.models.fields.IntegerField')(default=1, max_length=3)),
+        # Adding unique constraint on 'Registration', fields ['course', 'student']
+        db.create_unique(u'tradeschool_registration', ['course_id', 'student_id'])
+
+        # Adding M2M table for field items on 'Registration'
+        m2m_table_name = db.shorten_name(u'tradeschool_registration_items')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('registration', models.ForeignKey(orm[u'tradeschool.registration'], null=False)),
+            ('barteritem', models.ForeignKey(orm[u'tradeschool.barteritem'], null=False))
         ))
-        db.send_create_signal('tradeschool', ['RegisteredItem'])
+        db.create_unique(m2m_table_name, ['registration_id', 'barteritem_id'])
 
         # Adding model 'Feedback'
-        db.create_table('tradeschool_feedback', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_feedback', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('schedule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Schedule'])),
+            ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Course'])),
             ('feedback_type', self.gf('django.db.models.fields.CharField')(default='student', max_length=20)),
             ('content', self.gf('django.db.models.fields.TextField')()),
         ))
-        db.send_create_signal('tradeschool', ['Feedback'])
+        db.send_create_signal(u'tradeschool', ['Feedback'])
 
         # Adding model 'Photo'
-        db.create_table('tradeschool_photo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        db.create_table(u'tradeschool_photo', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('filename', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
             ('position', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(default='2', to=orm['sites.Site'])),
-            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(default=[], to=orm['tradeschool.Branch'])),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'])),
         ))
-        db.send_create_signal('tradeschool', ['Photo'])
+        db.send_create_signal(u'tradeschool', ['Photo'])
+
+        # Adding model 'Page'
+        db.create_table(u'tradeschool_page', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=100, db_index=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('content', self.gf('tinymce.models.HTMLField')(blank=True)),
+            ('is_visible', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tradeschool.Branch'], null=True, blank=True)),
+            ('position', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
+        ))
+        db.send_create_signal(u'tradeschool', ['Page'])
+
+        # Adding unique constraint on 'Page', fields ['branch', 'url']
+        db.create_unique(u'tradeschool_page', ['branch_id', 'url'])
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'Page', fields ['branch', 'url']
+        db.delete_unique(u'tradeschool_page', ['branch_id', 'url'])
+
+        # Removing unique constraint on 'Registration', fields ['course', 'student']
+        db.delete_unique(u'tradeschool_registration', ['course_id', 'student_id'])
+
         # Deleting model 'StudentConfirmation'
-        db.delete_table('tradeschool_studentconfirmation')
+        db.delete_table(u'tradeschool_studentconfirmation')
 
         # Deleting model 'StudentReminder'
-        db.delete_table('tradeschool_studentreminder')
+        db.delete_table(u'tradeschool_studentreminder')
 
         # Deleting model 'StudentFeedback'
-        db.delete_table('tradeschool_studentfeedback')
+        db.delete_table(u'tradeschool_studentfeedback')
 
         # Deleting model 'TeacherConfirmation'
-        db.delete_table('tradeschool_teacherconfirmation')
+        db.delete_table(u'tradeschool_teacherconfirmation')
 
         # Deleting model 'TeacherClassApproval'
-        db.delete_table('tradeschool_teacherclassapproval')
+        db.delete_table(u'tradeschool_teacherclassapproval')
 
         # Deleting model 'TeacherReminder'
-        db.delete_table('tradeschool_teacherreminder')
+        db.delete_table(u'tradeschool_teacherreminder')
 
         # Deleting model 'TeacherFeedback'
-        db.delete_table('tradeschool_teacherfeedback')
+        db.delete_table(u'tradeschool_teacherfeedback')
 
         # Deleting model 'DefaultEmailContainer'
-        db.delete_table('tradeschool_defaultemailcontainer')
+        db.delete_table(u'tradeschool_defaultemailcontainer')
 
-        # Deleting model 'BranchEmailContainer'
-        db.delete_table('tradeschool_branchemailcontainer')
+        # Deleting model 'Cluster'
+        db.delete_table(u'tradeschool_cluster')
+
+        # Deleting model 'Language'
+        db.delete_table(u'tradeschool_language')
 
         # Deleting model 'Branch'
-        db.delete_table('tradeschool_branch')
+        db.delete_table(u'tradeschool_branch')
+
+        # Removing M2M table for field languages on 'Branch'
+        db.delete_table(db.shorten_name(u'tradeschool_branch_languages'))
+
+        # Removing M2M table for field organizers on 'Branch'
+        db.delete_table(db.shorten_name(u'tradeschool_branch_organizers'))
+
+        # Removing M2M table for field clusters on 'Branch'
+        db.delete_table(db.shorten_name(u'tradeschool_branch_clusters'))
 
         # Deleting model 'Venue'
-        db.delete_table('tradeschool_venue')
+        db.delete_table(u'tradeschool_venue')
 
         # Deleting model 'Person'
-        db.delete_table('tradeschool_person')
+        db.delete_table(u'tradeschool_person')
 
-        # Removing M2M table for field site on 'Person'
-        db.delete_table('tradeschool_person_site')
+        # Removing M2M table for field groups on 'Person'
+        db.delete_table(db.shorten_name(u'tradeschool_person_groups'))
 
-        # Deleting model 'Course'
-        db.delete_table('tradeschool_course')
+        # Removing M2M table for field user_permissions on 'Person'
+        db.delete_table(db.shorten_name(u'tradeschool_person_user_permissions'))
 
-        # Removing M2M table for field site on 'Course'
-        db.delete_table('tradeschool_course_site')
+        # Removing M2M table for field branches on 'Person'
+        db.delete_table(db.shorten_name(u'tradeschool_person_branches'))
 
         # Deleting model 'Time'
-        db.delete_table('tradeschool_time')
+        db.delete_table(u'tradeschool_time')
 
         # Deleting model 'TimeRange'
-        db.delete_table('tradeschool_timerange')
-
-        # Deleting model 'ScheduleEmailContainer'
-        db.delete_table('tradeschool_scheduleemailcontainer')
-
-        # Deleting model 'Schedule'
-        db.delete_table('tradeschool_schedule')
+        db.delete_table(u'tradeschool_timerange')
 
         # Deleting model 'BarterItem'
-        db.delete_table('tradeschool_barteritem')
+        db.delete_table(u'tradeschool_barteritem')
+
+        # Deleting model 'Course'
+        db.delete_table(u'tradeschool_course')
 
         # Deleting model 'Registration'
-        db.delete_table('tradeschool_registration')
+        db.delete_table(u'tradeschool_registration')
 
-        # Deleting model 'RegisteredItem'
-        db.delete_table('tradeschool_registereditem')
+        # Removing M2M table for field items on 'Registration'
+        db.delete_table(db.shorten_name(u'tradeschool_registration_items'))
 
         # Deleting model 'Feedback'
-        db.delete_table('tradeschool_feedback')
+        db.delete_table(u'tradeschool_feedback')
 
         # Deleting model 'Photo'
-        db.delete_table('tradeschool_photo')
+        db.delete_table(u'tradeschool_photo')
+
+        # Deleting model 'Page'
+        db.delete_table(u'tradeschool_page')
 
 
     models = {
-        'sites.site': {
-            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
-            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        u'auth.group': {
+            'Meta': {'object_name': 'Group'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+        },
+        u'auth.permission': {
+            'Meta': {'ordering': "(u'content_type__app_label', u'content_type__model', u'codename')", 'unique_together': "((u'content_type', u'codename'),)", 'object_name': 'Permission'},
+            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'tradeschool.barteritem': {
-            'Meta': {'object_name': 'BarterItem'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'requested': ('django.db.models.fields.IntegerField', [], {'default': '1', 'max_length': '3'}),
-            'schedule': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Schedule']", 'null': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+        u'contenttypes.contenttype': {
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'tradeschool.branch': {
-            'Meta': {'ordering': "['title']", 'object_name': 'Branch'},
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        u'sites.site': {
+            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
+        u'tradeschool.barteritem': {
+            'Meta': {'ordering': "['title']", 'object_name': 'BarterItem'},
+            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Course']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['sites.Site']", 'unique': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
+        },
+        u'tradeschool.branch': {
+            'Meta': {'ordering': "['title']", 'object_name': 'Branch'},
+            'branch_status': ('django.db.models.fields.CharField', [], {'default': "'pending'", 'max_length': '50'}),
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'clusters': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['tradeschool.Cluster']", 'null': 'True', 'blank': 'True'}),
+            'country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '100'}),
+            'footer_copy': ('tinymce.models.HTMLField', [], {'default': "'Information for the footer of the page'", 'null': 'True', 'blank': 'True'}),
+            'header_copy': ('tinymce.models.HTMLField', [], {'default': "'Barter for knowledge'", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'intro_copy': ('tinymce.models.HTMLField', [], {'default': "'Information for the header of the page'", 'null': 'True', 'blank': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True'}),
+            'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['tradeschool.Language']", 'symmetrical': 'False'}),
+            'organizers': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'branches_organized'", 'symmetrical': 'False', 'db_column': "'person_id'", 'to': u"orm['tradeschool.Person']"}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '120'}),
             'state': ('django.contrib.localflavor.us.models.USStateField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
             'timezone': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
-        'tradeschool.branchemailcontainer': {
-            'Meta': {'object_name': 'BranchEmailContainer'},
-            'branch': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'emails'", 'unique': 'True', 'to': "orm['tradeschool.Branch']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        u'tradeschool.cluster': {
+            'Meta': {'ordering': "['name']", 'object_name': 'Cluster'},
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'site': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'emails'", 'unique': 'True', 'to': "orm['sites.Site']"}),
-            'student_confirmation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentConfirmation']"}),
-            'student_feedback': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentFeedback']"}),
-            'student_reminder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentReminder']"}),
-            'teacher_class_approval': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherClassApproval']"}),
-            'teacher_confirmation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherConfirmation']"}),
-            'teacher_feedback': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherFeedback']"}),
-            'teacher_reminder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherReminder']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '120'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
-        'tradeschool.course': {
-            'Meta': {'object_name': 'Course'},
-            'category': ('django.db.models.fields.SmallIntegerField', [], {'default': '2', 'max_length': '1'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+        u'tradeschool.course': {
+            'Meta': {'ordering': "['status', 'start_time', '-venue', 'title']", 'object_name': 'Course'},
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Branch']"}),
+            'color': ('django.db.models.fields.CharField', [], {'default': '5', 'max_length': '7'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 25, 0, 0)'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'max_students': ('django.db.models.fields.IntegerField', [], {'max_length': '4'}),
-            'site': ('django.db.models.fields.related.ManyToManyField', [], {'default': "'2'", 'to': "orm['sites.Site']", 'null': 'True', 'symmetrical': 'False'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '120', 'null': 'True'}),
-            'teacher': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'courses_taught'", 'to': "orm['tradeschool.Person']"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 25, 0, 0)'}),
+            'status': ('django.db.models.fields.CharField', [], {'default': "'pending'", 'max_length': '20'}),
+            'students': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['tradeschool.Person']", 'through': u"orm['tradeschool.Registration']", 'symmetrical': 'False'}),
+            'teacher': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'courses_taught'", 'to': u"orm['tradeschool.Person']"}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {}),
+            'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Venue']", 'null': 'True', 'blank': 'True'})
         },
-        'tradeschool.defaultemailcontainer': {
+        u'tradeschool.defaultemailcontainer': {
             'Meta': {'object_name': 'DefaultEmailContainer'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'student_confirmation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentConfirmation']"}),
-            'student_feedback': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentFeedback']"}),
-            'student_reminder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentReminder']"}),
-            'teacher_class_approval': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherClassApproval']"}),
-            'teacher_confirmation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherConfirmation']"}),
-            'teacher_feedback': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherFeedback']"}),
-            'teacher_reminder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherReminder']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'studentconfirmation': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.StudentConfirmation']", 'unique': 'True'}),
+            'studentfeedback': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.StudentFeedback']", 'unique': 'True'}),
+            'studentreminder': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.StudentReminder']", 'unique': 'True'}),
+            'teacherclassapproval': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.TeacherClassApproval']", 'unique': 'True'}),
+            'teacherconfirmation': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.TeacherConfirmation']", 'unique': 'True'}),
+            'teacherfeedback': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.TeacherFeedback']", 'unique': 'True'}),
+            'teacherreminder': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.TeacherReminder']", 'unique': 'True'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
-        'tradeschool.feedback': {
+        u'tradeschool.feedback': {
             'Meta': {'object_name': 'Feedback'},
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Course']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
             'feedback_type': ('django.db.models.fields.CharField', [], {'default': "'student'", 'max_length': '20'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'schedule': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Schedule']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
-        'tradeschool.person': {
-            'Meta': {'object_name': 'Person'},
-            'bio': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '100'}),
-            'fullname': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'hashcode': ('django.db.models.fields.CharField', [], {'default': "'473f5c406a4d11e291c314109fdfc929'", 'unique': 'True', 'max_length': '32'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        u'tradeschool.language': {
+            'Meta': {'object_name': 'Language'},
+            'code': ('django.db.models.fields.CharField', [], {'max_length': '6', 'db_index': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
-            'site': ('django.db.models.fields.related.ManyToManyField', [], {'default': "'2'", 'to': "orm['sites.Site']", 'null': 'True', 'symmetrical': 'False'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '120'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
+        },
+        u'tradeschool.page': {
+            'Meta': {'ordering': "['branch', 'title']", 'unique_together': "(('branch', 'url'),)", 'object_name': 'Page'},
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Branch']", 'null': 'True', 'blank': 'True'}),
+            'content': ('tinymce.models.HTMLField', [], {'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_visible': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'position': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {}),
+            'url': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'})
+        },
+        u'tradeschool.person': {
+            'Meta': {'ordering': "['fullname']", 'object_name': 'Person'},
+            'bio': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'branches': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['tradeschool.Branch']", 'symmetrical': 'False'}),
+            'courses_taken_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '7'}),
+            'courses_taught_count': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '7'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            'default_branch': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'default_branch'", 'null': 'True', 'to': u"orm['tradeschool.Branch']"}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '100'}),
+            'fullname': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'language': ('django.db.models.fields.CharField', [], {'default': "'en'", 'max_length': '50', 'null': 'True'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'names_of_co_organizers': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '220'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
-        'tradeschool.photo': {
+        u'tradeschool.photo': {
             'Meta': {'ordering': "['position']", 'object_name': 'Photo'},
-            'branch': ('django.db.models.fields.related.ForeignKey', [], {'default': '[]', 'to': "orm['tradeschool.Branch']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Branch']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
             'filename': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'position': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': "'2'", 'to': "orm['sites.Site']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
-        'tradeschool.registereditem': {
-            'Meta': {'object_name': 'RegisteredItem'},
-            'barter_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.BarterItem']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        u'tradeschool.registration': {
+            'Meta': {'ordering': "['-course__start_time', 'course', 'registration_status', 'student']", 'unique_together': "(('course', 'student'),)", 'object_name': 'Registration'},
+            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Course']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'registered': ('django.db.models.fields.IntegerField', [], {'default': '1', 'max_length': '3'}),
-            'registration': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Registration']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'tradeschool.registration': {
-            'Meta': {'object_name': 'Registration'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'items': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['tradeschool.BarterItem']", 'through': "orm['tradeschool.RegisteredItem']", 'symmetrical': 'False'}),
+            'items': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['tradeschool.BarterItem']", 'symmetrical': 'False'}),
             'registration_status': ('django.db.models.fields.CharField', [], {'default': "'registered'", 'max_length': '20'}),
-            'schedule': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Schedule']"}),
-            'student': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'registrations'", 'to': "orm['tradeschool.Person']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'student': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'registrations'", 'to': u"orm['tradeschool.Person']"}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
-        'tradeschool.schedule': {
-            'Meta': {'ordering': "['course_status', 'start_time', '-venue']", 'object_name': 'Schedule'},
-            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Course']"}),
-            'course_status': ('django.db.models.fields.SmallIntegerField', [], {'default': '0', 'max_length': '1'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 29, 0, 0)'}),
-            'hashcode': ('django.db.models.fields.CharField', [], {'default': "'4740ebd16a4d11e29db914109fdfc929'", 'unique': 'True', 'max_length': '32'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '120', 'unique': 'True', 'null': 'True'}),
-            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 29, 0, 0)'}),
-            'students': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['tradeschool.Person']", 'through': "orm['tradeschool.Registration']", 'symmetrical': 'False'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.Venue']", 'null': 'True', 'blank': 'True'})
-        },
-        'tradeschool.scheduleemailcontainer': {
-            'Meta': {'object_name': 'ScheduleEmailContainer'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'schedule': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'emails'", 'unique': 'True', 'to': "orm['tradeschool.Schedule']"}),
-            'student_confirmation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentConfirmation']"}),
-            'student_feedback': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentFeedback']"}),
-            'student_reminder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.StudentReminder']"}),
-            'teacher_class_approval': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherClassApproval']"}),
-            'teacher_confirmation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherConfirmation']"}),
-            'teacher_feedback': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherFeedback']"}),
-            'teacher_reminder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tradeschool.TeacherReminder']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'tradeschool.studentconfirmation': {
+        u'tradeschool.studentconfirmation': {
             'Meta': {'object_name': 'StudentConfirmation'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.studentfeedback': {
+        u'tradeschool.studentfeedback': {
             'Meta': {'object_name': 'StudentFeedback'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'days_delta': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'send_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'send_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(10, 0)'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.studentreminder': {
+        u'tradeschool.studentreminder': {
             'Meta': {'object_name': 'StudentReminder'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'days_delta': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'send_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'send_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(10, 0)'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.teacherclassapproval': {
+        u'tradeschool.teacherclassapproval': {
             'Meta': {'object_name': 'TeacherClassApproval'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.teacherconfirmation': {
+        u'tradeschool.teacherconfirmation': {
             'Meta': {'object_name': 'TeacherConfirmation'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.teacherfeedback': {
+        u'tradeschool.teacherfeedback': {
             'Meta': {'object_name': 'TeacherFeedback'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'days_delta': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'send_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'send_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(10, 0)'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.teacherreminder': {
+        u'tradeschool.teacherreminder': {
             'Meta': {'object_name': 'TeacherReminder'},
+            'branch': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Branch']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'course': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['tradeschool.Course']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'days_delta': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             'email_status': ('django.db.models.fields.CharField', [], {'default': "'not_sent'", 'max_length': '30'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'send_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'send_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(10, 0)'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '140'})
         },
-        'tradeschool.time': {
+        u'tradeschool.time': {
             'Meta': {'object_name': 'Time'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 29, 0, 0)'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Branch']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            'end_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 25, 0, 0)'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': "'2'", 'to': "orm['sites.Site']"}),
-            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 29, 0, 0)'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+            'start_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 25, 0, 0)'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {}),
+            'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Venue']", 'null': 'True', 'blank': 'True'})
         },
-        'tradeschool.timerange': {
+        u'tradeschool.timerange': {
             'Meta': {'object_name': 'TimeRange'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime(2013, 1, 29, 0, 0)'}),
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Branch']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime(2014, 1, 25, 0, 0)'}),
             'end_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.datetime(2008, 1, 31, 0, 0)'}),
             'friday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'monday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'saturday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': "'2'", 'to': "orm['sites.Site']"}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime(2013, 1, 29, 0, 0)'}),
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime(2014, 1, 25, 0, 0)'}),
             'start_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.datetime(2008, 1, 31, 0, 0)'}),
             'sunday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'thursday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'tuesday': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {}),
+            'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Venue']", 'null': 'True', 'blank': 'True'}),
             'wednesday': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
-        'tradeschool.venue': {
-            'Meta': {'object_name': 'Venue'},
-            'address_1': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'address_2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+        u'tradeschool.venue': {
+            'Meta': {'ordering': "['branch', 'is_active', 'title']", 'object_name': 'Venue'},
+            'address_1': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tradeschool.Branch']"}),
             'capacity': ('django.db.models.fields.SmallIntegerField', [], {'default': '20', 'max_length': '4'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'color': ('django.db.models.fields.CharField', [], {'default': "'#d8713d'", 'max_length': '7'}),
+            'color': ('django.db.models.fields.CharField', [], {'default': "'#5e2692'", 'max_length': '7'}),
             'country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
-            'resources': ('django.db.models.fields.TextField', [], {'default': "'Chairs, Tables'", 'null': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'default': "'2'", 'to': "orm['sites.Site']"}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'resources': ('django.db.models.fields.TextField', [], {'default': "'For Example: Chairs, Tables'", 'null': 'True'}),
             'state': ('django.contrib.localflavor.us.models.USStateField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'venue_type': ('django.db.models.fields.SmallIntegerField', [], {'default': '0', 'max_length': '1'})
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         }
     }
 

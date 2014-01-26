@@ -867,7 +867,9 @@ class Branch(Location):
         help_text=_(
             "Select multiple languages that you would like the site to be "
             "displayed in."
-        )
+        ),
+        null=True,
+        blank=True
     )
     organizers = ManyToManyField(
         settings.AUTH_USER_MODEL,
