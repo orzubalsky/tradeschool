@@ -188,8 +188,8 @@ def load_fixture():
 
 @task
 def restart_memcached():
-    with cd('/etc/init.d/memcached'):
-        sudo('restart')
+    with cd(env.project_dir):
+        sudo('/etc/init.d/memcached restart')
 
 
 @task
@@ -200,10 +200,10 @@ def restart_wsgi():
 
 @task
 def restart():
-    #restart_memcached()
+    restart_memcached()
     restart_wsgi()
 
-    sudo('/etc/init.d/apache2 restart')
+    sudo('service apache2 restart')
 
 
 @task

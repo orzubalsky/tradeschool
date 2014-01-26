@@ -101,6 +101,10 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
             if student.exists():
                 student = student[0]
 
+                # keep this object in case something goes wrong
+                # when saving the registration
+                original_student = student
+
                 # update student data from form
                 student.fullname = student_data['fullname']
                 student.phone = student_data['phone']
@@ -149,6 +153,13 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
             # (see comment above the try block),
             # add an error to the registration form
             except IntegrityError:
+
+                # restore data
+                student.fullname = original_student.fullname
+                student.phone = original_student.phone
+                student.save()
+
+                # display error
                 registration_form._errors['items'] = \
                     registration_form.error_class(
                         [_('You are already registered to this class')])
