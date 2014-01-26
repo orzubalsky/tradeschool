@@ -2835,7 +2835,7 @@ class Photo(Base):
         This folder's name is updated automatically when the title
         of the branch is changed.
         """
-        return "uploads/%s/images/%s" % (self.branch.slug, filename)
+        return "uploads/%i/%s" % (self.branch.pk, filename)
 
     # Translators: These next three are for the photograph files
     filename = ImageField(

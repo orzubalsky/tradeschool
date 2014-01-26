@@ -97,11 +97,14 @@ class BranchPhotosManager(Manager):
             try:
                 branch = Branch.objects.get(pk=int(data['branch_id']))
 
+                filename = "uploads/%i/%s" % (
+                    branch.pk, data['filename'])
+
                 if branch_photo.exists() is False:
                     branch_photo = Photo(
                         pk=data['id'],
                         branch=branch,
-                        filename=data['filename'],
+                        filename=filename,
                         created=timezone.make_aware(data['timestamp'], timezone.utc),
                         updated=timezone.make_aware(data['timestamp'], timezone.utc),
                     )
@@ -109,7 +112,8 @@ class BranchPhotosManager(Manager):
 
                     print "     saved Photo: [%s]" % branch_photo
                 else:
-                    branch_photo = Photo.objects.get(filename=data['filename'])
+
+                    branch_photo = Photo.objects.get(filename=filename)
                     print "     found Photo: [%s]" % branch_photo
             except Branch.DoesNotExist:
                 pass
