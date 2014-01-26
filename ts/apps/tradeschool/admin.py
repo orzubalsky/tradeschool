@@ -839,6 +839,7 @@ class PendingBranchAdmin(BranchAdmin):
                 'city',
                 'state',
                 'country',
+                'timezone',
                 'branch_status',
             )
         }),

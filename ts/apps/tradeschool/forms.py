@@ -127,6 +127,11 @@ class OrganizerForm(TeacherForm):
         required=True,
         label=_("Names of Co-Organizers"),
     )
+    bio = forms.CharField(
+        required=True,
+        label=_("A few sentences about why your group wants to open a Trade School"),
+        widget=forms.Textarea
+    )
 
 
 class CourseForm (ModelForm):
