@@ -165,7 +165,12 @@ def update_static_files():
 def load_fixtures():
     # load fixtures
     with cd(env.project_dir):
-        sudo('./bin/django loaddata email_initial_data.json pages_initial_data.json teacher-info.json', user=env.username)
+        sudo('./bin/django loaddata \
+            email_initial_data.json \
+            pages_initial_data.json \
+            group_initial_data.json \
+            language_initial_data.json \
+            teacher-info.json', user=env.username)
 
 
 @task
@@ -209,7 +214,7 @@ def restart():
 @task
 def test():
     with cd(env.project_dir):
-        sudo('./bin/django test tradeschool -v 3', user=env.username)
+        sudo('./bin/django test tradeschool -v 2', user=env.username)
 
 
 @task
