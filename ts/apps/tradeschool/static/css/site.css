@@ -983,10 +983,10 @@ iframe{
 }
 
 #container #headerNav {
-	width: 400px;
+	width: 540px;
 	height: 65px;
 	position: absolute;
-  top: 10px;
+  top: 3px;
   right: 65px;
   text-align: right;
 }
