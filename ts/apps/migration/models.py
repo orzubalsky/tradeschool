@@ -34,7 +34,7 @@ class BranchPagesManager(Manager):
             try:
                 branch = Branch.objects.get(pk=int(data['branch_id']))
 
-                url = "/%s/" % data['url']
+                url = "%s" % data['url']
 
                 pages_with_url = Page.objects.filter(url=url, branch=branch)
 

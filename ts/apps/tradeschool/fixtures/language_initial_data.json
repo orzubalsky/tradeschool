@@ -1,0 +1,232 @@
+[
+{
+    "pk": 1, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:13:57Z", 
+        "code": "en", 
+        "is_active": true, 
+        "created": "2014-01-25T21:13:57Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:02Z", 
+        "code": "es_es", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:02Z"
+    }
+},
+{
+    "pk": 3, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:11Z", 
+        "code": "es_mx", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:11Z"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:15Z", 
+        "code": "es_us", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:15Z"
+    }
+},
+{
+    "pk": 5, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:22Z", 
+        "code": "es_us", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:22Z"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:25Z", 
+        "code": "es_ar", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:25Z"
+    }
+},
+{
+    "pk": 7, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:31Z", 
+        "code": "es_cl", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:31Z"
+    }
+},
+{
+    "pk": 8, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:35Z", 
+        "code": "es_ec", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:35Z"
+    }
+},
+{
+    "pk": 9, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:38Z", 
+        "code": "es_pr", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:38Z"
+    }
+},
+{
+    "pk": 10, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:42Z", 
+        "code": "es_ve", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:42Z"
+    }
+},
+{
+    "pk": 11, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:48Z", 
+        "code": "de_de", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:48Z"
+    }
+},
+{
+    "pk": 12, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:51Z", 
+        "code": "ms_sg", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:51Z"
+    }
+},
+{
+    "pk": 13, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:56Z", 
+        "code": "zh_sg", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:56Z"
+    }
+},
+{
+    "pk": 14, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:14:59Z", 
+        "code": "it_it", 
+        "is_active": true, 
+        "created": "2014-01-25T21:14:59Z"
+    }
+},
+{
+    "pk": 15, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:03Z", 
+        "code": "tl", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:03Z"
+    }
+},
+{
+    "pk": 16, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:07Z", 
+        "code": "fr_fr", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:07Z"
+    }
+},
+{
+    "pk": 17, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:10Z", 
+        "code": "nl_nl", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:10Z"
+    }
+},
+{
+    "pk": 18, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:14Z", 
+        "code": "th", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:14Z"
+    }
+},
+{
+    "pk": 19, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:17Z", 
+        "code": "pt_br", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:17Z"
+    }
+},
+{
+    "pk": 20, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:22Z", 
+        "code": "el_gr", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:22Z"
+    }
+},
+{
+    "pk": 21, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:27Z", 
+        "code": "zh_cn", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:27Z"
+    }
+},
+{
+    "pk": 22, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:32Z", 
+        "code": "vi", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:32Z"
+    }
+},
+{
+    "pk": 23, 
+    "model": "tradeschool.language", 
+    "fields": {
+        "updated": "2014-01-25T21:15:36Z", 
+        "code": "ta_sg", 
+        "is_active": true, 
+        "created": "2014-01-25T21:15:36Z"
+    }
+}
+]

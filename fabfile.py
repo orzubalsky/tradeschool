@@ -26,6 +26,7 @@ def local():
         Config.local_project_dir,
         Config.local_settings_file
     )
+    env.branch = 'development'
 
 
 @task
@@ -41,6 +42,7 @@ def testing():
         Config.testing_project_dir,
         Config.testing_settings_file
     )
+    env.branch = 'development'
 
 
 @task
@@ -56,7 +58,7 @@ def prod():
         Config.production_project_dir,
         Config.production_settings_file
     )
-
+    env.branch = 'master'
 
 #####
 #
@@ -149,7 +151,7 @@ def run_buildout():
 def update_db():
     with cd(env.project_dir):
         sudo('./bin/django syncdb --verbosity 3', user=env.username)
-        sudo('./bin/django migrate', user=env.username)
+        sudo('./bin/django migrate tradeschool', user=env.username)
 
 
 @task
@@ -218,7 +220,7 @@ def load_data():
     )
     #sudo('mkdir /opt/projects/tse/sql',user=env.username)
 
-    destination = '%s/sql/data.sql' % env.project_dir
+    destination = '%ssql/data.sql' % env.project_dir
 
     db_name = prompt(
         'Enter name of database:',
@@ -304,7 +306,10 @@ def init_project_sourcecode():
     sudo('mkdir --parents %s' % env.project_dir)
     sudo('chown %s:webdev %s' % (env.username, env.project_dir))
     with cd(env.project_dir):
-        sudo('git clone git@github.com:orzubalsky/tradeschool.git .', user=env.username)
+        sudo(
+            'git clone -b %s git@github.com:orzubalsky/tradeschool.git .' % env.branch,
+            user=env.username
+        )
 
 
 @task
