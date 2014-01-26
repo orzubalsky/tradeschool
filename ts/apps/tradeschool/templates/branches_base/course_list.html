@@ -6,7 +6,7 @@
 <div class="classes" id="future">
 {% for course in branch.course_set.public.approved %}
    
-   {% ifchanged branch.course_set.start_time.day %}
+   {% ifchanged course.start_time.day %}
    {% block course_date_divider %}
     <div class="dateDivider">
         <strong class="date1">{{ course.start_time|date:"M j, Y"|localize }}</strong>

@@ -467,10 +467,9 @@ ul.errors li{
 
 
 #container #headerNav {
-	width: 400px;
 	height: 65px;
 	position: absolute;
-  top: 10px;
+  top: 4px;
   right: 0;
   text-align: right;
 }
