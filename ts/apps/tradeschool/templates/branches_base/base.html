@@ -109,6 +109,14 @@
     {% endblock %}		
     </div>
 
+    {% block footer %}    
+    <div id="footer">
+        {% if branch.footer_copy %}
+            {{ branch.footer_copy|safe }}
+        {% endif %}                    
+    </div>
+    {% endblock footer %}    
+
     <div class="clear"></div>
     {% endblock content %}
 </div>
