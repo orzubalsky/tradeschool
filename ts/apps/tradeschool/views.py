@@ -100,6 +100,10 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
 
             if student.exists():
                 student = student[0]
+
+                # update student data from form
+                student.fullname = student_data['fullname']
+                student.phone = student_data['phone']
             else:
                 student = Person.objects.create_user(**student_data)
 
