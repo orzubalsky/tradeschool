@@ -1140,14 +1140,14 @@ class TimeAdmin(BaseAdmin):
 
         if obj is not None:
             form.base_fields['venue'].queryset = Venue.objects.filter(
-                branch=obj.branch)
+                branch=obj.branch, is_active=True)
 
             form.base_fields['branch'].queryset = Branch.objects.filter(
                 pk=obj.branch.pk)
 
         else:
             form.base_fields['venue'].queryset = Venue.objects.filter(
-                branch=request.user.default_branch)
+                branch=request.user.default_branch, is_active=True)
 
             form.base_fields['branch'].queryset = Branch.objects.filter(
                 pk=request.user.default_branch.pk)
