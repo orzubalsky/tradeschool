@@ -827,7 +827,7 @@ p.credit{
 }
 .wide{
   float: left;
-  width: 800px;
+  width: 760px;
   margin:0px 0px 30px 0px;
 }
 .mainWide{
@@ -835,11 +835,12 @@ p.credit{
   margin: 40px 0 0 0;
 }
 .main{
+
   float: left;
   margin: 0 0 0 0;
 }
 
-#globalContainer #admin h3,
+#globalContainer #about h3,
 .main h3, .mainWide h3{
     float: left;
     width: 100%;
@@ -869,7 +870,7 @@ p.credit{
   .main h3:first-child, .sidebar h3:first-child, .mainWide h3:first-child{
     margin-top: 0;
   }
-#globalContainer #admin p, #globalContainer #admin ul,  
+#globalContainer #about p, #globalContainer #about ul,  
   .main p, .main ul, .sidebar p, .sidebar ul, .mainWide p, .mainWide ul{
     margin: 0 0 15px 0;
     line-height: 1.6em;
@@ -916,7 +917,7 @@ p.credit{
 
 
 
-#globalContainer #admin h2,
+#globalContainer #about h2,
 .wideText{
   float: left;
   width: 760px;
@@ -924,7 +925,7 @@ p.credit{
   font-size: 2.7em;
   line-height: 1.2em;
 }
-#globalContainer #admin h2 strong,
+#globalContainer #about h2 strong,
   .wideText strong{
     font-weight: bold;
   }
