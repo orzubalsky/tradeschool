@@ -80,7 +80,7 @@ var site = window.site = new function()
     {
         var self = this;
         
-        $('#registerToClass').on('submit', function(e) 
+        $(document).on('submit', '#registerToClass', function(e) 
         {            
             e.preventDefault();
 
