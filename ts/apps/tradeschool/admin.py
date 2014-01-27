@@ -57,27 +57,27 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
             **kwargs
         )
 
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        """
-        when an admin model has a branch manytomany field
-        filter the queryset of the barnches field by the branches
-        that the logged in user is organizing. Make the user's
-        defulat_branch selected in the form widget.
-        """
-        if db_field.name == 'branches':
-            qs = Branch.objects.filter(
-                pk__in=[request.user.default_branch.pk, ]
-            )
-            kwargs['queryset'] = qs
+    # def formfield_for_manytomany(self, db_field, request, **kwargs):
+    #     """
+    #     when an admin model has a branch manytomany field
+    #     filter the queryset of the barnches field by the branches
+    #     that the logged in user is organizing. Make the user's
+    #     defulat_branch selected in the form widget.
+    #     """
+    #     if db_field.name == 'branches':
+    #         qs = Branch.objects.filter(
+    #             pk__in=[request.user.default_branch.pk, ]
+    #         )
+    #         kwargs['queryset'] = qs
 
-            #  Make the user's defulat_branch selected in the form widget.
-            kwargs['initial'] = [request.user.default_branch.pk, ]
+    #         #  Make the user's defulat_branch selected in the form widget.
+    #         kwargs['initial'] = [request.user.default_branch.pk, ]
 
-        return super(BaseAdmin, self).formfield_for_manytomany(
-            db_field,
-            request,
-            **kwargs
-        )
+    #     return super(BaseAdmin, self).formfield_for_manytomany(
+    #         db_field,
+    #         request,
+    #         **kwargs
+    #     )
 
     def filter_dbfield(self, request, model, q, **kwargs):
         """
