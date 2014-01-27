@@ -27,7 +27,7 @@ class CustomIndexDashboard(Dashboard):
 
     def init_with_context(self, context):
 
-        user = Person.objects.get(fullname=context['user'])
+        user = Person.objects.get(username=context['user'])
 
         self.children.append(modules.Group(
             column=1,
