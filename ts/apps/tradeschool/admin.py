@@ -66,7 +66,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         """
         if db_field.name == 'branches':
             qs = Branch.objects.filter(
-                pk__in=request.user.default_branch
+                pk__in=[request.user.default_branch, ]
             )
             kwargs['queryset'] = qs
 
@@ -1059,6 +1059,8 @@ class OrganizerAdmin(PersonAdmin):
 
         return super(OrganizerAdmin, self).\
             formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 
     list_display = (
         'username',
