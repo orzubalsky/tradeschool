@@ -1066,12 +1066,16 @@ class OrganizerAdmin(PersonAdmin):
         'email',
         'branches_organized_string'
     )
+    list_editable = (
+        'fullname',
+    )
     fields = (
         'username',
         'fullname',
         'email',
         'language',
         'default_branch',
+        'groups'
     )
     inlines = (
         OrganizedBranchInline,
