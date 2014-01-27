@@ -66,7 +66,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         """
         if db_field.name == 'branches':
             qs = Branch.objects.filter(
-                pk__in=[request.user.default_branc.pk, ]
+                pk__in=[request.user.default_branch.pk, ]
             )
             kwargs['queryset'] = qs
 
