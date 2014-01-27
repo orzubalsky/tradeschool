@@ -1549,7 +1549,7 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         """
         Return the person's fullname.
         """
-        return u"%s" % self.fullname
+        return u"%s" % self.username
 
 
 class OrganizerManager(PersonManager):
