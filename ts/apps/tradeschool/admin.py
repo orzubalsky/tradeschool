@@ -66,12 +66,12 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         """
         if db_field.name == 'branches':
             qs = Branch.objects.filter(
-                pk__in=[request.user.default_branch, ]
+                pk__in=[request.user.default_branc.pk, ]
             )
             kwargs['queryset'] = qs
 
             #  Make the user's defulat_branch selected in the form widget.
-            kwargs['initial'] = [request.user.default_branch, ]
+            kwargs['initial'] = [request.user.default_branch.pk, ]
 
         return super(BaseAdmin, self).formfield_for_manytomany(
             db_field,
