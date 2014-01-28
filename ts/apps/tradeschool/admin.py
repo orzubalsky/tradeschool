@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import Group
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib import admin
 from admin_enhancer import admin as enhanced_admin
@@ -1005,6 +1006,19 @@ class PersonAdmin(BaseAdmin):
             **kwargs
         )
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """
+        Add the person to the translators group
+        """
+        if db_field.name == 'groups':
+            kwargs['initial'] = [Group.objects.get(name='translators'), ]
+
+        if db_field.name == 'branches':
+            kwargs['initial'] = [request.user.default_branch.pk, ]
+
+        return super(PersonAdmin, self).formfield_for_manytomany(
+            db_field, request, **kwargs)
+
     list_display = (
         'fullname',
         'email',
@@ -1019,14 +1033,17 @@ class PersonAdmin(BaseAdmin):
         'phone',
     )
     fields = (
-        'fullname',
         'username',
+        'is_staff',
+        'fullname',
         'email',
         'phone',
-        'website',
-        'bio',
+        'default_branch',
+        'branches',
+        'groups',
     )
     inlines = (
+        OrganizedBranchInline,
         CourseRegistrationInline,
         CourseInline
     )
@@ -1073,8 +1090,6 @@ class OrganizerAdmin(PersonAdmin):
 
         return super(OrganizerAdmin, self).\
             formfield_for_foreignkey(db_field, request, **kwargs)
-
-
 
     list_display = (
         'username',
@@ -1126,6 +1141,17 @@ class TeacherAdmin(PersonAdmin):
         'courses_taught_count',
         'created'
     )
+    fields = (
+        'username',
+        'email',
+        'phone',
+        'website',
+        'bio',
+    )
+    inlines = (
+        CourseRegistrationInline,
+        CourseInline
+    )
 
 
 class StudentAdmin(PersonAdmin):
@@ -1144,6 +1170,16 @@ class StudentAdmin(PersonAdmin):
             request,
             Q(branches__in=[request.user.default_branch, ])
         )
+
+    fields = (
+        'username',
+        'email',
+        'phone',
+    )
+    inlines = (
+        CourseRegistrationInline,
+        CourseInline
+    )
 
 
 class TimeAdmin(BaseAdmin):
