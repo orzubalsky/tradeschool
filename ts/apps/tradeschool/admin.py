@@ -110,6 +110,8 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
             else:
                 if qs.count() > 0:
                     kwargs['initial'] = qs[0]
+                else:
+                    kwargs['initial'] = None
 
         # if the user IS a superuser, don't filter, but do try to
         # return an 'initial' key argument if there is one
