@@ -820,8 +820,10 @@ class Branch(Location):
     )
 
     # create a tuple of timezones from pytz.
+    common_timezones = [tz for tz in pytz.all_timezones if 'GMT' in tz]
+
     COMMON_TIMEZONE_CHOICES = tuple(
-        zip(pytz.all_timezones, pytz.all_timezones)
+        zip(common_timezones, common_timezones)
     )
 
     slug = SlugField(
@@ -843,6 +845,7 @@ class Branch(Location):
         verbose_name=_("timezone"),
         max_length=100,
         choices=COMMON_TIMEZONE_CHOICES,
+        default='Etc/GMT+0',
         help_text=_(
             "The local timezone in the area where this branch of TS"
             "is taking place. The timezone is used to calculate all "
@@ -854,6 +857,7 @@ class Branch(Location):
         max_length=50,
         choices=settings.LANGUAGES,
         null=True,
+        default='en',
         help_text=_(
             "Setting this language will cause both the front end and "
             "the backend of the site to try to load text from the translation "
