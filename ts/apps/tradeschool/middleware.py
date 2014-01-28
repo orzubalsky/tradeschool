@@ -38,7 +38,8 @@ class BranchMiddleware(object):
                     translation.activate(request.user.language)
 
                     if request.user.branches.count() > 0:
-                        if request.user.default_branch is not None:
+                        if request.user.default_branch is not None \
+                                and request.user.branches_organized.count() > 0:
                             branch = request.user.default_branch
                         else:
                             branch = Branch.objects.filter(

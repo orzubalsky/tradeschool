@@ -1549,6 +1549,10 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         if self.default_branch is None and self.branches_organized.count() > 0:
             self.default_branch = self.branches_organized.all()[0]
 
+        if self.default_branch is not None \
+                and self.branches_organized.count() == 0:
+            self.branches_organized.add(self.default_branch)
+
     def __unicode__(self):
         """
         Return the person's fullname.
