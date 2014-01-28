@@ -1510,7 +1510,6 @@ class CourseAdmin(BaseAdmin):
     readonly_fields = ()
     search_fields = (
         'title',
-        'get_teacher_fullname'
     )
     inlines = ()
     actions = [
@@ -1887,7 +1886,6 @@ class BarterItemAdmin(BaseAdmin):
     )
     search_fields = (
         'title',
-        'course'
     )
     fields = (
         'title',
