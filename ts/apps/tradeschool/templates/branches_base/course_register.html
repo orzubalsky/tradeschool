@@ -31,8 +31,6 @@
             {% endblock registration_body_seats %}
 
             {% block registration_body_form %}
-            <img id="loading" src="{{ STATIC_URL }}images/ajax-loader.gif" />
-
             <form id="registerToClass" class="{{ course.slug }}" method="post" action="{% url 'course-register' branch_slug=branch.slug course_slug=course.slug %}">{% csrf_token %}
                 {% if student_form.errors or registration_form.errors %}
                 <ul class="errors">                    

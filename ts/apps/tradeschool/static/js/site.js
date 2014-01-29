@@ -39,8 +39,6 @@ var site = window.site = new function()
 
                 $('#matte').fadeIn(100, function() 
                 {
-                    $('#loader').show();
-
                     $('#previewContainer').fadeIn(100, function() 
                     {
                         Dajaxice.tradeschool.course_load_form(
@@ -84,6 +82,12 @@ var site = window.site = new function()
         {            
             e.preventDefault();
 
+            $('#registerToClass').animate({'opacity':0}, 100, function()
+            {
+                $('.seatsLeft').hide();
+            });
+            $('#loader').show();                
+
             var slug = $(this).attr('class');
             var data = $(this).serialize();
 
@@ -101,6 +105,13 @@ var site = window.site = new function()
 
     this.course_submit_register_form_callback = function(data)	
     {
+        $('#loader').hide();    
+        
+        $('#registerToClass').animate({'opacity':1}, 100, function()
+        {
+            $('.seatsLeft').show();
+        });
+
         $('#preview').empty().append(data).show();
 
         var height    = $('#preview #classPopup').height();
