@@ -17,6 +17,7 @@ from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 #from django_mailer import send_mail
 from django.template import Context
 from django.template import Template
@@ -277,7 +278,13 @@ class Email(Model):
         branch = course_obj.branch
 
         # send the email
-        send_mail(self.subject, body, branch.email, recipient)
+        message = EmailMessage(
+            subject=self.subject,
+            body=body,
+            to=recipient,
+            headers={'Reply-To': branch.email}
+        )
+        message.send()
 
         # update the email's status to sent
         self.email_status = 'sent'
