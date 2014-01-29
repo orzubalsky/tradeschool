@@ -2260,11 +2260,11 @@ class Course(ScheduledEvent):
         """
         student_list = ""
         for registration_obj in self.registration_set.registered():
-            student_list += "\n%s: " % registration_obj.student.fullname
+            student_list += "\n%s: " % unicode(registration_obj.student.fullname)
             student_items = []
             for item in registration_obj.items.all():
-                student_items.append(item.title)
-            student_list += ", ".join(map(str, student_items))
+                student_items.append(unicode(item.title))
+            student_list += ", ".join(map(str, unicode(student_items)))
 
         return student_list
 
