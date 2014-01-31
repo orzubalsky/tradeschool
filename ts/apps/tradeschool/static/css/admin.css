@@ -420,6 +420,8 @@ form .grp-module.grp-transparent.grp-dynamic-form .grp-row:not(tr) {
     padding: 2px 4px 1px;
 }
 
+.tradeschool-student .is_student,
+.tradeschool-teacher .is_teacher,
 .tradeschool-teacher .branches,
 .tradeschool-organizer .is_staff,
 .tradeschool-timerange .branch,

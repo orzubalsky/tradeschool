@@ -1119,10 +1119,12 @@ class OrganizerAdmin(PersonAdmin):
     )
     fields = (
         'username',
-        'is_staff',
         'fullname',
         'email',
         'phone',
+        'is_student',
+        'is_teacher',
+        'is_staff',
         'default_branch',
         'branches',
         'groups',
@@ -1153,6 +1155,15 @@ class TeacherAdmin(PersonAdmin):
         The only distinction is that a teacher is a person who taught
         at least 1 class
     """
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(
+            TeacherAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+        if db_field.name == 'is_teacher':
+            formfield.initial = True
+
+        return formfield
+
     def queryset(self, request):
         """
         Filter queryset by the courses taught count,
@@ -1179,6 +1190,7 @@ class TeacherAdmin(PersonAdmin):
         'phone',
         'website',
         'bio',
+        'is_teacher',
         'branches'
     )
     inlines = (
@@ -1194,6 +1206,15 @@ class StudentAdmin(PersonAdmin):
     The only distinction is that a student is a person who
     registered to at least 1 class.
     """
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(
+            StudentAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+        if db_field.name == 'is_student':
+            formfield.initial = True
+
+        return formfield
+
     def queryset(self, request):
         """
         Filter queryset by the registration count,
@@ -1209,6 +1230,7 @@ class StudentAdmin(PersonAdmin):
         'fullname',
         'email',
         'phone',
+        'is_student',
         'branches'
     )
     inlines = (

@@ -111,6 +111,7 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
             else:
                 student = Person.objects.create_user(**student_data)
 
+            student.is_student = True
             student.save()
             student.branches.add(branch)
 
@@ -264,6 +265,8 @@ def course_add(request, branch_slug=None):
                 teacher.phone = teacher_form.cleaned_data['phone']
             else:
                 teacher = Person.objects.create_user(**teacher_data)
+
+            teacher.is_teacher = True
 
             # save teacher
             teacher.save()

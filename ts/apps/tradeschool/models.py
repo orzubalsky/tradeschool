@@ -1423,6 +1423,20 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
             "Designates whether the user can log into this admin site."
         )
     )
+    is_teacher = BooleanField(
+        _('teacher status'),
+        default=False,
+        help_text=_(
+            "Designates whether the user is considered a teacher on the site."
+        )
+    )
+    is_student = BooleanField(
+        _('student status'),
+        default=True,
+        help_text=_(
+            "Designates whether the user is considered a student on the site."
+        )
+    )
     courses_taught_count = IntegerField(
         default=0,
         max_length=7,
@@ -1549,7 +1563,11 @@ class Person(AbstractBaseUser, PermissionsMixin, Base):
         Set courses_taken_count & courses_taught_count attributes.
         """
         self.courses_taken_count = self.calculate_registration_count()
+        if self.courses_taken_count > 0:
+            self.is_student = True
         self.courses_taught_count = self.calculate_courses_taught_count()
+        if self.courses_taught_count > 0:
+            self.is_teacher = True
 
         super(Person, self).save(*args, **kwargs)
 
@@ -1602,9 +1620,7 @@ class TeacherManager(PersonManager):
     """
     def get_query_set(self):
         return super(
-            TeacherManager, self).get_query_set().filter(
-                courses_taught_count__gt=0
-            )
+            TeacherManager, self).get_query_set().filter(is_teacher=True)
 
 
 class Teacher(Person):
@@ -1634,7 +1650,7 @@ class StudentManager(PersonManager):
     """
     def get_query_set(self):
         return super(StudentManager, self).get_query_set().filter(
-            courses_taken_count__gt=0)
+            is_student=True)
 
 
 class Student(Person):
