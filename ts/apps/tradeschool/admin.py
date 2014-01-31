@@ -649,6 +649,12 @@ class BranchAdmin(BaseAdmin):
           will be translated to.
         * Branch.slug will set the URL that the branch website will be on.
     """
+    class Media:
+        js = (
+            '../static/js/lib/jquery.js',
+            '../static/js/admin/TsAdmin.js',
+        )
+
     def queryset(self, request):
         """
         Filter to Branches that are organized by the logged in user.
@@ -1036,13 +1042,9 @@ class PersonAdmin(BaseAdmin):
     )
     fields = (
         'username',
-        'is_staff',
         'fullname',
         'email',
         'phone',
-        'default_branch',
-        'branches',
-        'groups',
     )
     inlines = (
         OrganizedBranchInline,
@@ -1085,6 +1087,15 @@ class OrganizerAdmin(PersonAdmin):
         return mark_safe(html)
     change_password_link.short_description = _('change password')
 
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(
+            OrganizerAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+        if db_field.name == 'is_staff':
+            formfield.initial = True
+
+        return formfield
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'default_branch':
             kwargs['queryset'], kwargs['initial'] = self.filter_dbfield(
@@ -1094,27 +1105,46 @@ class OrganizerAdmin(PersonAdmin):
             formfield_for_foreignkey(db_field, request, **kwargs)
 
     list_display = (
-        'username',
         'fullname',
         'email',
-        'branches_organized_string'
+        'phone',
+        'courses_taken_count',
+        'courses_taught_count',
+        'created',
     )
-    list_editable = (
+    search_fields = (
         'fullname',
+        'email',
+        'phone',
     )
     fields = (
         'username',
+        'is_staff',
         'fullname',
         'email',
-        'language',
+        'phone',
         'default_branch',
-        'groups'
+        'branches',
+        'groups',
     )
     inlines = (
         OrganizedBranchInline,
         CourseRegistrationInline,
         CourseInline
     )
+
+    #prepopulated_fields = {'slug': ('username',)}
+    actions = [
+        export_as_csv_action('CSV Export', fields=[
+            'fullname',
+            'email',
+            'website',
+            'phone',
+            'courses_taken_count',
+            'courses_taught_count',
+            'created'
+        ]),
+    ]
 
 
 class TeacherAdmin(PersonAdmin):
@@ -1149,6 +1179,7 @@ class TeacherAdmin(PersonAdmin):
         'phone',
         'website',
         'bio',
+        'branches'
     )
     inlines = (
         CourseRegistrationInline,
@@ -1175,8 +1206,10 @@ class StudentAdmin(PersonAdmin):
 
     fields = (
         'username',
+        'fullname',
         'email',
         'phone',
+        'branches'
     )
     inlines = (
         CourseRegistrationInline,
@@ -1305,6 +1338,12 @@ class CourseAdmin(BaseAdmin):
     CourseAdmin lets you add and edit class courses,
     their barter items, registrations, and email templates.
     """
+    class Media:
+        js = (
+            '../static/js/lib/jquery.js',
+            '../static/js/admin/TsAdmin.js',
+        )
+
     def queryset(self, request):
         return super(CourseAdmin, self).queryset(
             request,
