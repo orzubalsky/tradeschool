@@ -6,7 +6,7 @@ urlpatterns = patterns(
 
     url(r'admin$', 'redirect_to_admin', name='redirect-to-admin'),
     url(r'admin/$', 'redirect_to_admin', name='redirect-to-admin'),
-    url(r'teacher-info$', 'teacher_info', name='teacher-info'),
+    #url(r'teacher-info$', 'teacher_info', name='teacher-info'),
     url(r'class/add$', 'course_add', name='course-add'),
     url(r'class/past$', 'course_list_past', name='course-list-past'),
     url(r'class/(?P<course_slug>[0-9A-Za-z\-_]+)/added$', 'course_submitted', name='course-submitted'),
