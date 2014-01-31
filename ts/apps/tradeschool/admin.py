@@ -1186,6 +1186,7 @@ class TeacherAdmin(PersonAdmin):
     )
     fields = (
         'username',
+        'fullname',
         'email',
         'phone',
         'website',
