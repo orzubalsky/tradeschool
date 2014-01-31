@@ -18,5 +18,6 @@ urlpatterns = patterns(
     url(r'class/$', 'redirect_to_course_list', name='redirect-to-course-list'),
     url(r'class$', 'redirect_to_course_list', name='redirect-to-course-list'),
     url(r'page/(?P<url>.*)$', 'branch_page', name='branch-page'),
+    url(r'page/(?P<url>.*)/$', 'branch_page', name='branch-page'),
     url(r'$', 'course_list', name='course-list'),
 )
