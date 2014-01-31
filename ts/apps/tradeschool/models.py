@@ -2271,7 +2271,7 @@ class Course(ScheduledEvent):
             student_items = []
             for item in registration_obj.items.all():
                 student_items.append(unicode(item.title))
-            student_list += ", ".join(map(str, unicode(student_items)))
+            student_list += ", ".join(map(str, student_items))
 
         return student_list
 
