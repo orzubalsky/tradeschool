@@ -529,7 +529,12 @@ def branch_page(request, url, branch_slug=None):
     except Http404:
         if url.endswith('/'):
             url = url[:-1]
-            page = get_object_or_404(Page, url__exact=url, is_active=True)
+            page = get_object_or_404(
+                Page,
+                url__exact=url,
+                branch__pk=branch.pk,
+                is_active=True
+            )
         else:
             raise
 
