@@ -12,7 +12,7 @@
         <div id="popupHeader">
             {% blocktrans %}I would like to join{% endblocktrans %}<br />
             <h3>{{ course.title }}</h3>
-            {{ course.start_time|smartdate:"g:ia"|localize }} to {{ course.end_time|smartdate:"g:ia"|localize }}<br />
+            {{ course.start_time|date:"g:ia"|localize }} to {{ course.end_time|date:"g:ia"|localize }}<br />
             at <strong>{{ course.venue.address_1 }}, {{ course.venue.city }}</strong><br />
         </div>
         {% endblock registration_header %}
