@@ -1960,12 +1960,14 @@ class PageAdmin(BaseAdmin):
     list_display = (
         'title',
         'url',
+        'branch',
         'is_visible'
     )
     list_filter = (
         'branch',
     )
     list_editable = (
+        'url',
         'is_visible',
     )
     search_fields = (
