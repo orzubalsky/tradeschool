@@ -1501,12 +1501,6 @@ class CourseAdmin(BaseAdmin):
         return obj.teacher.website
     teacher_website.short_description = _('Teacher website')
 
-    def registration_count(self, obj):
-        """
-        """
-        return obj.registered_students()
-    registration_count.short_description = _('Total Registered')
-
     def get_form(self, request, obj=None, **kwargs):
         # Proper kwargs are form, fields, exclude, formfield_callback
         if obj:                     # obj is not None, so this is a change page
@@ -1516,7 +1510,7 @@ class CourseAdmin(BaseAdmin):
                     'fields': (
                         'title',
                         'description',
-                        'registration_count',
+                        'total_registered_students',
                         'max_students',
                         'slug'
                     )
@@ -1545,7 +1539,7 @@ class CourseAdmin(BaseAdmin):
                 'title',
                 'slug',
                 'description',
-                'registration_count',
+                'total_registered_students',
                 'venue',
                 'start_time',
                 'end_time',
@@ -1558,7 +1552,7 @@ class CourseAdmin(BaseAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj:                                 # editing an existing object
             return self.readonly_fields + (
-                'registration_count',
+                'total_registered_students',
                 'teacher_fullname',
                 'teacher_email',
                 'teacher_bio',

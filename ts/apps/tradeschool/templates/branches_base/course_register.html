@@ -56,7 +56,7 @@
                 {{ student_form.phone.label }}<br />
                 {{ student_form.phone }}<br />
                 
-                {% if course.registered_students < course.max_students %}                
+                {% if course.total_registered_students < course.max_students %}                
                 <input type="submit" class="join" value="Join" />
                 {% endif %}
             </form>

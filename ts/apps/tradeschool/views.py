@@ -78,9 +78,9 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
     branch = get_object_or_404(Branch, slug=branch_slug)
     course = get_object_or_404(Course, slug=course_slug)
     open_seat_percentage = round(
-        (float(course.registered_students()) /
+        (float(course.total_registered_students) /
             float(course.max_students)) * 100)
-    seats_left = course.max_students - course.registered_students()
+    seats_left = course.max_students - course.total_registered_students
 
     if request.method == 'POST' and not request.is_ajax():
         data = request.POST

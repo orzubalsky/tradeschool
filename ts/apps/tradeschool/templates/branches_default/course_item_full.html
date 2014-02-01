@@ -26,11 +26,9 @@
 {% block course_item %}
 <div id="{{ course.slug }}" class="aClass venue{{ course.venue.title }}">
     
-{% if course.registered_students >= course.max_students %}
     {% block course_tag %}
     {{ block.super }}
     {% endblock course_tag %}
-{% endif %}
 
     <div class="classInfo" style="background-color:{{ course.color }}">
         {% block course_header %}
