@@ -1461,7 +1461,7 @@ class CourseAdmin(BaseAdmin):
         """
         teacher = obj.teacher
         # link to teacher edit admin form
-        url = reverse('admin:tradeschool_person_change', args=(teacher.pk,))
+        url = reverse('admin:tradeschool_teacher_change', args=(teacher.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, teacher.fullname)
         return mark_safe(html)
     teacher_fullname.short_description = _('Teacher Fullname')
