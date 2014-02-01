@@ -983,7 +983,7 @@ class Branch(Location):
         """
         Url for the branch's website
         """
-        return "%s%s" % (
+        return "http://%s%s" % (
             self.domain, reverse_lazy('course-list', kwargs={
                 'branch_slug': self.slug
             })
@@ -2222,7 +2222,7 @@ class Course(ScheduledEvent):
         """
         Returns URL for students to leave feedback for a scheduled class.
         """
-        return "%s%s" % (
+        return "http://%s%s" % (
             self.branch.domain, reverse_lazy('course-feedback', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
@@ -2235,7 +2235,7 @@ class Course(ScheduledEvent):
         """
         Returns URL for teachers to leave feedback for a scheduled class.
         """
-        return "%s%s" % (
+        return "http://%s%s" % (
             self.branch.domain, reverse_lazy('course-feedback', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
@@ -2248,7 +2248,7 @@ class Course(ScheduledEvent):
         """
         Returns URL for teachers to edit a scheduled class.
         """
-        return "%s%s" % (
+        return "http://%s%s" % (
             self.branch.domain, reverse_lazy('course-edit', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
@@ -2743,7 +2743,7 @@ class Registration(Base):
         """
         domain = self.course.branch.domain
 
-        return "%s%s" % (
+        return "http://%s%s" % (
             domain, reverse_lazy('course-unregister', kwargs={
                 'branch_slug': self.course.branch.slug,
                 'course_slug': self.course.slug,
