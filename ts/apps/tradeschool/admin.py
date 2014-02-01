@@ -1527,6 +1527,7 @@ class CourseAdmin(BaseAdmin):
                 # Translators: This is the a header in the branch admin form
                 (_('Teacher Info'), {
                     'fields': (
+                        'teacher',
                         'teacher_fullname',
                         'teacher_email',
                         'teacher_phone',
@@ -1546,6 +1547,7 @@ class CourseAdmin(BaseAdmin):
             )
             kwargs['fields'] = (
                 'title',
+                'teacher',                
                 'slug',
                 'description',
                 'total_registered_students',

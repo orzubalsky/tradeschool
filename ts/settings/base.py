@@ -164,7 +164,7 @@ INSTALLED_APPS = (
     'rosetta',            # django admin translation interface
     'admin_enhancer',
     #'debug_toolbar',
-    'tastypie',
+    #'tastypie',
     #'django_mailer',     # handle outgoing email queue
     'tradeschool',        # tradeschool branch app
     # 'branches',         # holding all branch-specific files (templates, css, js)
