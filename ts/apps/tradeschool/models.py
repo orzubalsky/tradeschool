@@ -960,6 +960,16 @@ class Branch(Location):
             "This text appears on the footer of the page. It's optional."
         )
     )
+    google_analytics_code = TextField(
+        # Translators: This is the part at the end of the page.
+        verbose_name=_("Google Analytics Code"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Paste in the tracking code from Google Analytics here "
+            "if you want to track all of the branch's pages."
+        )
+    )
 
     def emails():
         def fget(self):

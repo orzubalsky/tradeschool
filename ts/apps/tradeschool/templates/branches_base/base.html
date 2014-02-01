@@ -138,10 +138,12 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.js"></script>	
 <script type="text/javascript" src="{{ STATIC_URL }}js/site.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}{{ branch.slug }}/branch.js"></script>
+{% if branch.google_analytics_code %}
+    {{ branch.google_analytics_code|safe }}
+{% endif %}
 {% endblock js %}
 
 {% block extra_js %}{% endblock %}
-
 
 </body>
 {% endblock body %}

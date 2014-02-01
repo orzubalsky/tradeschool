@@ -765,7 +765,8 @@ class BranchAdmin(BaseAdmin):
             'fields': (
                 'header_copy',
                 'intro_copy',
-                'footer_copy'
+                'footer_copy',
+                'google_analytics_code'
             )
         }),
         # Translators: This is the a header in the branch admin form
