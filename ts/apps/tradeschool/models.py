@@ -15,7 +15,6 @@ from django.contrib.auth.models import AbstractBaseUser, \
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
-from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
@@ -968,6 +967,16 @@ class Branch(Location):
         help_text=_(
             "Paste in the tracking code from Google Analytics here "
             "if you want to track all of the branch's pages."
+        )
+    )
+    min_barteritems = PositiveSmallIntegerField(
+        verbose_name=_("Minimum Barter Items for each class"),
+        null=False,
+        blank=False,
+        default=5,
+        help_text=_(
+            "The minimum number of barter items a teacher need to list "
+            "when submitting a class on the website."
         )
     )
 

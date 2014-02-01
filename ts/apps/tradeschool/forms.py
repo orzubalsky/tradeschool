@@ -164,10 +164,15 @@ class BarterItemForm (ModelForm):
 
 
 class BaseBarterItemFormSet(BaseFormSet):
+    def __init__(self, branch, *args, **kwargs):
+        ""
+        self.branch = branch
+        super(BaseBarterItemFormSet, self).__init__(*args, **kwargs)
+
     def clean(self):
         "Checks that at least 5 barter items form are filled"
         count = 0
-        required = 5
+        required = self.branch.min_barteritems
 
         if any(self.errors):
             return
@@ -177,7 +182,7 @@ class BaseBarterItemFormSet(BaseFormSet):
                     count += 1
         if count < required:
             raise forms.ValidationError(
-                _("Please add at least 5 barter items")
+                _("Please add at least %i barter items" % required)
             )
 
 

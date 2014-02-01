@@ -766,9 +766,17 @@ class BranchAdmin(BaseAdmin):
                 'header_copy',
                 'intro_copy',
                 'footer_copy',
-                'google_analytics_code'
             )
         }),
+
+        # Translators: This is the a header in the branch admin form
+        (_('Settings'), {
+            'fields': (
+                'min_barteritems',
+                'google_analytics_code',
+            )
+        }),
+
         # Translators: This is the a header in the branch admin form
         (_('Organizers'), {
             'fields': (
