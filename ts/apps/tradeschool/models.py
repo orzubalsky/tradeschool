@@ -247,8 +247,11 @@ class Email(Model):
         Returns:
             A string with the rendered Template content's
         """
+        # turn autoescape off in the template
+        content_with_tag = '{% autoescape on %}' + self.content + '{% endautoescape %}'
+
         # instantiate a temlate with the email's content
-        template = Template(self.content)
+        template = Template(content_with_tag)
 
         # create a context using data from the course
         # and/or registration objects
