@@ -15,6 +15,7 @@ from django.contrib.auth.models import AbstractBaseUser, \
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
@@ -192,24 +193,24 @@ class Email(Model):
             A template Context object.
         """
         # simplify variables
-        teacher = course_obj.teacher
-        branch = course_obj.branch
-        venue = course_obj.venue
+        teacher = mark_safe(course_obj.teacher)
+        branch = mark_safe(course_obj.branch)
+        venue = mark_safe(course_obj.venue)
 
         # create a string with the registered students for a scheduled class
         student_list = course_obj.student_list_string()
 
         # create a Context with all of the above variables
         c = Context({
-            'course': course_obj,
+            'course': mark_safe(course_obj),
             'branch': branch,
             'teacher': teacher,
             'venue': venue,
-            'student_feedback_url': course_obj.student_feedback_url,
-            'teacher_feedback_url': course_obj.teacher_feedback_url,
-            'class_edit_url': course_obj.course_edit_url,
-            'homepage_url': branch.branch_url,
-            'student_list': student_list
+            'student_feedback_url': mark_safe(course_obj.student_feedback_url),
+            'teacher_feedback_url': mark_safe(course_obj.teacher_feedback_url),
+            'class_edit_url': mark_safe(course_obj.course_edit_url),
+            'homepage_url': mark_safe(branch.branch_url),
+            'student_list': mark_safe(student_list)
         })
 
         # Emails sent to students require additional variables from
