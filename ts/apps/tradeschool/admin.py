@@ -466,14 +466,27 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         )
     registration_link.short_description = _('Title')
 
+    def student_email_link(self, obj):
+        """
+        Return an anchor tag with the registered student's email.
+        """
+        # return a safe output so the html can be rendered in the template
+        return mark_safe(
+            '<a target="_blank" href="mailto:%s">%s</a>' % (
+                obj.student.email, obj.student.email)
+        )
+    student_email_link.short_description = _('Email')
+
     model = Registration
     readonly_fields = (
         'registration_link',
+        'student_email_link',
         'items',
         'registration_status'
     )
     fields = (
         'registration_link',
+        'student_email_link',
         'items',
         'registration_status',
     )
