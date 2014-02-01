@@ -193,16 +193,16 @@ class Email(Model):
             A template Context object.
         """
         # simplify variables
-        teacher = mark_safe(course_obj.teacher)
-        branch = mark_safe(course_obj.branch)
-        venue = mark_safe(course_obj.venue)
+        teacher = course_obj.teacher
+        branch = course_obj.branch
+        venue = course_obj.venue
 
         # create a string with the registered students for a scheduled class
         student_list = course_obj.student_list_string()
 
         # create a Context with all of the above variables
         c = Context({
-            'course': mark_safe(course_obj),
+            'course': course_obj,
             'branch': branch,
             'teacher': teacher,
             'venue': venue,
@@ -210,7 +210,7 @@ class Email(Model):
             'teacher_feedback_url': course_obj.teacher_feedback_url,
             'class_edit_url': course_obj.course_edit_url,
             'homepage_url': branch.branch_url,
-            'student_list': student_list        
+            'student_list': student_list
         })
 
         # Emails sent to students require additional variables from
