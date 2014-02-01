@@ -1730,6 +1730,7 @@ class Time(Durational):
 
     venue = ForeignKey(
         Venue,
+        on_delete=SET_NULL,
         verbose_name=_("venue"),
         null=True,
         blank=True,
@@ -1889,6 +1890,7 @@ class TimeRange(Base):
     )
     venue = ForeignKey(
         Venue,
+        on_delete=SET_NULL,
         verbose_name=_("venue"),
         null=True,
         blank=True,
@@ -1995,6 +1997,7 @@ class ScheduledEvent(Durational):
     )
     venue = ForeignKey(
         Venue,
+        on_delete=SET_NULL,
         verbose_name=_("venue"),
         null=True,
         blank=True,
