@@ -88,6 +88,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'tradeschool.context_processors.branch',
+    'tradeschool.context_processors.google_analytics'
 )
 
 MIDDLEWARE_CLASSES = (

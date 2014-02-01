@@ -37,3 +37,7 @@ def branch(request):
         # can be passed to the template
         branch = Branch(timezone=settings.TIME_ZONE)
         return {'branch': branch, }
+
+
+def google_analytics(request):
+    return {'GOOGLE_ANALYTICS_KEY': settings.GOOGLE_ANALYTICS_KEY}
