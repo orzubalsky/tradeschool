@@ -482,7 +482,7 @@ class RegistrationInline(enhanced_admin.EnhancedModelAdminMixin, BaseTabularInli
         'registration_link',
         'student_email_link',
         'items',
-        'registration_status'
+        #'registration_status'
     )
     fields = (
         'registration_link',
@@ -1812,6 +1812,12 @@ class RegistrationAdmin(BaseAdmin):
     RegistrationAdmin lets you add and edit the student registrations
     as well as the items each student signed up to bring.
     """
+    class Media:
+        js = (
+            '../static/js/lib/jquery.js',
+            '../static/js/admin/TsAdmin.js',
+        )
+
     def queryset(self, request):
         """
         Filter queryset by the registration count,
@@ -1855,11 +1861,29 @@ class RegistrationAdmin(BaseAdmin):
         return super(RegistrationAdmin, self).formfield_for_manytomany(
             db_field, request, **kwargs)
 
+    def get_form(self, request, obj=None, **kwargs):
+        # Proper kwargs are form, fields, exclude, formfield_callback
+        if obj:                     # obj is not None, so this is a change page
+            kwargs['fields'] = (
+                'student_fullname',
+                'course_link',
+                'items',
+                'registration_status'
+            )
+        else:
+            kwargs['fields'] = (
+                'student',
+                'course',
+                'items',
+                'registration_status'
+            )
+        return super(RegistrationAdmin, self).get_form(request, obj, **kwargs)
+
     def get_readonly_fields(self, request, obj=None):
         if obj:                             # editing an existing object
             return self.readonly_fields + (
-                'student',
-                'course'
+                'student_fullname',
+                'course_link',
             )
         return self.readonly_fields
 
@@ -1899,16 +1923,6 @@ class RegistrationAdmin(BaseAdmin):
         )
     course_link.short_description = _('Class')
 
-    fields = (
-        'student_fullname',
-        'course_link',
-        'items',
-        'registration_status'
-    )
-    readonly_fields = (
-        'student_fullname',
-        'course_link',
-    )
     list_display = (
         'student',
         'course',

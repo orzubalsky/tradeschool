@@ -10,7 +10,8 @@ var TsAdmin = window.TsAdmin = new function()
     {
     	this.replace_add_link($('#add_id_teacher'), 'teacher');
     	this.replace_add_link($('#add_id_organizers'), 'organizer');
-
+        this.replace_add_link($('#add_id_student'), 'student');        
+        this.replace_add_link($('#edit_id_student'), 'student');
     };
 
     this.replace_add_link = function($element, proxy_model_name)
