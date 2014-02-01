@@ -206,11 +206,11 @@ class Email(Model):
             'branch': branch,
             'teacher': teacher,
             'venue': venue,
-            'student_feedback_url': mark_safe(course_obj.student_feedback_url),
-            'teacher_feedback_url': mark_safe(course_obj.teacher_feedback_url),
-            'class_edit_url': mark_safe(course_obj.course_edit_url),
-            'homepage_url': mark_safe(branch.branch_url),
-            'student_list': mark_safe(student_list)
+            'student_feedback_url': course_obj.student_feedback_url,
+            'teacher_feedback_url': course_obj.teacher_feedback_url,
+            'class_edit_url': course_obj.course_edit_url,
+            'homepage_url': branch.branch_url,
+            'student_list': student_list        
         })
 
         # Emails sent to students require additional variables from
