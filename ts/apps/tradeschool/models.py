@@ -2277,7 +2277,8 @@ class Course(ScheduledEvent):
         """
         Returns True if the course has 3/4 registrations
         """
-        if self.total_registered_students / self.max_students >= 0.75:
+        if self.total_registered_students / self.max_students >= 0.75 \
+                and self.total_registered_students < self.max_students:
             return True
         else:
             return False

@@ -4,16 +4,19 @@
 <div id="{{ course.slug }}" class="aClass venue{{ course.venue.title }}">
     
     {% block course_tag %}
-    {% if course.total_registered_students >= course.max_students %}
-    <div class="classTag tagFull">
-        ({% blocktrans context "Class full tag" %}Full{% endblocktrans %})
-    </div>
-    {% endif %}    
+
     {% if course.is_almost_full %}
     <div class="classTag tagAlmost">
         ({% blocktrans context "Class almost full tag" %}Almost full{% endblocktrans %})
     </div>
     {% endif %}
+
+    {% if course.total_registered_students >= course.max_students %}
+    <div class="classTag tagFull">
+        ({% blocktrans context "Class full tag" %}Full{% endblocktrans %})
+    </div>
+    {% endif %}    
+
     {% endblock course_tag %}
 
     <div class="classInfo" style="background-color:{{ course.color }}">
