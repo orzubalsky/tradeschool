@@ -176,6 +176,9 @@ def registration_postsave_callback(sender, instance, **kwargs):
     instance.student.courses_taken_count = courses_taken
     instance.student.save()
 
+    # update course
+    instance.course.set_registered_students()
+
 
 @receiver(pre_save, sender=StudentReminder, dispatch_uid="ts.apps.tradeschool.signals")
 def studentreminder_presave_callback(sender, instance, **kwargs):

@@ -2199,6 +2199,13 @@ class Course(ScheduledEvent):
         related_name='courses_taught',
         help_text=_("The person teaching this class.")
     )
+    total_registered_students = IntegerField(
+        verbose_name=_("Total Registered Students"),
+        default=0,
+        help_text=_(
+            "The number of students who are currently registered to the class"
+        )
+    )
 
     def emails():
         def fget(self):
@@ -2265,14 +2272,24 @@ class Course(ScheduledEvent):
         else:
             return False
 
+    @property
+    def is_almost_full(self):
+        """
+        Returns True if the course has 3/4 registrations
+        """
+        if self.total_registered_students / self.max_students >= 0.75:
+            return True
+        else:
+            return False
+
     objects = CourseManager()
 
-    def registered_students(self):
+    def set_registered_students(self):
         """
-        Returns a count of all regisrered students.
-        The number does not include students who unregistered.
+        Sets the total registration count
         """
-        return self.registration_set.registered().count()
+        self.total_registered_students = self.registration_set.registered().count()
+        self.save()
 
     def student_list_string(self):
         """
