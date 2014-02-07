@@ -1144,6 +1144,7 @@ class OrganizerAdmin(PersonAdmin):
         'fullname',
         'email',
         'phone',
+        'language',
         'is_student',
         'is_teacher',
         'is_staff',
