@@ -2,21 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-25 23:59-0500\n"
-"PO-Revision-Date: 2013-07-20 17:12-0500\n"
-"Last-Translator: admin istrator <admin@test.tradeschool.coop>\n"
+"PO-Revision-Date: 2014-01-26 11:31-0800\n"
+"Last-Translator: Anonymous User <economiasolidariaenred@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Translated-Using: django-rosetta 0.7.3\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
 #. Translators: Any times that the word class is shown as plural
 #: dashboard.py:37 apps/tradeschool/models.py:2161
@@ -25,12 +25,12 @@ msgstr "Clases"
 
 #: dashboard.py:52
 msgid "Manage Times for Class Submissions"
-msgstr ""
+msgstr "Administrar número de veces para enviar clases"
 
 #. Translators: Plural.
 #: dashboard.py:61 apps/tradeschool/models.py:1322
 msgid "People"
-msgstr ""
+msgstr "Personas"
 
 #: dashboard.py:71
 msgid "Settings"
@@ -43,7 +43,7 @@ msgstr "Contenido de la página"
 
 #: apps/tradeschool/admin.py:411
 msgid "Taught"
-msgstr ""
+msgstr "Enseñado por"
 
 #: apps/tradeschool/admin.py:464 apps/tradeschool/admin.py:562
 msgid "Title"
@@ -194,7 +194,7 @@ msgstr "Por favor ingrese su número de teléfono"
 #: apps/tradeschool/forms.py:97 apps/tradeschool/models.py:1354
 #: apps/tradeschool/templates/branches_base/course_submitted.html:39
 msgid "A few sentences about you"
-msgstr "Un parca de ti"
+msgstr "Unas palabras sobre ti"
 
 #. Translators: Contextual Help
 #: apps/tradeschool/forms.py:98 apps/tradeschool/models.py:1356
@@ -203,12 +203,12 @@ msgstr "Para que los estudiantes la vean en la página."
 
 #: apps/tradeschool/forms.py:111
 msgid "Please enter the names of at least one or two more organizers"
-msgstr ""
+msgstr "Nombre de al menos uno o dos organizadores"
 
 #: apps/tradeschool/forms.py:113
 msgid ""
 "Please tell us about why you would like to open a Trade School in your area"
-msgstr ""
+msgstr "Dinos acerca de ti y porque quieres abrir un Tradeschool en tu área"
 
 #: apps/tradeschool/forms.py:128
 #, fuzzy
@@ -254,7 +254,7 @@ msgstr "Creado"
 
 #: apps/tradeschool/models.py:49
 msgid "The time when this object was created."
-msgstr ""
+msgstr "Fecha en la que este objeto fue creado"
 
 #. Translators: Used wherever an update time stamp is needed.
 #: apps/tradeschool/models.py:53
@@ -263,7 +263,7 @@ msgstr "Actualizado"
 
 #: apps/tradeschool/models.py:55
 msgid "The time when this object was edited last."
-msgstr ""
+msgstr "Fecha en que este objeto fue editado por la última vez"
 
 #. Translators: Used to determine whether something
 #. is active in the front end or not.
@@ -276,6 +276,8 @@ msgid ""
 "This field indicates whether the object is activeon the front end of the "
 "site. Inactive objects willstill be available through the admin backend."
 msgstr ""
+"Este campo indica si un objeto está activado en el frontend del sitio. "
+"Inactivo estará disponible en el backend del admin"
 
 #. Translators: Determines the status of an e-mail - disabled.
 #: apps/tradeschool/models.py:123
@@ -286,12 +288,12 @@ msgstr "Inactivo"
 #: apps/tradeschool/models.py:126
 #, fuzzy
 msgid "Enabled (Not Sent Yet)"
-msgstr "No se ha mandado"
+msgstr "No se ha enviado"
 
 #. Translators: Determines the status of an e-mail - Sent.
 #: apps/tradeschool/models.py:129
 msgid "Sent"
-msgstr "Mandado"
+msgstr "Enviado"
 
 #. Translators: The subject of an e-mail.
 #: apps/tradeschool/models.py:134
@@ -300,7 +302,7 @@ msgstr "Asunto"
 
 #: apps/tradeschool/models.py:136
 msgid "The subject line of the email."
-msgstr ""
+msgstr "Línea de asunto del correo"
 
 #. Translators: The content of an e-mail.
 #: apps/tradeschool/models.py:140 apps/tradeschool/models.py:2949
@@ -319,14 +321,16 @@ msgstr "Estatus del correo"
 
 #: apps/tradeschool/models.py:150
 msgid ""
-"Indicates the current status of the email message.A disabled email won't get "
-"sent,a not sent email was not sent yet,and a sent email was sent by the "
+"Indicates the current status of the email message.A disabled email won't get"
+" sent,a not sent email was not sent yet,and a sent email was sent by the "
 "system."
 msgstr ""
+"Indica el estatus actual del mensaje del correo, un correo inhabilidado no "
+"será enviado."
 
 #: apps/tradeschool/models.py:313
 msgid "Send on"
-msgstr "Mandar... (fecha)"
+msgstr "Enviar el"
 
 #: apps/tradeschool/models.py:317
 msgid ""
@@ -334,10 +338,13 @@ msgid ""
 "automatically by the system. Edit this time if you wish to have the email "
 "sent at a different time."
 msgstr ""
+"Fecha en la que el correo debe de ser enviado automaticamente por el "
+"sistema. Edita la fecha si desea que un correo sea enviado en fecha "
+"diferente."
 
 #: apps/tradeschool/models.py:324
 msgid "Days before"
-msgstr "Cuantos días antes?"
+msgstr " días antes"
 
 #: apps/tradeschool/models.py:327
 msgid ""
@@ -345,6 +352,9 @@ msgid ""
 "date is calculated by adding or subtracting as many days as this value from "
 "the date the class is scheduled to take place."
 msgstr ""
+"Este valor es usado internamente para calcular la fecha de envio de un "
+"correo. La fecha es calculada al sumar o restar el númerod e días como valor"
+" de la fecha de la clase que se va a tomar"
 
 #: apps/tradeschool/models.py:335
 msgid "Send time"
@@ -425,6 +435,8 @@ msgid ""
 "This email is sent to a student's email after they registered to a class "
 "successfully."
 msgstr ""
+"Este correo se enviará a un estudiante después de que se registró "
+"correctamente"
 
 #: apps/tradeschool/models.py:498
 msgid "Student Reminder"
@@ -432,9 +444,11 @@ msgstr "Recordatorio para el estudiante"
 
 #: apps/tradeschool/models.py:500
 msgid ""
-"This email is sent to all students registered to a class before the class is "
-"scheduled to take place."
+"This email is sent to all students registered to a class before the class is"
+" scheduled to take place."
 msgstr ""
+"Este correo se enviará a todos los estudiantes registrados para tomar una "
+"clase antes de la fecha de inicio"
 
 #: apps/tradeschool/models.py:507
 msgid "Student Feedback"
@@ -443,9 +457,11 @@ msgstr "Comentarios del estudiante"
 #: apps/tradeschool/models.py:509
 msgid ""
 "This email is sent to all students who were registered to a class after the "
-"class has taken place. It includes a link for students to submit feedback on "
-"the class."
+"class has taken place. It includes a link for students to submit feedback on"
+" the class."
 msgstr ""
+"Este correo se enviará a todos los estudiantes registrados después de que la"
+" clase se llevó a cabo. incluye una liga para la retroalimentación"
 
 #: apps/tradeschool/models.py:517
 msgid "Teacher Confirmation"
@@ -456,6 +472,8 @@ msgid ""
 "This email is sent to a teacher after they proposed a class using the form "
 "on the front end."
 msgstr ""
+"Este correo es enviado a in maestro después de que propuso una clase usando "
+"el formulario del frontend"
 
 #: apps/tradeschool/models.py:526
 msgid "Teacher Class Approval"
@@ -466,6 +484,7 @@ msgid ""
 "This email is sent to a teacher once their class has been approved by an "
 "organizer using the admin backend."
 msgstr ""
+"Este correo es enviado una  vez que la clase fue aprobada por el organizador"
 
 #: apps/tradeschool/models.py:535
 msgid "Teacher Reminder"
@@ -475,7 +494,7 @@ msgstr "Recordatorio para el/la maestra/o"
 msgid ""
 "This email is sent to a teacher before the class they're teaching is "
 "scheduled to take place."
-msgstr ""
+msgstr "este correo es enviado al maestro antes de la clase que propuso"
 
 #: apps/tradeschool/models.py:544
 msgid "Teacher Feedback"
@@ -483,9 +502,12 @@ msgstr "Comentarios del maestro/a"
 
 #: apps/tradeschool/models.py:546
 msgid ""
-"This email is sent to a teacher who taught a class after it has taken place. "
-"It includes a link for the teacher to submit feedback about their experience."
+"This email is sent to a teacher who taught a class after it has taken place."
+" It includes a link for the teacher to submit feedback about their "
+"experience."
 msgstr ""
+"este correo es emviado a un maestro que impartió una clase después de que "
+"fue llevada a cabo, incluye una liga de retroalimentación"
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
@@ -520,11 +542,11 @@ msgstr "Opcional"
 
 #: apps/tradeschool/models.py:622
 msgid "City/Province/Region"
-msgstr ""
+msgstr "Ciudad/Provincia/Región"
 
 #: apps/tradeschool/models.py:626
 msgid "state"
-msgstr "Departamento"
+msgstr "Departamento/Estafo"
 
 #. Translators: Contextual Help
 #: apps/tradeschool/models.py:630
@@ -589,18 +611,18 @@ msgstr "Idioma"
 
 #: apps/tradeschool/models.py:714
 msgid "Name"
-msgstr ""
+msgstr "nombre"
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
 #: apps/tradeschool/models.py:808
 msgid "Branch"
-msgstr "Sucursal"
+msgstr "Escuela"
 
 #. Translators: Plural.
 #: apps/tradeschool/models.py:811
 msgid "Branches"
-msgstr "Sucursales"
+msgstr "Escuelas"
 
 #. Translators: The thing that shows what the status of the class is
 #: apps/tradeschool/models.py:817 apps/tradeschool/models.py:1939
@@ -614,7 +636,7 @@ msgstr "Ajustes"
 
 #: apps/tradeschool/models.py:819
 msgid "In Session"
-msgstr ""
+msgstr "En sesión"
 
 #: apps/tradeschool/models.py:834
 #, fuzzy
@@ -635,12 +657,12 @@ msgstr "Zona horaria"
 msgid ""
 "The local timezone in the area where this branch of TSis taking place. The "
 "timezone is used to calculate all the class and email times."
-msgstr ""
+msgstr "Tiempo local donde la escuela está localizada"
 
 #: apps/tradeschool/models.py:853
 #, fuzzy
 msgid "default language"
-msgstr "Idioma"
+msgstr "Idioma default"
 
 #: apps/tradeschool/models.py:858
 msgid ""
@@ -648,6 +670,8 @@ msgid ""
 "site to try to load text from the translation strings stored in the system. "
 "Text that wasn't translated will fallback on the English version of it."
 msgstr ""
+"configuración del idioma será en front y back end del sitio, el idioma "
+"default es inglés"
 
 #: apps/tradeschool/models.py:866
 #, fuzzy
@@ -658,6 +682,8 @@ msgstr "Idioma"
 msgid ""
 "Select multiple languages that you would like the site to be displayed in."
 msgstr ""
+"Selecciona múltiples idiomas en los que te gustaría que tu sitio se "
+"visualizara"
 
 #: apps/tradeschool/models.py:876
 msgid "organizers"
@@ -668,6 +694,9 @@ msgid ""
 "Select multiple users who help organize this branch of TS. People selected "
 "in this box will have access to the branch's data on the admin backend."
 msgstr ""
+"Selecciona múltiples usuarios que ayudan a organizar esta escuela. Personas "
+"seleccionadas en esta caja tendrán acceso a los datos de la escuela en el "
+"sitio del administrador."
 
 #: apps/tradeschool/models.py:887
 #, fuzzy
@@ -688,10 +717,13 @@ msgstr "Página"
 #: apps/tradeschool/models.py:898
 msgid ""
 "The TS system can be installed on several different domains, and still be "
-"managed using the same admin backend. This field indicates what installation "
-"of the software the branch is related to, meaning, what website do you go to "
-"in order to access it."
+"managed using the same admin backend. This field indicates what installation"
+" of the software the branch is related to, meaning, what website do you go "
+"to in order to access it."
 msgstr ""
+"El sistema TS puede ser instalado en diferentes dominios y puede seguir "
+"siendo manejado usando el mismo admin back end, este campo indica que  "
+"software pertenece la escuela"
 
 #. Translators: If this Trade School belogns to a set of Trade Schools.
 #: apps/tradeschool/models.py:908
@@ -702,10 +734,12 @@ msgstr "Grupo"
 #: apps/tradeschool/models.py:912
 msgid ""
 "TS branches can be grouped together in clusters. This is used mostly to be "
-"able to present them together on the same page. For example, all branches in "
-"East Coast can belong to the East Coast cluster, and accessed via a separate "
-"web page."
+"able to present them together on the same page. For example, all branches in"
+" East Coast can belong to the East Coast cluster, and accessed via a "
+"separate web page."
 msgstr ""
+"Las escuelas pueden ser agrupasas juntas en un grupo, esto es usado si son "
+"varias en una misma página"
 
 #. Translators: This is the part that says 'Barter for Knowledge'
 #. which is also editable.
@@ -725,9 +759,11 @@ msgstr "Intro"
 
 #: apps/tradeschool/models.py:933
 msgid ""
-"This text appears under the header. Usually it gives brief information about "
-"the current session and has a link to submit class proposals."
+"This text appears under the header. Usually it gives brief information about"
+" the current session and has a link to submit class proposals."
 msgstr ""
+"este texto aparece bajo el encabezado, usualmente da una breve información "
+"acerca de la sesión actual y tiene el link a la clase"
 
 #. Translators: This is the part at the end of the page.
 #: apps/tradeschool/models.py:940
@@ -736,7 +772,7 @@ msgstr "Pie de la página"
 
 #: apps/tradeschool/models.py:945
 msgid "This text appears on the footer of the page. It's optional."
-msgstr ""
+msgstr "Este texto aparece al pie de página, es opcional."
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
@@ -770,7 +806,7 @@ msgstr "Sucursal"
 
 #: apps/tradeschool/models.py:1166
 msgid "Street"
-msgstr ""
+msgstr "Calle"
 
 #. Translators: the capacity of the venue where you are hosting classes.
 #: apps/tradeschool/models.py:1172
@@ -798,13 +834,13 @@ msgstr "Color"
 
 #: apps/tradeschool/models.py:1188 apps/tradeschool/models.py:2019
 msgid "A hex value HTML color in the form of #123456"
-msgstr ""
+msgstr "Un valor hexadecimal HTML para el color del formulario"
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
 #: apps/tradeschool/models.py:1319
 msgid "Person"
-msgstr ""
+msgstr "Personas"
 
 #: apps/tradeschool/models.py:1328
 msgid "your name"
@@ -855,13 +891,15 @@ msgstr "URL Slug"
 
 #: apps/tradeschool/models.py:1370
 msgid "This will be used to create a unique URL for each person in TS."
-msgstr ""
+msgstr "Este es usado para crear una url única para cada persona en ts"
 
 #: apps/tradeschool/models.py:1379
 msgid ""
 "People in the TS system can be related to many TS branches. This "
 "relationship is made when a person either teaches or registers to a class."
 msgstr ""
+"Gente en el sistema ts que puede ser referida a las escuelas, esta relación "
+"esta heca cuando una persona ofrece o toma una clase"
 
 #: apps/tradeschool/models.py:1385
 #, fuzzy
@@ -870,10 +908,13 @@ msgstr "Sucursal"
 
 #: apps/tradeschool/models.py:1390
 msgid ""
-"This is the branch that will be selected automatically for actions this user "
-"makes. Usually the default branch is the one in which the organizer does the "
-"most work in."
+"This is the branch that will be selected automatically for actions this user"
+" makes. Usually the default branch is the one in which the organizer does "
+"the most work in."
 msgstr ""
+"estae scurla será seleccionada automaticamente para las acciones que este "
+"usuario realize, usualmente la escuela default es donde el organizador hace "
+"más trabajo"
 
 #: apps/tradeschool/models.py:1396
 #, fuzzy
@@ -886,6 +927,8 @@ msgid ""
 "the translation strings stored in the system FOR THIS USER ONLY. Text that "
 "wasn't translated will fallback on the English version of it."
 msgstr ""
+"comfigurar este idioma hará que el back end descargue texto del sistema para"
+" SOLO este usuaruo. el texto que no fue traducido aparece en inglés"
 
 #: apps/tradeschool/models.py:1409
 #, fuzzy
@@ -895,6 +938,7 @@ msgstr "Estatus del correo"
 #: apps/tradeschool/models.py:1412
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
+"Designa cuando un usuaruo puede ingresar al sistema como administrador"
 
 #: apps/tradeschool/models.py:1418
 #, fuzzy
@@ -903,20 +947,20 @@ msgstr "Cantidad de clases enseñadas"
 
 #: apps/tradeschool/models.py:1420
 msgid "Number of courses taught in Trade School"
-msgstr ""
+msgstr "Número de cursos enseñados en tradeschool"
 
 #: apps/tradeschool/models.py:1426
 msgid "Total Classes Taken"
-msgstr ""
+msgstr "Total de clases tomadas"
 
 #: apps/tradeschool/models.py:1428
 msgid "Number of courses taken in Trade School"
-msgstr ""
+msgstr "Numero de cursos tomados en tradeschool"
 
 #: apps/tradeschool/models.py:1433
 #, fuzzy
 msgid "names of co-organizers"
-msgstr "Organizadores"
+msgstr "Nombres de los co organizadores"
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
@@ -934,7 +978,7 @@ msgstr "Maestra/o"
 #. Translators: Plural.
 #: apps/tradeschool/models.py:1609
 msgid "Teachers"
-msgstr "Maestres"
+msgstr "Maestros"
 
 #. Translators: Plural.
 #: apps/tradeschool/models.py:1639
@@ -964,8 +1008,8 @@ msgstr "Lugar"
 
 #: apps/tradeschool/models.py:1707
 msgid ""
-"Time slots can be related to specifc venues. When a time slot that's related "
-"a venue is selected by a potential teacher, the proposed class will be "
+"Time slots can be related to specifc venues. When a time slot that's related"
+" a venue is selected by a potential teacher, the proposed class will be "
 "booked in that venue. In the case a venue isn't selected, it's up to the "
 "organizers to select a venue for a proposed class."
 msgstr ""
@@ -1005,8 +1049,8 @@ msgstr "Comienza (hora)"
 
 #: apps/tradeschool/models.py:1798
 msgid ""
-"This is the start time of the all of the available time slots that are going "
-"to be created."
+"This is the start time of the all of the available time slots that are going"
+" to be created."
 msgstr ""
 
 #: apps/tradeschool/models.py:1803
@@ -1015,31 +1059,34 @@ msgstr "Termina (hora)"
 
 #: apps/tradeschool/models.py:1806
 msgid ""
-"This is the end time of all of the available time slots that are going to be "
-"created."
+"This is the end time of all of the available time slots that are going to be"
+" created."
 msgstr ""
 
 #: apps/tradeschool/models.py:1811
+#, fuzzy
 msgid "Sunday"
 msgstr "Domingo"
 
 #: apps/tradeschool/models.py:1813
 msgid ""
-"Check this day if you wish to create available times on Sundays in the above "
-"date range."
+"Check this day if you wish to create available times on Sundays in the above"
+" date range."
 msgstr ""
 
 #: apps/tradeschool/models.py:1818
+#, fuzzy
 msgid "Monday"
 msgstr "Lunes"
 
 #: apps/tradeschool/models.py:1820
 msgid ""
-"Check this day if you wish to create available times on Mondays in the above "
-"date range."
+"Check this day if you wish to create available times on Mondays in the above"
+" date range."
 msgstr ""
 
 #: apps/tradeschool/models.py:1825
+#, fuzzy
 msgid "Tuesday"
 msgstr "Martes"
 
@@ -1050,6 +1097,7 @@ msgid ""
 msgstr ""
 
 #: apps/tradeschool/models.py:1832
+#, fuzzy
 msgid "Wednesday"
 msgstr "Miércoles"
 
@@ -1060,6 +1108,7 @@ msgid ""
 msgstr ""
 
 #: apps/tradeschool/models.py:1839
+#, fuzzy
 msgid "Thursday"
 msgstr "Jueves"
 
@@ -1070,16 +1119,18 @@ msgid ""
 msgstr ""
 
 #: apps/tradeschool/models.py:1846
+#, fuzzy
 msgid "Friday"
 msgstr "Viernes"
 
 #: apps/tradeschool/models.py:1848
 msgid ""
-"Check this day if you wish to create available times on Fridays in the above "
-"date range."
+"Check this day if you wish to create available times on Fridays in the above"
+" date range."
 msgstr ""
 
 #: apps/tradeschool/models.py:1853
+#, fuzzy
 msgid "Saturday"
 msgstr "Sábado"
 
@@ -1094,8 +1145,8 @@ msgid ""
 "All of the avaialble time slots that will be created can be related to a "
 "specifc venue. When a time slot that's related a venue is selected by a "
 "potential teacher, the proposed class will be booked in that venue. In the "
-"case a venue isn't selected, it's up to the organizers to select a venue for "
-"a proposed class."
+"case a venue isn't selected, it's up to the organizers to select a venue for"
+" a proposed class."
 msgstr ""
 
 #: apps/tradeschool/models.py:1879
@@ -1115,7 +1166,7 @@ msgstr "Objetos de Trueque"
 
 #: apps/tradeschool/models.py:1903
 msgid "A name or short description of the barter item."
-msgstr ""
+msgstr "Una descripción del objeto de trueque"
 
 #: apps/tradeschool/models.py:1907
 #, fuzzy
@@ -1154,8 +1205,8 @@ msgstr "Estudiantes"
 
 #: apps/tradeschool/models.py:1978
 msgid ""
-"The students who registered to this scheduled class, what are they bringing, "
-"and whether they cancelled their attendance."
+"The students who registered to this scheduled class, what are they bringing,"
+" and whether they cancelled their attendance."
 msgstr ""
 
 #: apps/tradeschool/models.py:1985
@@ -1190,8 +1241,8 @@ msgstr "Horarios de Clases"
 #: apps/tradeschool/models.py:2010
 #, fuzzy
 msgid ""
-"What is the current status of the class? Only approved classes appear on the "
-"website."
+"What is the current status of the class? Only approved classes appear on the"
+" website."
 msgstr "Cual es el estatus de la clase ahora mismo?"
 
 #: apps/tradeschool/models.py:2167
@@ -1200,7 +1251,7 @@ msgstr "Maestro/a"
 
 #: apps/tradeschool/models.py:2169
 msgid "The person teaching this class."
-msgstr ""
+msgstr "La persona enseñando esta clase"
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
@@ -1281,7 +1332,7 @@ msgstr "Clase"
 
 #: apps/tradeschool/models.py:2683
 msgid "What scheduled class does this registration refer to?"
-msgstr ""
+msgstr "¿A cuál clase registrada se está refiriendo?"
 
 #: apps/tradeschool/models.py:2687
 msgid "student"
@@ -1306,8 +1357,9 @@ msgid "items"
 msgstr "Objetos"
 
 #: apps/tradeschool/models.py:2703
-msgid "The barter items that the student said they were bringing to the class."
-msgstr ""
+msgid ""
+"The barter items that the student said they were bringing to the class."
+msgstr "Los objetos a trueque que el estudiante dijo que llevaría a la clase"
 
 #. Translators: This is used in the header navigation
 #. to let you know where you are.
@@ -1318,7 +1370,7 @@ msgstr "Comentario"
 #. Translators: Plural
 #: apps/tradeschool/models.py:2778
 msgid "Feedbacks"
-msgstr "Comentarios"
+msgstr "Comentarios/Retroalimentación"
 
 #: apps/tradeschool/models.py:2782
 msgid "From the Teacher"
@@ -1330,15 +1382,17 @@ msgstr "Del estudiante"
 
 #: apps/tradeschool/models.py:2790
 msgid "Feedback is given for a class that was scheduled and took place."
-msgstr ""
+msgstr "Retroalimentación dada a una clase que fue acordada y se realizó"
 
 #: apps/tradeschool/models.py:2794
 msgid "feedback type"
-msgstr "Clase de comentario"
+msgstr "Tipo de retroalimentación"
 
 #: apps/tradeschool/models.py:2799
 msgid "Was this feedback given by a student in the class or by the teacher?"
 msgstr ""
+"¿Fue la retroalimentación dada por un estudiante en la clase o por un "
+"maestro?"
 
 #: apps/tradeschool/models.py:2805
 #, fuzzy
@@ -1366,12 +1420,12 @@ msgstr "Posición"
 
 #: apps/tradeschool/models.py:2851
 msgid "This indicates the order in which the pictures appear on the website."
-msgstr ""
+msgstr "Esto indica el orden como las fotografías aparecen en el sitio web"
 
 #. Translators: Contextual Help
 #: apps/tradeschool/models.py:2859
 msgid "What TS branch's page is this photo on?"
-msgstr ""
+msgstr "¿En cual Página TS va esta foto?"
 
 #. Translators: If there are no images
 #: apps/tradeschool/models.py:2876
@@ -1392,16 +1446,15 @@ msgstr "Páginas de las Sucursales"
 #: apps/tradeschool/models.py:2940
 msgid "URL"
 msgstr ""
-"Inscribete a una clase con cualquier cantidad de maestros/as especializados/"
-"as, a cambio de objetos basicos o servicios. Puedes asegurar tu puesto en "
-"una clase con solo confirmar haras trueque por una de las necesidades del "
-"maestro/a."
+"Inscribete a una clase con cualquier cantidad de maestros/as "
+"especializados/as, a cambio de objetos basicos o servicios. Puedes asegurar "
+"tu puesto en una clase con solo confirmar haras trueque por una de las "
+"necesidades del maestro/a."
 
 #: apps/tradeschool/models.py:2954
 msgid "is visible"
 msgstr ""
-"Gracias! Tu clase esta pendiente ahora. Te avisaremos tan pronto como "
-"hagamos una decisiones.\n"
+"Gracias! Tu clase esta pendiente ahora. Te avisaremos tan pronto como hagamos una decisiones.\n"
 "Aquí esta la información que nos diste:"
 
 #: apps/tradeschool/models.py:2957
@@ -1458,11 +1511,11 @@ msgstr "Error en el servidor <em>(500)</em>"
 
 #: apps/tradeschool/templates/admin/500.html:20
 msgid ""
-"There's been an error. It's been reported to the site administrators via e-"
-"mail and should be fixed shortly. Thanks for your patience."
+"There's been an error. It's been reported to the site administrators via "
+"e-mail and should be fixed shortly. Thanks for your patience."
 msgstr ""
-"Ha habido un error. Se reportara a la administración y sera arreglado lo más "
-"pronto posible."
+"Ha habido un error. Se reportara a la administración y sera arreglado lo más"
+" pronto posible."
 
 #: apps/tradeschool/templates/admin/actions.html:10
 msgid "Click here to select the objects across all pages"
@@ -1598,8 +1651,8 @@ msgstr ""
 #: apps/tradeschool/templates/admin/delete_confirmation.html:35
 #, python-format
 msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
-"following protected related objects:"
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the"
+" following protected related objects:"
 msgstr ""
 
 #: apps/tradeschool/templates/admin/delete_confirmation.html:45
@@ -1654,14 +1707,12 @@ msgstr ""
 
 #: apps/tradeschool/templates/admin/invalid_setup.html:17
 msgid ""
-"Something's wrong with your database installation. Make sure the appropriate "
-"database tables have been created, and make sure the database is readable by "
-"the appropriate user."
+"Something's wrong with your database installation. Make sure the appropriate"
+" database tables have been created, and make sure the database is readable "
+"by the appropriate user."
 msgstr ""
 "blah blah blah\n"
-"Something's wrong with your database installation. Make sure the appropriate "
-"database tables have been created, and make sure the database is readable by "
-"the appropriate user."
+"Something's wrong with your database installation. Make sure the appropriate database tables have been created, and make sure the database is readable by the appropriate user."
 
 #: apps/tradeschool/templates/admin/login.html:27
 msgid "Login"
@@ -1705,8 +1756,8 @@ msgstr "Objeto creado"
 
 #: apps/tradeschool/templates/admin/object_history.html:47
 msgid ""
-"This object doesn't have a change history. It probably wasn't added via this "
-"admin site."
+"This object doesn't have a change history. It probably wasn't added via this"
+" admin site."
 msgstr "Este objeto no tiene historia de cambios. "
 
 #: apps/tradeschool/templates/admin/pagination.html:8
@@ -1811,7 +1862,7 @@ msgstr "Añadir otro"
 
 #: apps/tradeschool/templates/admin/includes_grappelli/header.html:24
 msgid "Edit Profile"
-msgstr ""
+msgstr "Edita el perfil"
 
 #: apps/tradeschool/templates/admin/includes_grappelli/header.html:40
 msgid "Tests"
@@ -1821,7 +1872,7 @@ msgstr "Ensayos"
 #: apps/tradeschool/templates/branches_base/base.html:50
 msgctxt "Main header on the website"
 msgid "Trade School"
-msgstr "LA TRUECA"
+msgstr "Trade School"
 
 #: apps/tradeschool/templates/branches_base/base.html:15
 #: apps/tradeschool/templates/hub/base.html:8
@@ -1831,16 +1882,16 @@ msgid ""
 "items and services. Secure a spot in a TradeSchool class by meeting one of "
 "the teachers barter needs."
 msgstr ""
-"Inscribete a una clase con cualquier cantidad de maestros/as especializados/"
-"as, a cambio de objetos basicos o servicios. Puedes asegurar tu puesto en "
-"una clase con solo confirmar haras trueque por una de las necesidades del "
-"maestro/a."
+"Inscribete a una clase con cualquier cantidad de maestros/as "
+"especializados/as, a cambio de objetos basicos o servicios. Puedes asegurar "
+"tu puesto en una clase con solo confirmar haras trueque por una de las "
+"necesidades del maestro/a."
 
 #: apps/tradeschool/templates/branches_base/base.html:16
 msgctxt "Page Meta Keywords"
 msgid ""
 "tradeschool, trade, school, ourgoods, barter, trade, exchange, community"
-msgstr "La Trueca, trueque, escuala, intercambio, comunidad,"
+msgstr ""
 
 #: apps/tradeschool/templates/branches_base/base.html:63
 msgctxt "Past Classes"
@@ -1955,8 +2006,7 @@ msgid ""
 "Thanks! Your class will be pending for now. It will be added to the site "
 "within 24 hours if it's approved. Here is what you submitted:"
 msgstr ""
-"Gracias! Tu clase esta pendiente ahora. Te avisaremos tan pronto como "
-"hagamos una decisiones.\n"
+"Gracias! Tu clase esta pendiente ahora. Te avisaremos tan pronto como hagamos una decisiones.\n"
 "Aquí esta la información que nos diste:"
 
 #: apps/tradeschool/templates/branches_base/course_submitted.html:14
@@ -1985,7 +2035,8 @@ msgid ""
 "tradeschool, trade, school, grand, opening, grandopening, ourgoods, art, "
 "artist, barter, trade, exchange, community, pop-up, storefront, new york "
 "city, lower east side "
-msgstr "ening, ourgoods, art, artist, barter, trade, exchange, community, pop-"
+msgstr ""
+"ening, ourgoods, art, artist, barter, trade, exchange, community, pop-"
 
 #: apps/tradeschool/templates/hub/branch_list.html:97
 msgctxt "Go to class button"
@@ -2000,15 +2051,15 @@ msgstr "Deshaces la selección"
 #: apps/tradeschool/templates/templatesadmin/edit.html:37
 #: apps/tradeschool/templates/templatesadmin/edit.html:41
 msgid "Edit Template:"
-msgstr ""
+msgstr "Editar la plantilla"
 
 #: apps/tradeschool/templates/templatesadmin/edit.html:64
 msgid "This template is not writeable."
-msgstr ""
+msgstr "Esta plantilla no es editable"
 
 #: settings/base.py:218
 msgid "Trade School Admin"
-msgstr "La Trueca - Administración"
+msgstr "Tradeschool  Admin"
 
 #~ msgid "Emails"
 #~ msgstr "Correos"
@@ -2016,11 +2067,9 @@ msgstr "La Trueca - Administración"
 #~ msgid "city"
 #~ msgstr "Ciudad"
 
-#, fuzzy
 #~ msgid "Open Time Slot Batch"
 #~ msgstr "Gama del horario"
 
-#, fuzzy
 #~ msgid "Open Time Slot Batches"
 #~ msgstr "Gamas de horarios"
 
@@ -2054,7 +2103,6 @@ msgstr "La Trueca - Administración"
 #~ msgid "Class Schedules"
 #~ msgstr "Horarios de Clases"
 
-#, fuzzy
 #~ msgid "class"
 #~ msgstr "Clase"
 
@@ -2073,25 +2121,25 @@ msgstr "La Trueca - Administración"
 #~ msgid ""
 #~ "After you submit your class idea, when you'd like to teach, and what you "
 #~ "want in exchange for teaching, Trade School organizers will review your "
-#~ "submission. If your submission is approved, it will be posted on the "
-#~ "website for students to sign up. On the day of class, you will meet your "
-#~ "students at Trade School, receive your barter items, and enjoy the class."
+#~ "submission. If your submission is approved, it will be posted on the website"
+#~ " for students to sign up. On the day of class, you will meet your students "
+#~ "at Trade School, receive your barter items, and enjoy the class."
 #~ msgstr ""
-#~ "review your submission. If your submission is approved, it will be posted "
-#~ "on the website for students to sign up. On the day of class, you will "
-#~ "meet your students at "
+#~ "review your submission. If your submission is approved, it will be posted on"
+#~ " the website for students to sign up. On the day of class, you will meet "
+#~ "your students at "
 
 #~ msgid "Your class"
 #~ msgstr "Your class"
 
 #~ msgid ""
-#~ "Your class can be about anything and can be structured in any way you "
-#~ "like. Just be sure that you feel comfortable setting the tone and sharing "
-#~ "information. You are in charge during your class! Past topics and "
-#~ "approaches to teaching have ranged from butter-making workshops to "
-#~ "foraging walking tours; from business lectures to group discussions. We "
-#~ "find that students want to get to know each other, so classes work best "
-#~ "with break-out groups, work in pairs, and lots of student participation."
+#~ "Your class can be about anything and can be structured in any way you like. "
+#~ "Just be sure that you feel comfortable setting the tone and sharing "
+#~ "information. You are in charge during your class! Past topics and approaches"
+#~ " to teaching have ranged from butter-making workshops to foraging walking "
+#~ "tours; from business lectures to group discussions. We find that students "
+#~ "want to get to know each other, so classes work best with break-out groups, "
+#~ "work in pairs, and lots of student participation."
 #~ msgstr ""
 #~ "ay you like. Just be sure that you feel comfortable setting the tone and "
 #~ "sharing information. You are in charge during your class! Past topics and "
@@ -2099,8 +2147,8 @@ msgstr "La Trueca - Administración"
 
 #~ msgid "Your barter items"
 #~ msgstr ""
-#~ "Your barter itemsThis indicates whether a page is listed in the menu or "
-#~ "not. Visible pages appear on the menu. Other pages do not, but are still "
+#~ "Your barter itemsThis indicates whether a page is listed in the menu or not."
+#~ " Visible pages appear on the menu. Other pages do not, but are still "
 #~ "accessible via their URL."
 
 #~ msgid "Scheduling"
