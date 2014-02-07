@@ -368,7 +368,7 @@ def course_edit(request, course_slug=None, branch_slug=None):
     if request.method == 'POST':
         BarterItemFormSet = formset_factory(
             BarterItemForm, extra=5, formset=BaseBarterItemFormSet)
-        barter_item_formset = BarterItemFormSet(request.POST, prefix="item")
+        barter_item_formset = BarterItemFormSet(data=request.POST, prefix="item", branch=branch)
         course_form = CourseForm(
             request.POST, prefix="course", instance=course)
         teacher_form = TeacherForm(
@@ -416,7 +416,7 @@ def course_edit(request, course_slug=None, branch_slug=None):
         BarterItemFormSet = formset_factory(
             BarterItemForm, extra=0, formset=BaseBarterItemFormSet,)
         barter_item_formset = BarterItemFormSet(
-            prefix="item", initial=initial_item_data)
+            prefix="item", initial=initial_item_data, branch=branch)
         course_form = CourseForm(
             prefix="course",
             instance=course
