@@ -4,29 +4,8 @@ from django.core.urlresolvers import resolve
 from tradeschool.models import *
 
 
-def reset_translation_cache():
-    from django.utils.translation import trans_real
-    from django.conf import settings
-    import gettext
-    if settings.USE_I18N:
-        try:
-            # Reset gettext.GNUTranslation cache.
-            gettext._translations = {}
-
-            # Reset Django by-language translation cache.
-            trans_real._translations = {}
-
-            # Delete Django current language translation cache.
-            trans_real._default = None
-
-        except AttributeError:
-            pass
-
-
 class BranchMiddleware(object):
     def process_request(self, request):
-
-        reset_translation_cache()
 
         try:
             url = resolve(request.path)
