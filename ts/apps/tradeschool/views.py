@@ -598,11 +598,14 @@ def start_a_tradeschool(request):
 
             # save organizer
             organizer = Organizer(**organizer_data)
+            organizer.default_branch = branch
             organizer.save()
 
             # add an organizer-branch relationship to the current branch
             organizer.branches.add(branch)
             branch.organizers.add(organizer)
+
+            return HttpResponseRedirect(reverse_lazy(branch_list))
 
     else:
         branch_form = BranchForm(prefix="branch")
