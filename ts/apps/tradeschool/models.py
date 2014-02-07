@@ -2004,7 +2004,11 @@ class ScheduledEvent(Durational):
         ('#74ac23', 'green'),
         ('#2da57c', 'turquoise'),
         ('#2d9ac2', 'light blue'),
-        ('#8a54bb', 'violet')
+        ('#8a54bb', 'violet'),
+        ('#CCCCFF', 'lavender'),
+        ('#989898', 'grey'),
+        ('#FFFF66', 'yellow'),
+        ('#99FFCC', 'seafoam'),
     )
 
     title = CharField(
