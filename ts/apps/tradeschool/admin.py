@@ -1473,7 +1473,7 @@ class CourseAdmin(BaseAdmin):
         teacher = obj.teacher
         # link to teacher edit admin form
         url = reverse('admin:tradeschool_teacher_change', args=(teacher.pk,))
-        html = '<a target="_blank" href="%s">%s</a>' % (url, teacher.fullname)
+        html = '<a target="_blank" href="%s">%s</a>' % (url, unicode(teacher.fullname))
         return mark_safe(html)
     teacher_fullname.short_description = _('Teacher Fullname')
 
@@ -1501,7 +1501,7 @@ class CourseAdmin(BaseAdmin):
         Return related teacher's bio
         so it can be used in list_display.
         """
-        return obj.teacher.bio
+        return unicode(obj.teacher.bio)
     teacher_bio.short_description = _('Teacher bio')
 
     def teacher_website(self, obj):
