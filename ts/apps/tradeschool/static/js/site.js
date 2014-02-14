@@ -213,19 +213,23 @@ var site = window.site = new function()
         $(images).css({'opacity':0});
         $(images).eq(0).css({'opacity':1});
 
-        var i = 0;
-        var interval = setInterval(function() 
+        if (count > 1)
         {
-            var next = (i < count-1) ? i+1 : 0;
+            var i = 0;
+            var interval = setInterval(function() 
+            {
+                var next = (i < count-1) ? i+1 : 0;
 
-            $(images).eq(i).animate({
-                opacity	: 0
-            }, 3000);
-            $(images).eq(next).animate({
-                opacity	: 1
-            }, 3000);	
-            i = (i < count-1) ? i+1 : 0;
-        }, 9000);
+                $(images).eq(i).animate({
+                    opacity : 0
+                }, 3000);
+                $(images).eq(next).animate({
+                    opacity : 1
+                }, 3000);   
+                i = (i < count-1) ? i+1 : 0;
+            }, 9000);            
+        }
+
     };
 };
 })(jQuery);
