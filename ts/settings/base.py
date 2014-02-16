@@ -65,10 +65,6 @@ STATICFILES_FINDERS = (
     'dajaxice.finders.DajaxiceFinder',
 )
 
-LOCALE_PATHS = (
-    os.path.join(PROJECT_DIR, 'locale/'),
-)
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     #('django.template.loaders.cached.Loader', (
