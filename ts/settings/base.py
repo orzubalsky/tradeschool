@@ -262,7 +262,7 @@ LANGUAGES = (
     ('zh_sg', 'Chinese (Singapore)'),
     ('it_it', 'Italian'),
     ('tl', 'Tagalog'),
-    ('fr-FR', 'French'),
+    ('fr_fr', 'French'),
     ('nl_nl', 'Dutch'),
     ('th', 'Thai'),
     ('pt_br', 'Portuguese'),
