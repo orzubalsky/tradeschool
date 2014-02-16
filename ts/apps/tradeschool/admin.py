@@ -66,9 +66,7 @@ class BaseAdmin(enhanced_admin.EnhancedModelAdminMixin, admin.ModelAdmin):
         defulat_branch selected in the form widget.
         """
         if db_field.name == 'branches':
-            qs = Branch.objects.filter(
-                pk__in=[request.user.default_branch.pk, ]
-            )
+            qs = Branch.objects.all()
             kwargs['queryset'] = qs
 
             #  Make the user's defulat_branch selected in the form widget.
