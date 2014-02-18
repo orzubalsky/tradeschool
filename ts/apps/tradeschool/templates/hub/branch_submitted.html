@@ -1,0 +1,41 @@
+{% extends "hub/base.html" %}
+
+{% load humanize smartdate i18n l10n %}
+
+{% block content %}
+<div id="teacherForm">
+    <div class="formThanks">
+        
+        {% block branch_complete_intro %}
+        <p class="thanks_intro">
+            {% blocktrans %}Thanks! A Trade School organizer will get in touch with you soon.<br />
+            Here is what you submitted:
+            {% endblocktrans %}
+        </p>
+        {% endblock branch_complete_intro %}
+
+        {% block branch_complete_data %}
+        <h4>{% blocktrans %}Your name{% endblocktrans %}:</h4>
+        {{ organizer.fullname }}
+        
+        <h4>{% blocktrans %}Your Co-Organizers{% endblocktrans %}:</h4>
+        {{ organizer.names_of_co_organizers }}
+        
+        <h4>{% blocktrans %}Email address{% endblocktrans %}:</h4>
+        {{ organizer.email }}
+
+        <h4>{% blocktrans %}Why You Would Like to Open a Trade School{% endblocktrans %}:</h4>
+        {{ organizer.bio }}
+
+        <h4>{% blocktrans %}City/Province/Region{% endblocktrans %}:</h4>
+        {{ branch.city }}
+
+        <h4>{% blocktrans %}State{% endblocktrans %}:</h4>
+        {{ branch.state }}
+
+        <h4>{% blocktrans %}Country{% endblocktrans %}:</h4>
+        {{ branch.country }}
+        {% endblock branch_complete_data %}        
+    </div>
+</div>
+{% endblock content %}

@@ -1168,3 +1168,22 @@ iframe{
 	outline: 0;
 	cursor: pointer;
 }
+.formThanks {
+	margin: 0;
+	overflow: hidden;
+	text-align: left;
+	padding: 15px 20px;
+	width: 560px;
+	color: #fff;
+	background: #666;
+	font-weight: bold;
+}
+
+.formThanks p.thanks_intro {
+	font-weight: normal;
+}
+
+.formThanks h4 {
+	font-weight: normal;
+	margin: 20px 0 0 0;
+}

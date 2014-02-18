@@ -607,7 +607,12 @@ def start_a_tradeschool(request):
             organizer.groups.add(Group.objects.get(name='translators'))
             branch.organizers.add(organizer)
 
-            return HttpResponseRedirect(reverse_lazy(branch_list))
+            return HttpResponseRedirect(reverse_lazy(
+                branch_submitted,
+                kwargs={
+                    'slug': branch.slug,
+                })
+            )
 
     else:
         branch_form = BranchForm(prefix="branch")
@@ -618,6 +623,18 @@ def start_a_tradeschool(request):
         'pages': pages,
         'branch_form': branch_form,
         'organizer_form': organizer_form,
+    }, context_instance=RequestContext(request))
+
+
+def branch_submitted(request, slug=None):
+    """
+    loaded after a successful submission of the start a tradeschool form.
+    """
+    branch = get_object_or_404(Branch, slug=slug)
+
+    return render_to_response('hub/branch_submitted.html', {
+        'branch': branch,
+        'organizer': branch.organizers.all()[0]
     }, context_instance=RequestContext(request))
 
 
