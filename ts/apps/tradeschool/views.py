@@ -639,7 +639,7 @@ def branch_submitted(request, slug=None):
     """
     loaded after a successful submission of the start a tradeschool form.
     """
-    branch = get_object_or_404(Branch, slug=slug)
+    branch = get_object_or_404(Branch, slug=slug, branch_status='pending')
 
     return render_to_response('hub/branch_submitted.html', {
         'branch': branch,
