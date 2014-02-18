@@ -600,11 +600,11 @@ def start_a_tradeschool(request):
             # save organizer
             organizer = Organizer(**organizer_data)
             organizer.default_branch = branch
-            organizer.groups.add(Group.objects.get(name='translators'))
             organizer.save()
 
             # add an organizer-branch relationship to the current branch
             organizer.branches.add(branch)
+            organizer.groups.add(Group.objects.get(name='translators'))
             branch.organizers.add(organizer)
 
             return HttpResponseRedirect(reverse_lazy(branch_list))
