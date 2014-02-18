@@ -13,6 +13,7 @@ from tradeschool.utils import daterange, unique_slugify
 # more info here on a better way to fix this problem:
 # http://stackoverflow.com/questions/2345400/why-is-post-save-being-raised-twice-during-the-save-of-a-django-model
 @receiver(post_save, sender=Branch, dispatch_uid="ts.apps.tradeschool.signals")
+@receiver(post_save, sender=PendingBranch, dispatch_uid="ts.apps.tradeschool.signals")
 def branch_save_callback(sender, instance, **kwargs):
     """
     Create notifications on creation of a new branch.

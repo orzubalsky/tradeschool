@@ -89,7 +89,7 @@ class BranchTestCase(TestCase):
         self.assertTemplateUsed('admin/change_form.html')
 
         # an empty form should return 10 errors for the required fields
-        self.assertContains(response, 'This field is required', count=9)
+        self.assertContains(response, 'This field is required', count=10)
 
         # now submit valid form
         response = self.client.post(
