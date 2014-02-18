@@ -613,13 +613,6 @@ class Location(Base):
     class Meta:
         abstract = True
 
-    title = CharField(
-        # Translators: This is for the name of a Trade School location or venue
-        verbose_name=_("title"),
-        max_length=100,
-        # Translators: Contextual Help.
-        help_text=_("The name of the space")
-    )
     phone = CharField(
         verbose_name=_("phone"),
         max_length=30,
@@ -836,6 +829,14 @@ class Branch(Location):
         zip(common_timezones, common_timezones)
     )
 
+    title = CharField(
+        # Translators: This is for the name of a Trade School location or venue
+        verbose_name=_("title"),
+        max_length=100,
+        unique=True,
+        # Translators: Contextual Help.
+        help_text=_("The name of the school")
+    )
     slug = SlugField(
         # Translators: This is the part that comes after tradeschool.coop/
         # in the URL.
@@ -1190,6 +1191,13 @@ class Venue(Location):
         colorValue = random.randint(0, 16777215)
         return "#%x" % colorValue
 
+    title = CharField(
+        # Translators: This is for the name of a Trade School location or venue
+        verbose_name=_("title"),
+        max_length=100,
+        # Translators: Contextual Help.
+        help_text=_("The name of the space")
+    )
     branch = ForeignKey(
         Branch,
         verbose_name=_("branch"),

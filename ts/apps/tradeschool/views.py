@@ -567,52 +567,61 @@ def start_a_tradeschool(request):
 
         if branch_form.is_valid() and organizer_form.is_valid():
 
-            # save branch
-            branch = branch_form.save(commit=False)
-            branch_data = branch_form.cleaned_data
+            try:
+                # save branch
+                branch = branch_form.save(commit=False)
+                branch_data = branch_form.cleaned_data
 
-            # create a title from the city field
-            branch_data['title'] = branch_data['city']
+                # create a title from the city field
+                branch_data['title'] = branch_data['city']
 
-            # create a slug for the organizer object
-            branch_data['slug'] = unique_slugify(
-                Branch, branch_data['title'])
+                # create a slug for the organizer object
+                branch_data['slug'] = unique_slugify(
+                    Branch, branch_data['title'])
 
-            branch_data['is_active'] = False
-            branch_data['branch_status'] = 'pending'
+                branch_data['is_active'] = False
+                branch_data['branch_status'] = 'pending'
 
-            # save branch
-            branch = Branch(**branch_data)
-            branch.save()
+                # save branch
+                branch = Branch(**branch_data)
+                branch.save()
 
-            # save organizer
-            organizer = organizer_form.save(commit=False)
-            organizer_data = organizer_form.cleaned_data
+                # save organizer
+                organizer = organizer_form.save(commit=False)
+                organizer_data = organizer_form.cleaned_data
 
-            # create a slug for the organizer object
-            organizer_data['slug'] = unique_slugify(
-                Organizer, organizer.fullname)
+                # create a slug for the organizer object
+                organizer_data['slug'] = unique_slugify(
+                    Organizer, organizer.fullname)
 
-            organizer_data['username'] = organizer.fullname
-            organizer_data['is_active'] = False
-            organizer_data['is_staff'] = True
+                organizer_data['username'] = organizer.fullname
+                organizer_data['is_active'] = False
+                organizer_data['is_staff'] = True
 
-            # save organizer
-            organizer = Organizer(**organizer_data)
-            organizer.default_branch = branch
-            organizer.save()
+                # save organizer
+                organizer = Organizer(**organizer_data)
+                organizer.default_branch = branch
+                organizer.save()
 
-            # add an organizer-branch relationship to the current branch
-            organizer.branches.add(branch)
-            organizer.groups.add(Group.objects.get(name='translators'))
-            branch.organizers.add(organizer)
+                # add an organizer-branch relationship to the current branch
+                organizer.branches.add(branch)
+                organizer.groups.add(Group.objects.get(name='translators'))
+                branch.organizers.add(organizer)
 
-            return HttpResponseRedirect(reverse_lazy(
-                branch_submitted,
-                kwargs={
-                    'slug': branch.slug,
-                })
-            )
+                return HttpResponseRedirect(reverse_lazy(
+                    branch_submitted,
+                    kwargs={
+                        'slug': branch.slug,
+                    })
+                )
+            # in case saving the branch failed
+            # (see comment above the try block),
+            # add an error to the branch form
+            except IntegrityError:
+                # display error
+                branch_form._errors['city'] = \
+                    branch_form.error_class(
+                        [_('This Trade School already exists')])
 
     else:
         branch_form = BranchForm(prefix="branch")
