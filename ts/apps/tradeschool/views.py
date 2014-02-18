@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse_lazy
 from django.forms.formsets import formset_factory
 from django.contrib.flatpages.models import FlatPage
+from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
@@ -599,6 +600,7 @@ def start_a_tradeschool(request):
             # save organizer
             organizer = Organizer(**organizer_data)
             organizer.default_branch = branch
+            organizer.groups.add(Group.objects.get(name='translators'))
             organizer.save()
 
             # add an organizer-branch relationship to the current branch
