@@ -58,7 +58,7 @@
 
             <div class="section map_2" id="map_2">
                 <p class="col_1">
-                    <strong>2012</strong><br />
+                    <strong>2010</strong><br />
                     Feb
                 </p>
             </div>     
@@ -109,7 +109,7 @@
 
             <div class="section" id="links">
                 <p class="col_1">
-                    Read more about us in the news, or <a target="_blank" href="{{ STATIC_URL }}docs/startaTS.pdf">read our principles</a>.
+                    Read more about us in the news, <a href="{% url 'branch-list' %}">take a class</a>, or <a target="_blank" href="{{ STATIC_URL }}docs/startaTS.pdf">read our principles</a>.
                 </p>
             </div>            
 
@@ -117,7 +117,10 @@
                 <p class="col_1">
                     Thank you!
                 </p>
-                <a href="{% url 'branch-list' %}">tradeschool.coop</a>                              
+                <p class="center">
+                    <a href="{% url 'branch-list' %}">tradeschool.coop</a><br />
+                    <a href="mailto:info@tradeschool.coop">info@tradeschool.coop</a>
+                </p>
             </div>
         </div>
     </div>
