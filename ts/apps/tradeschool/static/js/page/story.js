@@ -8,10 +8,12 @@ var page = window.page = new function()
 
     this.init = function() 
     {
-        this.page_height = $('#container').outerHeight(true) + 50;
+        this.page_height = $('#container').outerHeight(true);
         this.video_height = $('#video').outerHeight(true);
         this.total_pages = $('.section').size() - 1;
-        console.log(this.video_height);
+        
+        $('.section').css({'height': this.page_height + 'px'});
+
         this.navigation();
     };
 
