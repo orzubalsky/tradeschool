@@ -53,6 +53,7 @@ if settings.DEBUG:
 urlpatterns += patterns('',
     url(r'^u/sdb/', 'tradeschool.views.switch_default_branch', name='switch-default-branch'),
     url(r'^start-a-tradeschool/', 'tradeschool.views.start_a_tradeschool', name='start-a-tradeschool'),
+    url(r'^story/', 'tradeschool.views.story', name='story'),    
     url(r'^school-submitted/(?P<slug>[0-9A-Za-z\-_]+)', 'tradeschool.views.branch_submitted', name='branch-submitted'),
     url(r'^cluster/(?P<slug>[0-9A-Za-z\-_]+)/', 'tradeschool.views.cluster_list', name='cluster-list'),
     url(r'^(?P<branch_slug>[0-9A-Za-z\-_]+)/', include('tradeschool.urls')),

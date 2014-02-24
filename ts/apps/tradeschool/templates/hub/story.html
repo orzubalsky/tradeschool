@@ -1,0 +1,141 @@
+{% load i18n humanize %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trade School</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="{% blocktrans context 'Page Meta Description' %}Take a class with a range of specialized teachers in exchange for basic items and services. Secure a spot in a TradeSchool class by meeting one of the teachers barter needs.{% endblocktrans %}" />
+    <meta name="keywords" content="{% blocktrans context 'Page Meta Keywords' %}tradeschool, trade, school, grand, opening, grandopening, ourgoods, art, artist, barter, trade, exchange, community, pop-up, storefront, new york city, lower east side {% endblocktrans %}" />
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/page/story.css" />
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div id="container">
+        <a class="navigation" id="previous">PREVIOUS</a>
+        <a class="navigation" id="next">NEXT</a>
+        <div id="content">
+            <div class="section" id="logo">
+                <h1>
+                    <strong>
+                        TRADE SCHOOL<br />
+                        EVERYWHERE
+                    </strong>
+                </h1>
+                <div class="image_container">
+                    <img src="{{ STATIC_URL }}images/logos/logo_white.png" />
+                </div>
+            </div>
+
+            <div class="section" id="intro">
+                <h2 class="col_1">
+                    Trade School is a non-traditional learning space where students barter with teachers.
+                </h2>
+                <div class="image_container">
+
+                </div>                
+            </div>
+
+            <div class="section" id="intro_02">
+                <h2 class="col_1">
+                    Anyone can teach a class, and students can sign up for classes by agreeing to bring a barter item that the teacher requests.
+                </h2>
+                <div class="image_container">
+
+                </div>                   
+            </div>
+
+            <div class="section" id="video">
+                <iframe id="video_embed" src="//player.vimeo.com/video/41996790?title=0&amp;byline=0&amp;portrait=0" width="1152" height="647" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>                
+            </div>
+
+            <div class="section map_1" id="map">
+                <p class="col_1 ">
+                    The first Trade School opened in 2010. Trade School is now an international network of local, self-organized chapters.
+                </p>
+            </div>            
+
+            <div class="section map_2" id="map_2">
+                <p class="col_1">
+                    <strong>2012</strong><br />
+                    Feb
+                </p>
+            </div>     
+
+            <div class="section map_1" id="map_3">
+                <p class="col_1">
+                    There are now <strong>50</strong> Trade School chapters worldwide and counting.
+                </p>
+            </div>                 
+
+            <div class="section" id="branches">
+                <h2 class="col_1 add_bottom_margin">
+                    Each chapter coordinates the exchange of knowledge for barter items and services.
+                </h2>
+                <ul id="exchanges">
+                    {% for registration in exchanges %}
+                    <li>
+                        <h4><strong>{{ registration.course.branch.title }}</strong></h4>
+                        <p>                            
+                            {{ registration.items.all.0 }}<br />
+                            <strong>for</strong><br />
+                            {{ registration.course.title }}
+                        </p>
+                    </li>                        
+                    {% endfor %}                                                                                                  
+                </ul>
+            </div>            
+
+            <div class="section" id="people">
+                <h2 class="col_1 add_bottom_margin">
+                    <strong>{{ total_people_count|intcomma }}</strong> people have been in class at Trade School so far.
+                </h2>
+                <ul>
+                    {% for branch in branches %}
+                    {% if branch.course_count > 0 and branch.student_count > 0 and branch.teacher_count > 0 %}
+                    <li>
+                        <h4>{{ branch.title|title }} <span class="year">{{ branch.created|date:"Y" }}</span></h4>
+                        <p>
+                            {{ branch.course_count }} classes<br />
+                            {{ branch.student_count }} students<br />
+                            {{ branch.teacher_count }} teachers<br />
+                        </p>
+                    </li>
+                    {% endif %}                    
+                    {% endfor %}                                    
+                </ul>                
+            </div>
+
+            <div class="section" id="links">
+                <p class="col_1">
+                    Read more about us in the news, or <a href="">read our principles</a>.
+                </p>
+            </div>            
+
+            <div class="section" id="thanks">
+                <p class="col_1">
+                    Thank you!
+                </p>
+                <a href="">tradeschool.coop</a>                              
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.js"></script> 
+    <script type="text/javascript" src="{{ STATIC_URL }}js/page/story.js"></script> 
+
+    {% if GOOGLE_ANALYTICS_KEY %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', '{{ GOOGLE_ANALYTICS_KEY}}', 'tradeschool.coop');
+      ga('send', 'pageview');
+
+    </script>    
+    {% endif %}    
+    {% block extra_js %}{% endblock %}  
+</body>
+</html>

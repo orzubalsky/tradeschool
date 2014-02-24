@@ -647,6 +647,30 @@ def branch_submitted(request, slug=None):
     }, context_instance=RequestContext(request))
 
 
+def story(request):
+    """
+    """
+    exchanges = Registration.objects.annotate(Count('items')).filter(
+        registration_status='registered',
+        course__status='approved',
+        items__count__gt=0).order_by('?')[:10]
+
+    branches = Branch.objects.public().filter().order_by('created')
+
+    for b in branches:
+        b.course_count = b.course_set.all().filter(status='approved').count()
+        b.student_count = b.person_set.all().filter(is_student=True, courses_taken_count__gt=0).count()
+        b.teacher_count = b.person_set.all().filter(is_teacher=True).count()
+
+    total_people_count = Person.objects.filter(is_active=True).count()
+
+    return render_to_response('hub/story.html', {
+        'exchanges': exchanges,
+        'branches': branches,
+        'total_people_count': total_people_count
+    }, context_instance=RequestContext(request))
+
+
 def switch_default_branch(request):
 
     organizer_id = request.GET.get('organizer_id', None)

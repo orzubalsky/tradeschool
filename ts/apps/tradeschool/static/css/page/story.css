@@ -1,0 +1,158 @@
+@font-face {
+    font-family: 'TradeGothicLTStdBold';
+    src: url('../../fonts/tradegothicltstd-bold-webfont.eot');
+    src: url('../../fonts/tradegothicltstd-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/tradegothicltstd-bold-webfont.woff') format('woff'),
+         url('../../fonts/tradegothicltstd-bold-webfont.ttf') format('truetype'),
+         url('../../fonts/tradegothicltstd-bold-webfont.svg#TradeGothicLTStdBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+body, html {
+  height: 100%;
+}
+body {
+	background-color: #ffcc00;
+	padding: 0;
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
+}
+h1 {
+	font-family: 'TradeGothicLTStdBold';
+	font-size: 62.75px;
+	width: 50%;
+	float: left;
+	margin: 0 0 0 50px;
+	line-height: 83px;
+}
+h2, p {
+	font-size: 48px;
+	line-height: 65px;
+	font-weight: normal;
+	margin: 0;
+}
+strong {
+	font-weight: bold;
+}
+a {
+	color: #000;
+}
+img {
+
+}
+ul {
+	list-style: none;
+	width: 20000px;
+	height: 230px;
+	clear: both;
+	padding: 0;
+	margin: 0;
+}
+li {
+	background-color: white;
+	width: 360px;
+	height: 170px;
+	margin: 0 10px 10px 0;
+	float: left;
+	padding: 30px;
+}
+li h4,
+li p {
+	font-size: 24px;
+	line-height: 42px;
+}
+li h4 {
+	margin: 0 0 20px 0;
+	position: relative;
+}
+li h4 span {
+	position: absolute;
+	right: 0;
+}
+#container {
+	margin: 0px auto;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	min-width: 800px;
+}
+#container .navigation {
+	position: absolute;
+	left: 50%;
+	cursor: pointer;
+	z-index: 10;
+	color: white;
+}
+#container .navigation#previous {
+	top: 0;
+	display: none;
+}
+#container .navigation#next {
+	bottom: 0;
+}
+#content {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+}
+.section {
+	height: 100vh;
+	width: 100%;
+	clear: both;
+	margin-top: 50px;
+	overflow: hidden;
+}
+.col_1 {
+	margin-left: 50px;		
+	width: 50%;
+	max-width: 576px;
+}
+.add_bottom_margin {
+	margin-bottom: 50px;
+}
+.image_container {
+    position: absolute;
+    right: 0;
+    width: 50%;
+}
+.image_container img {
+	position: relative;
+	left: 25%;
+}
+.map_1,
+.map_2 {
+	background-repeat: no-repeat; 	
+	
+}
+.map_1 {
+	background-image: url(../../images/dymaxion_01.png);
+}
+.map_2 {
+	background-image: url(../../images/dymaxion_02.png);
+}
+#video {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	height: 0;
+	min-height: 20vh;
+	margin-top: 0;
+}
+#video iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+#thanks a {
+    display: block;
+    font-size: 48px;
+    font-weight: bold;
+    margin: 250px auto;
+    text-align: center;
+}
+ul#exchanges li {
+	height: 310px;
+}
