@@ -15,6 +15,7 @@ var page = window.page = new function()
         $('.section').css({'height': this.page_height + 'px'});
 
         this.navigation();
+        this.scrolls();
     };
 
 
@@ -94,6 +95,11 @@ var page = window.page = new function()
                 (self.current_page == self.total_pages) ? $('#next').hide() : $('#next').show();                
             });
         }
+    };
+
+    this.scrolls = function()
+    {
+        
     };
 
 };

@@ -52,7 +52,7 @@ li {
 	background-color: white;
 	width: 360px;
 	height: 170px;
-	margin: 0 10px 10px 0;
+	margin: 0 10px 0 0;
 	float: left;
 	padding: 30px;
 }
@@ -149,6 +149,11 @@ li h4 span {
     font-weight: bold;
     margin: 250px auto;
     text-align: center;
+}
+ul#exchanges {
+	overflow-x: scroll;
+    overflow-y: hidden;
+    height: 360px;
 }
 ul#exchanges li {
 	height: 310px;
