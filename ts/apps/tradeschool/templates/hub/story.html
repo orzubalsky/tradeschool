@@ -78,9 +78,9 @@
                     <li>
                         <h4><strong>{{ registration.course.branch.title }}</strong></h4>
                         <p>                            
-                            {{ registration.items.all.0 }}<br />
+                            {{ registration.items.all.0|title }}<br />
                             <strong>for</strong><br />
-                            {{ registration.course.title }}
+                            {{ registration.course.title|title }}
                         </p>
                     </li>                        
                     {% endfor %}                                                                                                  
