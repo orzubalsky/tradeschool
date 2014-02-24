@@ -42,24 +42,26 @@ img {
 }
 ul {
 	list-style: none;
-	width: 20000px;
-	height: 230px;
+	width: 15910px;
+	height: 220px;
 	clear: both;
 	padding: 0;
 	margin: 0;
+	overflow-x: scroll;
+    overflow-y: hidden;	
 }
 li {
-	background-color: white;
-	width: 360px;
-	height: 170px;
-	margin: 0 10px 0 0;
-	float: left;
-	padding: 30px;
+   	background-color: #FFFFFF;
+    float: left;
+    height: 170px;
+    margin: 0 10px 0 0;
+    padding: 20px 20px 10px;
+    width: 380px;
 }
 li h4,
 li p {
-	font-size: 24px;
-	line-height: 42px;
+	font-size: 20px;
+	line-height: 36px;
 }
 li h4 {
 	margin: 0 0 20px 0;
@@ -73,23 +75,22 @@ li h4 span {
 	margin: 0px auto;
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
 	position: relative;
 	min-width: 800px;
 }
 #container .navigation {
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	cursor: pointer;
 	z-index: 10;
 	color: white;
 }
 #container .navigation#previous {
-	top: 0;
+	top: 10px;
 	display: none;
 }
 #container .navigation#next {
-	bottom: 0;
+	bottom: 10px;
 }
 #content {
 	height: 100%;
@@ -101,7 +102,11 @@ li h4 span {
 	height: 100vh;
 	width: 100%;
 	clear: both;
-	overflow: hidden;
+}
+.wrapper {
+	overflow-y: hidden;
+	overflow-x: scroll;
+	width: 100%;
 }
 .col_1 {
 	margin-left: 50px;		
@@ -126,6 +131,8 @@ li h4 span {
 .map_2 {
 	background-repeat: no-repeat; 	
   	background-position: 20px 40px;	
+  	background-size: contain;
+  	width: 90%;
 }
 .map_1 {
 	background-image: url(../../images/dymaxion_01.png);
@@ -153,9 +160,8 @@ li h4 span {
     font-weight: bold;
 }
 ul#exchanges {
-	overflow-x: scroll;
-    overflow-y: hidden;
-    height: 360px;
+    height: 368px;
+    width: 4300px;
 }
 ul#exchanges li {
 	height: 310px;

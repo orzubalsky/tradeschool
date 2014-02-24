@@ -73,38 +73,42 @@
                 <h2 class="col_1 add_bottom_margin">
                     Each chapter coordinates the exchange of knowledge for barter items and services.
                 </h2>
-                <ul id="exchanges">
-                    {% for registration in exchanges %}
-                    <li>
-                        <h4><strong>{{ registration.course.branch.title }}</strong></h4>
-                        <p>                            
-                            {{ registration.items.all.0|title }}<br />
-                            <strong>for</strong><br />
-                            {{ registration.course.title|title }}
-                        </p>
-                    </li>                        
-                    {% endfor %}                                                                                                  
-                </ul>
+                <div class="wrapper">
+                    <ul id="exchanges">
+                        {% for registration in exchanges %}
+                        <li>
+                            <h4><strong>{{ registration.course.branch.title|title }}</strong></h4>
+                            <p>                            
+                                {{ registration.items.all.0|title }}<br />
+                                <strong>for</strong><br />
+                                {{ registration.course.title|title }}
+                            </p>
+                        </li>                        
+                        {% endfor %}                                                                                                  
+                    </ul>
+                </div>
             </div>            
 
             <div class="section" id="people">
                 <h2 class="col_1 add_bottom_margin">
                     <strong>{{ total_people_count|intcomma }}</strong> people have been in class at Trade School so far.
                 </h2>
-                <ul>
-                    {% for branch in branches %}
-                    {% if branch.course_count > 0 and branch.student_count > 0 and branch.teacher_count > 0 %}
-                    <li>
-                        <h4>{{ branch.title|title }} <span class="year">{{ branch.created|date:"Y" }}</span></h4>
-                        <p>
-                            {{ branch.course_count }} classes<br />
-                            {{ branch.student_count }} students<br />
-                            {{ branch.teacher_count }} teachers<br />
-                        </p>
-                    </li>
-                    {% endif %}                    
-                    {% endfor %}                                    
-                </ul>                
+                <div class="wrapper">
+                    <ul>
+                        {% for branch in branches %}
+                        {% if branch.course_count > 0 and branch.student_count > 0 and branch.teacher_count > 0 %}
+                        <li>
+                            <h4>{{ branch.title|title }} <span class="year">{{ branch.created|date:"Y" }}</span></h4>
+                            <p>
+                                {{ branch.course_count }} classes<br />
+                                {{ branch.student_count }} students<br />
+                                {{ branch.teacher_count }} teachers<br />
+                            </p>
+                        </li>
+                        {% endif %}                    
+                        {% endfor %}                                    
+                    </ul>                
+                </div>
             </div>
 
             <div class="section" id="links">
