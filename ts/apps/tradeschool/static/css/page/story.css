@@ -22,7 +22,7 @@ h1 {
 	font-size: 62.75px;
 	width: 50%;
 	float: left;
-	margin: 50px 0 0 50px;
+	margin: 0 0 0 50px;
 	line-height: 83px;
 }
 h2, p {
@@ -102,6 +102,7 @@ li h4 span {
 	height: 100vh;
 	width: 100%;
 	clear: both;
+	padding: 50px 0 0 0;
 }
 .wrapper {
 	overflow-y: hidden;
@@ -110,7 +111,6 @@ li h4 span {
 }
 .col_1 {
 	margin-left: 50px;		
-	margin-top: 50px;
 	width: 50%;
 	max-width: 576px;
 }
