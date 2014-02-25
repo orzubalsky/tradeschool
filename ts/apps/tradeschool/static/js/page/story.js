@@ -92,9 +92,13 @@ var page = window.page = new function()
         
         var current_scroll_position = $(document).scrollTop();
 
-        var scroll_down = (current_scroll_position > self.last_scroll_value) ? true : false;
+        if (Math.abs(current_scroll_position - self.last_scroll_value) > 10)
+        {
 
-        self.scroll_to(self.get_target_scroll_position(scroll_down));
+            var scroll_down = (current_scroll_position > self.last_scroll_value) ? true : false;
+
+            self.scroll_to(self.get_target_scroll_position(scroll_down));            
+        }
     };
 
     this.scroll_to = function(top_value)
