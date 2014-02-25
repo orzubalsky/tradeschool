@@ -96,9 +96,9 @@
                 <div class="wrapper">
                     <ul>
                         {% for branch in branches %}
-                        {% if branch.course_count > 1 and branch.student_count > 1 and branch.teacher_count > 1 %}
+                        {% if branch.course_count > 3 and branch.student_count > 3 and branch.teacher_count > 3 %}
                         <li>
-                            <h4>{{ branch.title|title }}</h4>
+                            <h4>{{ branch.title|title }} <span class="year">since {{ branch.created|date:"Y" }}</span></h4>
                             <p>
                                 {{ branch.course_count }} classes<br />
                                 {{ branch.student_count }} students<br />
