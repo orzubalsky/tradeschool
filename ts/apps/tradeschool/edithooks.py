@@ -11,7 +11,6 @@ class CollectStaticFilesHook(TemplatesAdminHook):
 
     @classmethod
     def post_save(cls, request, form, template_path):
-        print "calling collectstatic"
         call_command('collectstatic', interactive=False)
 
     @classmethod
