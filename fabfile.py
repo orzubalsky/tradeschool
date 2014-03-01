@@ -158,7 +158,7 @@ def update_db():
 def update_static_files():
     # run the django command to update static files
     with cd(env.project_dir):
-        sudo('./bin/django collectstatic --verbosity 3', user=env.username)
+        sudo('./bin/django collectstatic --noinput --verbosity 3', user=env.username)
 
 
 @task

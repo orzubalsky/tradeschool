@@ -219,6 +219,11 @@ TEMPLATESADMIN_GROUP = 'translators'
 TEMPLATESADMIN_TEMPLATE_DIRS = (
     BRANCH_TEMPLATE_DIR,
 )
+TEMPLATESADMIN_EDITHOOKS = (
+    'templatesadmin.edithooks.dotbackupfiles.DotBackupFilesHook',
+    'tradeschool.edithooks.CollectStaticFilesHook',
+)
+
 
 DATETIME_INPUT_FORMATS = (
     '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
