@@ -244,7 +244,7 @@ TIME_INPUT_FORMATS = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(PROJECT_DIR, 'apps', 'tradeschool', 'locale'),
+    os.path.join(PROJECT_DIR, 'apps', 'tradeschool', 'locale/'),
 )
 
 # You can find more languages that Django supports
