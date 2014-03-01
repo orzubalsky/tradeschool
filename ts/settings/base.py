@@ -243,6 +243,10 @@ TIME_INPUT_FORMATS = (
     '%I:%M %p'       # '2:30PM'
 )
 
+LOCALE_PATHS = (
+    os.path.join(PROJECT_DIR, 'apps', 'tradeschool', 'locale'),
+)
+
 # You can find more languages that Django supports
 # at http://www.i18nguy.com/unicode/language-identifiers.html
 
