@@ -20,7 +20,7 @@ var page = window.page = new function()
         this.last_scroll_value = Math.round($(document).scrollTop());
         this.total_height = $(document).height();
 
-        $('.section').css({'height': this.page_height + 'px'});
+        $('.section').css({'height': this.page_height + 'px', 'max-height': this.page_height});
 
         this.navigation_buttons_display(this.last_scroll_value);
         this.navigation();

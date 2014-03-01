@@ -111,8 +111,8 @@ li h4 span {
 }
 .col_1 {
 	margin-left: 50px;		
-	width: 50%;
-	max-width: 576px;
+	min-width: 50%;
+	max-width: 70%;
 }
 .add_bottom_margin {
 	margin-bottom: 50px;
