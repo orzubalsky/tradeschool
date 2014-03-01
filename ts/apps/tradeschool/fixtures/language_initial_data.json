@@ -14,7 +14,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:02Z", 
-        "code": "es_es", 
+        "code": "es-ES", 
         "is_active": true, 
         "created": "2014-01-25T21:14:02Z"
     }
@@ -24,7 +24,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:11Z", 
-        "code": "es_mx", 
+        "code": "es-MX", 
         "is_active": true, 
         "created": "2014-01-25T21:14:11Z"
     }
@@ -34,19 +34,9 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:15Z", 
-        "code": "es_us", 
+        "code": "es-US", 
         "is_active": true, 
         "created": "2014-01-25T21:14:15Z"
-    }
-},
-{
-    "pk": 5, 
-    "model": "tradeschool.language", 
-    "fields": {
-        "updated": "2014-01-25T21:14:22Z", 
-        "code": "es_us", 
-        "is_active": true, 
-        "created": "2014-01-25T21:14:22Z"
     }
 },
 {
@@ -54,7 +44,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:25Z", 
-        "code": "es_ar", 
+        "code": "es-AR", 
         "is_active": true, 
         "created": "2014-01-25T21:14:25Z"
     }
@@ -64,7 +54,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:31Z", 
-        "code": "es_cl", 
+        "code": "es-CL", 
         "is_active": true, 
         "created": "2014-01-25T21:14:31Z"
     }
@@ -74,7 +64,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:35Z", 
-        "code": "es_ec", 
+        "code": "es-EC", 
         "is_active": true, 
         "created": "2014-01-25T21:14:35Z"
     }
@@ -84,7 +74,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:38Z", 
-        "code": "es_pr", 
+        "code": "es-PR", 
         "is_active": true, 
         "created": "2014-01-25T21:14:38Z"
     }
@@ -94,7 +84,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:42Z", 
-        "code": "es_ve", 
+        "code": "es-VE", 
         "is_active": true, 
         "created": "2014-01-25T21:14:42Z"
     }
@@ -104,7 +94,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:48Z", 
-        "code": "de_de", 
+        "code": "de-DE", 
         "is_active": true, 
         "created": "2014-01-25T21:14:48Z"
     }
@@ -114,7 +104,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:51Z", 
-        "code": "ms_sg", 
+        "code": "ms-SG", 
         "is_active": true, 
         "created": "2014-01-25T21:14:51Z"
     }
@@ -124,7 +114,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:56Z", 
-        "code": "zh_sg", 
+        "code": "zh-SG", 
         "is_active": true, 
         "created": "2014-01-25T21:14:56Z"
     }
@@ -134,7 +124,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:14:59Z", 
-        "code": "it_it", 
+        "code": "it-IT", 
         "is_active": true, 
         "created": "2014-01-25T21:14:59Z"
     }
@@ -154,7 +144,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:15:07Z", 
-        "code": "fr_fr", 
+        "code": "fr", 
         "is_active": true, 
         "created": "2014-01-25T21:15:07Z"
     }
@@ -164,7 +154,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:15:10Z", 
-        "code": "nl_nl", 
+        "code": "nl-NL", 
         "is_active": true, 
         "created": "2014-01-25T21:15:10Z"
     }
@@ -184,7 +174,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:15:17Z", 
-        "code": "pt_br", 
+        "code": "pt-BR", 
         "is_active": true, 
         "created": "2014-01-25T21:15:17Z"
     }
@@ -194,7 +184,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:15:22Z", 
-        "code": "el_gr", 
+        "code": "el-GR", 
         "is_active": true, 
         "created": "2014-01-25T21:15:22Z"
     }
@@ -204,7 +194,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:15:27Z", 
-        "code": "zh_cn", 
+        "code": "zh-CN", 
         "is_active": true, 
         "created": "2014-01-25T21:15:27Z"
     }
@@ -224,7 +214,7 @@
     "model": "tradeschool.language", 
     "fields": {
         "updated": "2014-01-25T21:15:36Z", 
-        "code": "ta_sg", 
+        "code": "ta-SG", 
         "is_active": true, 
         "created": "2014-01-25T21:15:36Z"
     }
