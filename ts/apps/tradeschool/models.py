@@ -247,7 +247,9 @@ class Email(Model):
             A string with the rendered Template content's
         """
         # turn autoescape off in the template
-        content_with_tag = '{% autoescape off %}' + self.content + '{% endautoescape %}'
+        tz_tag = '{% timezone "' + course_obj.branch.timezone + '" %}'
+
+        content_with_tag = '{% load tz %}' + tz_tag + '{% autoescape off %}' + self.content + '{% endautoescape %} {% endtimezone %}'
 
         # instantiate a temlate with the email's content
         template = Template(content_with_tag)
@@ -2293,7 +2295,7 @@ class Course(ScheduledEvent):
         """
         Returns URL for teachers to edit a scheduled class.
         """
-        return "http://%s%s" % (
+        return "http://%s%s/" % (
             self.branch.domain, reverse_lazy('course-edit', kwargs={
                 'branch_slug': self.branch.slug,
                 'course_slug': self.slug,
