@@ -2554,6 +2554,19 @@ class Course(ScheduledEvent):
                     # email teacher if the course was approved to let them know
                     self.email_teacher(self.teacherclassapproval)
 
+                # compare the pre-saved status with the current status
+                if original.status != self.status \
+                        and self.status == 'rejected':
+
+                    # recreate the time slot
+                    time = Time(
+                        start_time=self.start_time,
+                        end_time=self.end_time,
+                        venue=self.venue,
+                        branch=self.branch
+                    )
+                    time.save()
+
             except Course.DoesNotExist:
                 pass
 
