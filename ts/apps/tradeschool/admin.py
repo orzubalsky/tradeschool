@@ -988,7 +988,7 @@ class VenueAdmin(BaseAdmin):
         }),
         # Translators: This is the a header in the branch admin form
         (_('Additional Info'), {
-            'fields': ('capacity', 'resources', 'branch',)
+            'fields': ('capacity', 'resources', 'directions', 'branch',)
         }),
     )
     actions = [
@@ -1000,6 +1000,7 @@ class VenueAdmin(BaseAdmin):
             'country',
             'capacity',
             'resources',
+            'directions',
             'created',
             'is_active'
         ]),
@@ -1702,7 +1703,7 @@ class ApprovedCourseAdmin(CourseAdmin):
         # by clicking on "save and continue editing"
         if (isinstance(response, HttpResponseRedirect) and '_continue' in request.POST):
 
-            if obj.status is not 'approved':
+            if obj.status == 'pending':
                 url = reverse(
                     'admin:tradeschool_pendingcourse_change',
                     args=(obj.pk,)

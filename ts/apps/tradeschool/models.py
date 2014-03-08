@@ -1203,7 +1203,7 @@ class Venue(Location):
     branch = ForeignKey(
         Branch,
         verbose_name=_("branch"),
-        help_text="What branch of TS is this venue related to?"
+        help_text=_("What branch of TS is this venue related to?")
     )
     address_1 = CharField(
         max_length=200,
@@ -1224,6 +1224,15 @@ class Venue(Location):
         default="For Example: Chairs, Tables",
         # Translators: Contextual Help
         help_text=_("What resources are available at the space?")
+    )
+    directions = TextField(
+        verbose_name=_("Directions"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Include directions for getting to the space, parking "
+            "information, etc"
+        )
     )
     color = CharField(
         verbose_name=_("color"),
