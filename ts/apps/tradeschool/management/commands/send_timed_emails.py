@@ -14,7 +14,9 @@ class Command(BaseCommand):
 
         courses = Course.objects.filter(
             start_time__gte=(start_date - timedelta(days=14)),
-            end_time__lte=(start_date + timedelta(days=14))
+            end_time__lte=(start_date + timedelta(days=14)),
+            status='approved',
+            is_active=True
         )
 
         self.stdout.write(
