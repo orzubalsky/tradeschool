@@ -21,7 +21,7 @@ from django.core.mail import EmailMessage
 #from django_mailer import send_mail
 from django.template import Context
 from django.template import Template
-from django_countries import CountryField
+from django_countries.fields import CountryField
 from tinymce.models import HTMLField
 from datetime import *
 from tradeschool.utils import copy_model_instance, unique_slugify

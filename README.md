@@ -14,19 +14,16 @@ When installing locally, use development.cfg. Otherwise, fab is used to install 
 
 To install locally:
 
-1. $ python bootstrap.py -c development.cfg
-2. $ ./bin/buildout -c development.cfg
-3. edit settings/development.py with database info and local paths
-4. $ ./bin/django syncdb
-5. $ ./bin/django migrate
-6. $ ./bin/django loaddata email_initial_data.json pages_initial_data.json group_initial_data.json language_initial_data.json teacher-info.json
-7. (optional) ./bin/django loaddata sample_data.json
+    ./dev/setup_dev.sh
+
 
 To run locally:
-$ ./bin/django runserver
 
-To test:
-$ ./bin/django test tradeschool -v 2
+    ./bin/django runserver
+
+To run tests:
+
+    ./bin/django test tradeschool -v 2
 
 
 To install remotely:
