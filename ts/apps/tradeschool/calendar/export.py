@@ -44,14 +44,17 @@ def course_to_event(course):
     })
 
 
-def build_calendar_for_courses(courses):
+def build_calendar_for_courses(courses, domain):
     """Build an icalendar from a list of Courses.
 
     :param courseis: list of :class:`tradeschool.model.Course`
     :returns: :class:`icalendar.Calendar`
     """
 
-    cal = Calendar(version='2.0', prodid='-//TradeSchool.coop//Export//EN')
+    cal = Calendar(
+        version='2.0',
+        prodid='-//{domain}//Calendar Export//'.format(domain=domain)
+    )
     for course in courses:
         cal.add_component(course_to_event(course))
     return cal

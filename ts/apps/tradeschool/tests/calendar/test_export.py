@@ -63,12 +63,15 @@ class CalendarExportTestCase(TestCase):
 
     def test_build_calendar_for_courses(self):
         courses = [build_course(1), build_course(2)]
-        calendar = export.build_calendar_for_courses(courses).to_ical()
+        calendar = export.build_calendar_for_courses(
+            courses,
+            'TradeSchool.coop'
+        ).to_ical()
 
         expected = [
             'BEGIN:VCALENDAR\r',
             'VERSION:2.0\r',
-            'PRODID:-//TradeSchool.coop//Export//EN\r',
+            'PRODID:-//TradeSchool.coop//Calendar Export//\r',
         ]
         self.assertSequenceEqual(calendar.split('\n')[:3], expected)
         self.assertIn(

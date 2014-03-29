@@ -300,6 +300,14 @@ class BranchTestCase(TestCase):
         # verify the branch is in the view
         self.assertContains(response, self.branch.slug)
 
+    def test_event_calendar(self):
+        branch = Branch.objects.all()[0]
+        url = reverse('event-calendar', kwargs={'branch_slug': branch.slug})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/calendar')
+        self.assertIn('BEGIN:VCALENDAR', response.content)
+
     def tearDown(self):
         """ Delete branch files in case something went wrong
             and the files weren't deleted.
