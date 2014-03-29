@@ -42,5 +42,7 @@
     {% endwith %}
 
 {% endfor %}
+    <a href="webcal://{{branch.domain}}{% url 'event-calendar' branch_slug=branch.slug %}">
+        Export iCal</a>
 </div>
 {% endblock main_content %}
