@@ -83,7 +83,10 @@ class EmailTestCase(TestCase):
         """ Compares the data from the email message in the mail outbox
             and the Email object.
         """
-        self.assertEqual(message_obj.from_email, self.branch.email)
+        self.assertEqual(
+            message_obj.extra_headers['Reply-To'],
+            self.branch.email
+        )
         self.assertEqual(message_obj.subject, email_obj.subject)
         self.assertEqual(
             message_obj.body,
