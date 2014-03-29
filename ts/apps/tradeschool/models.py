@@ -2312,6 +2312,19 @@ class Course(ScheduledEvent):
         )
 
     @property
+    def course_view_url(self):
+        """
+        Returns the URL for viewing the details about a scheduled class.
+        """
+        return "http://%s%s/" % (
+            self.branch.domain,
+            reverse_lazy('course-view', kwargs={
+                'branch_slug': self.branch.slug,
+                'course_slug': self.slug,
+            })
+        )
+
+    @property
     def is_past(self):
         """
         Returns True if the course would be a PastCourse.
