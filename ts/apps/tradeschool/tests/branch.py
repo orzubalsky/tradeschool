@@ -215,15 +215,6 @@ class BranchTestCase(TestCase):
             branch.language = language_code
             branch.save()
 
-            # it's not possible to use translation.activate
-            # in the context of a unittest-
-            # what happens is that once a get/post request is made,
-            # django calls translation.activate with the language
-            # that's defined in settings (or the testcase's settings override).
-            # This means we can't really test the language switching
-            # unless we override the settings.
-            settings.LANGUAGE_CODE = language_code
-
             # load a page to check the language setting
             response = self.client.get(url)
 
