@@ -1,6 +1,7 @@
 *.pyc
 *~
 .DS_Store
+.*.swp
 
 # ignore buildout's workspace stuff:
 .installed.cfg
@@ -32,3 +33,6 @@ ts/apps/tradeschool/fixtures/migration.json
 
 # ignore branch template files (for now)
 ts/apps/branches/
+
+# ignore dev database
+dev-database.sqlite3
