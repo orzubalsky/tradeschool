@@ -1,5 +1,7 @@
 ## Trade School Everywhere ##
 
+[![Travis Build Status](https://travis-ci.org/orzubalsky/tradeschool.svg?branch=master)](https://travis-ci.org/orzubalsky/tradeschool)
+
 
 ### Installation ###
 

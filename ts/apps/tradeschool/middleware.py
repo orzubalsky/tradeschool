@@ -1,12 +1,12 @@
-import ast
 from django.utils import timezone, translation
 from django.core.urlresolvers import resolve
+import simplejson
+
 from tradeschool.models import *
 
 
 class BranchMiddleware(object):
     def process_request(self, request):
-
         try:
             url = resolve(request.path)
 
@@ -19,10 +19,7 @@ class BranchMiddleware(object):
                request.method == 'POST' and
                request.is_ajax()):
 
-                # the incoming data from Dajaxice looks like
-                # a Python dictionary, but it's a string.
-                # We're parsing it using the ast library
-                ajax_dict = ast.literal_eval(request.POST.dict()['argv'])
+                ajax_dict = simplejson.loads(request.POST.dict()['argv'])
 
                 # after that we can get the branch_slug value,
                 # like from any other dictionary
