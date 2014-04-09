@@ -2316,7 +2316,7 @@ class Course(ScheduledEvent):
         """
         Returns the URL for viewing the details about a scheduled class.
         """
-        return "http://%s%s/" % (
+        return "http://%s%s" % (
             self.branch.domain,
             reverse_lazy('course-view', kwargs={
                 'branch_slug': self.branch.slug,
