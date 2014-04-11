@@ -568,6 +568,11 @@ body.global {
 	font-weight: bold;
 }
 
+
+#classPopup #popupHeader a {
+    color: #fff;
+}
+
 #classPopup #popupBody {
 	text-align: left;
 	padding: 20px;

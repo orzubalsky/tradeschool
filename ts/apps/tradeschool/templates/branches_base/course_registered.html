@@ -9,14 +9,12 @@
             <h3>{{ registration.course.title }}</h3>
             {{ registration.course.start_time|date:"M j, Y"|localize }}<br />
             at <strong>{{ registration.course.start_time|date:"g:ia"|localize }}</strong><br />
+
+            {% block export_class_calendar %}
+                <a href="{% url 'course-calendar' branch_slug=registration.course.branch.slug course_slug=registration.course.slug %}">Add this class to your calendar</a>
+            {% endblock export_class_calendar %}
+
         </div>
-
-        {% block export_calendar %}
-            <a href="{% url 'course-calendar'
-                    branch_slug=registration.course.branch.slug
-                    course_slug=registration.course.slug %}">Add this class to your calendar</a>
-        {% endblock export_calendar %}
-
         {% endblock registration_complete_header %}        
         
         {% block registration_complete_body %}

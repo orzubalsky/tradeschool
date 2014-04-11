@@ -202,7 +202,7 @@ def course_calendar(request, course_slug=None, branch_slug=None):
     course = get_object_or_404(
         Course, slug=course_slug, branch__slug=branch_slug)
 
-    calendar = export.build_calendar_for_courses([course], branch.domain)
+    calendar = export.build_calendar_for_courses([course], course.branch.domain)
     return HttpResponse(calendar.to_ical(), content_type="text/calendar")
 
 
