@@ -14,11 +14,12 @@ urlpatterns = patterns(
     url(r'class/(?P<course_slug>[0-9A-Za-z\-_]+)/unregister/(?P<student_slug>[0-9A-Za-z\-_]*)$', 'course_unregister', name='course-unregister'),
     url(r'class/(?P<course_slug>[0-9A-Za-z\-_]+)/edit$', 'course_edit', name='course-edit'),
     url(r'class/(?P<course_slug>[0-9A-Za-z\-_]+)/feedback/(?P<feedback_type>[0-9A-Za-z\-_]+)$', 'course_feedback', name='course-feedback'),
+    url(r'class/(?P<course_slug>[0-9A-Za-z\-_]+)/ical$', 'course_calendar', name='course-calendar'),
     url(r'class/(?P<course_slug>[0-9A-Za-z\-_]+)/$', 'course_view', name='course-view'),
     url(r'class/$', 'redirect_to_course_list', name='redirect-to-course-list'),
     url(r'class$', 'redirect_to_course_list', name='redirect-to-course-list'),
     url(r'page/(?P<url>.*)$', 'branch_page', name='branch-page'),
     url(r'page/(?P<url>.*)/$', 'branch_page', name='branch-page'),
-    url(r'event_calendar/?$', 'event_calendar', name='event-calendar'),
+    url(r'calendar/?$', 'branch_calendar', name='branch-calendar'),
     url(r'$', 'course_list', name='course-list'),
 )

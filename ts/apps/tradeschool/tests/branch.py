@@ -283,9 +283,9 @@ class BranchTestCase(TestCase):
         # verify the branch is in the view
         self.assertContains(response, self.branch.slug)
 
-    def test_event_calendar(self):
+    def test_branch_calendar(self):
         branch = Branch.objects.all()[0]
-        url = reverse('event-calendar', kwargs={'branch_slug': branch.slug})
+        url = reverse('branch-calendar', kwargs={'branch_slug': branch.slug})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'text/calendar')

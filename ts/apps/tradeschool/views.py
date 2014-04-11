@@ -197,6 +197,10 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
     }, context_instance=RequestContext(request), mimetype=mimetype)
 
 
+def course_calendar(request, branch_slug=None):
+    pass
+
+
 def teacher_info(request, branch_slug=None):
     """
     display a content page with information for prospective teachers.
@@ -560,8 +564,8 @@ def branch_page(request, url, branch_slug=None):
     }, context_instance=RequestContext(request))
 
 
-def event_calendar(request, branch_slug=None):
-    """Display a calendar of events in iCalendar format.
+def branch_calendar(request, branch_slug=None):
+    """Display a calendar of events for a branch in iCalendar format.
     """
     branch = get_object_or_404(Branch, slug=branch_slug)
     courses = branch.course_set.public().approved()
