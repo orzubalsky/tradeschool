@@ -197,8 +197,13 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
     }, context_instance=RequestContext(request), mimetype=mimetype)
 
 
-def course_calendar(request, branch_slug=None):
-    pass
+def course_calendar(request, course_slug=None, branch_slug=None):
+    """Display an ical for with a single course."""
+    course = get_object_or_404(
+        Course, slug=course_slug, branch__slug=branch_slug)
+
+    calendar = export.build_calendar_for_courses([course], branch.domain)
+    return HttpResponse(calendar.to_ical(), content_type="text/calendar")
 
 
 def teacher_info(request, branch_slug=None):
