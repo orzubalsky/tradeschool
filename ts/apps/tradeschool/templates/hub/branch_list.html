@@ -7,7 +7,7 @@
 {% block header %}
 <div id="headerBoard">
     Barter for knowledge
-</div>    
+</div>
 {% endblock header %}
 
 {% block intro %}
@@ -15,13 +15,13 @@
     <h2><strong>Trade School</strong> celebrates practical wisdom, mutual respect, and the social nature of exchange. <a href="">Read More.</a></h2>
 
     <div id="headerEmail">
-        <p>Join our mailing list:</p>       
+        <p>Join our mailing list:</p>
         <form id="mailinglist" action="http://carolinewoolard.createsend.com/t/r/s/qukiuh/" method="post" id="subForm">
             <input type="text" name="cm-qukiuh-qukiuh" id="qukiuh-qukiuh" class="emailField">
             <input type="submit" value="GO" class="emailButton">
         </form>
     </div>
-</div>    
+</div>
 {% endblock intro %}
 
 {% block branch-list %}
@@ -33,23 +33,23 @@
             <div class="branchHeader">
                 <h3>
                     {% if branch.branch_status == 'in_session' %}
-                    <a href="{% url 'course-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>    
+                    <a href="{% url 'course-list' branch_slug=branch.slug %}">{{ branch.title|title }}</a>
                     {%else %}
                     {{ branch.title|title }}
                     {% endif %}
-                    
+
                 </h3>
             </div>
         </div>
-    </div>        
+    </div>
     {% endfor %}
 </div>
 {% endblock branch-list %}
 
 {% block start-a-tradeschool %}
 <div id="start">
-    <p>Want to <a href="">start a Trade School in your city?</a></p>
-</div>    
+    <p>Want to <a href="/start-a-tradeschool/">start a Trade School in your city?</a></p>
+</div>
 {% endblock start-a-tradeschool %}
 
 {% block course-list %}
@@ -62,8 +62,8 @@
     {% if branch.course_set.approved.public %}
         <div class="branchDivider">
     	    <h4 class="branchTitle">{{ branch.title|title }}</h4>
-        </div>    
-    
+        </div>
+
         {% for course in branch.course_set.approved.public %}
 
         <div id="{{ course.slug }}" class="aClass venue{{ course.venue.title }}">
@@ -87,19 +87,19 @@
                     {% for item in course.barteritem_set.all %}
                         {{ item.title }}<br />
                     {% endfor %}
-                    </p>          
+                    </p>
                     <h4 class="teacher">
                         {% blocktrans %}About the teacher{% endblocktrans %}, <a href="{{ course.teacher.website }}" target="_blank">{{ course.teacher.fullname }}</a>
                     </h4>
                     <p class="description">
                         {{ course.teacher.bio }}
                     </p>
-                    <a class="join fromHub" id="{{ course.slug }}" href="{% url 'course-view' branch_slug=branch.slug course_slug=course.slug %}" title="view {{ course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>                    
+                    <a class="join fromHub" id="{{ course.slug }}" href="{% url 'course-view' branch_slug=branch.slug course_slug=course.slug %}" title="view {{ course.title }}">{% blocktrans context "Go to class button" %}GO TO CLASS{% endblocktrans %}</a>
                 </div>
             </div>
         </div>
-        {% endfor %}   
-    {% endif %} 
+        {% endfor %}
+    {% endif %}
     {% endfor %}
     </div>
 </div>
