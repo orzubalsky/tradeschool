@@ -197,6 +197,15 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
     }, context_instance=RequestContext(request), mimetype=mimetype)
 
 
+def course_calendar(request, course_slug=None, branch_slug=None):
+    """Display an ical for with a single course."""
+    course = get_object_or_404(
+        Course, slug=course_slug, branch__slug=branch_slug)
+
+    calendar = export.build_calendar_for_courses([course], course.branch.domain)
+    return HttpResponse(calendar.to_ical(), content_type="text/calendar")
+
+
 def teacher_info(request, branch_slug=None):
     """
     display a content page with information for prospective teachers.
@@ -560,8 +569,8 @@ def branch_page(request, url, branch_slug=None):
     }, context_instance=RequestContext(request))
 
 
-def event_calendar(request, branch_slug=None):
-    """Display a calendar of events in iCalendar format.
+def branch_calendar(request, branch_slug=None):
+    """Display a calendar of events for a branch in iCalendar format.
     """
     branch = get_object_or_404(Branch, slug=branch_slug)
     courses = branch.course_set.public().approved()
