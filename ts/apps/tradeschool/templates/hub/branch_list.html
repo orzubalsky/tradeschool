@@ -12,7 +12,7 @@
 
 {% block intro %}
 <div id="intro">
-    <h2><strong>Trade School</strong> celebrates practical wisdom, mutual respect, and the social nature of exchange. <a href="">Read More.</a></h2>
+    <h2><strong>Trade School</strong> celebrates practical wisdom, mutual respect, and the social nature of exchange. <a href="/about/">Read More.</a></h2>
 
     <div id="headerEmail">
         <p>Join our mailing list:</p>
@@ -48,7 +48,7 @@
 
 {% block start-a-tradeschool %}
 <div id="start">
-    <p>Want to <a href="/start-a-tradeschool/">start a Trade School in your city?</a></p>
+    <p>Want to <a href="{% url 'start-a-tradeschool' %}">start a Trade School in your city?</a></p>
 </div>
 {% endblock start-a-tradeschool %}
 
