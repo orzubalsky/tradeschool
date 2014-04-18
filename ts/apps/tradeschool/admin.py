@@ -1147,6 +1147,7 @@ class OrganizerAdmin(PersonAdmin):
         'is_student',
         'is_teacher',
         'is_staff',
+        'is_active',
         'bio',
         'default_branch',
         'branches',
