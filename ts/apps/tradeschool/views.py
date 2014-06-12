@@ -616,7 +616,7 @@ def start_a_tradeschool(request):
                     Organizer, organizer.fullname)
 
                 organizer_data['username'] = organizer.fullname
-                organizer_data['is_active'] = False
+                organizer_data['is_active'] = True
                 organizer_data['is_staff'] = True
 
                 # save organizer
@@ -626,8 +626,8 @@ def start_a_tradeschool(request):
 
                 # add an organizer-branch relationship to the current branch
                 organizer.branches.add(branch)
+                organizer.branches_organized.add(branch)
                 organizer.groups.add(Group.objects.get(name='translators'))
-                branch.organizers.add(organizer)
 
                 return HttpResponseRedirect(reverse_lazy(
                     branch_submitted,
