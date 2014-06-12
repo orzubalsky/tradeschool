@@ -10,23 +10,24 @@ def _build_uid_for_course(course):
     """Construct an event UID from a :class:`tradeschool.models.Course`.
     """
     return "{label}-{id}@{site}".format(
-            label=unicode(course.slug),
-            id=course.id,
-            site=course.branch.site.domain)
+        label=unicode(course.slug),
+        id=course.id,
+        site=course.branch.site.domain)
 
 
 def _build_location_for_venue(venue):
     return "{title}, {address} {city}, {state}, {country}".format(
-            title=unicode(venue.title),
-            address=unicode(venue.address_1),
-            state=unicode(venue.state),
-            city=unicode(venue.city),
-            country=unicode(venue.country)
+        title=unicode(venue.title),
+        address=unicode(venue.address_1),
+        state=unicode(venue.state),
+        city=unicode(venue.city),
+        country=unicode(venue.country)
+    )
 
 
 def course_to_event(course):
     """Convert a Course into a icalendar event.
-    
+
     :param course: a :class:`tradeschool.models.Course` to export as an Event
     :returns: :class:`icalendar.Event`
     """
