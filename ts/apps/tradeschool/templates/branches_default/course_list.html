@@ -43,4 +43,7 @@
 
 {% endfor %}
 </div>
+{% block export_calendar %}
+    {{ block.super }}
+{% endblock export_calendar %}
 {% endblock main_content %}

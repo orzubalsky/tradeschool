@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.http import HttpResponse
 from django.http import HttpResponsePermanentRedirect
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse_lazy
@@ -9,6 +10,8 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.db import IntegrityError
+
+from tradeschool.calendar import export
 from tradeschool.utils import unique_slugify, branch_templates
 from tradeschool.models import *
 from tradeschool.forms import *
@@ -192,6 +195,15 @@ def course_register(request, branch_slug=None, course_slug=None, data=None):
         'templates': view_templates,
         'popup_container_class': popup_container_class
     }, context_instance=RequestContext(request), mimetype=mimetype)
+
+
+def course_calendar(request, course_slug=None, branch_slug=None):
+    """Display an ical for with a single course."""
+    course = get_object_or_404(
+        Course, slug=course_slug, branch__slug=branch_slug)
+
+    calendar = export.build_calendar_for_courses([course], course.branch.domain)
+    return HttpResponse(calendar.to_ical(), content_type="text/calendar")
 
 
 def teacher_info(request, branch_slug=None):
@@ -555,6 +567,15 @@ def branch_page(request, url, branch_slug=None):
         'page': page,
         'templates': view_templates
     }, context_instance=RequestContext(request))
+
+
+def branch_calendar(request, branch_slug=None):
+    """Display a calendar of events for a branch in iCalendar format.
+    """
+    branch = get_object_or_404(Branch, slug=branch_slug)
+    courses = branch.course_set.public().approved()
+    calendar = export.build_calendar_for_courses(courses, branch.domain)
+    return HttpResponse(calendar.to_ical(), content_type="text/calendar")
 
 
 def start_a_tradeschool(request):

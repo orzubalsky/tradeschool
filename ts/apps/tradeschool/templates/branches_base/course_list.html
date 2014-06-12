@@ -21,4 +21,10 @@
 
 {% endfor %}
 </div>
+{% block export_calendar %}
+    <div class="exportCalendar">
+        <a href="webcal://{{branch.domain}}{% url 'branch-calendar' branch_slug=branch.slug %}">
+            Export class list as iCalendar</a>
+    </div>
+{% endblock export_calendar %}
 {% endblock main_content %}

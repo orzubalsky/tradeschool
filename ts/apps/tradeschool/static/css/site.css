@@ -352,10 +352,13 @@ body.global {
 }
 
 /* Class list ---------------------------------------------------------------------------- */
-.classes{
+.classes, .exportCalendar {
   float: left;
   width: 100%;
   margin: 40px auto;
+}
+.exportCalendar a:hover {
+    color: #555;
 }
 .dateDivider {
 	border-top: 5px solid #000;
@@ -563,6 +566,11 @@ body.global {
 	color: #fff;
 	font: 1.5em/ 1.25em Helvetica, Arial, sans-serif;
 	font-weight: bold;
+}
+
+
+#classPopup #popupHeader a {
+    color: #fff;
 }
 
 #classPopup #popupBody {
