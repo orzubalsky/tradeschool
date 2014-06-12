@@ -10,18 +10,18 @@ def _build_uid_for_course(course):
     """Construct an event UID from a :class:`tradeschool.models.Course`.
     """
     return "{label}-{id}@{site}".format(
-        label=unicode(course.slug),
+        label=course.slug,
         id=course.id,
         site=course.branch.site.domain)
 
 
 def _build_location_for_venue(venue):
     return "{title}, {address} {city}, {state}, {country}".format(
-        title=unicode(venue.title),
-        address=unicode(venue.address_1),
-        state=unicode(venue.state),
-        city=unicode(venue.city),
-        country=unicode(venue.country)
+        title=venue.title.encode('utf8'),
+        address=venue.address_1.encode('utf8'),
+        state=venue.state.encode('utf8'),
+        city=venue.city.encode('utf8'),
+        country=venue.country.encode('utf8')
     )
 
 
@@ -34,13 +34,13 @@ def course_to_event(course):
     return Event(**{
         'uid': vText(_build_uid_for_course(course)),
         'created': vDatetime(course.created),
-        'description': vText(unicode(course.description)),
+        'description': vText(course.description.encode('utf8')),
         'dtstart': vDatetime(course.start_time),
         'dtend': vDatetime(course.end_time),
         'last-mod': vDatetime(course.updated),
         'dtstamp': vDatetime(datetime.datetime.now()),
         'location': vText(_build_location_for_venue(course.venue)),
-        'summary': vText(unicode(course.title)),
+        'summary': vText(course.title.encode('utf8')),
         'url': vUri(course.course_view_url),
     })
 
