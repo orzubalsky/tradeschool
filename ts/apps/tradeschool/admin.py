@@ -670,12 +670,17 @@ class BranchAdmin(BaseAdmin):
         """
         Filter to Branches that are organized by the logged in user.
         """
-        return super(BranchAdmin, self).queryset(
-            request,
-            (
+        # Trade School Everywhere organizers get to see all data,
+        if request.user.is_giving_support:
+            qs = super(BranchAdmin, self).queryset(request, Q())
+
+        else:
+            qs = super(BranchAdmin, self).queryset(
+                request,
                 Q(pk=request.user.default_branch.pk)
             )
-        )
+
+        return qs
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """
