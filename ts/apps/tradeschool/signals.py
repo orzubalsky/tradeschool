@@ -39,6 +39,10 @@ def branch_save_callback(sender, instance, **kwargs):
         except Page.DoesNotExist:
             instance.copy_teacher_info_page()
 
+    # add TSE organizers (is_giving_support=True) to newly added pending branch.
+    if kwargs.get('created') and instance.branch_status is 'pending':
+        instance.add_support_orgazniers()
+
 
 @receiver(post_save, sender=Course, dispatch_uid="ts.apps.tradeschool.signals")
 @receiver(post_save, sender=PastCourse, dispatch_uid="ts.apps.tradeschool.signals")

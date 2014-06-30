@@ -1097,6 +1097,15 @@ class Branch(Location):
 
         os.rename(old_dirname, new_dirname)
 
+    def add_support_orgazniers(self):
+        """
+        Add all Organizers with is_giving_support status
+        as orgazniers of the Branch.
+        """
+        for organizer in Organizer.objects.filter(
+                is_giving_support=True, is_active=True):
+            self.organizers.add(organizer)
+
     def save(self, *args, **kwargs):
         """
         Check to see if the slug field's value has been changed.
