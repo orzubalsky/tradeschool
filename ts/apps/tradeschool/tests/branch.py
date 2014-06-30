@@ -61,6 +61,17 @@ class BranchTestCase(TestCase):
             'photo_set-INITIAL_FORMS': 0,
             'photo_set-MAX_NUM_FORMS': 1000,
         }
+        self.pending_branch_add_url = '/start-a-tradeschool/'
+        self.pending_branch_data = {
+            'organizer-fullname': 'test new organizer',
+            'organizer-names_of_co_organizers': 'another test new organizer',
+            'organizer-email': 'test@neworganizer.com',
+            'organizer-bio': 'hello',
+            'branch-city': 'pending branch town',
+            'branch-state': 'AZ',
+            'branch-country': 'AU'
+        }
+        self.pending_branch_empty_form = {}
         self.branch = Branch(
             title=self.branch_data['title'],
             city=self.branch_data['city'],
@@ -106,6 +117,83 @@ class BranchTestCase(TestCase):
         # )
         self.assertTemplateUsed('admin/change_list.html')
         self.assertEqual(response.status_code, 200)
+
+    def compare_branch_to_data(self, branch_obj, organizer_obj):
+        """
+        Asserts that the objects that were created after
+        a successful pending branch submission match
+        the data that was used in the forms.
+        """
+        self.assertEqual(
+            branch_obj.title,
+            self.pending_branch_data['branch-city']
+        )
+        self.assertEqual(
+            branch_obj.city,
+            self.pending_branch_data['branch-city']
+        )
+        self.assertEqual(
+            branch_obj.state,
+            self.pending_branch_data['branch-state']
+        )
+        self.assertEqual(
+            branch_obj.country,
+            self.pending_branch_data['branch-country']
+        )
+        self.assertEqual(
+            organizer_obj.fullname,
+            self.pending_branch_data['organizer-fullname']
+        )
+        self.assertEqual(
+            organizer_obj.names_of_co_organizers,
+            self.pending_branch_data['organizer-names_of_co_organizers']
+        )
+        self.assertEqual(
+            organizer_obj.email,
+            self.pending_branch_data['organizer-email']
+        )
+        self.assertEqual(
+            organizer_obj.bio,
+            self.pending_branch_data['organizer-bio']
+        )
+
+        self.assertTrue(branch_obj.slug.__len__() > 0)
+        self.assertTrue(organizer_obj.slug.__len__() > 0)
+
+    def test_pending_branch_creation(self):
+        """
+        Test valid and invalid branch form submission from frontend.
+        """
+        # submit an empty form
+        response = self.client.post(
+            self.pending_branch_add_url, data=self.pending_branch_empty_form)
+
+        # check that the same template is displayed (form + errors)
+        self.assertTemplateUsed('admin/change_form.html')
+
+        # an empty form should return 10 errors for the required fields
+        self.assertContains(response, 'Please', count=6)
+
+        # now submit valid form
+        response = self.client.post(
+            self.pending_branch_add_url,
+            follow=True,
+            data=self.pending_branch_data
+        )
+
+        # check that the branch was created successfully, following a redirect
+        self.assertRedirects(
+            response,
+            response.redirect_chain[0][0],
+            response.redirect_chain[0][1]
+        )
+        self.assertEqual(response.status_code, 200)
+
+        self.compare_branch_to_data(
+            response.context['branch'], response.context['organizer'])
+
+        # self.verify_organizer_permissions()
+        # self.verify_branch_status()
 
     def test_branch_emails(self):
         """ Test that copies of the email templates were created

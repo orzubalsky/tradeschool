@@ -107,6 +107,10 @@ class OrganizerForm(TeacherForm):
         "Sets custom meta data to the form's fields"
         super(TeacherForm, self).__init__(*args, **kwargs)
 
+        self.fields['fullname'].error_messages['required'] = _(
+            "Please enter your name")
+        self.fields['email'].error_messages['required'] = _(
+            "Please enter your email")
         self.fields['names_of_co_organizers'].error_messages['required'] = _(
             "Please enter the names of at least one or two more organizers")
         self.fields['bio'].error_messages['required'] = _(
