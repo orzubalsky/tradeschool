@@ -1094,10 +1094,17 @@ class OrganizerAdmin(PersonAdmin):
         Filter queryset by the registration count,
         so only people who took at least one class are returned.
         """
-        return super(PersonAdmin, self).queryset(
-            request,
-            Q(branches_organized__in=[request.user.default_branch, ])
-        )
+        # Trade School Everywhere organizers get to see all data,
+        if request.user.is_giving_support:
+            qs = super(OrganizerAdmin, self).queryset(request)
+
+        else:
+            qs = super(PersonAdmin, self).queryset(
+                request,
+                Q(branches_organized__in=[request.user.default_branch, ])
+            )
+
+        return qs
 
     def change_password_link(self, obj):
         """
@@ -1131,8 +1138,10 @@ class OrganizerAdmin(PersonAdmin):
         'phone',
         'courses_taken_count',
         'courses_taught_count',
+        'default_branch',
         'created',
     )
+
     search_fields = (
         'fullname',
         'email',
