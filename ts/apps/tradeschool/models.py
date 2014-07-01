@@ -15,7 +15,7 @@ from django.contrib.auth.models import AbstractBaseUser, \
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 #from django_mailer import send_mail
@@ -1105,6 +1105,33 @@ class Branch(Location):
         for organizer in Organizer.objects.filter(
                 is_giving_support=True, is_active=True):
             self.organizers.add(organizer)
+
+    def email_support_users(self):
+        """
+        Send an email to all organizers with is_giving_support=True
+        to notify them about the new branch that was created
+        """
+        subject = "Trade School Everywhere | New pending branch: %s" % self.title
+
+        base_url = "http://%s" % self.domain
+        branch_url = base_url  + reverse('admin:tradeschool_pendingbranch_change',  args=[self.pk])
+
+        body = """
+        Hello, this is the Trade School website emailing you!\n
+        Someone wants to open a new school in %s %s %s\n
+        See more details at %s\n.
+        Thank you!
+        """ % (self.city, self.state, self.country.name, branch_url)
+
+        recipients = Organizer.objects.filter(
+            is_giving_support=True).values_list('email', flat=True)
+
+        message = EmailMessage(
+            subject=subject,
+            body=body,
+            to=recipients
+        )
+        message.send()
 
     def save(self, *args, **kwargs):
         """
