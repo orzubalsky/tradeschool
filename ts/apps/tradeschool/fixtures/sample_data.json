@@ -26,6 +26,7 @@
         "website": null, 
         "is_superuser": true, 
         "is_staff": true, 
+        "is_giving_support": true, 
         "last_login": "2013-08-07T23:46:35Z", 
         "groups": [], 
         "user_permissions": [], 

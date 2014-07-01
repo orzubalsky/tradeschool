@@ -160,6 +160,34 @@ class BranchTestCase(TestCase):
         self.assertTrue(branch_obj.slug.__len__() > 0)
         self.assertTrue(organizer_obj.slug.__len__() > 0)
 
+    def verify_branch_organizer_status(self, branch_obj, organizer_obj):
+        """
+        """
+        self.assertTrue(organizer_obj.is_staff)
+        self.assertEqual(organizer_obj.groups.count(), 1)
+        self.assertTrue(organizer_obj.is_active)
+        self.assertEqual(organizer_obj.default_branch, branch_obj)
+        self.assertEqual(branch_obj.branch_status, 'pending')
+        self.assertEqual(branch_obj.organizers.count(), 2)
+
+    def verify_new_organizer_can_login(self, branch_obj, organizer_obj):
+        """
+        """
+        password = 'test-password'
+
+        # try to login without setting a password
+        login_attempt = self.client.login(username=organizer_obj.username, password=password)
+        self.assertFalse(login_attempt)
+
+        # set password and try to login
+        organizer_obj.set_password(password)
+        organizer_obj.save()
+
+        # Login
+        login_attempt = self.client.login(username=organizer_obj.username, password=password)
+        self.assertTrue(login_attempt)
+
+
     def test_pending_branch_creation(self):
         """
         Test valid and invalid branch form submission from frontend.
@@ -189,11 +217,12 @@ class BranchTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-        self.compare_branch_to_data(
-            response.context['branch'], response.context['organizer'])
+        organizer = response.context['organizer']
+        branch = response.context['branch']
 
-        # self.verify_organizer_permissions()
-        # self.verify_branch_status()
+        self.compare_branch_to_data(branch, organizer)
+        self.verify_branch_organizer_status(branch, organizer)
+        self.verify_new_organizer_can_login(branch, organizer)
 
     def test_branch_emails(self):
         """ Test that copies of the email templates were created
