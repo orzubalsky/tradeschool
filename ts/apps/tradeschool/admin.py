@@ -1111,6 +1111,36 @@ class OrganizerAdmin(PersonAdmin):
 
         return qs
 
+    def changelist_view(self, request, extra_context=None):
+        """
+        """
+        if request.user.is_superuser:
+            self.list_display = (
+                'fullname',
+                'email',
+                'phone',
+                'courses_taken_count',
+                'courses_taught_count',
+                'default_branch',
+                'is_giving_support',
+                'created',
+            )
+            self.list_editable = (
+                'is_giving_support',
+            )
+        else:
+            self.list_display = (
+                'fullname',
+                'email',
+                'phone',
+                'courses_taken_count',
+                'courses_taught_count',
+                'default_branch',
+                'created',
+            )
+
+        return super(OrganizerAdmin, self).changelist_view(request, extra_context)
+
     def change_password_link(self, obj):
         """
         """
@@ -1136,16 +1166,6 @@ class OrganizerAdmin(PersonAdmin):
 
         return super(OrganizerAdmin, self).\
             formfield_for_foreignkey(db_field, request, **kwargs)
-
-    list_display = (
-        'fullname',
-        'email',
-        'phone',
-        'courses_taken_count',
-        'courses_taught_count',
-        'default_branch',
-        'created',
-    )
 
     search_fields = (
         'fullname',
