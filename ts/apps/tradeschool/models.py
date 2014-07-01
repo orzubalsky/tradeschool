@@ -1001,6 +1001,10 @@ class Branch(Location):
     emails = property(**emails())
 
     @property
+    def first_organizer(self):
+        return self.organizers.all().order_by('-created')[0]
+
+    @property
     def domain(self):
         return Site.objects.get_current().domain
 

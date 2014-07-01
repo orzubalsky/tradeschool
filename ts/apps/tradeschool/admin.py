@@ -829,7 +829,7 @@ class PendingBranchAdmin(BranchAdmin):
     def organizer_fullname(self, obj):
         """
         """
-        organizer = obj.organizers.all().order_by('-created')[0]
+        organizer = obj.first_organizer
         # link to teacher edit admin form
         url = reverse('admin:tradeschool_organizer_change', args=(organizer.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, organizer.fullname)
@@ -839,7 +839,7 @@ class PendingBranchAdmin(BranchAdmin):
     def organizer_email(self, obj):
         """
         """
-        organizer = obj.organizers.all()[0]
+        organizer = obj.first_organizer
 
         html = '<a href="mailto:%s">%s</a>' % (
             organizer.email, organizer.email)
@@ -850,14 +850,14 @@ class PendingBranchAdmin(BranchAdmin):
     def organizer_bio(self, obj):
         """
         """
-        organizer = obj.organizers.all()[0]
+        organizer = obj.first_organizer
         return organizer.bio
     organizer_bio.short_description = _('Organizer description')
 
     def organizer_names_of_co_organizers(self, obj):
         """
         """
-        organizer = obj.organizers.all()[0]
+        organizer = obj.first_organizer
         return organizer.names_of_co_organizers
     organizer_names_of_co_organizers.short_description = _('Teacher phone')
 

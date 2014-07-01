@@ -664,7 +664,7 @@ def branch_submitted(request, slug=None):
 
     return render_to_response('hub/branch_submitted.html', {
         'branch': branch,
-        'organizer': branch.organizers.all().order_by('-created')[0]
+        'organizer': branch.first_organizer
     }, context_instance=RequestContext(request))
 
 
