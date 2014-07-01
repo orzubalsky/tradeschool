@@ -196,8 +196,9 @@ def studentreminder_presave_callback(sender, instance, **kwargs):
     """
     # student reminders should be sent a day before at 10am.
     # TODO: make this editable per branch / per email.
-    instance.days_delta = -1
-    instance.send_time = time(10, 0, 0)
+    if kwargs.get('created'):
+        instance.days_delta = -1
+        instance.send_time = time(10, 0, 0)
 
 
 @receiver(pre_save, sender=StudentFeedback, dispatch_uid="ts.apps.tradeschool.signals")
@@ -207,8 +208,9 @@ def studentfeedback_presave_callback(sender, instance, **kwargs):
     """
     # student reminders should be sent a day after at 4pm.
     # TODO: make this editable per branch / per email.
-    instance.days_delta = 1
-    instance.send_time = time(16, 0, 0)
+    if kwargs.get('created'):
+        instance.days_delta = 1
+        instance.send_time = time(16, 0, 0)
 
 
 @receiver(pre_save, sender=TeacherReminder, dispatch_uid="ts.apps.tradeschool.signals")
@@ -218,8 +220,9 @@ def teacherreminder_presave_callback(sender, instance, **kwargs):
     """
     # teachers reminders should be sent a day before at 6pm.
     # TODO: make this editable per branch / per email.
-    instance.days_delta = -1
-    instance.send_time = time(18, 0, 0)
+    if kwargs.get('created'):
+        instance.days_delta = -1
+        instance.send_time = time(18, 0, 0)
 
 
 @receiver(pre_save, sender=TeacherFeedback, dispatch_uid="ts.apps.tradeschool.signals")
@@ -229,8 +232,9 @@ def teacherfeedback_presave_callback(sender, instance, **kwargs):
     """
     # student reminders should be sent a day after at 6pm.
     # TODO: make this editable per branch / per email.
-    instance.days_delta = 1
-    instance.send_time = time(18, 0, 0)
+    if kwargs.get('created'):
+        instance.days_delta = 1
+        instance.send_time = time(18, 0, 0)
 
 
 @receiver(pre_save, sender=Cluster, dispatch_uid="ts.apps.tradeschool.signals")
