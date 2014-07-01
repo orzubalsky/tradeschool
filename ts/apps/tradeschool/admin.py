@@ -829,7 +829,7 @@ class PendingBranchAdmin(BranchAdmin):
     def organizer_fullname(self, obj):
         """
         """
-        organizer = obj.organizers.all()[0]
+        organizer = obj.organizers.all().order_by('-created')[0]
         # link to teacher edit admin form
         url = reverse('admin:tradeschool_organizer_change', args=(organizer.pk,))
         html = '<a target="_blank" href="%s">%s</a>' % (url, organizer.fullname)
